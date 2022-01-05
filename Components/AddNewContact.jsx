@@ -1,8 +1,23 @@
 import React, { useRef, useState, useContext } from "react";
+import styled from "styled-components";
 import DataContext from "../lib/DataContext";
 
+const Input = styled.input`
+  width: 50px;
+`;
+const InputText = styled(Input)`
+  min-width: 70px;
+  width: auto;
+  /* max-width: 150px; */
+`;
+const InputTime = styled(Input)`
+  width: 30px;
+`;
+const InputSubmit = styled(Input)`
+  width: 50px;
+`;
+
 export default function AddNewContact() {
-  const [time, setTime] = useState(3);
   const nameRef = useRef();
   const timeRef = useRef();
   const contactData = useContext(DataContext);
@@ -23,11 +38,11 @@ export default function AddNewContact() {
       <form onSubmit={createNewContact}>
         I would like to talk to:
         <label>
-          <input ref={nameRef} type="text" name="name" required />
+          <InputText ref={nameRef} type="text" name="name" required />
         </label>
         <label>
           every
-          <input
+          <InputTime
             ref={timeRef}
             type="number"
             name="time"
@@ -37,7 +52,7 @@ export default function AddNewContact() {
           />
           days
         </label>
-        <input type="submit" value="Submit" />
+        <InputSubmit type="submit" value="add" />
       </form>
     </div>
   );
