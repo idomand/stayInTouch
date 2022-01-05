@@ -4,7 +4,7 @@ import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import NavBar from "../Components/NavBar";
 
-import DataContext, { contactData } from "../lib/DataContext";
+import DataContext from "../lib/DataContext";
 
 //* ===========================================
 //! ===========================================
@@ -16,6 +16,19 @@ const HomeWrapper = styled.section`
 `;
 
 export default function Home() {
+  const [contactArray, setContactArray] = useState([
+    { name: "ido", number: 1 },
+    { name: "dana", number: 2 },
+  ]);
+
+  const contactData = {
+    contactArray: contactArray,
+    addContact(data) {
+      setContactArray((contactArray) => [...contactArray, data]);
+    },
+    removeContact() {},
+  };
+
   return (
     <HomeWrapper>
       <DataContext.Provider value={contactData}>
