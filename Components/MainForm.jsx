@@ -13,17 +13,10 @@ const MainFormContent = styled.div`
 `;
 
 export default function MainForm() {
-  const [showContactForm, setShowContactForm] = useState(false);
-
-  function addContactForm() {
-    setShowContactForm(true);
-  }
-
   return (
     <MainFormWrapper>
       <H1>Staying in Touch!</H1>
-      <BasicButton onClick={addContactForm}>Add New Contact</BasicButton>
-      {showContactForm && <AddNewContact />}
+      <AddNewContact />
     </MainFormWrapper>
   );
 }
