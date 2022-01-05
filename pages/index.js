@@ -1,7 +1,14 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { BasicButton, GlowButton } from "../Components/Common/Button";
+import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import NavBar from "../Components/NavBar";
+
+import DataContext, { contactData } from "../lib/DataContext";
+
+//* ===========================================
+//! ===========================================
+//* ===========================================
 
 const HomeWrapper = styled.section`
   background-color: ${({ theme }) => theme.BackgroundColor};
@@ -11,8 +18,11 @@ const HomeWrapper = styled.section`
 export default function Home() {
   return (
     <HomeWrapper>
-      <NavBar />
-      <MainForm />
+      <DataContext.Provider value={contactData}>
+        <NavBar />
+        <MainForm />
+        <ContactDetails />
+      </DataContext.Provider>
     </HomeWrapper>
   );
 }
