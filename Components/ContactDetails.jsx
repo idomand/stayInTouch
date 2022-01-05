@@ -5,6 +5,10 @@ import DataContext from "../lib/DataContext";
 import { H2 } from "./Common/Text";
 import ContactItem from "./ContactItem";
 
+const ContactList = styled.ul`
+  padding: 0;
+`;
+
 export default function ContactDetails() {
   const contactData = useContext(DataContext);
 
@@ -13,11 +17,17 @@ export default function ContactDetails() {
   return (
     <>
       <H2>this is ContactDetails</H2>
-      <ul>
+      <ContactList>
         {contactData.contactArray.map((element) => {
-          return <ContactItem key={element.name} name={element.name} />;
+          return (
+            <ContactItem
+              key={Math.random()}
+              name={element.name}
+              time={element.time}
+            />
+          );
         })}
-      </ul>
+      </ContactList>
     </>
   );
 }
