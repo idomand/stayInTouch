@@ -2,11 +2,17 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import DataContext from "../lib/DataContext";
 
-export default function ContactItem({ name }) {
+const ContactItemWrapper = styled.li`
+  list-style-type: none;
+`;
+
+export default function ContactItem({ name, time }) {
   const contactData = useContext(DataContext);
   return (
-    <li>
-      <h3>the name is: {name}</h3>
-    </li>
+    <ContactItemWrapper>
+      <h3>
+        the name is: {name} and the time is {time}
+      </h3>
+    </ContactItemWrapper>
   );
 }
