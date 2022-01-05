@@ -1,18 +1,18 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-
 import styled from "styled-components";
+import { BasicButton, GlowButton } from "../Components/Common/Button";
+import MainForm from "../Components/MainForm";
+import NavBar from "../Components/NavBar";
 
-const Foo = styled.button`
-  background-color: ${({ theme }) => theme.primaryActiveColor};
+const HomeWrapper = styled.section`
+  background-color: ${({ theme }) => theme.BackgroundColor};
+  height: 100vh;
 `;
 
 export default function Home() {
   return (
-    <>
-      <div>123</div>
-      <Foo>234234234</Foo>
-    </>
+    <HomeWrapper>
+      <NavBar />
+      <MainForm />
+    </HomeWrapper>
   );
 }
