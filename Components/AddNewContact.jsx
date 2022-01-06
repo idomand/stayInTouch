@@ -16,12 +16,13 @@ const InputTime = styled(Input)`
   margin: 5px;
 `;
 const InputSubmit = styled(Input)`
+  padding: 10px;
   /* width: 50px; */
   margin-left: 10px;
   border-radius: 10px;
   color: ${({ theme }) => theme.secondaryColor};
   background-color: ${({ theme }) => theme.niceBrown};
-  font-weight: 600;
+  font-weight: bolder;
 `;
 
 const Form = styled.form`
