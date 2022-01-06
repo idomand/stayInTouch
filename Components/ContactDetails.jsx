@@ -12,8 +12,6 @@ const ContactList = styled.ul`
 export default function ContactDetails() {
   const contactData = useContext(DataContext);
 
-  const foo = contactData.contactArray;
-
   return (
     <>
       <H2>this is ContactDetails</H2>
@@ -24,6 +22,7 @@ export default function ContactDetails() {
               key={Math.random()}
               name={element.name}
               time={element.time}
+              timeCreated={element.timeCreated}
             />
           );
         })}

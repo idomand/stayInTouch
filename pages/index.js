@@ -17,8 +17,9 @@ const HomeWrapper = styled.section`
 
 export default function Home() {
   const [contactArray, setContactArray] = useState([
-    { name: "ido", time: 1 },
-    { name: "dana", time: 2 },
+    { name: "ido", time: 3, timeCreated: 1641118513000 }, // 2.1.22
+    { name: "dana", time: 14, timeCreated: 1640513713000 }, // 26.12.21
+    { name: "bob", time: 7, timeCreated: 1639563313000 }, // 15.12.21
   ]);
 
   const contactData = {

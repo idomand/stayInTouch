@@ -1,5 +1,7 @@
 import React, { useRef, useState, useContext } from "react";
 import styled from "styled-components";
+import dayjs from "dayjs";
+
 import DataContext from "../lib/DataContext";
 
 const Input = styled.input`
@@ -7,8 +9,6 @@ const Input = styled.input`
 `;
 const InputText = styled(Input)`
   min-width: 70px;
-  width: auto;
-  /* max-width: 150px; */
 `;
 const InputTime = styled(Input)`
   width: 30px;
@@ -27,11 +27,12 @@ export default function AddNewContact() {
     let newContact = {
       name: nameRef.current.value,
       time: timeRef.current.value,
+      timeCreated: dayjs().valueOf(),
     };
     contactData.addContact(newContact);
     console.log("newContact :>> ", newContact);
     nameRef.current.value = "";
-    timeRef.current.value = 1;
+    timeRef.current.value = 3;
   }
   return (
     <div>
@@ -49,6 +50,7 @@ export default function AddNewContact() {
             id="time"
             max={31}
             min={1}
+            defaultValue={3}
           />
           days
         </label>
