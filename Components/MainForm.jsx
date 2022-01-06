@@ -8,6 +8,14 @@ const MainFormWrapper = styled.section`
   margin-top: 50px;
 `;
 
+const HeaderWrapper = styled.div`
+  display: flex;
+`;
+const MainHeader = styled(H1)`
+  margin: auto;
+  padding-top: 10px;
+`;
+
 const MainFormContent = styled.div`
   color: ${({ theme }) => theme.primaryColorText};
 `;
@@ -15,7 +23,9 @@ const MainFormContent = styled.div`
 export default function MainForm() {
   return (
     <MainFormWrapper>
-      <H1>Staying in Touch!</H1>
+      <HeaderWrapper>
+        <MainHeader>Staying in Touch!</MainHeader>
+      </HeaderWrapper>
       <AddNewContact />
     </MainFormWrapper>
   );

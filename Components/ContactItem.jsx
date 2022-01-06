@@ -33,29 +33,38 @@ const EditButton = styled(BasicButton)``;
 const ResatButton = styled(BasicButton)``;
 
 const DataWrapper = styled.div`
-  border: 3px red dotted;
+  border-left: 3px red dotted;
+  padding-left: 3px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-around;
   flex-grow: 1;
+  @media (max-width: 480px) {
+    justify-content: space-between;
+  }
 `;
 
 const NameContainer = styled.span`
   border: 2px black solid;
+  padding: 5px;
+  font-weight: bold;
   /* flex-grow: 1; */
-  min-width: 60px;
+  min-width: 110px;
+  text-decoration: underline;
 `;
 const TimeContainer = styled.div`
-  border: 2px solid yellow;
+  /* border: 2px solid yellow; */
+  width: 100px;
+  /* margin: 5px; */
   /* flex-grow: 1; */
 `;
 
 const LastTalkedContainer = styled.div`
-  border: 2px solid lightcoral;
+  /* border: 2px solid lightcoral; */
   /* flex-grow: 1; */
 `;
 const EmojiContainer = styled.div`
-  border: 2px solid green;
+  /* border: 2px solid green; */
   /* flex-grow: 1; */
 `;
 
@@ -80,22 +89,22 @@ export default function ContactItem({ name, time, timeCreated, id }) {
     contactData.resatTimer(id);
   }
 
-  let flag;
+  let lastTalkedToResponse;
+  let lastTalkedToStatus;
+
   if (currantTime - timeCreated < time * oneDay) {
-    flag = true;
+    lastTalkedToStatus = true;
   } else {
-    flag = false;
+    lastTalkedToStatus = false;
   }
 
-  let lastTalkedToResponse;
-
   if (currantTime - timeCreated < 0) {
-    lastTalkedToResponse = <p>We talked today</p>;
+    lastTalkedToResponse = <p>Last talk was today!</p>;
   } else {
     lastTalkedToResponse = (
       <p>
-        have not talked in {Math.floor((currantTime - timeCreated) / oneDay)}{" "}
-        days
+        Last talk was {Math.floor((currantTime - timeCreated) / oneDay)} days
+        ago
       </p>
     );
   }
@@ -103,16 +112,14 @@ export default function ContactItem({ name, time, timeCreated, id }) {
   return (
     <ContactItemWrapper>
       <ButtonContainer>
-        <EditButton onClick={editFunction}>edit</EditButton>
-        <ResatButton onClick={resatFunction}>resat</ResatButton>
+        <EditButton onClick={editFunction}>Edit</EditButton>
+        <ResatButton onClick={resatFunction}>Resat</ResatButton>
       </ButtonContainer>
       <DataWrapper>
-        <NameContainer> {name}.</NameContainer>
-        <TimeContainer>days: {time}.</TimeContainer>
+        <NameContainer> {name} </NameContainer>
+        <TimeContainer>Every: {time} days.</TimeContainer>
         <LastTalkedContainer>{lastTalkedToResponse}</LastTalkedContainer>
-        <EmojiContainer>
-          {flag ? <p>Great</p> : <p>Talk To them</p>}{" "}
-        </EmojiContainer>
+        <EmojiContainer>{lastTalkedToStatus ? "😎" : "😱"} </EmojiContainer>
       </DataWrapper>
     </ContactItemWrapper>
   );

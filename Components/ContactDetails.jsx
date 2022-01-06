@@ -14,7 +14,6 @@ export default function ContactDetails() {
 
   return (
     <>
-      <H2>this is ContactDetails</H2>
       <ContactList>
         {contactData.contactArray.map((element) => {
           return (
