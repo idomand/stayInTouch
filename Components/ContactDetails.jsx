@@ -12,10 +12,12 @@ const ContactList = styled.ul`
 export default function ContactDetails() {
   const contactData = useContext(DataContext);
 
+  let type = 0;
   return (
     <>
       <ContactList>
         {contactData.contactArray.map((element) => {
+          type++;
           return (
             <ContactItem
               key={element.id}
@@ -23,6 +25,7 @@ export default function ContactDetails() {
               time={element.time}
               timeCreated={element.timeCreated}
               id={element.id}
+              type={type}
             />
           );
         })}

@@ -10,6 +10,7 @@ const NavBarWrapper = styled.nav`
   width: 100%;
   height: 50px;
   display: flex;
+  justify-content: flex-end;
 `;
 const NevBarText = styled(H2)`
   color: ${({ theme }) => theme.secondaryColor};
@@ -24,10 +25,10 @@ const NavBarButton = styled(BasicButton)`
 export default function NavBar() {
   return (
     <NavBarWrapper>
-      <NevBarText>this is the navBar</NevBarText>
+      {/* <NevBarText>this is the navBar</NevBarText> */}
+      {/* <NavBarButton>about the site</NavBarButton> */}
       <NavBarButton>about the site</NavBarButton>
-      <NavBarButton>2</NavBarButton>
-      <NavBarButton>3</NavBarButton>
+      <NavBarButton>Logout</NavBarButton>
     </NavBarWrapper>
   );
 }

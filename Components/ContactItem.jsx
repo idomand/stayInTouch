@@ -10,11 +10,12 @@ import { BasicButton } from "./Common/Button";
 //*--------------------------------------------------------------------------------
 
 const ContactItemWrapper = styled.li`
+  background-color: ${(element) => element.backgroundColor};
   display: flex;
   justify-content: space-between;
   list-style-type: none;
   border: solid 1.5px ${({ theme }) => theme.niceBrown};
-  margin: 5px;
+  margin: 10px 5px;
   border-radius: 10px;
   color: ${({ theme }) => theme.niceBrown};
 `;
@@ -33,7 +34,7 @@ const EditButton = styled(BasicButton)``;
 const ResatButton = styled(BasicButton)``;
 
 const DataWrapper = styled.div`
-  border-left: 3px red dotted;
+  border-left: 1.5px ${({ theme }) => theme.niceBrown} solid;
   padding-left: 3px;
   display: flex;
   align-items: center;
@@ -76,9 +77,18 @@ const currantTime = dayjs().valueOf();
 //!--------------------------------------------------------------------------------
 //*--------------------------------------------------------------------------------
 
-export default function ContactItem({ name, time, timeCreated, id }) {
+export default function ContactItem({ name, time, timeCreated, id, type }) {
   const contactData = useContext(DataContext);
 
+  let colorType;
+
+  if (type % 2 === 0) {
+    colorType = "#1C5340";
+  } else {
+    colorType = "#003E29";
+  }
+
+  console.log("type :>> ", type);
   const isMobile = useMedia("(max-width: 480px)");
 
   function editFunction() {
@@ -110,7 +120,7 @@ export default function ContactItem({ name, time, timeCreated, id }) {
   }
 
   return (
-    <ContactItemWrapper>
+    <ContactItemWrapper backgroundColor={colorType}>
       <ButtonContainer>
         <EditButton onClick={editFunction}>Edit</EditButton>
         <ResatButton onClick={resatFunction}>Resat</ResatButton>

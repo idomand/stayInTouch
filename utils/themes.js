@@ -2,20 +2,14 @@ import { primaryFont, typeScale } from "./typography";
 
 export const defaultTheme = {
   BackgroundColor: "#164A41",
-
   subSectionColor: "#3AAFA9",
-  // subSectionColor: "#0804b8",
-
   primaryColorText: "#F1B24A",
-  primaryColorHover: "#9DC88D",
-  niceGreen: "#3AAFA9",
   niceBrown: "#D9B08C",
   secondaryColor: "#d0454c",
   buttonBackgroundColor: "#9DC88D",
-  // buttonBackgroundColor: "#4D774E",
   buttonHoverColor: "#4D774E",
-
-  // buttonHoverColor: "#9DC88D",
+  boldGreen: "#1C5340",
+  darkGreen: "#003E29",
   primaryFont: primaryFont,
   typeScale,
 };
