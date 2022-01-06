@@ -5,16 +5,28 @@ import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
 
 const Input = styled.input`
-  width: 50px;
+  /* width: 50px; */
 `;
 const InputText = styled(Input)`
   min-width: 70px;
+  margin: 5px;
 `;
 const InputTime = styled(Input)`
   width: 30px;
+  margin: 5px;
 `;
 const InputSubmit = styled(Input)`
-  width: 50px;
+  /* width: 50px; */
+  margin-left: 10px;
+  border-radius: 10px;
+  color: ${({ theme }) => theme.secondaryColor};
+  background-color: ${({ theme }) => theme.niceBrown};
+  font-weight: 600;
+`;
+
+const Form = styled.form`
+  color: ${({ theme }) => theme.niceBrown};
+  margin: 10px;
 `;
 
 export default function AddNewContact() {
@@ -37,7 +49,7 @@ export default function AddNewContact() {
   }
   return (
     <div>
-      <form onSubmit={createNewContact}>
+      <Form onSubmit={createNewContact}>
         I would like to talk to:
         <label>
           <InputText ref={nameRef} type="text" name="name" required />
@@ -55,8 +67,8 @@ export default function AddNewContact() {
           />
           days
         </label>
-        <InputSubmit type="submit" value="add" />
-      </form>
+        <InputSubmit type="submit" value="Add contact" />
+      </Form>
     </div>
   );
 }
