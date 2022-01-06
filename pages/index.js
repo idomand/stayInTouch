@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import NavBar from "../Components/NavBar";
+import dayjs from "dayjs";
 
 import DataContext from "../lib/DataContext";
 
@@ -28,6 +29,18 @@ export default function Home() {
       setContactArray((contactArray) => [...contactArray, data]);
     },
     removeContact() {},
+    resatTimer(name) {
+      const newTimeCreated = dayjs().valueOf();
+      const contactObject = this.contactArray.find(({ name }) => name);
+      contactObject.timeCreated = newTimeCreated;
+      const newArray = this.contactArray.map((element) =>
+        element.name === name
+          ? { ...element, timeCreated: newTimeCreated }
+          : element
+      );
+      setContactArray(newArray);
+    },
+    editContact(name) {},
   };
 
   return (
