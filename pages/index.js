@@ -12,8 +12,7 @@ import DataContext from "../lib/DataContext";
 //* ===========================================
 
 const HomeWrapper = styled.section`
-  background-color: ${({ theme }) => theme.BackgroundColor};
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 export default function Home() {
