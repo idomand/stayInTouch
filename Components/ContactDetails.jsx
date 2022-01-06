@@ -19,10 +19,11 @@ export default function ContactDetails() {
         {contactData.contactArray.map((element) => {
           return (
             <ContactItem
-              key={Math.random()}
+              key={element.id}
               name={element.name}
               time={element.time}
               timeCreated={element.timeCreated}
+              id={element.id}
             />
           );
         })}

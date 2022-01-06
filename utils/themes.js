@@ -11,8 +11,11 @@ export const defaultTheme = {
   niceGreen: "#3AAFA9",
   niceBrown: "#D9B08C",
   secondaryColor: "#d0454c",
-  buttonBackgroundColor: "#4D774E",
-  buttonHoverColor: "#9DC88D",
+  buttonBackgroundColor: "#9DC88D",
+  // buttonBackgroundColor: "#4D774E",
+  buttonHoverColor: "#4D774E",
+
+  // buttonHoverColor: "#9DC88D",
   primaryFont: primaryFont,
   typeScale,
 };
