@@ -28,6 +28,7 @@ export default function AddNewContact() {
       name: nameRef.current.value,
       time: timeRef.current.value,
       timeCreated: dayjs().valueOf(),
+      id: Math.floor(Math.random() * 10000),
     };
     contactData.addContact(newContact);
     console.log("newContact :>> ", newContact);
