@@ -21,7 +21,6 @@ export default function Home() {
     { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
     { name: "david", time: 3, timeCreated: 1641118522222, id: 2 },
     { name: "dana", time: 14, timeCreated: 1640513733333, id: 3 },
-
     { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
   ]);
 
@@ -31,7 +30,9 @@ export default function Home() {
     addContact(data) {
       setContactArray((contactArray) => [...contactArray, data]);
     },
-    removeContact() {},
+    deleteContactFunc(id) {
+      setContactArray(this.contactArray.filter((element) => element.id !== id));
+    },
 
     resatTimer(id) {
       const newTimeCreated = dayjs().valueOf();
@@ -50,7 +51,26 @@ export default function Home() {
       setContactArray(newArray);
     },
 
-    editContact(name) {},
+    editContactName(id, name) {
+      const newArray = this.contactArray.map((element) => {
+        if (element.id === id) {
+          return (element = { ...element, name: name });
+        } else {
+          return element;
+        }
+      });
+      setContactArray(newArray);
+    },
+    editContactTime(id, time) {
+      const newArray = this.contactArray.map((element) => {
+        if (element.id === id) {
+          return (element = { ...element, time: time });
+        } else {
+          return element;
+        }
+      });
+      setContactArray(newArray);
+    },
   };
 
   return (

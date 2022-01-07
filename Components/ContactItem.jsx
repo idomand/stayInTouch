@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import DataContext from "../lib/DataContext";
 import dayjs from "dayjs";
-import { useMedia } from "react-use";
+// import { useMedia } from "react-use";
 import { BasicButton } from "./Common/Button";
+import ContactEditModal from "./ContactEditModal";
 
 //*--------------------------------------------------------------------------------
 //!--------------------------------------------------------------------------------
@@ -88,13 +89,8 @@ export default function ContactItem({ name, time, timeCreated, id, type }) {
     colorType = "#003E29";
   }
 
-  console.log("type :>> ", type);
-  const isMobile = useMedia("(max-width: 480px)");
+  // const isMobile = useMedia("(max-width: 480px)");
 
-  function editFunction() {
-    console.log("edit");
-    contactData.editContact(name);
-  }
   function resatFunction() {
     contactData.resatTimer(id);
   }
@@ -122,7 +118,12 @@ export default function ContactItem({ name, time, timeCreated, id, type }) {
   return (
     <ContactItemWrapper backgroundColor={colorType}>
       <ButtonContainer>
-        <EditButton onClick={editFunction}>Edit</EditButton>
+        <ContactEditModal
+          name={name}
+          time={time}
+          timeCreated={timeCreated}
+          id={id}
+        />
         <ResatButton onClick={resatFunction}>Resat</ResatButton>
       </ButtonContainer>
       <DataWrapper>
