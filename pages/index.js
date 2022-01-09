@@ -4,12 +4,11 @@ import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import NavBar from "../Components/NavBar";
 import dayjs from "dayjs";
-
 import DataContext from "../lib/DataContext";
+import Login from "../Components/Login";
 
-//* ===========================================
-//! ===========================================
-//* ===========================================
+//?=======================================================
+//?=======================================================
 
 const HomeWrapper = styled.section`
   /* height: 100vh; */
@@ -77,6 +76,7 @@ export default function Home() {
     <HomeWrapper>
       <DataContext.Provider value={contactData}>
         <NavBar />
+        <Login />
         <MainForm />
         <ContactDetails />
       </DataContext.Provider>
