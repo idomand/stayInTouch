@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { H2 } from "./Common//Text.js";
 import { BasicButton } from "./Common/Button";
+import Logout from "./Logout.jsx";
 
 const NavBarWrapper = styled.nav`
   background-color: ${({ theme }) => theme.subSectionColor};
@@ -28,7 +29,8 @@ export default function NavBar() {
       {/* <NevBarText>this is the navBar</NevBarText> */}
       {/* <NavBarButton>about the site</NavBarButton> */}
       <NavBarButton>about the site</NavBarButton>
-      <NavBarButton>Logout</NavBarButton>
+      <Logout />
+      {/* <NavBarButton>Logout</NavBarButton> */}
     </NavBarWrapper>
   );
 }
