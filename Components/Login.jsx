@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import {
   signInWithRedirect,
-  getRedirectResult,
   GoogleAuthProvider,
+  getRedirectResult,
 } from "firebase/auth";
 
 import FirebaseApp, { auth, provider } from "../lib/Firebase";
@@ -16,7 +16,7 @@ const LoginWrapper = styled.div`
 `;
 
 export default function Login() {
-  function signInWithGoogle() {
+  async function signInWithGoogle() {
     console.log("%c signInWithGoogle! ", "background: #222; color: #da7055");
 
     signInWithRedirect(auth, provider);
@@ -26,11 +26,11 @@ export default function Login() {
         // This gives you a Google Access Token. You can use it to access Google APIs.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-
         // The signed-in user info.
         const user = result.user;
-        console.log("user :>> ", user);
+        return user;
       })
+
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;

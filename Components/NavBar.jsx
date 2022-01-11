@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { H2 } from "./Common//Text.js";
 import { BasicButton } from "./Common/Button";
 import Logout from "./Logout.jsx";
+import { useAuth } from "../lib/AuthContext";
+
+// !=========================
+// ?=========================
+// !=========================
 
 const NavBarWrapper = styled.nav`
   background-color: ${({ theme }) => theme.subSectionColor};
@@ -24,8 +29,12 @@ const NavBarButton = styled(BasicButton)`
 `;
 
 export default function NavBar() {
+  const { currentUser } = useAuth();
+
   return (
     <NavBarWrapper>
+      {currentUser && <h1>{currentUser.displayName}</h1>}
+
       {/* <NevBarText>this is the navBar</NevBarText> */}
       {/* <NavBarButton>about the site</NavBarButton> */}
       <NavBarButton>about the site</NavBarButton>
