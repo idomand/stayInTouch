@@ -26,3 +26,9 @@ export const BasicButton = styled.button.attrs((props) => {
     font-size: ${({ theme }) => theme.typeScale.paragraph};
   }
 `;
+
+export const NavbarButton = styled(BasicButton)`
+  color: ${({ theme }) => theme.secondaryColor};
+  margin: 3px;
+  background-color: lightgreen;
+`;
