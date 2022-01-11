@@ -2,11 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
-import NavBar from "../Components/NavBar";
 import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
 import Login from "../Components/Login";
 import AuthProvider, { useAuth } from "../lib/AuthContext";
+import Layout from "../Components/Layout";
 //?=======================================================
 //?=======================================================
 
@@ -83,20 +83,20 @@ export default function Home() {
     <HomeWrapper>
       <AuthProvider>
         <DataContext.Provider value={contactData}>
-          <NavBar />
-
-          {currentUser ? (
-            <>
-              {" "}
-              <MainForm />
-              <ContactDetails />
-            </>
-          ) : (
-            <>
-              {" "}
-              <Login />
-            </>
-          )}
+          <Layout>
+            {currentUser ? (
+              <>
+                {" "}
+                <MainForm />
+                <ContactDetails />
+              </>
+            ) : (
+              <>
+                {" "}
+                <Login />
+              </>
+            )}
+          </Layout>
         </DataContext.Provider>
       </AuthProvider>
     </HomeWrapper>
