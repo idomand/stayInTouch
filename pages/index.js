@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+
 import styled from "styled-components";
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
@@ -15,8 +17,16 @@ const HomeWrapper = styled.section`
 `;
 
 export default function Home() {
+  const router = useRouter();
+
   const currentUser = useAuth();
   const [user, setUser] = useState(currentUser);
+
+  if (currentUser) {
+    console.log("there is a user: " + currentUser.displayName);
+  } else {
+    console.log("there is no user");
+  }
 
   console.log(`currentUser`, currentUser);
   const [contactArray, setContactArray] = useState([
