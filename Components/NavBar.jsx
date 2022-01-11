@@ -5,6 +5,7 @@ import { H2 } from "./Common//Text.js";
 import { NavbarButton } from "./Common/Button";
 import Logout from "./Logout.jsx";
 import { useAuth } from "../lib/AuthContext";
+import { NavLink } from "./Common/Links";
 
 // !=========================
 // ?=========================
@@ -15,29 +16,18 @@ const NavBarWrapper = styled.nav`
   position: fixed;
   top: 0;
   width: 100%;
-  /* height: 60px; */
   display: flex;
   justify-content: flex-end;
-`;
-const NevBarText = styled(H2)`
-  color: ${({ theme }) => theme.secondaryColor};
+  align-items: center;
 `;
 
 export default function NavBar() {
-  // const { currentUser } = useAuth();
-
   return (
     <NavBarWrapper>
-      {/* {currentUser && <h1>{currentUser.displayName}</h1>} */}
-
-      {/* <NevBarText>this is the navBar</NevBarText> */}
-      {/* <NavBarButton>about the site</NavBarButton> */}
-      <Link href="/">home</Link>
-
-      <Link href="/about">about the site</Link>
-      <NavbarButton>About the site</NavbarButton>
+      <NavLink href="/">Home</NavLink>
+      <NavLink href="/about">About</NavLink>
+      <NavLink href="/login">Login</NavLink>
       <Logout />
-      {/* <NavBarButton>Logout</NavBarButton> */}
     </NavBarWrapper>
   );
 }

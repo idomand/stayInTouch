@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { signOut } from "firebase/auth";
-import { NavbarButton } from "./Common/Button";
+import { BasicButton } from "./Common/Button";
 import FirebaseApp, { auth, provider } from "../lib/Firebase";
 
 //*=================
 //*=================
 //*=================
-const LogOutWrapper = styled.div`
+const LogoutButton = styled(BasicButton)`
   /* margin-top: 50px; */
 `;
 
@@ -23,9 +23,5 @@ export default function Logout() {
       });
   }
 
-  return (
-    <LogOutWrapper>
-      <NavbarButton onClick={LogoutFunc}>Logout </NavbarButton>
-    </LogOutWrapper>
-  );
+  return <LogoutButton onClick={LogoutFunc}>Logout </LogoutButton>;
 }
