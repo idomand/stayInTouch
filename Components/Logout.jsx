@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { signOut } from "firebase/auth";
-
+import { NavbarButton } from "./Common/Button";
 import FirebaseApp, { auth, provider } from "../lib/Firebase";
 
 //*=================
@@ -25,7 +25,7 @@ export default function Logout() {
 
   return (
     <LogOutWrapper>
-      <button onClick={LogoutFunc}>Logout </button>
+      <NavbarButton onClick={LogoutFunc}>Logout </NavbarButton>
     </LogOutWrapper>
   );
 }
