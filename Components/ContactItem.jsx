@@ -124,7 +124,7 @@ export default function ContactItem({ name, time, timeCreated, id, type }) {
           timeCreated={timeCreated}
           id={id}
         />
-        <ResatButton onClick={resatFunction}>Resat</ResatButton>
+        <ResatButton onClick={resatFunction}>Reset</ResatButton>
       </ButtonContainer>
       <DataWrapper>
         <NameContainer> {name} </NameContainer>

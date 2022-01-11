@@ -6,7 +6,7 @@ import NavBar from "../Components/NavBar";
 import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
 import Login from "../Components/Login";
-
+import AuthProvider, { useAuth } from "../lib/AuthContext";
 //?=======================================================
 //?=======================================================
 
@@ -15,6 +15,10 @@ const HomeWrapper = styled.section`
 `;
 
 export default function Home() {
+  const currentUser = useAuth();
+  const [user, setUser] = useState(currentUser);
+
+  console.log(`currentUser`, currentUser);
   const [contactArray, setContactArray] = useState([
     { name: "poopLord", time: 3, timeCreated: 1641227473000, id: 5 },
     { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
@@ -23,16 +27,20 @@ export default function Home() {
     { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
   ]);
 
+  const authContextData = {
+    checkUser(newUser) {
+      setUser(newUser);
+    },
+  };
+
   const contactData = {
     contactArray: contactArray,
-
     addContact(data) {
       setContactArray((contactArray) => [...contactArray, data]);
     },
     deleteContactFunc(id) {
       setContactArray(this.contactArray.filter((element) => element.id !== id));
     },
-
     resatTimer(id) {
       const newTimeCreated = dayjs().valueOf();
       const contactObject = this.contactArray.find(
@@ -49,7 +57,6 @@ export default function Home() {
       });
       setContactArray(newArray);
     },
-
     editContactName(id, name) {
       const newArray = this.contactArray.map((element) => {
         if (element.id === id) {
@@ -74,12 +81,24 @@ export default function Home() {
 
   return (
     <HomeWrapper>
-      <DataContext.Provider value={contactData}>
-        <NavBar />
-        <Login />
-        <MainForm />
-        <ContactDetails />
-      </DataContext.Provider>
+      <AuthProvider>
+        <DataContext.Provider value={contactData}>
+          <NavBar />
+
+          {currentUser ? (
+            <>
+              {" "}
+              <MainForm />
+              <ContactDetails />
+            </>
+          ) : (
+            <>
+              {" "}
+              <Login />
+            </>
+          )}
+        </DataContext.Provider>
+      </AuthProvider>
     </HomeWrapper>
   );
 }

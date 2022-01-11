@@ -44,7 +44,6 @@ export default function AddNewContact() {
       id: Math.floor(Math.random() * 10000),
     };
     contactData.addContact(newContact);
-    console.log("newContact :>> ", newContact);
     nameRef.current.value = "";
     timeRef.current.value = 3;
   }
