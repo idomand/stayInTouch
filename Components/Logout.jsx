@@ -3,24 +3,16 @@ import styled from "styled-components";
 import { signOut } from "firebase/auth";
 import { BasicButton } from "./Common/Button";
 import FirebaseApp, { auth, provider } from "../lib/Firebase";
-
+import { useAuth } from "../lib/AuthContext";
 //*=================
 //*=================
 //*=================
-const LogoutButton = styled(BasicButton)`
-  /* margin-top: 50px; */
-`;
+const LogoutButton = styled(BasicButton)``;
 
 export default function Logout() {
+  const { logout } = useAuth();
   function LogoutFunc() {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("user is signed out");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+    logout();
   }
 
   return <LogoutButton onClick={LogoutFunc}>Logout </LogoutButton>;

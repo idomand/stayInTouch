@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import styled from "styled-components";
@@ -6,27 +6,26 @@ import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
-import Login from "../Components/Login";
-import AuthProvider, { useAuth } from "../lib/AuthContext";
+import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
 //?=======================================================
 //?=======================================================
 
-const HomeWrapper = styled.section`
-  /* height: 100vh; */
-`;
-
 export default function Home() {
   const router = useRouter();
 
-  const currentUser = useAuth();
+  const { currentUser } = useAuth();
+
   const [user, setUser] = useState(currentUser);
 
-  if (currentUser) {
-    console.log("there is a user: " + currentUser.displayName);
-  } else {
-    console.log("there is no user");
-  }
+  useEffect(() => {
+    if (currentUser) {
+      console.log("there is a user: " + currentUser.displayName);
+    } else {
+      console.log("there is no user");
+      router.push("/login");
+    }
+  }, [currentUser, router]);
 
   console.log(`currentUser`, currentUser);
   const [contactArray, setContactArray] = useState([
@@ -90,25 +89,32 @@ export default function Home() {
   };
 
   return (
-    <HomeWrapper>
-      <AuthProvider>
-        <DataContext.Provider value={contactData}>
-          <Layout>
-            {currentUser ? (
-              <>
-                {" "}
-                <MainForm />
-                <ContactDetails />
-              </>
-            ) : (
-              <>
-                {" "}
-                <Login />
-              </>
-            )}
-          </Layout>
-        </DataContext.Provider>
-      </AuthProvider>
-    </HomeWrapper>
+    <DataContext.Provider value={contactData}>
+      <Layout>
+        <h1>this is home</h1>
+        <MainForm />
+        <ContactDetails />
+      </Layout>
+    </DataContext.Provider>
   );
+
+  // return (
+  //   <DataContext.Provider value={contactData}>
+  //     <Layout>
+  //       <h1>this is home</h1>
+  //       {currentUser ? (
+  //         <>
+  //           {" "}
+  //           <MainForm />
+  //           <ContactDetails />
+  //         </>
+  //       ) : (
+  //         <>
+  //           {" "}
+  //           <Login />
+  //         </>
+  //       )}
+  //     </Layout>
+  //   </DataContext.Provider>
+  // );
 }
