@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { signOut } from "firebase/auth";
 import { BasicButton } from "./Common/Button";
-import FirebaseApp, { auth, provider } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 //*=================
 //*=================
