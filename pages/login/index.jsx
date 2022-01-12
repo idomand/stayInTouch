@@ -3,6 +3,7 @@ import Layout from "../../Components/Layout";
 import { useRouter } from "next/router";
 
 import { useAuth } from "../../lib/AuthContext";
+import { BasicButton } from "../../Components/Common/Button";
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth();
@@ -17,7 +18,7 @@ export default function Login() {
   return (
     <Layout>
       <h1>this is the login</h1>
-      <button onClick={loginWithGoogle}>SignInWithGoogle </button>
+      <BasicButton onClick={loginWithGoogle}>SignInWithGoogle </BasicButton>
     </Layout>
   );
 }

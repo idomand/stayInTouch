@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
 import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
+import Spinner from "../Components/Common/Spinner";
 //?=======================================================
 //?=======================================================
 
@@ -27,7 +28,6 @@ export default function Home() {
     }
   }, [currentUser, router]);
 
-  console.log(`currentUser`, currentUser);
   const [contactArray, setContactArray] = useState([
     { name: "poopLord", time: 3, timeCreated: 1641227473000, id: 5 },
     { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
@@ -92,7 +92,7 @@ export default function Home() {
     <DataContext.Provider value={contactData}>
       <Layout>
         <h1>this is home</h1>
-        {currentUser && <h2>hello {currentUser.displayName}</h2>}
+        {currentUser && <h2>Hi {currentUser.displayName}</h2>}
         <MainForm />
         <ContactDetails />
       </Layout>
