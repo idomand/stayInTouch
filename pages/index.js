@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import styled from "styled-components";
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import dayjs from "dayjs";
 import DataContext from "../lib/DataContext";
 import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
-import Spinner from "../Components/Common/Spinner";
 //?=======================================================
 //?=======================================================
 
@@ -16,8 +14,6 @@ export default function Home() {
   const router = useRouter();
 
   const { currentUser } = useAuth();
-
-  const [user, setUser] = useState(currentUser);
 
   useEffect(() => {
     if (currentUser) {
@@ -35,12 +31,6 @@ export default function Home() {
     { name: "dana", time: 14, timeCreated: 1640513733333, id: 3 },
     { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
   ]);
-
-  const authContextData = {
-    checkUser(newUser) {
-      setUser(newUser);
-    },
-  };
 
   const contactData = {
     contactArray: contactArray,

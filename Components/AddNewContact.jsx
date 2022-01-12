@@ -1,12 +1,11 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 
 import DataContext from "../lib/DataContext";
 
-const Input = styled.input`
-  /* width: 50px; */
-`;
+const Input = styled.input``;
+
 const InputText = styled(Input)`
   min-width: 70px;
   margin: 5px;

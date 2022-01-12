@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import AddNewContact from "./AddNewContact";
-import { BasicButton } from "./Common/Button";
 import { H1 } from "./Common/Text";
 
 const MainFormWrapper = styled.section`
@@ -14,10 +13,6 @@ const HeaderWrapper = styled.div`
 const MainHeader = styled(H1)`
   margin: auto;
   padding-top: 10px;
-`;
-
-const MainFormContent = styled.div`
-  color: ${({ theme }) => theme.primaryColorText};
 `;
 
 export default function MainForm() {

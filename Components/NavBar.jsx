@@ -1,8 +1,5 @@
 import React from "react";
-import Link from "next/link";
 import styled from "styled-components";
-import { H2 } from "./Common//Text.js";
-import { NavbarButton } from "./Common/Button";
 import Logout from "./Logout.jsx";
 import { useAuth } from "../lib/AuthContext";
 import { NavLink } from "./Common/Links";
