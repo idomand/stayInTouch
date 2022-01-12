@@ -1,5 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../../Components/Layout";
-export default function index() {
-  return <Layout>this is the login page</Layout>;
+import { useRouter } from "next/router";
+
+import { useAuth } from "../../lib/AuthContext";
+import { BasicButton } from "../../Components/Common/Button";
+
+export default function Login() {
+  const { loginWithGoogle, currentUser } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/");
+    }
+  }, [currentUser, router]);
+
+  return (
+    <Layout>
+      <h1>this is the login</h1>
+      <BasicButton onClick={loginWithGoogle}>SignInWithGoogle </BasicButton>
+    </Layout>
+  );
 }

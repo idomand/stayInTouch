@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 
 import DataContext from "../lib/DataContext";
-import { H2 } from "./Common/Text";
 import ContactItem from "./ContactItem";
 
 const ContactList = styled.ul`

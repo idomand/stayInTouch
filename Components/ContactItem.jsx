@@ -22,15 +22,12 @@ const ContactItemWrapper = styled.li`
 `;
 
 const ButtonContainer = styled.div`
-  /* border: 1px solid blue; */
   width: min-content;
   height: min-content;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-
-const EditButton = styled(BasicButton)``;
 
 const ResatButton = styled(BasicButton)``;
 
