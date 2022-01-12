@@ -92,29 +92,10 @@ export default function Home() {
     <DataContext.Provider value={contactData}>
       <Layout>
         <h1>this is home</h1>
+        {currentUser && <h2>hello {currentUser.displayName}</h2>}
         <MainForm />
         <ContactDetails />
       </Layout>
     </DataContext.Provider>
   );
-
-  // return (
-  //   <DataContext.Provider value={contactData}>
-  //     <Layout>
-  //       <h1>this is home</h1>
-  //       {currentUser ? (
-  //         <>
-  //           {" "}
-  //           <MainForm />
-  //           <ContactDetails />
-  //         </>
-  //       ) : (
-  //         <>
-  //           {" "}
-  //           <Login />
-  //         </>
-  //       )}
-  //     </Layout>
-  //   </DataContext.Provider>
-  // );
 }
