@@ -1,31 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { signOut } from "firebase/auth";
-import { NavbarButton } from "./Common/Button";
-import FirebaseApp, { auth, provider } from "../lib/Firebase";
-
+import { BasicButton } from "./Common/Button";
+import { useAuth } from "../lib/AuthContext";
 //*=================
 //*=================
 //*=================
-const LogOutWrapper = styled.div`
-  /* margin-top: 50px; */
-`;
+const LogoutButton = styled(BasicButton)``;
 
 export default function Logout() {
+  const { logout } = useAuth();
   function LogoutFunc() {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("user is signed out");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+    logout();
   }
 
-  return (
-    <LogOutWrapper>
-      <NavbarButton onClick={LogoutFunc}>Logout </NavbarButton>
-    </LogOutWrapper>
-  );
+  return <LogoutButton onClick={LogoutFunc}>Logout </LogoutButton>;
 }
