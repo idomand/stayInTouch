@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import dayjs from "dayjs";
-import DataContext from "../lib/DataContext";
 import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
+
 //?=======================================================
 //?=======================================================
 
@@ -14,25 +13,25 @@ export default function Home() {
   const router = useRouter();
 
   const { currentUser } = useAuth();
+  console.log("[poop]");
 
   useEffect(() => {
-    if (currentUser) {
-      console.log("there is a user: " + currentUser.displayName);
-    } else {
-      console.log("there is no user");
+    console.log("object");
+
+    if (!currentUser) {
       router.push("/login");
     }
   }, [currentUser, router]);
 
-  const [contactArray, setContactArray] = useState([
-    { name: "poopLord", time: 3, timeCreated: 1641227473000, id: 5 },
-    { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
-    { name: "david", time: 3, timeCreated: 1641118522222, id: 2 },
-    { name: "dana", time: 14, timeCreated: 1640513733333, id: 3 },
-    { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
-  ]);
+  // const [contactArray, setContactArray] = useState([
+  //   { name: "poopLord", time: 3, timeCreated: 1641227473000, id: 5 },
+  //   { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
+  //   { name: "david", time: 3, timeCreated: 1641118522222, id: 2 },
+  //   { name: "dana", time: 14, timeCreated: 1640513733333, id: 3 },
+  //   { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
+  // ]);
 
-  const contactData = {
+  /*   const contactData = {
     contactArray: contactArray,
     addContact(data) {
       setContactArray((contactArray) => [...contactArray, data]);
@@ -76,16 +75,16 @@ export default function Home() {
       });
       setContactArray(newArray);
     },
-  };
+  }; */
 
   return (
-    <DataContext.Provider value={contactData}>
-      <Layout>
-        <h1>this is home</h1>
-        {currentUser && <h2>Hi {currentUser.displayName}</h2>}
-        <MainForm />
-        <ContactDetails />
-      </Layout>
-    </DataContext.Provider>
+    <Layout>
+      {currentUser && (
+        <>
+          <MainForm />
+          <ContactDetails />
+        </>
+      )}
+    </Layout>
   );
 }
