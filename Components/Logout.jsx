@@ -5,7 +5,9 @@ import { useAuth } from "../lib/AuthContext";
 //*=================
 //*=================
 //*=================
-const LogoutButton = styled(BasicButton)``;
+const LogoutButton = styled(BasicButton)`
+  height: 100%;
+`;
 
 export default function Logout() {
   const { logout } = useAuth();

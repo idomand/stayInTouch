@@ -75,7 +75,13 @@ const currantTime = dayjs().valueOf();
 //!--------------------------------------------------------------------------------
 //*--------------------------------------------------------------------------------
 
-export default function ContactItem({ name, time, timeCreated, id, type }) {
+export default function ContactItem({
+  name,
+  time,
+  timeCreated,
+  contactId,
+  type,
+}) {
   const contactData = useContext(DataContext);
 
   let colorType;
@@ -89,7 +95,7 @@ export default function ContactItem({ name, time, timeCreated, id, type }) {
   // const isMobile = useMedia("(max-width: 480px)");
 
   function resatFunction() {
-    contactData.resatTimer(id);
+    contactData.resatTimer(contactId);
   }
 
   let lastTalkedToResponse;
@@ -119,7 +125,7 @@ export default function ContactItem({ name, time, timeCreated, id, type }) {
           name={name}
           time={time}
           timeCreated={timeCreated}
-          id={id}
+          contactId={contactId}
         />
         <ResatButton onClick={resatFunction}>Reset</ResatButton>
       </ButtonContainer>
