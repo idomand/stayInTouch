@@ -13,11 +13,8 @@ export default function Home() {
   const router = useRouter();
 
   const { currentUser } = useAuth();
-  console.log("[poop]");
 
   useEffect(() => {
-    console.log("object");
-
     if (!currentUser) {
       router.push("/login");
     }

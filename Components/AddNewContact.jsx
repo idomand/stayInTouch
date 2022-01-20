@@ -42,15 +42,10 @@ export default function AddNewContact() {
       name: nameRef.current.value,
       time: timeRef.current.value,
       timeCreated: dayjs().valueOf(),
-      contactId: Math.floor(Math.random() * 10000),
     };
 
-    console.log("currentUser :>> ", currentUser);
-    console.log("currentUser.uid :>> ", currentUser.uid);
+    addContactToFirestore(currentUser.uid, currentUser.email, newContact);
 
-    addContactToFirestore(currentUser.uid, newContact);
-
-    // contactData.addContact(newContact);
     nameRef.current.value = "";
     timeRef.current.value = 3;
   }

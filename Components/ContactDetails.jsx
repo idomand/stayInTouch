@@ -14,19 +14,25 @@ export default function ContactDetails() {
 
   useEffect(() => {
     const getDataFromFirebase = async () => {
-      const contactArray = await getContactsFromFirestore(currentUser.uid);
+      const contactArray = await getContactsFromFirestore(
+        currentUser.uid,
+        currentUser.email
+      );
       setArrayOfContacts(contactArray);
     };
     getDataFromFirebase();
-  }, [currentUser.uid]);
+  }, [currentUser]);
 
   let type = 0;
 
   return (
     <>
       <ContactList>
-        {arrayOfContacts.length &&
+        {arrayOfContacts &&
+          arrayOfContacts.length &&
           arrayOfContacts.map(({ userData }) => {
+            console.log("userData :>> ", userData);
+            console.log("userData.contactId :>> ", userData.contactId);
             type++;
             return (
               <ContactItem
@@ -34,7 +40,7 @@ export default function ContactDetails() {
                 name={userData.name}
                 time={userData.time}
                 timeCreated={userData.timeCreated}
-                id={userData.contactId}
+                contactId={userData.contactId}
                 type={type}
               />
             );
