@@ -8,7 +8,6 @@
 //       databaseURL: "YOUR_DB_URL",
 //     });
 //   } catch (error) {
-//     console.log("Firebase admin initialization error", error.stack);
 //   }
 // }
 // export default admin.firestore();

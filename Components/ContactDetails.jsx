@@ -21,7 +21,7 @@ export default function ContactDetails() {
       setArrayOfContacts(contactArray);
     };
     getDataFromFirebase();
-  }, [currentUser]);
+  }, [currentUser, arrayOfContacts]);
 
   let type = 0;
 
@@ -31,8 +31,6 @@ export default function ContactDetails() {
         {arrayOfContacts &&
           arrayOfContacts.length &&
           arrayOfContacts.map(({ userData }) => {
-            console.log("userData :>> ", userData);
-            console.log("userData.contactId :>> ", userData.contactId);
             type++;
             return (
               <ContactItem

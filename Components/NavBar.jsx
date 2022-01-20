@@ -21,7 +21,6 @@ const NavBarWrapper = styled.nav`
 
 export default function NavBar() {
   const { currentUser } = useAuth();
-  console.log("currentUser :>> ", currentUser);
   return (
     <NavBarWrapper>
       <NavLink href="/">Home</NavLink>

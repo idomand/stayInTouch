@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
-import dayjs from "dayjs";
 import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
 
-//?=======================================================
 //?=======================================================
 
 export default function Home() {
@@ -19,60 +17,6 @@ export default function Home() {
       router.push("/login");
     }
   }, [currentUser, router]);
-
-  // const [contactArray, setContactArray] = useState([
-  //   { name: "poopLord", time: 3, timeCreated: 1641227473000, id: 5 },
-  //   { name: "ido", time: 3, timeCreated: 1641118511111, id: 1 },
-  //   { name: "david", time: 3, timeCreated: 1641118522222, id: 2 },
-  //   { name: "dana", time: 14, timeCreated: 1640513733333, id: 3 },
-  //   { name: "bob", time: 7, timeCreated: 1639563344444, id: 4 },
-  // ]);
-
-  /*   const contactData = {
-    contactArray: contactArray,
-    addContact(data) {
-      setContactArray((contactArray) => [...contactArray, data]);
-    },
-    deleteContactFunc(id) {
-      setContactArray(this.contactArray.filter((element) => element.id !== id));
-    },
-    resatTimer(id) {
-      const newTimeCreated = dayjs().valueOf();
-      const contactObject = this.contactArray.find(
-        (element) => element.id === id
-      );
-      contactObject.timeCreated = newTimeCreated;
-      const newArray = this.contactArray.map((element) => {
-        if (element.id === id) {
-          element = { ...element, timeCreated: newTimeCreated };
-          return element;
-        } else {
-          return element;
-        }
-      });
-      setContactArray(newArray);
-    },
-    editContactName(id, name) {
-      const newArray = this.contactArray.map((element) => {
-        if (element.id === id) {
-          return (element = { ...element, name: name });
-        } else {
-          return element;
-        }
-      });
-      setContactArray(newArray);
-    },
-    editContactTime(id, time) {
-      const newArray = this.contactArray.map((element) => {
-        if (element.id === id) {
-          return (element = { ...element, time: time });
-        } else {
-          return element;
-        }
-      });
-      setContactArray(newArray);
-    },
-  }; */
 
   return (
     <Layout>
