@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
-// import DataContext from "../lib/DataContext";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 const Input = styled.input``;
@@ -16,7 +15,6 @@ const InputTime = styled(Input)`
 `;
 const InputSubmit = styled(Input)`
   padding: 10px;
-  /* width: 50px; */
   margin-left: 10px;
   border-radius: 10px;
   color: ${({ theme }) => theme.secondaryColor};
@@ -32,7 +30,6 @@ const Form = styled.form`
 export default function AddNewContact() {
   const nameRef = useRef();
   const timeRef = useRef();
-  // const contactData = useContext(DataContext);
   const { currentUser } = useAuth();
 
   function createNewContact(event) {
