@@ -23,8 +23,8 @@ export default function MainForm() {
   return (
     <MainFormWrapper>
       <HeaderWrapper>
-        <MainHeader>Hi {currentUser.displayName}</MainHeader>
         <MainHeader>Staying in Touch!</MainHeader>
+        <MainHeader>Hi {currentUser.displayName}</MainHeader>
       </HeaderWrapper>
       <AddNewContact />
     </MainFormWrapper>
