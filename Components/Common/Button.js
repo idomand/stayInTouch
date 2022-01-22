@@ -17,7 +17,7 @@ export const BasicButton = styled.button.attrs((props) => {
   transition: 0.3s;
   &:hover {
     background-color: ${({ theme }) => theme.buttonHoverColor};
-    border: 3px solid ${({ theme }) => theme.lightGreen};
+    border: 2px solid ${({ theme }) => theme.lightGreen};
   }
   @media (max-width: 480px) {
     padding: 4px 10px;
