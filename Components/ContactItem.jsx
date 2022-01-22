@@ -49,25 +49,15 @@ const NameContainer = styled.span`
   border: 2px ${({ theme }) => theme.black} solid;
   padding: 5px;
   font-weight: bold;
-  /* flex-grow: 1; */
   min-width: 110px;
   text-decoration: underline;
 `;
 const TimeContainer = styled.div`
-  /* border: 2px solid yellow; */
   width: 100px;
-  /* margin: 5px; */
-  /* flex-grow: 1; */
 `;
 
-const LastTalkedContainer = styled.div`
-  /* border: 2px solid lightcoral; */
-  /* flex-grow: 1; */
-`;
-const EmojiContainer = styled.div`
-  /* border: 2px solid green; */
-  /* flex-grow: 1; */
-`;
+const LastTalkedContainer = styled.div``;
+const EmojiContainer = styled.div``;
 
 const oneDay = 86400000;
 

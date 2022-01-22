@@ -1,46 +1,33 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getContactsFromFirestore } from "../lib/Firebase";
+import { db } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ContactItem from "./ContactItem";
+import { collection, onSnapshot } from "firebase/firestore";
 
 const ContactList = styled.ul`
   padding: 0;
 `;
 
-const DUMMY_DATA = [
-  {
-    userData: {
-      name: "Dana",
-      time: 3,
-      timeCreated: 1641227473000,
-      contactId: 5,
-    },
-  },
-  {
-    userData: {
-      name: "Asaf",
-      time: 5,
-      timeCreated: 1641118511111,
-      contactId: 1,
-    },
-  },
-];
-
 export default function ContactDetails() {
-  const [arrayOfContacts, setArrayOfContacts] = useState(DUMMY_DATA);
+  const [arrayOfContacts, setArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
 
-  // useEffect(() => {
-  //   const getDataFromFirebase = async () => {
-  //     const contactArray = await getContactsFromFirestore(
-  //       currentUser.uid,
-  //       currentUser.email
-  //     );
-  //     setArrayOfContacts(contactArray);
-  //   };
-  //   getDataFromFirebase();
-  // }, [currentUser, arrayOfContacts]);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, `${currentUser.email}${currentUser.uid}`),
+      (snapshot) => {
+        setArrayOfContacts(
+          snapshot.docs.map((doc) => {
+            let contactObject = doc.data();
+            contactObject.userData.contactId = doc.id;
+            return contactObject;
+          })
+        );
+      }
+    );
+    return unsubscribe;
+  }, [currentUser]);
 
   let type = 0;
 

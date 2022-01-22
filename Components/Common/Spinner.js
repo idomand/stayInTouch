@@ -4,7 +4,6 @@ import styled from "styled-components";
 const SpinnerWrapper = styled.div`
   display: flex;
   justify-content: center;
-  /* border: solid red; */
   margin: auto;
   height: 200px;
   align-items: center;
