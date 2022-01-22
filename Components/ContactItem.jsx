@@ -27,7 +27,7 @@ const ButtonContainer = styled.div`
   align-items: center;
 `;
 
-const ResatButton = styled(BasicButton)`
+const ResetButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.nicePurple};
   border: solid ${({ theme }) => theme.boldRed};
   color: ${({ theme }) => theme.black};
@@ -83,7 +83,7 @@ export default function ContactItem({
     colorType = "#003E29";
   }
 
-  function resatFunction() {
+  function resetFunction() {
     const newContactData = {
       name: name,
       time: time,
@@ -126,7 +126,7 @@ export default function ContactItem({
           timeCreated={timeCreated}
           contactId={contactId}
         />
-        <ResatButton onClick={resatFunction}>Reset</ResatButton>
+        <ResetButton onClick={resetFunction}>Reset</ResetButton>
       </ButtonContainer>
       <DataWrapper>
         <NameContainer> {name} </NameContainer>
