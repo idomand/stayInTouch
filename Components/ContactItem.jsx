@@ -2,13 +2,10 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import DataContext from "../lib/DataContext";
 import dayjs from "dayjs";
-// import { useMedia } from "react-use";
+import { useMedia } from "react-use";
 import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
-
-//*--------------------------------------------------------------------------------
-//!--------------------------------------------------------------------------------
-//*--------------------------------------------------------------------------------
+import useStyledTheme from "../utils/hooks/useStyledTheme";
 
 const ContactItemWrapper = styled.li`
   background-color: ${(element) => element.backgroundColor};
@@ -29,7 +26,12 @@ const ButtonContainer = styled.div`
   align-items: center;
 `;
 
-const ResatButton = styled(BasicButton)``;
+const ResatButton = styled(BasicButton)`
+  background-color: ${({ theme }) => theme.nicePurple};
+  border: solid ${({ theme }) => theme.boldRed};
+  color: ${({ theme }) => theme.black};
+  margin: 5px 5px;
+`;
 
 const DataWrapper = styled.div`
   border-left: 1.5px ${({ theme }) => theme.niceBrown} solid;
@@ -44,7 +46,7 @@ const DataWrapper = styled.div`
 `;
 
 const NameContainer = styled.span`
-  border: 2px black solid;
+  border: 2px ${({ theme }) => theme.black} solid;
   padding: 5px;
   font-weight: bold;
   /* flex-grow: 1; */
@@ -71,10 +73,6 @@ const oneDay = 86400000;
 
 const currantTime = dayjs().valueOf();
 
-//*--------------------------------------------------------------------------------
-//!--------------------------------------------------------------------------------
-//*--------------------------------------------------------------------------------
-
 export default function ContactItem({
   name,
   time,
@@ -83,6 +81,8 @@ export default function ContactItem({
   type,
 }) {
   const contactData = useContext(DataContext);
+  const Theme = useStyledTheme();
+  const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let colorType;
 
@@ -91,8 +91,6 @@ export default function ContactItem({
   } else {
     colorType = "#003E29";
   }
-
-  // const isMobile = useMedia("(max-width: 480px)");
 
   function resatFunction() {
     contactData.resatTimer(contactId);
