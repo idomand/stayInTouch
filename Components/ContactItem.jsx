@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import DataContext from "../lib/DataContext";
 import dayjs from "dayjs";
-import { useMedia } from "react-use";
 import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
-import useStyledTheme from "../utils/hooks/useStyledTheme";
+import { updateContact } from "../lib/Firebase";
+import { useAuth } from "../lib/AuthContext";
+// import { useMedia } from "react-use";
+// import useStyledTheme from "../utils/hooks/useStyledTheme";
 
 const ContactItemWrapper = styled.li`
   background-color: ${(element) => element.backgroundColor};
@@ -70,12 +71,12 @@ export default function ContactItem({
   contactId,
   type,
 }) {
-  const contactData = useContext(DataContext);
-  const Theme = useStyledTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
+  const { currentUser } = useAuth();
+
+  // const Theme = useStyledTheme();
+  // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let colorType;
-
   if (type % 2 === 0) {
     colorType = "#1C5340";
   } else {
@@ -83,7 +84,17 @@ export default function ContactItem({
   }
 
   function resatFunction() {
-    contactData.resatTimer(contactId);
+    const newContactData = {
+      name: name,
+      time: time,
+      timeCreated: currantTime,
+    };
+    updateContact(
+      currentUser.uid,
+      currentUser.email,
+      contactId,
+      newContactData
+    );
   }
 
   let lastTalkedToResponse;
