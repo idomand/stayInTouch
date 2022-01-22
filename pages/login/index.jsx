@@ -58,7 +58,7 @@ export default function Login() {
       <LoginWrapper>
         <H1>Login with your Google account</H1>
         <SignInButton onClick={loginWithGoogle}>
-          <LoginText>Sign In</LoginText>
+          <LoginText>Login</LoginText>
           <GoogleLogo src="/Google-logo.png" />
         </SignInButton>
       </LoginWrapper>
