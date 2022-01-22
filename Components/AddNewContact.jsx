@@ -3,13 +3,15 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
+import { BasicTextInput } from "./Common/Input";
+
 const Input = styled.input``;
 
-const InputText = styled(Input)`
+const InputText = styled(BasicTextInput)`
   min-width: 70px;
   margin: 5px;
 `;
-const InputTime = styled(Input)`
+const InputTime = styled(BasicTextInput)`
   width: 30px;
   margin: 5px;
 `;
@@ -17,7 +19,7 @@ const InputSubmit = styled(Input)`
   padding: 10px;
   margin-left: 10px;
   border-radius: 10px;
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.boldRed};
   background-color: ${({ theme }) => theme.niceBrown};
   font-weight: bolder;
 `;

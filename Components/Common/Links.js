@@ -10,19 +10,24 @@ const LinkPrototype = ({ as, children, className, href }) => (
 export const NavLink = styled(LinkPrototype)`
   border: 2px solid ${({ theme }) => theme.primaryHoverColor};
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.buttonBackgroundColor};
+  background-color: ${({ theme }) => theme.lightGreen};
   font-size: ${({ theme }) => theme.typeScale.header4};
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.boldRed};
   align-items: center;
-  padding: 12px 24px;
+  padding: 10px 20px;
+  margin: 5px;
   min-width: 70px;
-
+  max-width: 120px;
+  /* height: 50px; */
   text-decoration: none;
   transition: all 0.3s ease-in-out;
 
   &:hover,
   &:focus {
     background-color: ${({ theme }) => theme.buttonHoverColor};
-    border: 3px solid ${({ theme }) => theme.buttonBackgroundColor};
+    border: 2px solid ${({ theme }) => theme.lightGreen};
+  }
+  @media (${({ theme }) => theme.devices.break1}) {
+    padding: 6px 12px;
   }
 `;
