@@ -41,17 +41,21 @@ const DataWrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   flex-grow: 1;
-  @media (max-width: 480px) {
+  @media (${({ theme }) => theme.devices.break1}) {
     justify-content: space-between;
   }
 `;
 
 const NameContainer = styled.span`
-  border: 2px ${({ theme }) => theme.black} solid;
-  padding: 5px;
+  border: 2px ${({ theme }) => theme.black} dotted;
+  border-radius: 10px;
+  padding: 10px;
   font-weight: bold;
   min-width: 110px;
   text-decoration: underline;
+  @media (${({ theme }) => theme.devices.break1}) {
+    padding: 5px;
+  }
 `;
 const TimeContainer = styled.div`
   width: 100px;
