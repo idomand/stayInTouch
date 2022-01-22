@@ -63,9 +63,6 @@ const InputWrapper = styled.div`
     flex-direction: column;
   }
 `;
-const StyledInput = styled.input`
-  background-color: lavender;
-`;
 const SubmitInput = styled.input`
   background-color: ${({ theme }) => theme.lightGreen};
   margin-top: 5px;
