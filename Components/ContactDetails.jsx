@@ -15,6 +15,7 @@ const ContactList = styled.ul`
 export default function ContactDetails() {
   const [arrayOfContacts, setArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
+  console.log("arrayOfContacts :>> ", arrayOfContacts);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -23,7 +24,7 @@ export default function ContactDetails() {
         setArrayOfContacts(
           snapshot.docs.map((doc) => {
             let contactObject = doc.data();
-            contactObject.userData.contactId = doc.id;
+            contactObject.contactId = doc.id;
             return contactObject;
           })
         );
@@ -39,19 +40,20 @@ export default function ContactDetails() {
       <ContactList>
         {arrayOfContacts &&
           arrayOfContacts.length &&
-          arrayOfContacts.map(({ userData }) => {
+          arrayOfContacts.map((element) => {
             type++;
             return (
               <ContactItem
-                key={userData.contactId}
-                name={userData.name}
-                time={userData.time}
-                timeCreated={userData.timeCreated}
-                contactId={userData.contactId}
+                key={element.contactId}
+                name={element.name}
+                time={element.time}
+                timeCreated={element.timeCreated}
+                contactId={element.contactId}
                 type={type}
               />
             );
           })}
+        {arrayOfContacts.length === 0 && <h1>no contacts</h1>}
       </ContactList>
     </>
   );

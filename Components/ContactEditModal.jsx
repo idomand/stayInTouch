@@ -93,7 +93,7 @@ export default function ContactEditModal({
     e.preventDefault();
     const newContactData = {
       name: contactName,
-      time: contactTime,
+      time: +contactTime,
       timeCreated: timeCreated,
     };
     updateContact(
