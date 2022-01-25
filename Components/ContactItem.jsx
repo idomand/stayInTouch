@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
-import { updateContact } from "../lib/Firebase";
+import { updateTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
 // import { useMedia } from "react-use";
@@ -99,7 +99,7 @@ export default function ContactItem({
       time: time,
       timeCreated: currantTime,
     };
-    updateContact(
+    updateTimerForContact(
       currentUser.uid,
       currentUser.email,
       contactId,
