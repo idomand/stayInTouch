@@ -136,6 +136,8 @@ export default function ContactEditModal({
               <BasicTextInput
                 id="time"
                 type="number"
+                max={31}
+                min={1}
                 value={contactTime}
                 onChange={(e) => setContactTime(e.target.value)}
               />

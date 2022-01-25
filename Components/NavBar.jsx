@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { NavLink } from "./Common/Links";
 import { useMedia } from "react-use";
 import { H1 } from "./Common/Text.js";
 import useStyledTheme from "../utils/hooks/useStyledTheme";
+import { useRouter } from "next/router";
 
 // !=========================
 // ?=========================
@@ -35,7 +36,19 @@ const ButtonWrapper = styled.div``;
 
 const HomeLink = styled(NavLink)``;
 
-const AboutLink = styled(NavLink)``;
+const AboutLink = styled(NavLink)`
+  /* ${({ value, currantPage }) => {
+    console.log("value", value);
+    console.log("currantPage :>> ", currantPage);
+  }}
+  ${({ currantPage }) => {
+    if (currantPage === "/about") {
+      return "background-color:blue";
+    } else {
+      return "background-color:red";
+    }
+  }} */
+`;
 
 const LoginButton = styled(NavLink)``;
 
@@ -47,8 +60,12 @@ const LogoutButton = styled(NavLink)`
 export default function NavBar() {
   const Theme = useStyledTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-
   const { currentUser, logout } = useAuth();
+
+  const router = useRouter();
+  console.log("router.route :>> ", router.route);
+  const currantPage = router.route;
+  console.log("typeof router.route :>> ", typeof router.route);
 
   return (
     <NavBarWrapper>
@@ -59,14 +76,20 @@ export default function NavBar() {
       )}
 
       <ButtonWrapper>
-        <HomeLink href="/">Home</HomeLink>
-        <AboutLink href="/about">About</AboutLink>
+        <HomeLink value={"/"} currantPage={currantPage} href="/">
+          Home
+        </HomeLink>
+        <AboutLink value={"/about"} currantPage={currantPage} href="/about">
+          About
+        </AboutLink>
         {currentUser ? (
           <LogoutButton as="button" onClick={logout}>
             Logout
           </LogoutButton>
         ) : (
-          <LoginButton href="/login">Login</LoginButton>
+          <LoginButton value={"/login"} currantPage={currantPage} href="/login">
+            Login
+          </LoginButton>
         )}
       </ButtonWrapper>
     </NavBarWrapper>
