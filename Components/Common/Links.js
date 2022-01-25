@@ -19,19 +19,9 @@ export const NavLink = styled(LinkPrototype)`
   max-width: 120px;
   text-decoration: none;
   transition: all 0.3s ease-in-out;
-  background-color: ${({ theme }) => theme.lightGreen};
-
-  /* ${({ currantPage, value }) => {
-    console.log("currantPage", currantPage);
-    console.log("value", value);
-    if (currantPage === value) {
-      console.log("yes");
-      return "background-color: black";
-    } else {
-      console.log("no");
-      return "background-color: red;";
-    }
-  }} */
+  text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.lightGreen : theme.boldGreen};
 
   &:hover,
   &:focus {
