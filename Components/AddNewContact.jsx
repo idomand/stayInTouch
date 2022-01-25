@@ -68,36 +68,61 @@ const Popper = styled.div`
   z-index: 2;
 `;
 
+const ErrorWrapper = styled.div`
+  border: solid red;
+`;
+
 //?==============================================================================================
 //*==============================================================================================
 //?==============================================================================================
 
 export default function AddNewContact() {
-  const nameRef = useRef();
   const timeRef = useRef();
   const { currentUser } = useAuth();
+  const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+  const [error, setError] = useState(false);
 
-  function createNewContact(event) {
+  function nameChangeHandler(e) {
+    setName(e.target.value);
+    if (error) {
+      setError(false);
+    }
+  }
+
+  async function createNewContact(event) {
     event.preventDefault();
 
     let newContact = {
-      name: nameRef.current.value,
+      name: name,
       time: +timeRef.current.value,
       timeCreated: startDate.getTime(),
     };
 
-    addContactToFirestore(currentUser.uid, currentUser.email, newContact);
-
-    nameRef.current.value = "";
-    timeRef.current.value = 3;
+    const result = await addContactToFirestore(
+      currentUser.uid,
+      currentUser.email,
+      newContact
+    );
+    if (result === "bad") {
+      setError("contact already in list");
+    } else {
+      setName("");
+      timeRef.current.value = 3;
+    }
   }
   return (
     <>
       <Form onSubmit={createNewContact}>
         I would like to talk to:
         <label>
-          <InputText ref={nameRef} type="text" name="name" required />
+          <InputText
+            type="text"
+            name="name"
+            value={name}
+            required
+            onChange={nameChangeHandler}
+          />
         </label>
         <label>
           every
@@ -124,6 +149,11 @@ export default function AddNewContact() {
           <InputSubmit type="submit" value="Add contact" />
         </DatePickerWrapper>
       </Form>
+      {error && (
+        <ErrorWrapper>
+          <h2>error: {error}</h2>
+        </ErrorWrapper>
+      )}
     </>
   );
 }
