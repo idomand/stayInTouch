@@ -24,9 +24,9 @@ const InputSubmit = styled(Input)`
   font-weight: bolder;
 `;
 
-const FormWrapper = styled.div`
-  display: flex;
-`;
+// const FormWrapper = styled.div`
+//   display: flex;
+// `;
 
 const Form = styled.form`
   color: ${({ theme }) => theme.niceBrown};
@@ -43,7 +43,7 @@ export default function AddNewContact() {
 
     let newContact = {
       name: nameRef.current.value,
-      time: timeRef.current.value,
+      time: +timeRef.current.value,
       timeCreated: dayjs().valueOf(),
     };
 

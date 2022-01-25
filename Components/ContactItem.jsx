@@ -5,6 +5,7 @@ import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
 import { updateContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
+import propTypes from "prop-types";
 // import { useMedia } from "react-use";
 // import useStyledTheme from "../utils/hooks/useStyledTheme";
 
@@ -145,3 +146,11 @@ export default function ContactItem({
     </ContactItemWrapper>
   );
 }
+
+ContactItem.propTypes = {
+  name: propTypes.string,
+  time: propTypes.number,
+  timeCreated: propTypes.number,
+  contactId: propTypes.string,
+  type: propTypes.number,
+};

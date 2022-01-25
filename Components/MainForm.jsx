@@ -11,7 +11,6 @@ const MainFormWrapper = styled.section`
   align-items: center;
 `;
 
-const HeaderWrapper = styled.div``;
 const MainHeader = styled(H1)`
   margin: auto;
   padding-top: 10px;
@@ -23,8 +22,6 @@ export default function MainForm() {
   return (
     <MainFormWrapper>
       <MainHeader>Hi {currentUser.displayName}</MainHeader>
-      {/* <HeaderWrapper> */}
-      {/* </HeaderWrapper> */}
       <AddNewContact />
     </MainFormWrapper>
   );
