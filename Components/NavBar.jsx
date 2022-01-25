@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { NavLink } from "./Common/Links";
@@ -34,22 +34,6 @@ const NavbarText = styled(H1)`
 `;
 const ButtonWrapper = styled.div``;
 
-const HomeLink = styled(NavLink)``;
-
-const AboutLink = styled(NavLink)`
-  /* ${({ value, currantPage }) => {
-    console.log("value", value);
-    console.log("currantPage :>> ", currantPage);
-  }}
-  ${({ currantPage }) => {
-    if (currantPage === "/about") {
-      return "background-color:blue";
-    } else {
-      return "background-color:red";
-    }
-  }} */
-`;
-
 const LoginButton = styled(NavLink)``;
 
 const LogoutButton = styled(NavLink)`
@@ -63,9 +47,6 @@ export default function NavBar() {
   const { currentUser, logout } = useAuth();
 
   const router = useRouter();
-  console.log("router.route :>> ", router.route);
-  const currantPage = router.route;
-  console.log("typeof router.route :>> ", typeof router.route);
 
   return (
     <NavBarWrapper>
@@ -76,18 +57,18 @@ export default function NavBar() {
       )}
 
       <ButtonWrapper>
-        <HomeLink value={"/"} currantPage={currantPage} href="/">
+        <NavLink isActive={router.pathname == "/"} href="/">
           Home
-        </HomeLink>
-        <AboutLink value={"/about"} currantPage={currantPage} href="/about">
+        </NavLink>
+        <NavLink isActive={router.pathname == "/about"} href="/about">
           About
-        </AboutLink>
+        </NavLink>
         {currentUser ? (
           <LogoutButton as="button" onClick={logout}>
             Logout
           </LogoutButton>
         ) : (
-          <LoginButton value={"/login"} currantPage={currantPage} href="/login">
+          <LoginButton isActive={router.pathname == "/login"} href="/login">
             Login
           </LoginButton>
         )}
