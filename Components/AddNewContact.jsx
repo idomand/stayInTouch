@@ -24,6 +24,10 @@ const InputSubmit = styled(Input)`
   font-weight: bolder;
 `;
 
+// const FormWrapper = styled.div`
+//   display: flex;
+// `;
+
 const Form = styled.form`
   color: ${({ theme }) => theme.niceBrown};
   margin: 10px;
@@ -39,7 +43,7 @@ export default function AddNewContact() {
 
     let newContact = {
       name: nameRef.current.value,
-      time: timeRef.current.value,
+      time: +timeRef.current.value,
       timeCreated: dayjs().valueOf(),
     };
 
@@ -49,7 +53,7 @@ export default function AddNewContact() {
     timeRef.current.value = 3;
   }
   return (
-    <div>
+    <>
       <Form onSubmit={createNewContact}>
         I would like to talk to:
         <label>
@@ -70,6 +74,6 @@ export default function AddNewContact() {
         </label>
         <InputSubmit type="submit" value="Add contact" />
       </Form>
-    </div>
+    </>
   );
 }

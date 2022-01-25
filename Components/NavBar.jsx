@@ -5,6 +5,7 @@ import { NavLink } from "./Common/Links";
 import { useMedia } from "react-use";
 import { H1 } from "./Common/Text.js";
 import useStyledTheme from "../utils/hooks/useStyledTheme";
+import { useRouter } from "next/router";
 
 // !=========================
 // ?=========================
@@ -33,10 +34,6 @@ const NavbarText = styled(H1)`
 `;
 const ButtonWrapper = styled.div``;
 
-const HomeLink = styled(NavLink)``;
-
-const AboutLink = styled(NavLink)``;
-
 const LoginButton = styled(NavLink)``;
 
 const LogoutButton = styled(NavLink)`
@@ -47,8 +44,9 @@ const LogoutButton = styled(NavLink)`
 export default function NavBar() {
   const Theme = useStyledTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-
   const { currentUser, logout } = useAuth();
+
+  const router = useRouter();
 
   return (
     <NavBarWrapper>
@@ -59,14 +57,20 @@ export default function NavBar() {
       )}
 
       <ButtonWrapper>
-        <HomeLink href="/">Home</HomeLink>
-        <AboutLink href="/about">About</AboutLink>
+        <NavLink isActive={router.pathname == "/"} href="/">
+          Home
+        </NavLink>
+        <NavLink isActive={router.pathname == "/about"} href="/about">
+          About
+        </NavLink>
         {currentUser ? (
           <LogoutButton as="button" onClick={logout}>
             Logout
           </LogoutButton>
         ) : (
-          <LoginButton href="/login">Login</LoginButton>
+          <LoginButton isActive={router.pathname == "/login"} href="/login">
+            Login
+          </LoginButton>
         )}
       </ButtonWrapper>
     </NavBarWrapper>
