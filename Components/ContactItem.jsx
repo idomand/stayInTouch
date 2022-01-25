@@ -5,6 +5,7 @@ import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
 import { updateContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
+import propTypes from "prop-types";
 // import { useMedia } from "react-use";
 // import useStyledTheme from "../utils/hooks/useStyledTheme";
 
@@ -17,6 +18,10 @@ const ContactItemWrapper = styled.li`
   margin: 10px 5px;
   border-radius: 10px;
   color: ${({ theme }) => theme.niceBrown};
+  @media (${({ theme }) => theme.devices.break2}) {
+    width: 80%;
+    /* border: solid red; */
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -141,3 +146,11 @@ export default function ContactItem({
     </ContactItemWrapper>
   );
 }
+
+ContactItem.propTypes = {
+  name: propTypes.string,
+  time: propTypes.number,
+  timeCreated: propTypes.number,
+  contactId: propTypes.string,
+  type: propTypes.number,
+};

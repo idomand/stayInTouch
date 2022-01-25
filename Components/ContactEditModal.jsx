@@ -5,6 +5,8 @@ import { BasicButton } from "./Common/Button";
 import { deleteContact, updateContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
+import propTypes from "prop-types";
+
 const EditButton = styled(BasicButton)`
   color: ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.nicePurple};
@@ -136,6 +138,8 @@ export default function ContactEditModal({
               <BasicTextInput
                 id="time"
                 type="number"
+                max={31}
+                min={1}
                 value={contactTime}
                 onChange={(e) => setContactTime(e.target.value)}
               />
@@ -151,6 +155,13 @@ export default function ContactEditModal({
     </>
   );
 }
+
+ContactEditModal.propTypes = {
+  name: propTypes.string,
+  time: propTypes.number,
+  timeCreated: propTypes.number,
+  contactId: propTypes.string,
+};
 
 //?========================
 //?========================

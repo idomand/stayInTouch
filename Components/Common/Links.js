@@ -10,7 +10,6 @@ const LinkPrototype = ({ as, children, className, href }) => (
 export const NavLink = styled(LinkPrototype)`
   border: 2px solid ${({ theme }) => theme.primaryHoverColor};
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.lightGreen};
   font-size: ${({ theme }) => theme.typeScale.header4};
   color: ${({ theme }) => theme.boldRed};
   align-items: center;
@@ -18,9 +17,11 @@ export const NavLink = styled(LinkPrototype)`
   margin: 5px;
   min-width: 70px;
   max-width: 120px;
-  /* height: 50px; */
   text-decoration: none;
   transition: all 0.3s ease-in-out;
+  text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.lightGreen : theme.boldGreen};
 
   &:hover,
   &:focus {

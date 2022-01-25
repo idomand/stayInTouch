@@ -7,6 +7,9 @@ import { collection, onSnapshot } from "firebase/firestore";
 
 const ContactList = styled.ul`
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default function ContactDetails() {
