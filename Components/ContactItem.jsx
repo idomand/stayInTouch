@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import dayjs from "dayjs";
 import { BasicButton } from "./Common/Button";
 import ContactEditModal from "./ContactEditModal";
 import { updateContact } from "../lib/Firebase";
@@ -59,7 +58,9 @@ const NameContainer = styled.span`
   min-width: 110px;
   text-decoration: underline;
   @media (${({ theme }) => theme.devices.break1}) {
+    overflow: scroll;
     padding: 5px;
+    max-width: 110px;
   }
 `;
 const TimeContainer = styled.div`
@@ -71,7 +72,7 @@ const EmojiContainer = styled.div``;
 
 const oneDay = 86400000;
 
-const currantTime = dayjs().valueOf();
+const currantTime = new Date().getTime();
 
 export default function ContactItem({
   name,
