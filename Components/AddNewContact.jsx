@@ -1,9 +1,14 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
-import dayjs from "dayjs";
+import React, { useRef, useState } from "react";
+import styled, { css, createGlobalStyle } from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+//?==============================================================================================
+//*==============================================================================================
+//?==============================================================================================
 
 const Input = styled.input``;
 
@@ -12,7 +17,7 @@ const InputText = styled(BasicTextInput)`
   margin: 5px;
 `;
 const InputTime = styled(BasicTextInput)`
-  width: 30px;
+  width: 45px;
   margin: 5px;
 `;
 const InputSubmit = styled(Input)`
@@ -24,19 +29,54 @@ const InputSubmit = styled(Input)`
   font-weight: bolder;
 `;
 
-// const FormWrapper = styled.div`
-//   display: flex;
-// `;
-
 const Form = styled.form`
   color: ${({ theme }) => theme.niceBrown};
   margin: 10px;
 `;
 
+const DatePickerWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const DatePickerComponent = styled(({ className, ...props }) => (
+  <DatePicker {...props} wrapperClassName={className} />
+))`
+  width: 90px;
+
+  & .react-datepicker__input-container {
+    width: 90px;
+  }
+  & .react-datepicker__input-container input {
+    width: 90px;
+
+    border-radius: 5px;
+    background-color: lavender;
+  }
+`;
+
+const Calendar = styled.div`
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(27, 37, 86, 0.16);
+  overflow: hidden;
+`;
+const Popper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+`;
+
+//?==============================================================================================
+//*==============================================================================================
+//?==============================================================================================
+
 export default function AddNewContact() {
   const nameRef = useRef();
   const timeRef = useRef();
   const { currentUser } = useAuth();
+  const [startDate, setStartDate] = useState(new Date());
 
   function createNewContact(event) {
     event.preventDefault();
@@ -44,7 +84,7 @@ export default function AddNewContact() {
     let newContact = {
       name: nameRef.current.value,
       time: +timeRef.current.value,
-      timeCreated: dayjs().valueOf(),
+      timeCreated: startDate.getTime(),
     };
 
     addContactToFirestore(currentUser.uid, currentUser.email, newContact);
@@ -72,7 +112,17 @@ export default function AddNewContact() {
           />
           days
         </label>
-        <InputSubmit type="submit" value="Add contact" />
+        <DatePickerWrapper>
+          <p>lest time we have talked was:</p>
+          <DatePickerComponent
+            CalendarContainer={Calendar}
+            popperContainer={Popper}
+            dateFormat="dd/MM/yyyy"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+          <InputSubmit type="submit" value="Add contact" />
+        </DatePickerWrapper>
       </Form>
     </>
   );
