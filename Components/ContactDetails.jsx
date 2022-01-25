@@ -15,7 +15,6 @@ const ContactList = styled.ul`
 export default function ContactDetails() {
   const [arrayOfContacts, setArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
-  console.log("arrayOfContacts :>> ", arrayOfContacts);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(

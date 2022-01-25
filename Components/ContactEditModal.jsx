@@ -71,6 +71,9 @@ const SubmitInput = styled.input`
   padding: 10px;
   border-radius: 10px;
 `;
+const ErrorWrapper = styled.div`
+  border: solid red;
+`;
 
 export default function ContactEditModal({
   name,
@@ -83,26 +86,38 @@ export default function ContactEditModal({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
+  const [error, setError] = useState(false);
 
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
     setIsModalOpen(false);
   }
 
-  function updateContactOnSubmit(e) {
+  async function updateContactOnSubmit(e) {
     e.preventDefault();
     const newContactData = {
       name: contactName,
       time: +contactTime,
       timeCreated: timeCreated,
     };
-    updateContact(
+    const result = await updateContact(
       currentUser.uid,
       currentUser.email,
       contactId,
       newContactData
     );
-    setIsModalOpen(false);
+
+    if (result === "bad") {
+      setError("contact already in list");
+    } else {
+      setIsModalOpen(false);
+    }
+  }
+  function nameChangeHandler(e) {
+    setContactName(e.target.value);
+    if (error) {
+      setError(false);
+    }
   }
 
   return (
@@ -130,7 +145,7 @@ export default function ContactEditModal({
                 id="name"
                 type="text"
                 value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
+                onChange={nameChangeHandler}
               />
             </InputWrapper>
             <InputWrapper>
@@ -150,6 +165,11 @@ export default function ContactEditModal({
           <DeleteContactButton onClick={deleteContactFunc}>
             Delete contact
           </DeleteContactButton>
+          {error && (
+            <ErrorWrapper>
+              <h2>error: {error}</h2>
+            </ErrorWrapper>
+          )}
         </ModalInputWrapper>
       </ReactModal>
     </>
