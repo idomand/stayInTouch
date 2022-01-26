@@ -56,10 +56,16 @@ export default function NavBar() {
         <NavbarText>Staying in Touch!</NavbarText>
       )}
 
+      <NavLink href="/about#firstSection">part1</NavLink>
+      <NavLink href="/about#secondSection">part2</NavLink>
+      <NavLink href="/about#thirdSection">part3</NavLink>
+
       <ButtonWrapper>
-        <NavLink isActive={router.pathname == "/"} href="/">
-          Home
-        </NavLink>
+        {currentUser && (
+          <NavLink isActive={router.pathname == "/"} href="/">
+            Home
+          </NavLink>
+        )}
         <NavLink isActive={router.pathname == "/about"} href="/about">
           About
         </NavLink>
