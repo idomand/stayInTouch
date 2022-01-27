@@ -137,7 +137,7 @@ export default function AddNewContact() {
           days
         </label>
         <DatePickerWrapper>
-          <p>lest time we have talked was:</p>
+          <p>last time we have talked was:</p>
           <DatePickerComponent
             CalendarContainer={Calendar}
             popperContainer={Popper}
