@@ -15,6 +15,11 @@ const ContactList = styled.ul`
   align-items: center;
 `;
 
+const NoContactsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 //?============================================================================================================
 //!============================================================================================================
 //?============================================================================================================
@@ -59,7 +64,11 @@ export default function ContactDetails() {
             );
           })}
       </ContactList>
-      {arrayOfContacts.length === 0 && <H1>no contacts</H1>}
+      {arrayOfContacts.length === 0 && (
+        <NoContactsWrapper>
+          <H1>no contacts</H1>
+        </NoContactsWrapper>
+      )}
     </>
   );
 }
