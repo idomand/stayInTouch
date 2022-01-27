@@ -62,52 +62,54 @@ export default function About() {
             stay in touch with the people they care about.
           </P>
           <P>
-            Working adults in 2022 face such a variety of distraction and
-            responsibilities that keeping a stable connection with even our
-            closest friends can become a challenge.
+            As working adults in 2022, we face so many distractions and
+            responsibilities that maintaining a stable connection with even our
+            closest friends can be difficult.
           </P>
           <P>
-            We all had that moment of realization, waking up one day and
-            realizing that we haven’t talk to that good friend from collage in a
-            couple of months. Well Staying-In-Touch is here to help!
+            Every one of us has had the experience of waking up one day and
+            realizing we haven't talked to that good friend from college in a
+            couple of months. Thankfully, Staying-In-Touch is here to help!
           </P>
         </IntroductionSection>
         <HowToUseSection id="HowToUseSection">
           <AboutHeader>How to use the site</AboutHeader>
+          <P>To begin, simply log into the site using your Google account.</P>
           <P>
-            The first step is simply to log into the site using your google
-            account.
+            Now just think about the people you want to stay in touch with, and
+            when you last spoke to them.
           </P>
           <P>
-            Now you can think about the people you want to stay in touch with,
-            and when you’ve lest talked to them.
-          </P>
-          <P>
-            All you need to do is enter their names and how often would you like
-            to talk to them, and Staying-In-Touch would do the rest.
+            All you need to do is enter their names and how often you would like
+            to contact them, and Staying-In-Touch will take care of the rest.{" "}
           </P>
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">
           <AboutHeader>About the site</AboutHeader>
           <P>
-            The base of the site was build using the Next.js framework, that
-            itself extend the faculties of the React.js library. In other word,
-            JavaScript, a whole lot of JavaScript.
+            This site was built using the Next.js framework, which extends the
+            capabilities of the React.js library. In other words I’ve
+            JavaScript, lots of JavaScript.
           </P>
           <P>
-            For the database and authentication, I’ve used the wonderful Google
-            Firebase BaaS. It allowed me to make sure that the user data would
-            remain secure in the best way possible.
+            To handle the database and authentication, I've used the Google
+            Firebase BaaS. This ensured that all user information would remain
+            safe and secure.
           </P>
           <P>
             The design was created by me using the Styled-components CSS-in-JS
-            library. The combination of styled-components and Next.js allowed me
-            to create my own design systems including reusable components,
-            responsiveness and a single source of truth for most of the theme in
-            the webpage.
+            library. By using styled-components and Next.js, I was able to
+            create my own design systems with reusable components,
+            responsiveness, and a single source of truth for most of the themes
+            on this website.
           </P>
-          <P> you can see the code itself in my GitHub repo at:</P>
-          <P>https://github.com/idomand/stayInTouch</P>
+          <P>
+            {" "}
+            you can see the code itself in my GitHub repo right{" "}
+            <BasicLink href={"https://github.com/idomand/stayInTouch"}>
+              here.
+            </BasicLink>
+          </P>
         </AboutTheSite>
         <AboutTheCreator id="AboutTheCreator">
           <AboutHeader>About me</AboutHeader>
@@ -120,11 +122,11 @@ export default function About() {
             Startups community.
           </P>
           <P>
-            In my free time I love reading coding books, history and science
-            fiction, cooking and learning German.
+            In my free time I love reading programming, history and science
+            fiction books, cooking and learning German.
           </P>
           <P>
-            You can see more of my projects in my{" "}
+            You can see more of my projects on my{" "}
             <BasicLink href={"https://www.hire-ido.com"}>website.</BasicLink>
           </P>
           <P>
