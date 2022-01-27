@@ -33,7 +33,7 @@ export const NavLink = styled(LinkPrototype)`
   border: 2px solid ${({ theme }) => theme.primaryHoverColor};
   border-radius: 10px;
   font-size: ${({ theme }) => theme.typeScale.header4};
-  color: ${({ theme }) => theme.boldRed};
+  color: ${({ theme }) => theme.black};
   align-items: center;
   padding: 10px 20px;
   margin: 5px;
@@ -43,12 +43,12 @@ export const NavLink = styled(LinkPrototype)`
   transition: all 0.3s ease-in-out;
   text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
   background-color: ${({ theme, isActive }) =>
-    isActive ? theme.lightGreen : theme.boldGreen};
+    isActive ? theme.buttonHoverColor : theme.boldGreen};
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.buttonHoverColor};
-    border: 2px solid ${({ theme }) => theme.lightGreen};
+    background-color: ${({ theme }) => theme.lightGreen};
+    border: 2px solid ${({ theme }) => theme.boldRed};
   }
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 6px 12px;
