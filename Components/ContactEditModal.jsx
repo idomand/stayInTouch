@@ -7,6 +7,9 @@ import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
 import propTypes from "prop-types";
 
+//*============================================================================================================
+//?============================================================================================================
+
 const EditButton = styled(BasicButton)`
   color: ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.nicePurple};
@@ -74,6 +77,10 @@ const SubmitInput = styled.input`
 const ErrorWrapper = styled.div`
   border: solid red;
 `;
+
+//?============================================================================================================
+//!============================================================================================================
+//?============================================================================================================
 
 export default function ContactEditModal({
   name,
