@@ -12,6 +12,7 @@ export const defaultTheme = {
   boldGreen: "#1C5340",
   darkGreen: "#003E29",
   nicePurple: "#dee2fc",
+  boldPurple: "#742a7f",
   primaryFont: primaryFont,
   typeScale,
   devices,
