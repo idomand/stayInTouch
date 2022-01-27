@@ -21,7 +21,7 @@ const AboutHeader = styled(H1)`
 
 const AboutSubSection = styled.div`
   scroll-margin-top: 60px;
-  width: 90%;
+  width: 70%;
   padding: 20px;
   text-align: justify;
 
@@ -57,6 +57,8 @@ export default function About() {
     <Layout>
       <AboutPageWrapper>
         <IntroductionSection>
+          <AboutHeader>Welcome!</AboutHeader>
+
           <P>
             This site was created as a way to help people (including myself) to
             stay in touch with the people they care about.
@@ -88,7 +90,7 @@ export default function About() {
           <AboutHeader>About the site</AboutHeader>
           <P>
             This site was built using the Next.js framework, which extends the
-            capabilities of the React.js library. In other words I have
+            capabilities of the React.js library. In other words,
             JavaScript, lots of JavaScript.
           </P>
           <P>

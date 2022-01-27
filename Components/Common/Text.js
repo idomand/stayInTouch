@@ -8,6 +8,7 @@ export const H1 = styled.h1`
   color: ${({ theme }) => theme.primaryColorText};
   padding: 0;
   margin: 0;
+  font-weight: bolder;
 `;
 
 export const H2 = styled.h3`
