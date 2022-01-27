@@ -7,6 +7,7 @@ const ScrollButton = styled.button`
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 3;
 `;
 
 export default function ScrollToTopButton() {
