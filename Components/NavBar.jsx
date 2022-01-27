@@ -25,6 +25,7 @@ const NavBarWrapper = styled.nav`
   top: 0;
   width: 100%;
   height: 60px;
+  margin-bottom: 50px;
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
