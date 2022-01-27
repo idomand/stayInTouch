@@ -19,7 +19,7 @@ const NavBarWrapper = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: ${({ theme }) => theme.coolBlue};
+  background-color: ${({ theme }) => theme.boldPurple};
   position: sticky;
   top: 0;
   width: 100%;
@@ -54,7 +54,8 @@ export default function NavBar() {
   return (
     <NavBarWrapper>
       {isMobile ? (
-        <LogoImg src="/telephoneLogo.png" />
+        // <LogoImg src="/telephoneLogo.png" />
+        <LogoImg src="/friendsLogo.png" />
       ) : (
         <NavbarText>Staying in Touch!</NavbarText>
       )}
