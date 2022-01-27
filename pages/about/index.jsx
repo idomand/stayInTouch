@@ -68,7 +68,7 @@ export default function About() {
           </P>
           <P>
             Every one of us has had the experience of waking up one day and
-            realizing we haven't talked to that good friend from college in a
+            realizing we have not talked to that good friend from college in a
             couple of months. Thankfully, Staying-In-Touch is here to help!
           </P>
         </IntroductionSection>
@@ -88,11 +88,11 @@ export default function About() {
           <AboutHeader>About the site</AboutHeader>
           <P>
             This site was built using the Next.js framework, which extends the
-            capabilities of the React.js library. In other words I’ve
+            capabilities of the React.js library. In other words I have
             JavaScript, lots of JavaScript.
           </P>
           <P>
-            To handle the database and authentication, I've used the Google
+            To handle the database and authentication, I have used the Google
             Firebase BaaS. This ensured that all user information would remain
             safe and secure.
           </P>
@@ -114,11 +114,11 @@ export default function About() {
         <AboutTheCreator id="AboutTheCreator">
           <AboutHeader>About me</AboutHeader>
           <P>
-            My name is Ido Mandelman and I’m a passionate frontend developer.
+            My name is Ido Mandelman and I am a passionate frontend developer.
           </P>
           <P>
-            Originally from Israel, I’ve moved to Berlin with my wife to start a
-            new life in this beautiful city. And I can’t wait to join Berlin
+            Originally from Israel, I have moved to Berlin with my wife to start
+            a new life in this beautiful city. And I can not wait to join Berlin
             Startups community.
           </P>
           <P>
