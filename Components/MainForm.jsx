@@ -31,6 +31,7 @@ const HowToUseLink = styled(LinkPrototype)`
   width: 40px;
   height: 40px;
   margin: 10px;
+  margin-right: 60px;
   background-color: ${({ theme }) => theme.black};
   border-radius: 20px;
   color: white;
@@ -38,6 +39,9 @@ const HowToUseLink = styled(LinkPrototype)`
   &:hover {
     color: black;
     background-color: ${({ theme }) => theme.nicePurple};
+  }
+  @media (${({ theme }) => theme.devices.break1}) {
+    margin-right: 5px;
   }
 `;
 

@@ -17,7 +17,7 @@ const LogoImg = styled.img`
 
 const NavBarWrapper = styled.nav`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   background-color: ${({ theme }) => theme.coolBlue};
   position: sticky;
@@ -58,7 +58,7 @@ export default function NavBar() {
       ) : (
         <NavbarText>Staying in Touch!</NavbarText>
       )}
-
+      <div></div>
       <ButtonWrapper>
         {currentUser && (
           <NavLink isActive={router.pathname == "/"} href="/">
