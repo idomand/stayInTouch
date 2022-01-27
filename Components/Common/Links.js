@@ -4,11 +4,30 @@ import Link from "next/link";
 //*============================================================================================================
 //?============================================================================================================
 
-export const LinkPrototype = ({ as, children, className, href }) => (
+export const LinkPrototype = ({ as, children, className, href, target }) => (
   <Link href={href} as={as}>
-    <a className={className}>{children}</a>
+    <a target={target} className={className}>
+      {children}
+    </a>
   </Link>
 );
+
+export const BasicLink = styled(LinkPrototype).attrs(() => {
+  return {
+    target: "_blank",
+  };
+})`
+  transition: all 0.3s ease-in-out;
+
+  color: blue;
+  text-decoration: underline;
+  border-bottom: 2px solid transparent;
+
+  &:hover,
+  &:focus {
+    border-bottom: 2px solid ${({ theme }) => theme.boldRed};
+  }
+`;
 
 export const NavLink = styled(LinkPrototype)`
   border: 2px solid ${({ theme }) => theme.primaryHoverColor};
