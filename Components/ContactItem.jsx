@@ -8,6 +8,9 @@ import propTypes from "prop-types";
 // import { useMedia } from "react-use";
 // import useStyledTheme from "../utils/hooks/useStyledTheme";
 
+//*============================================================================================================
+//?============================================================================================================
+
 const ContactItemWrapper = styled.li`
   background-color: ${(element) => element.backgroundColor};
   display: flex;
@@ -73,6 +76,10 @@ const EmojiContainer = styled.div``;
 const oneDay = 86400000;
 
 const currantTime = new Date().getTime();
+
+//?============================================================================================================
+//!============================================================================================================
+//?============================================================================================================
 
 export default function ContactItem({
   name,
