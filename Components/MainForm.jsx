@@ -3,12 +3,11 @@ import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import AddNewContact from "./AddNewContact";
 import { H1 } from "./Common/Text";
-
+import { LinkPrototype } from "./Common/Links";
 //*============================================================================================================
 //?============================================================================================================
 
 const MainFormWrapper = styled.section`
-  /* margin-top: 50px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +16,29 @@ const MainFormWrapper = styled.section`
 const MainHeader = styled(H1)`
   margin: auto;
   padding-top: 10px;
+`;
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+`;
+
+const HowToUseLink = styled(LinkPrototype)`
+  text-align: center;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  background-color: ${({ theme }) => theme.black};
+  border-radius: 20px;
+  color: white;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    color: black;
+    background-color: ${({ theme }) => theme.nicePurple};
+  }
 `;
 
 //?============================================================================================================
@@ -28,7 +50,13 @@ export default function MainForm() {
 
   return (
     <MainFormWrapper>
-      <MainHeader>Hi {currentUser.displayName}</MainHeader>
+      <HeaderWrapper>
+        <div></div>
+        <MainHeader>Hi {currentUser.displayName}</MainHeader>
+        {/* <FirstTimeButtonWrapper> */}
+        <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
+        {/* </FirstTimeButtonWrapper> */}
+      </HeaderWrapper>
       <AddNewContact />
     </MainFormWrapper>
   );

@@ -4,7 +4,7 @@ import Link from "next/link";
 //*============================================================================================================
 //?============================================================================================================
 
-const LinkPrototype = ({ as, children, className, href }) => (
+export const LinkPrototype = ({ as, children, className, href }) => (
   <Link href={href} as={as}>
     <a className={className}>{children}</a>
   </Link>
