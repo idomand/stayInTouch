@@ -8,7 +8,7 @@ import { H1 } from "./Common/Text";
 //?============================================================================================================
 
 const MainFormWrapper = styled.section`
-  margin-top: 50px;
+  /* margin-top: 50px; */
   display: flex;
   flex-direction: column;
   align-items: center;
