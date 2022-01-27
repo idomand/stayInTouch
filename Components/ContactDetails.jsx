@@ -4,7 +4,7 @@ import { db } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ContactItem from "./ContactItem";
 import { collection, onSnapshot } from "firebase/firestore";
-import { H1 } from "./Common/text";
+import { H1 } from "./Common/Text";
 //*============================================================================================================
 //?============================================================================================================
 
@@ -62,27 +62,4 @@ export default function ContactDetails() {
       {arrayOfContacts.length === 0 && <H1>no contacts</H1>}
     </>
   );
-
-  // return (
-  //   <>
-  //     <ContactList>
-  //       {arrayOfContacts &&
-  //         arrayOfContacts.length &&
-  //         arrayOfContacts.map((element) => {
-  //           type++;
-  //           return (
-  //             <ContactItem
-  //               key={element.contactId}
-  //               name={element.name}
-  //               time={element.time}
-  //               timeCreated={element.timeCreated}
-  //               contactId={element.contactId}
-  //               type={type}
-  //             />
-  //           );
-  //         })}
-  //       {arrayOfContacts.length === 0 && <h1>no contacts</h1>}
-  //     </ContactList>
-  //   </>
-  // );
 }
