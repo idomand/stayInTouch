@@ -7,16 +7,19 @@ const FirstSection = styled.div`
   height: 400px;
   border: solid red;
   background-color: lightblue;
+  scroll-margin-top: 60px;
 `;
 const SecondSection = styled.div`
   height: 400px;
   border: solid green;
   background-color: lightcoral;
+  scroll-margin-top: 60px;
 `;
 const ThirdSection = styled.div`
   height: 400px;
   border: solid blue;
   background-color: lightcyan;
+  scroll-margin-top: 60px;
 `;
 
 export default function About() {
