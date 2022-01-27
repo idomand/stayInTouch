@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { useRouter } from "next/router";
-
 import { useAuth } from "../../lib/AuthContext";
 import { BasicButton } from "../../Components/Common/Button";
 import styled from "styled-components";
 import { H1, H2 } from "../../Components/Common/Text";
+
+//*============================================================================================================
+//?============================================================================================================
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -42,6 +44,10 @@ const GoogleLogo = styled.img`
 const LoginText = styled(H2)`
   color: ${({ theme }) => theme.black};
 `;
+
+//?============================================================================================================
+//!============================================================================================================
+//?============================================================================================================
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth();
