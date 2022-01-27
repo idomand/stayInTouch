@@ -4,6 +4,7 @@ import ContactDetails from "../Components/ContactDetails";
 import MainForm from "../Components/MainForm";
 import { useAuth } from "../lib/AuthContext";
 import Layout from "../Components/Layout";
+import ScrollToTopButton from "../Components/ScrollToTopButton";
 
 //?=======================================================
 
@@ -24,6 +25,7 @@ export default function Home() {
         <>
           <MainForm />
           <ContactDetails />
+          <ScrollToTopButton />
         </>
       )}
     </Layout>

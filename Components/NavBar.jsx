@@ -57,9 +57,9 @@ export default function NavBar() {
         <NavbarText>Staying in Touch!</NavbarText>
       )}
 
-      <NavLink href="/about#firstSection">part1</NavLink>
+      {/* <NavLink href="/about#firstSection">part1</NavLink>
       <NavLink href="/about#secondSection">part2</NavLink>
-      <NavLink href="/about#thirdSection">part3</NavLink>
+      <NavLink href="/about#thirdSection">part3</NavLink> */}
 
       <ButtonWrapper>
         {currentUser && (
