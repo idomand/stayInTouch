@@ -19,7 +19,7 @@ export const H2 = styled.h3`
 
 export const P = styled.p`
   font-size: ${({ theme }) => theme.typeScale.paragraph};
-  color: ${({ theme }) => theme.primaryColorText};
+  color: ${({ theme }) => theme.black};
   padding: 0;
-  margin: 0;
+  margin: 3px;
 `;
