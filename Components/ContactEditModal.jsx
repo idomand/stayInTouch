@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
 import { BasicButton } from "./Common/Button";
-import { deleteContact, updateContact } from "../lib/Firebase";
+import {
+  deleteContact,
+  updateContactFull,
+  updateContactTime,
+} from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
 import propTypes from "prop-types";
@@ -107,12 +111,30 @@ export default function ContactEditModal({
       time: +contactTime,
       timeCreated: timeCreated,
     };
-    const result = await updateContact(
-      currentUser.uid,
-      currentUser.email,
-      contactId,
-      newContactData
-    );
+    const oldContactData = { name, time, timeCreated };
+
+    let result;
+
+    if (
+      oldContactData.name == newContactData.name &&
+      oldContactData.time == newContactData.time
+    ) {
+      return setIsModalOpen(false);
+    } else if (oldContactData.name == newContactData.name) {
+      result = await updateContactTime(
+        currentUser.uid,
+        currentUser.email,
+        contactId,
+        newContactData
+      );
+    } else {
+      result = await updateContactFull(
+        currentUser.uid,
+        currentUser.email,
+        contactId,
+        newContactData
+      );
+    }
 
     if (result === "bad") {
       setError("contact already in list");
@@ -120,8 +142,15 @@ export default function ContactEditModal({
       setIsModalOpen(false);
     }
   }
+
   function nameChangeHandler(e) {
     setContactName(e.target.value);
+    if (error) {
+      setError(false);
+    }
+  }
+  function onCloseModal() {
+    setIsModalOpen(false);
     if (error) {
       setError(false);
     }
@@ -139,9 +168,7 @@ export default function ContactEditModal({
       >
         <ModalHeaderWrapper>
           <h3>Update Contact: {name}</h3>
-          <CloseModalButton onClick={() => setIsModalOpen(false)}>
-            X
-          </CloseModalButton>
+          <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
         </ModalHeaderWrapper>
 
         <ModalInputWrapper>

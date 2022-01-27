@@ -27,7 +27,6 @@ const NoContactsWrapper = styled.div`
 export default function ContactDetails() {
   const [arrayOfContacts, setArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
-  console.log("arrayOfContacts :>> ", arrayOfContacts);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, `${currentUser.email}${currentUser.uid}`),
