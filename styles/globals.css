@@ -3,7 +3,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Merriweather", serif;
-  background-color: #164a41;
+  /* background-color: #164a41; */
+  background-color: white;
 }
 
 a {
