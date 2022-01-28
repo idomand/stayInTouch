@@ -26,11 +26,11 @@ const SignInButton = styled(BasicButton)`
   margin-top: 15px;
   padding: 10px;
   font-size: ${({ theme }) => theme.typeScale.header1};
-  background-color: ${({ theme }) => theme.nicePurple};
+  background-color: ${({ theme }) => theme.grey};
   width: 20%;
   justify-content: space-around;
   &:hover {
-    background-color: ${({ theme }) => theme.coolBlue};
+    background-color: ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.black};
   }
   @media (${({ theme }) => theme.devices.break1}) {
