@@ -33,14 +33,14 @@ const AboutSubSection = styled.div`
 const IntroductionSection = styled(AboutSubSection)`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.blue2};
 `;
 
 const HowToUseSection = styled(AboutSubSection)`
   background-color: ${({ theme }) => theme.white};
 `;
 const AboutTheSite = styled(AboutSubSection)`
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.blue2};
 `;
 const AboutTheCreator = styled(AboutSubSection)`
   background-color: ${({ theme }) => theme.white};

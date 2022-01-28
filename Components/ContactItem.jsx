@@ -12,7 +12,7 @@ import { deleteContact } from "../lib/Firebase";
 //?============================================================================================================
 
 const ContactItemWrapper = styled.li`
-  background-color: ${(element) => element.white};
+  background-color: ${(element) => element.backgroundColor};
   border: solid 1.5px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   display: flex;
@@ -36,13 +36,9 @@ const ButtonContainer = styled.div`
 
 const ResetButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.white};
-  border: solid ${({ theme }) => theme.black};
+  border: solid 2px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   margin: 5px 5px;
-`;
-const DeleteButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.white};
-  border: 2px solid ${({ theme }) => theme.black};
 `;
 
 const DataWrapper = styled.div`
@@ -77,6 +73,16 @@ const TimeContainer = styled.div`
 const LastTalkedContainer = styled.div``;
 const EmojiContainer = styled.div``;
 
+const DeleteButton = styled(BasicButton)`
+  background-color: ${({ theme }) => theme.white};
+  border: 2px solid ${({ theme }) => theme.black};
+  margin: 5px 0;
+  padding: 5px 0 0 0;
+  &:hover {
+    background-color: ${({ theme }) => theme.brown1};
+  }
+`;
+
 const DeleteLogo = styled.img`
   height: 20px;
 `;
@@ -103,9 +109,9 @@ export default function ContactItem({
 
   let colorType;
   if (type % 2 === 0) {
-    colorType = Theme.boldGreen;
+    colorType = Theme.blue1;
   } else {
-    colorType = Theme.darkGreen;
+    colorType = Theme.blue3;
   }
 
   function deleteContactFunc() {

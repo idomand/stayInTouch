@@ -17,15 +17,15 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
     target: "_blank",
   };
 })`
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s;
 
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.blue4};
   text-decoration: underline;
-  border-bottom: 2px solid transparent;
+  /* border-bottom: 2px solid transparent; */
 
   &:hover,
   &:focus {
-    border-bottom: 2px solid ${({ theme }) => theme.black};
+    border-bottom: 2px solid ${({ theme }) => theme.blue4};
   }
 `;
 
@@ -47,8 +47,8 @@ export const NavLink = styled(LinkPrototype)`
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.black};
-    border: 2px solid ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.blue4};
+    border: 2px solid ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.white};
   }
   @media (${({ theme }) => theme.devices.break1}) {
