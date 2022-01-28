@@ -12,17 +12,17 @@ import { deleteContact } from "../lib/Firebase";
 //?============================================================================================================
 
 const ContactItemWrapper = styled.li`
-  background-color: ${(element) => element.backgroundColor};
+  background-color: ${(element) => element.white};
+  border: solid 1.5px ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: space-between;
   list-style-type: none;
-  border: solid 1.5px ${({ theme }) => theme.niceBrown};
   margin: 10px 5px;
   border-radius: 10px;
-  color: ${({ theme }) => theme.niceBrown};
+  box-shadow: 9px 12px 19px -1px rgba(0, 0, 0, 0.5);
   @media (${({ theme }) => theme.devices.break2}) {
     width: 80%;
-    /* border: solid red; */
   }
 `;
 
@@ -35,18 +35,18 @@ const ButtonContainer = styled.div`
 `;
 
 const ResetButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.nicePurple};
-  border: solid ${({ theme }) => theme.boldRed};
+  background-color: ${({ theme }) => theme.grey};
+  border: solid ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   margin: 5px 5px;
 `;
 const DeleteButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.boldRed};
+  background-color: ${({ theme }) => theme.grey};
   border: 2px solid ${({ theme }) => theme.black};
 `;
 
 const DataWrapper = styled.div`
-  border-left: 1.5px ${({ theme }) => theme.niceBrown} solid;
+  border-left: 1.5px ${({ theme }) => theme.black} solid;
   padding-left: 3px;
   display: flex;
   align-items: center;

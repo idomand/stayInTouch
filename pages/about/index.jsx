@@ -24,7 +24,7 @@ const AboutSubSection = styled.div`
   width: 70%;
   padding: 20px;
   text-align: justify;
-
+  border: solid 1px ${({ theme }) => theme.black};
   @media (${({ theme }) => theme.devices.break1}) {
     width: 95%;
   }
@@ -33,18 +33,17 @@ const AboutSubSection = styled.div`
 const IntroductionSection = styled(AboutSubSection)`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-
-  background-color: ${({ theme }) => theme.nicePurple};
+  background-color: ${({ theme }) => theme.white};
 `;
 
 const HowToUseSection = styled(AboutSubSection)`
-  background-color: ${({ theme }) => theme.lightGreen};
+  background-color: ${({ theme }) => theme.white};
 `;
 const AboutTheSite = styled(AboutSubSection)`
-  background-color: ${({ theme }) => theme.nicePurple};
+  background-color: ${({ theme }) => theme.white};
 `;
 const AboutTheCreator = styled(AboutSubSection)`
-  background-color: ${({ theme }) => theme.lightGreen};
+  background-color: ${({ theme }) => theme.white};
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 `;
@@ -90,8 +89,8 @@ export default function About() {
           <AboutHeader>About the site</AboutHeader>
           <P>
             This site was built using the Next.js framework, which extends the
-            capabilities of the React.js library. In other words,
-            JavaScript, lots of JavaScript.
+            capabilities of the React.js library. In other words, JavaScript,
+            lots of JavaScript.
           </P>
           <P>
             To handle the database and authentication, I have used the Google

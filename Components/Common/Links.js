@@ -19,21 +19,23 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
 })`
   transition: all 0.3s ease-in-out;
 
-  color: blue;
+  color: ${({ theme }) => theme.black};
   text-decoration: underline;
   border-bottom: 2px solid transparent;
 
   &:hover,
   &:focus {
-    border-bottom: 2px solid ${({ theme }) => theme.boldRed};
+    border-bottom: 2px solid ${({ theme }) => theme.black};
   }
 `;
 
 export const NavLink = styled(LinkPrototype)`
-  border: 2px solid ${({ theme }) => theme.primaryHoverColor};
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.black : theme.grey};
+  color: ${({ theme }) => theme.white};
+  border: 2px solid ${({ theme }) => theme.black};
   border-radius: 10px;
   font-size: ${({ theme }) => theme.typeScale.header4};
-  color: ${({ theme }) => theme.black};
   align-items: center;
   padding: 10px 20px;
   margin: 5px;
@@ -42,13 +44,12 @@ export const NavLink = styled(LinkPrototype)`
   text-decoration: none;
   transition: all 0.3s ease-in-out;
   text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.buttonHoverColor : theme.boldGreen};
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.lightGreen};
-    border: 2px solid ${({ theme }) => theme.boldRed};
+    background-color: ${({ theme }) => theme.grey};
+    border: 2px solid ${({ theme }) => theme.lack};
+    color: ${({ theme }) => theme.black};
   }
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 6px 12px;

@@ -19,7 +19,7 @@ const NavBarWrapper = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: ${({ theme }) => theme.boldPurple};
+  background-color: ${({ theme }) => theme.grey};
   position: sticky;
   top: 0;
   width: 100%;
@@ -36,8 +36,13 @@ const ButtonWrapper = styled.div``;
 const LoginButton = styled(NavLink)``;
 
 const LogoutButton = styled(NavLink)`
-  background-color: ${({ theme }) => theme.boldRed};
+  background-color: ${({ theme }) => theme.grey};
   color: ${({ theme }) => theme.black};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.white};
+  }
 `;
 
 //?============================================================================================================
