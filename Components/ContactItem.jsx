@@ -6,8 +6,8 @@ import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
 // import { useMedia } from "react-use";
-// import useStyledTheme from "../utils/hooks/useStyledTheme";
-
+import useStyledTheme from "../utils/hooks/useStyledTheme";
+import { deleteContact } from "../lib/Firebase";
 //*============================================================================================================
 //?============================================================================================================
 
@@ -39,6 +39,10 @@ const ResetButton = styled(BasicButton)`
   border: solid ${({ theme }) => theme.boldRed};
   color: ${({ theme }) => theme.black};
   margin: 5px 5px;
+`;
+const DeleteButton = styled(BasicButton)`
+  background-color: ${({ theme }) => theme.boldRed};
+  border: 2px solid ${({ theme }) => theme.black};
 `;
 
 const DataWrapper = styled.div`
@@ -73,6 +77,10 @@ const TimeContainer = styled.div`
 const LastTalkedContainer = styled.div``;
 const EmojiContainer = styled.div``;
 
+const DeleteLogo = styled.img`
+  height: 20px;
+`;
+
 const oneDay = 86400000;
 
 const currantTime = new Date().getTime();
@@ -90,14 +98,18 @@ export default function ContactItem({
 }) {
   const { currentUser } = useAuth();
 
-  // const Theme = useStyledTheme();
+  const Theme = useStyledTheme();
   // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let colorType;
   if (type % 2 === 0) {
-    colorType = "#1C5340";
+    colorType = Theme.boldGreen;
   } else {
-    colorType = "#003E29";
+    colorType = Theme.darkGreen;
+  }
+
+  function deleteContactFunc() {
+    deleteContact(currentUser.uid, currentUser.email, contactId);
   }
 
   function resetFunction() {
@@ -137,13 +149,16 @@ export default function ContactItem({
   return (
     <ContactItemWrapper backgroundColor={colorType}>
       <ButtonContainer>
+        <ResetButton onClick={resetFunction}>Reset</ResetButton>
         <ContactEditModal
           name={name}
           time={time}
           timeCreated={timeCreated}
           contactId={contactId}
         />
-        <ResetButton onClick={resetFunction}>Reset</ResetButton>
+        <DeleteButton onClick={deleteContactFunc}>
+          <DeleteLogo src="/trash.svg" alt="delete" />
+        </DeleteButton>
       </ButtonContainer>
       <DataWrapper>
         <NameContainer> {name} </NameContainer>
