@@ -12,6 +12,7 @@ const AboutPageWrapper = styled.section`
   align-items: center;
   flex-direction: column;
   margin-bottom: 10px;
+  position: relative;
 `;
 
 const AboutHeader = styled(H1)`

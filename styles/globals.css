@@ -38,3 +38,24 @@ a {
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.75);
 }
+
+.wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  /* opacity: 0.5; */
+}
+
+.wave svg {
+  position: relative;
+  display: block;
+  width: calc(134% + 1.3px);
+  height: 285px;
+}
+
+.wave .shape-fill {
+  fill: #597fdb;
+}
