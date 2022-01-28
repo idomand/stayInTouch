@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
 import { BasicButton } from "./Common/Button";
-import {
-  deleteContact,
-  updateContactFull,
-  updateContactTime,
-} from "../lib/Firebase";
+import { updateContactFull, updateContactTime } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
 import propTypes from "prop-types";
@@ -52,13 +48,6 @@ const UpdateContactForm = styled.form`
   align-items: center;
 `;
 
-const DeleteContactButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.boldRed};
-  margin-top: 15px;
-  padding: 10px;
-  color: ${({ theme }) => theme.black};
-`;
-
 const InputWrapper = styled.div`
   background-color: ${({ theme }) => theme.nicePurple};
   border: 1px dotted ${({ theme }) => theme.boldGreen};
@@ -98,11 +87,6 @@ export default function ContactEditModal({
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState(false);
-
-  function deleteContactFunc() {
-    deleteContact(currentUser.uid, currentUser.email, contactId);
-    setIsModalOpen(false);
-  }
 
   async function updateContactOnSubmit(e) {
     e.preventDefault();
@@ -195,10 +179,6 @@ export default function ContactEditModal({
             </InputWrapper>
             <SubmitInput type="submit" value="Submit" />
           </UpdateContactForm>
-
-          <DeleteContactButton onClick={deleteContactFunc}>
-            Delete contact
-          </DeleteContactButton>
           {error && (
             <ErrorWrapper>
               <h2>error: {error}</h2>
