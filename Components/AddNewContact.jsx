@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
-import { BasicTextInput } from "./Common/Input";
+import { BasicTextInput, InputSubmit } from "./Common/Input";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -19,23 +20,16 @@ const InputTime = styled(BasicTextInput)`
   width: 45px;
   margin: 5px;
 `;
-const InputSubmit = styled(Input)`
-  background-color: ${({ theme }) => theme.grey};
-  color: ${({ theme }) => theme.black};
-  padding: 10px;
+const AddSubmitInput = styled(InputSubmit)`
   margin-left: 10px;
-  border-radius: 10px;
-  font-weight: bolder;
-  transition: 0.5s;
-  &:hover {
-    background-color: ${({ theme }) => theme.black};
-    color: ${({ theme }) => theme.white};
-  }
 `;
 
 const Form = styled.form`
   color: ${({ theme }) => theme.black};
   margin: 10px;
+  border: solid 1px;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
 `;
 
 const DatePickerWrapper = styled.div`
@@ -150,7 +144,7 @@ export default function AddNewContact() {
             selected={startDate}
             onChange={(date) => setStartDate(date)}
           />
-          <InputSubmit type="submit" value="Add contact" />
+          <AddSubmitInput type="submit" value="Add contact" />
         </DatePickerWrapper>
       </Form>
       {error && (
