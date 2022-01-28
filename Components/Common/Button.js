@@ -6,7 +6,7 @@ import styled from "styled-components";
 export const BasicButton = styled.button.attrs((props) => {
   target: "_self";
 })`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: 2px solid ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   border-radius: 10px;
@@ -21,7 +21,7 @@ export const BasicButton = styled.button.attrs((props) => {
   &:hover {
     color: ${({ theme }) => theme.white};
     background-color: ${({ theme }) => theme.black};
-    border: 2px solid ${({ theme }) => theme.grey};
+    border: 2px solid ${({ theme }) => theme.black};
   }
   @media (max-width: 480px) {
     padding: 4px 10px;

@@ -31,8 +31,8 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
 
 export const NavLink = styled(LinkPrototype)`
   background-color: ${({ theme, isActive }) =>
-    isActive ? theme.black : theme.grey};
-  color: ${({ theme }) => theme.white};
+    isActive ? theme.white : theme.white};
+  color: ${({ theme }) => theme.black};
   border: 2px solid ${({ theme }) => theme.black};
   border-radius: 10px;
   font-size: ${({ theme }) => theme.typeScale.header4};
@@ -47,9 +47,9 @@ export const NavLink = styled(LinkPrototype)`
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.grey};
-    border: 2px solid ${({ theme }) => theme.lack};
-    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.black};
+    border: 2px solid ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.white};
   }
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 6px 12px;

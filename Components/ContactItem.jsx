@@ -35,13 +35,13 @@ const ButtonContainer = styled.div`
 `;
 
 const ResetButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: solid ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   margin: 5px 5px;
 `;
 const DeleteButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: 2px solid ${({ theme }) => theme.black};
 `;
 

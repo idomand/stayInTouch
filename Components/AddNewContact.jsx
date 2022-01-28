@@ -20,7 +20,9 @@ const InputTime = styled(BasicTextInput)`
   margin: 5px;
 `;
 const InputSubmit = styled(Input)`
-  background-color: ${({ theme }) => theme.grey};
+  cursor: pointer;
+
+  background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.black};
   padding: 10px;
   margin-left: 10px;

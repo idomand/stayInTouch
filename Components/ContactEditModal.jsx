@@ -12,7 +12,7 @@ import propTypes from "prop-types";
 
 const EditButton = styled(BasicButton)`
   color: ${({ theme }) => theme.black};
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: solid ${({ theme }) => theme.black};
   width: fill-available;
   margin: 5px 5px;
@@ -24,7 +24,7 @@ const ModalHeaderWrapper = styled.div`
   align-items: center;
 `;
 const CloseModalButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.black};
   font-size: xx-large;
   padding: 0;
@@ -49,7 +49,7 @@ const UpdateContactForm = styled.form`
 `;
 
 const InputWrapper = styled.div`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: 1px dotted ${({ theme }) => theme.black};
   border-radius: 10px;
   display: flex;
@@ -62,7 +62,7 @@ const InputWrapper = styled.div`
   }
 `;
 const SubmitInput = styled.input`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   margin-top: 5px;
   padding: 10px;
   border-radius: 10px;
