@@ -27,19 +27,20 @@ const HeaderWrapper = styled.div`
 
 const HowToUseLink = styled(LinkPrototype)`
   text-align: center;
+
   padding: 10px;
   width: 40px;
   height: 40px;
   margin: 10px;
   margin-right: 60px;
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   border: solid 2px ${({ theme }) => theme.black};
-  border-radius: 20px;
   color: ${({ theme }) => theme.black};
+  border-radius: 20px;
   transition: all 0.3s ease-in-out;
   &:hover {
-    color: ${({ theme }) => theme.black};
-    background-color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.black};
   }
   @media (${({ theme }) => theme.devices.break1}) {
     margin-right: 5px;

@@ -26,7 +26,7 @@ const SignInButton = styled(BasicButton)`
   margin-top: 15px;
   padding: 10px;
   font-size: ${({ theme }) => theme.typeScale.header1};
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   width: 20%;
   justify-content: space-around;
   &:hover {
