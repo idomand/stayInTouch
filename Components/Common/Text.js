@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 export const H1 = styled.h1`
   font-size: ${({ theme }) => theme.typeScale.header1};
-  color: ${({ theme }) => theme.primaryColorText};
+  color: ${({ theme }) => theme.black};
   padding: 0;
   margin: 0;
   font-weight: bolder;
@@ -13,7 +13,7 @@ export const H1 = styled.h1`
 
 export const H2 = styled.h3`
   font-size: ${({ theme }) => theme.typeScale.header4};
-  color: ${({ theme }) => theme.primaryColorText};
+  color: ${({ theme }) => theme.black};
   padding: 0;
   margin: 0;
 `;

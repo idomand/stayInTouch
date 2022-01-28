@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import styled, { css, createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput } from "./Common/Input";
@@ -20,16 +20,21 @@ const InputTime = styled(BasicTextInput)`
   margin: 5px;
 `;
 const InputSubmit = styled(Input)`
+  background-color: ${({ theme }) => theme.grey};
+  color: ${({ theme }) => theme.black};
   padding: 10px;
   margin-left: 10px;
   border-radius: 10px;
-  color: ${({ theme }) => theme.boldRed};
-  background-color: ${({ theme }) => theme.niceBrown};
   font-weight: bolder;
+  transition: 0.5s;
+  &:hover {
+    background-color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.white};
+  }
 `;
 
 const Form = styled.form`
-  color: ${({ theme }) => theme.niceBrown};
+  color: ${({ theme }) => theme.black};
   margin: 10px;
 `;
 
@@ -51,7 +56,7 @@ const DatePickerComponent = styled(({ className, ...props }) => (
     width: 90px;
 
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.nicePurple};
+    background-color: ${({ theme }) => theme.white};
   }
 `;
 

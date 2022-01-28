@@ -6,12 +6,12 @@ import styled from "styled-components";
 export const BasicButton = styled.button.attrs((props) => {
   target: "_self";
 })`
-  border: 2px solid ${({ theme }) => theme.primaryHoverColor};
+  background-color: ${({ theme }) => theme.grey};
+  border: 2px solid ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.black};
   border-radius: 10px;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.lightGreen};
   font-size: ${({ theme }) => theme.typeScale.header4};
-  color: ${({ theme }) => theme.boldRed};
   text-decoration: none;
   align-items: center;
   padding: 8px 16px;
@@ -19,8 +19,9 @@ export const BasicButton = styled.button.attrs((props) => {
   cursor: pointer;
   transition: 0.3s;
   &:hover {
-    background-color: ${({ theme }) => theme.buttonHoverColor};
-    border: 2px solid ${({ theme }) => theme.lightGreen};
+    color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.black};
+    border: 2px solid ${({ theme }) => theme.grey};
   }
   @media (max-width: 480px) {
     padding: 4px 10px;
@@ -30,7 +31,8 @@ export const BasicButton = styled.button.attrs((props) => {
 `;
 
 export const NavbarButton = styled(BasicButton)`
-  color: ${({ theme }) => theme.boldRed};
+  /* background-color: ${({ theme }) => theme.lightGreen}; ; */
+  /* color: ${({ theme }) => theme.boldRed}; */
+  /* border:solid 2px ${({ theme }) => theme.lightGreen} ; */
   margin: 3px;
-  background-color: ${({ theme }) => theme.lightGreen}; ;
 `;
