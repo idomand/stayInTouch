@@ -51,7 +51,7 @@ const DatePickerComponent = styled(({ className, ...props }) => (
     width: 90px;
 
     border-radius: 5px;
-    background-color: lavender;
+    background-color: ${({ theme }) => theme.nicePurple};
   }
 `;
 

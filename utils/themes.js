@@ -3,6 +3,7 @@ import { devices } from "./devices";
 export const defaultTheme = {
   BackgroundColor: "#164A41",
   black: "#000000",
+  white: "#ffffff",
   coolBlue: "#3AAFA9",
   primaryColorText: "#F1B24A",
   niceBrown: "#D9B08C",

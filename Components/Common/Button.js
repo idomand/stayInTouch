@@ -32,5 +32,5 @@ export const BasicButton = styled.button.attrs((props) => {
 export const NavbarButton = styled(BasicButton)`
   color: ${({ theme }) => theme.boldRed};
   margin: 3px;
-  background-color: lightgreen;
+  background-color: ${({ theme }) => theme.lightGreen}; ;
 `;
