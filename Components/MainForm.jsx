@@ -34,10 +34,10 @@ const HowToUseLink = styled(LinkPrototype)`
   margin-right: 60px;
   background-color: ${({ theme }) => theme.black};
   border-radius: 20px;
-  color: white;
+  color: ${({ theme }) => theme.white};
   transition: all 0.3s ease-in-out;
   &:hover {
-    color: black;
+    color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.nicePurple};
   }
   @media (${({ theme }) => theme.devices.break1}) {
