@@ -4,18 +4,24 @@ import styled from "styled-components";
 import { BasicButton } from "./Common/Button";
 import { updateContactFull, updateContactTime } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
-import { BasicTextInput } from "./Common/Input";
+import { BasicTextInput, InputSubmit } from "./Common/Input";
 import propTypes from "prop-types";
-
+import { H2 } from "./Common/Text";
 //*============================================================================================================
 //?============================================================================================================
 
 const EditButton = styled(BasicButton)`
   color: ${({ theme }) => theme.black};
-  background-color: ${({ theme }) => theme.grey};
-  border: solid ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.white};
+  border: solid ${({ theme }) => theme.black} 2px;
   width: fill-available;
   margin: 5px 5px;
+`;
+
+const HeaderText = styled(H2)`
+  padding: 5px;
+  margin-bottom: 15;
+  border-bottom: solid;
 `;
 
 const ModalHeaderWrapper = styled.div`
@@ -24,12 +30,18 @@ const ModalHeaderWrapper = styled.div`
   align-items: center;
 `;
 const CloseModalButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.grey};
-  color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.blue4};
+  color: ${({ theme }) => theme.white};
   font-size: xx-large;
   padding: 0;
   height: 40px;
   width: 40px;
+  &:hover {
+    background-color: ${({ theme }) => theme.brown1};
+    color: ${({ theme }) => theme.black};
+
+    border: solid 1px ${({ theme }) => theme.black};
+  }
 `;
 
 const ModalInputWrapper = styled.div`
@@ -40,17 +52,19 @@ const ModalInputWrapper = styled.div`
 
 const UpdateContactForm = styled.form`
   border: solid ${({ theme }) => theme.coolBlue};
+  background-color: ${({ theme }) => theme.blue1};
   border-radius: 25px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  height: 40vh;
 `;
 
 const InputWrapper = styled.div`
-  background-color: ${({ theme }) => theme.grey};
-  border: 1px dotted ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.white};
+  border: 2px solid ${({ theme }) => theme.black};
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
@@ -61,11 +75,8 @@ const InputWrapper = styled.div`
     flex-direction: column;
   }
 `;
-const SubmitInput = styled.input`
-  background-color: ${({ theme }) => theme.grey};
+const EditSubmitInput = styled(InputSubmit)`
   margin-top: 5px;
-  padding: 10px;
-  border-radius: 10px;
 `;
 const ErrorWrapper = styled.div`
   border: solid red;
@@ -151,7 +162,8 @@ export default function ContactEditModal({
         overlayClassName={"contact-edit-modal-overlay"}
       >
         <ModalHeaderWrapper>
-          <h3>Update Contact: {name}</h3>
+          <div></div>
+          <HeaderText>Update Contact: {name}</HeaderText>
           <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
         </ModalHeaderWrapper>
 
@@ -177,7 +189,7 @@ export default function ContactEditModal({
                 onChange={(e) => setContactTime(e.target.value)}
               />
             </InputWrapper>
-            <SubmitInput type="submit" value="Submit" />
+            <EditSubmitInput type="submit" value="Submit" />
           </UpdateContactForm>
           {error && (
             <ErrorWrapper>

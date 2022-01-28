@@ -19,7 +19,8 @@ const NavBarWrapper = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: ${({ theme }) => theme.grey};
+  border-bottom: 1px solid ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.blue1};
   position: sticky;
   top: 0;
   width: 100%;
@@ -36,12 +37,14 @@ const ButtonWrapper = styled.div``;
 const LoginButton = styled(NavLink)``;
 
 const LogoutButton = styled(NavLink)`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.black};
+  cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.black};
-    color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.brown1};
+    color: ${({ theme }) => theme.black};
+    border: solid 2px ${({ theme }) => theme.black};
   }
 `;
 
@@ -62,7 +65,7 @@ export default function NavBar() {
         // <LogoImg src="/telephoneLogo.png" />
         <LogoImg src="/friendsLogo.png" />
       ) : (
-        <NavbarText>Staying in Touch!</NavbarText>
+        <NavbarText>Stay-in-Touch!</NavbarText>
       )}
       <div></div>
       <ButtonWrapper>
