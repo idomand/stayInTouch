@@ -22,4 +22,9 @@ export const InputSubmit = styled.input`
     background-color: ${({ theme }) => theme.blue1};
     color: ${({ theme }) => theme.white};
   }
+
+  &::disabled {
+    background-color: grey;
+    cursor: not-allowed;
+  }
 `;

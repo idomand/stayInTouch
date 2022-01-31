@@ -4,8 +4,10 @@ export const defaultTheme = {
   black: "#000000",
   white: "#ffffff",
   grey: "#9a9a9a",
+  white1: "#e9e7d3",
 
   blue1: "#597FDB",
+
   blue2: "#CFEBFF",
   blue3: "#6DA7FF",
   blue4: "#003382",

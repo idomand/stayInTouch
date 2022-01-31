@@ -144,7 +144,11 @@ export default function AddNewContact() {
             selected={startDate}
             onChange={(date) => setStartDate(date)}
           />
-          <AddSubmitInput type="submit" value="Add contact" />
+          <AddSubmitInput
+            disabled={name === ""}
+            type="submit"
+            value="Add contact"
+          />
         </DatePickerWrapper>
       </Form>
       {error && (

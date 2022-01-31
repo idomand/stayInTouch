@@ -20,13 +20,13 @@ const EditButton = styled(BasicButton)`
 
 const HeaderText = styled(H2)`
   padding: 5px;
-  margin-bottom: 15;
   border-bottom: solid;
+  margin: 0 auto 15px auto;
 `;
 
 const ModalHeaderWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `;
 const CloseModalButton = styled(BasicButton)`
@@ -162,7 +162,6 @@ export default function ContactEditModal({
         overlayClassName={"contact-edit-modal-overlay"}
       >
         <ModalHeaderWrapper>
-          <div></div>
           <HeaderText>Update Contact: {name}</HeaderText>
           <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
         </ModalHeaderWrapper>
@@ -193,7 +192,7 @@ export default function ContactEditModal({
           </UpdateContactForm>
           {error && (
             <ErrorWrapper>
-              <h2>error: {error}</h2>
+              <H2>error: {error}</H2>
             </ErrorWrapper>
           )}
         </ModalInputWrapper>

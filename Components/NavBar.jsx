@@ -19,9 +19,10 @@ const NavBarWrapper = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.black};
+  /* border-bottom: 1px solid ${({ theme }) => theme.black}; */
   background-color: ${({ theme }) => theme.blue1};
   position: sticky;
+  z-index: 2;
   top: 0;
   width: 100%;
   height: 60px;
