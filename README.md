@@ -23,7 +23,7 @@ yarn add
 
 after that, opening the code in your browser of choice will result in this image:
 
-![](public/stayingInTouch-picture.PNG)
+![](public/stayInTouch-picture.PNG)
 
 
 
