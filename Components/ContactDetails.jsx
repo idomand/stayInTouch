@@ -13,6 +13,7 @@ const ContactList = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const NoContactsWrapper = styled.div`

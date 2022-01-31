@@ -11,11 +11,13 @@ const MainFormWrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const MainHeader = styled(H1)`
   margin: auto;
   padding-top: 10px;
+  justify-self: center;
 `;
 
 const HeaderWrapper = styled.div`
@@ -55,15 +57,16 @@ export default function MainForm() {
   const { currentUser } = useAuth();
 
   return (
-    <MainFormWrapper>
-      <HeaderWrapper>
-        <div></div>
-        <MainHeader>Hi {currentUser.displayName}</MainHeader>
-        {/* <FirstTimeButtonWrapper> */}
-        <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
-        {/* </FirstTimeButtonWrapper> */}
-      </HeaderWrapper>
-      <AddNewContact />
-    </MainFormWrapper>
+    <>
+      <MainFormWrapper>
+        <HeaderWrapper>
+          <MainHeader>Hi {currentUser.displayName}</MainHeader>
+          {/* <FirstTimeButtonWrapper> */}
+          <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
+          {/* </FirstTimeButtonWrapper> */}
+        </HeaderWrapper>
+        <AddNewContact />
+      </MainFormWrapper>
+    </>
   );
 }

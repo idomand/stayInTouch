@@ -13,7 +13,7 @@ import { deleteContact } from "../lib/Firebase";
 
 const ContactItemWrapper = styled.li`
   background-color: ${(element) => element.backgroundColor};
-  border: solid 1.5px ${({ theme }) => theme.black};
+  /* border: solid 1.5px ${({ theme }) => theme.black}; */
   color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: space-between;
@@ -162,6 +162,8 @@ export default function ContactItem({
           timeCreated={timeCreated}
           contactId={contactId}
         />
+        {/* <DeleteLogo src="/trash.svg" alt="delete" /> */}
+
         <DeleteButton onClick={deleteContactFunc}>
           <DeleteLogo src="/trash.svg" alt="delete" />
         </DeleteButton>
