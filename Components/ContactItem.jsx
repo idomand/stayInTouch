@@ -13,14 +13,15 @@ import { deleteContact } from "../lib/Firebase";
 
 const ContactItemWrapper = styled.li`
   background-color: ${(element) => element.backgroundColor};
-  /* border: solid 1.5px ${({ theme }) => theme.black}; */
+  /* border: solid 2px ${({ theme }) => theme.black}; */
   color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: space-between;
   list-style-type: none;
   margin: 10px 5px;
   border-radius: 10px;
-  box-shadow: 9px 12px 19px -1px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 9px 12px 19px -1px rgba(0, 0, 0, 0.5); */
+  box-shadow: 4px 5px 12px 3px ${({ theme }) => theme.blue1};
   @media (${({ theme }) => theme.devices.break2}) {
     width: 80%;
   }
@@ -35,9 +36,9 @@ const ButtonContainer = styled.div`
 `;
 
 const ResetButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.white};
+  /* background-color: ${({ theme }) => theme.white}; */
   border: solid 2px ${({ theme }) => theme.black};
-  color: ${({ theme }) => theme.black};
+  /* color: ${({ theme }) => theme.black}; */
   margin: 5px 5px;
 `;
 
@@ -74,11 +75,12 @@ const LastTalkedContainer = styled.div``;
 const EmojiContainer = styled.div``;
 
 const DeleteButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.blue2};
   border: 2px solid ${({ theme }) => theme.black};
   margin: 5px 0;
   padding: 5px 0 0 0;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.brown1};
   }
 `;
@@ -109,9 +111,9 @@ export default function ContactItem({
 
   let colorType;
   if (type % 2 === 0) {
-    colorType = Theme.blue1;
+    colorType = Theme.white;
   } else {
-    colorType = Theme.blue3;
+    colorType = Theme.white;
   }
 
   function deleteContactFunc() {

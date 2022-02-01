@@ -42,7 +42,8 @@ const LogoutButton = styled(NavLink)`
   color: ${({ theme }) => theme.black};
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.brown1};
     color: ${({ theme }) => theme.black};
     border: solid 2px ${({ theme }) => theme.black};
