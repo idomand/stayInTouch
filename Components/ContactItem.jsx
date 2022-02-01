@@ -46,8 +46,9 @@ const DataWrapper = styled.div`
   justify-content: space-around;
   grid-template-areas: "name howLong lastSpoke status";
   align-items: center;
+  gap: 10px;
+  padding: 10px;
   border-left: 1.5px ${({ theme }) => theme.black} solid;
-  padding-left: 3px;
   flex-grow: 1;
   @media (${({ theme }) => theme.devices.break1}) {
     justify-items: center;
@@ -72,8 +73,11 @@ const NameContainer = styled.span`
   }
 `;
 const TimeContainer = styled.div`
-  width: 100px;
+  width: 150px;
   grid-area: howLong;
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 110px;
+  }
 `;
 
 const LastTalkedContainer = styled.div`
@@ -97,10 +101,6 @@ const DeleteButton = styled(BasicButton)`
 const DeleteLogo = styled.img`
   height: 20px;
 `;
-
-const oneDay = 86400000;
-
-const currantTime = new Date().getTime();
 
 //?============================================================================================================
 //!============================================================================================================
@@ -143,6 +143,10 @@ export default function ContactItem({
     );
   }
 
+  const oneDay = 86400000;
+
+  const currantTime = new Date().getTime();
+
   let lastTalkedToResponse;
   let lastTalkedToStatus;
 
@@ -173,7 +177,6 @@ export default function ContactItem({
           timeCreated={timeCreated}
           contactId={contactId}
         />
-        {/* <DeleteLogo src="/trash.svg" alt="delete" /> */}
 
         <DeleteButton onClick={deleteContactFunc}>
           <DeleteLogo src="/trash.svg" alt="delete" />
@@ -181,7 +184,9 @@ export default function ContactItem({
       </ButtonContainer>
       <DataWrapper>
         <NameContainer> {name} </NameContainer>
-        <TimeContainer>Every: {time} days.</TimeContainer>
+        <TimeContainer>
+          I want to talk to them every: {time} days.
+        </TimeContainer>
         <LastTalkedContainer>{lastTalkedToResponse}</LastTalkedContainer>
         <EmojiContainer>{lastTalkedToStatus ? "😎" : "😱"} </EmojiContainer>
       </DataWrapper>
