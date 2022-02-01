@@ -5,7 +5,6 @@ import ContactEditModal from "./ContactEditModal";
 import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
-// import { useMedia } from "react-use";
 import useStyledTheme from "../utils/hooks/useStyledTheme";
 import { deleteContact } from "../lib/Firebase";
 import { P } from "./Common/Text";
@@ -28,15 +27,11 @@ const ContactItemWrapper = styled.li`
 
 const ButtonContainer = styled.div`
   width: min-content;
-  /* height: min-content; */
-  /* padding: 5px; */
   display: flex;
   flex-direction: column;
   align-items: center;
   height: auto;
   justify-content: space-around;
-  /* @media (${({ theme }) => theme.devices.break2}) {
-  } */
 `;
 
 const ResetButton = styled(BasicButton)`
@@ -113,7 +108,6 @@ const DeleteButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.blue2};
   border: 2px solid ${({ theme }) => theme.black};
   margin: 5px 0;
-  /* padding: 5px 0 0 0; */
   &:hover,
   &:focus {
     background-color: ${({ theme }) => theme.brown1};
@@ -138,7 +132,6 @@ export default function ContactItem({
   const { currentUser } = useAuth();
 
   const Theme = useStyledTheme();
-  // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let colorType;
   if (type % 2 === 0) {
@@ -222,8 +215,6 @@ export default function ContactItem({
             <StatusPicture src="/evil.jpg" />
           </StatusContainer>
         )}
-
-        {/* <EmojiContainer>{lastTalkedToStatus ? "😎" : "😱"} </EmojiContainer> */}
       </DataWrapper>
     </ContactItemWrapper>
   );
