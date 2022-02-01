@@ -8,6 +8,7 @@ import propTypes from "prop-types";
 // import { useMedia } from "react-use";
 import useStyledTheme from "../utils/hooks/useStyledTheme";
 import { deleteContact } from "../lib/Firebase";
+import { P } from "./Common/Text";
 //*============================================================================================================
 //?============================================================================================================
 
@@ -27,11 +28,15 @@ const ContactItemWrapper = styled.li`
 
 const ButtonContainer = styled.div`
   width: min-content;
-  height: min-content;
-  padding: 5px;
+  /* height: min-content; */
+  /* padding: 5px; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: auto;
+  justify-content: space-around;
+  /* @media (${({ theme }) => theme.devices.break2}) {
+  } */
 `;
 
 const ResetButton = styled(BasicButton)`
@@ -47,11 +52,13 @@ const DataWrapper = styled.div`
   grid-template-areas: "name howLong lastSpoke status";
   align-items: center;
   gap: 10px;
-  padding: 10px;
   border-left: 1.5px ${({ theme }) => theme.black} solid;
   flex-grow: 1;
   @media (${({ theme }) => theme.devices.break1}) {
     justify-items: center;
+    gap: 3px;
+    padding: 10px;
+
     grid-template-areas:
       "name  status"
       "howLong lastSpoke";
@@ -83,15 +90,30 @@ const TimeContainer = styled.div`
 const LastTalkedContainer = styled.div`
   grid-area: lastSpoke;
 `;
-const EmojiContainer = styled.div`
+
+const StatusContainer = styled.div`
   grid-area: status;
+  display: flex;
+  align-items: center;
+`;
+
+const StatusPicture = styled.img`
+  border-radius: 50%;
+  margin-left: 10px;
+  height: 110px;
+  width: 110px;
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 70px;
+    height: 70px;
+  }
 `;
 
 const DeleteButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.blue2};
   border: 2px solid ${({ theme }) => theme.black};
   margin: 5px 0;
-  padding: 5px 0 0 0;
+  /* padding: 5px 0 0 0; */
   &:hover,
   &:focus {
     background-color: ${({ theme }) => theme.brown1};
@@ -157,13 +179,13 @@ export default function ContactItem({
   }
 
   if (currantTime - timeCreated < 0) {
-    lastTalkedToResponse = <p>Last talk was today!</p>;
+    lastTalkedToResponse = <P>Last talk was today!</P>;
   } else {
     lastTalkedToResponse = (
-      <p>
+      <P>
         Last talk was {Math.floor((currantTime - timeCreated) / oneDay)} days
         ago
-      </p>
+      </P>
     );
   }
 
@@ -188,7 +210,20 @@ export default function ContactItem({
           I want to talk to them every: {time} days.
         </TimeContainer>
         <LastTalkedContainer>{lastTalkedToResponse}</LastTalkedContainer>
-        <EmojiContainer>{lastTalkedToStatus ? "😎" : "😱"} </EmojiContainer>
+
+        {lastTalkedToStatus ? (
+          <StatusContainer>
+            <P>Great!</P>
+            <StatusPicture src="/win.jpg" />
+          </StatusContainer>
+        ) : (
+          <StatusContainer>
+            <P>Bad...</P>
+            <StatusPicture src="/evil.jpg" />
+          </StatusContainer>
+        )}
+
+        {/* <EmojiContainer>{lastTalkedToStatus ? "😎" : "😱"} </EmojiContainer> */}
       </DataWrapper>
     </ContactItemWrapper>
   );
