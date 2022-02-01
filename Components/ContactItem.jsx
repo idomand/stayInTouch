@@ -12,15 +12,13 @@ import { deleteContact } from "../lib/Firebase";
 //?============================================================================================================
 
 const ContactItemWrapper = styled.li`
-  background-color: ${(element) => element.backgroundColor};
-  /* border: solid 2px ${({ theme }) => theme.black}; */
-  color: ${({ theme }) => theme.black};
   display: flex;
   justify-content: space-between;
+  background-color: ${(element) => element.backgroundColor};
+  color: ${({ theme }) => theme.black};
   list-style-type: none;
   margin: 10px 5px;
   border-radius: 10px;
-  /* box-shadow: 9px 12px 19px -1px rgba(0, 0, 0, 0.5); */
   box-shadow: 4px 5px 12px 3px ${({ theme }) => theme.blue1};
   @media (${({ theme }) => theme.devices.break2}) {
     width: 80%;
@@ -30,31 +28,37 @@ const ContactItemWrapper = styled.li`
 const ButtonContainer = styled.div`
   width: min-content;
   height: min-content;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const ResetButton = styled(BasicButton)`
-  /* background-color: ${({ theme }) => theme.white}; */
+  background-color: ${({ theme }) => theme.blue2};
   border: solid 2px ${({ theme }) => theme.black};
-  /* color: ${({ theme }) => theme.black}; */
+  color: ${({ theme }) => theme.black};
   margin: 5px 5px;
 `;
 
 const DataWrapper = styled.div`
+  display: grid;
+  justify-content: space-around;
+  grid-template-areas: "name howLong lastSpoke status";
+  align-items: center;
   border-left: 1.5px ${({ theme }) => theme.black} solid;
   padding-left: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   flex-grow: 1;
   @media (${({ theme }) => theme.devices.break1}) {
-    justify-content: space-between;
+    justify-items: center;
+    grid-template-areas:
+      "name  status"
+      "howLong lastSpoke";
   }
 `;
 
 const NameContainer = styled.span`
+  grid-area: name;
   border: 2px ${({ theme }) => theme.black} dotted;
   border-radius: 10px;
   padding: 10px;
@@ -69,10 +73,15 @@ const NameContainer = styled.span`
 `;
 const TimeContainer = styled.div`
   width: 100px;
+  grid-area: howLong;
 `;
 
-const LastTalkedContainer = styled.div``;
-const EmojiContainer = styled.div``;
+const LastTalkedContainer = styled.div`
+  grid-area: lastSpoke;
+`;
+const EmojiContainer = styled.div`
+  grid-area: status;
+`;
 
 const DeleteButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.blue2};

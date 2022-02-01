@@ -11,8 +11,8 @@ import { H2 } from "./Common/Text";
 //?============================================================================================================
 
 const EditButton = styled(BasicButton)`
-  /* color: ${({ theme }) => theme.black}; */
-  /* background-color: ${({ theme }) => theme.white}; */
+  color: ${({ theme }) => theme.black};
+  background-color: ${({ theme }) => theme.blue2};
   border: solid ${({ theme }) => theme.black} 2px;
   width: fill-available;
   margin: 5px 5px;
