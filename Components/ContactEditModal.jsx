@@ -11,8 +11,8 @@ import { H2 } from "./Common/Text";
 //?============================================================================================================
 
 const EditButton = styled(BasicButton)`
-  color: ${({ theme }) => theme.black};
-  background-color: ${({ theme }) => theme.white};
+  /* color: ${({ theme }) => theme.black}; */
+  /* background-color: ${({ theme }) => theme.white}; */
   border: solid ${({ theme }) => theme.black} 2px;
   width: fill-available;
   margin: 5px 5px;
@@ -36,7 +36,8 @@ const CloseModalButton = styled(BasicButton)`
   padding: 0;
   height: 40px;
   width: 40px;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.brown1};
     color: ${({ theme }) => theme.black};
 

@@ -29,7 +29,8 @@ const SignInButton = styled(BasicButton)`
   background-color: ${({ theme }) => theme.white};
   width: 20%;
   justify-content: space-around;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.black};
   }
