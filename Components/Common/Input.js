@@ -18,7 +18,8 @@ export const InputSubmit = styled.input`
   border: solid 2px ${({ theme }) => theme.black};
   background-color: ${({ theme }) => theme.green1};
   color: ${({ theme }) => theme.black};
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.blue1};
     color: ${({ theme }) => theme.white};
   }

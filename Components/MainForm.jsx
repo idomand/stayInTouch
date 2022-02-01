@@ -40,7 +40,8 @@ const HowToUseLink = styled(LinkPrototype)`
   color: ${({ theme }) => theme.black};
   border-radius: 20px;
   transition: all 0.3s;
-  &:hover {
+  &:hover,
+  &:focus {
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.brown1};
   }
