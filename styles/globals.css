@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Merriweather", serif;
-  /* background-color: #e9e7d3; */
+  font-family: Arial, Helvetica, sans-serif;
+
   background-color: white;
 }
 
@@ -14,6 +14,7 @@ a {
 
 * {
   box-sizing: border-box;
+  outline: none;
 }
 
 .contact-edit-modal {
@@ -38,47 +39,4 @@ a {
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.75);
-}
-
-.wave {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  /* opacity: 0.5; */
-}
-
-.wave svg {
-  position: relative;
-  display: block;
-  width: calc(134% + 1.3px);
-  height: 285px;
-}
-
-.wave .shape-fill {
-  fill: #597fdb;
-}
-
-@media only screen and (max-width: 550px) {
-  .wave {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-  }
-
-  .wave svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 58px;
-  }
-
-  .wave .shape-fill {
-    fill: #597fdb;
-  }
 }

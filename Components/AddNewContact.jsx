@@ -6,11 +6,10 @@ import { BasicTextInput, InputSubmit } from "./Common/Input";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
 
 //*============================================================================================================
 //?============================================================================================================
-
-const Input = styled.input``;
 
 const InputText = styled(BasicTextInput)`
   min-width: 70px;
@@ -136,8 +135,9 @@ export default function AddNewContact() {
           days
         </label>
         <DatePickerWrapper>
-          <p>last time we have talked was:</p>
+          <p>Last time we have talked was:</p>
           <DatePickerComponent
+            maxDate={addDays(new Date(), 0)}
             CalendarContainer={Calendar}
             popperContainer={Popper}
             dateFormat="dd/MM/yyyy"

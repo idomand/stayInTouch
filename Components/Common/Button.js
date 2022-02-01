@@ -6,9 +6,9 @@ import styled from "styled-components";
 export const BasicButton = styled.button.attrs((props) => {
   target: "_self";
 })`
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.blue1};
   border: 1.5px solid ${({ theme }) => theme.black};
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.white};
   border-radius: 10px;
   cursor: pointer;
   font-size: ${({ theme }) => theme.typeScale.header4};
@@ -18,7 +18,8 @@ export const BasicButton = styled.button.attrs((props) => {
   min-width: 40px;
   cursor: pointer;
   transition: 0.3s;
-  &:hover {
+  &:hover,
+  &:focus {
     color: ${({ theme }) => theme.white};
     background-color: ${({ theme }) => theme.blue4};
     border: 2px solid ${({ theme }) => theme.white};

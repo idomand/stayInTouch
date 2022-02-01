@@ -19,7 +19,6 @@ const NavBarWrapper = styled.nav`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* border-bottom: 1px solid ${({ theme }) => theme.black}; */
   background-color: ${({ theme }) => theme.blue1};
   position: sticky;
   z-index: 2;
@@ -42,7 +41,8 @@ const LogoutButton = styled(NavLink)`
   color: ${({ theme }) => theme.black};
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${({ theme }) => theme.brown1};
     color: ${({ theme }) => theme.black};
     border: solid 2px ${({ theme }) => theme.black};
@@ -63,7 +63,6 @@ export default function NavBar() {
   return (
     <NavBarWrapper>
       {isMobile ? (
-        // <LogoImg src="/telephoneLogo.png" />
         <LogoImg src="/friendsLogo.png" />
       ) : (
         <NavbarText>Stay-in-Touch!</NavbarText>
