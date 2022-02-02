@@ -18,11 +18,8 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
   };
 })`
   transition: all 0.3s;
-
   color: ${({ theme }) => theme.blue4};
   text-decoration: underline;
-  /* border-bottom: 2px solid transparent; */
-
   &:hover,
   &:focus {
     border-bottom: 2px solid ${({ theme }) => theme.blue4};
