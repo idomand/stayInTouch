@@ -5,11 +5,16 @@ import { H1 } from "./Common/Text";
 //?============================================================================================================
 
 const ErrorWrapper = styled.div`
-  border: solid red;
+  color: ${({ theme }) => theme.red1};
+  background-color: ${({ theme }) => theme.red2};
+  margin: 15px;
+  /* border: solid 2px ${({ theme }) => theme.black}; */
+  border-radius: 15px;
 `;
 
 const ErrorText = styled(H1)`
-  padding: 5px;
+  padding: 10px;
+  color: ${({ theme }) => theme.red1};
 `;
 
 //?============================================================================================================
@@ -19,7 +24,7 @@ const ErrorText = styled(H1)`
 export default function ErrorWarning({ errorMessage }) {
   return (
     <ErrorWrapper>
-      <ErrorText>{errorMessage}</ErrorText>
+      <ErrorText> ⛔ {errorMessage}</ErrorText>
     </ErrorWrapper>
   );
 }
