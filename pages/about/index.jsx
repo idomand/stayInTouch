@@ -71,7 +71,7 @@ export default function About() {
           <P>
             Every one of us has had the experience of waking up one day and
             realizing we have not talked to that good friend from college in a
-            couple of months. Thankfully, Staying-In-Touch is here to help!
+            couple of months. Thankfully, Stay-in-Touch is here to help!
           </P>
         </IntroductionSection>
         <HowToUseSection id="HowToUseSection">
@@ -83,7 +83,7 @@ export default function About() {
           </P>
           <P>
             All you need to do is enter their names and how often you would like
-            to contact them, and Staying-In-Touch will take care of the rest.{" "}
+            to contact them, and Stay-in-Touch will take care of the rest.{" "}
           </P>
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">
