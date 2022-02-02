@@ -1,13 +1,10 @@
-import { /* primaryFont, */ typeScale } from "./typography";
+import { typeScale } from "./typography";
 import { devices } from "./devices";
 export const defaultTheme = {
   black: "#000000",
   white: "#ffffff",
   grey: "#9a9a9a",
-  white1: "#e9e7d3",
-
   blue1: "#597FDB",
-
   blue2: "#CFEBFF",
   blue3: "#6DA7FF",
   blue4: "#003382",
@@ -15,17 +12,6 @@ export const defaultTheme = {
   green1: "#90EE90",
   red1: "#d0454c",
   red2: "#F3BAB8",
-
-  // BackgroundColor: "#164A41",
-  // coolBlue: "#3AAFA9",
-  // primaryColorText: "#F1B24A",
-  // niceBrown: "#D9B08C",
-  // buttonHoverColor: "#4D774E",
-  // boldGreen: "#1C5340",
-  // darkGreen: "#003E29",
-  // nicePurple: "#dee2fc",
-  // boldPurple: "#742a7f",
-  // primaryFont: primaryFont,
   typeScale,
   devices,
 };
