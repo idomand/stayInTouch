@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../lib/AuthContext";
 import { BasicButton } from "../../Components/Common/Button";
 import styled from "styled-components";
-import { H1, H2 } from "../../Components/Common/Text";
+import { H1 } from "../../Components/Common/Text";
 
 //*============================================================================================================
 //?============================================================================================================
@@ -27,12 +27,14 @@ const SignInButton = styled(BasicButton)`
   padding: 10px;
   font-size: ${({ theme }) => theme.typeScale.header1};
   background-color: ${({ theme }) => theme.white};
-  width: 20%;
+  color: ${({ theme }) => theme.black};
+  width: 15%;
   justify-content: space-around;
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.white};
-    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.blue4};
+    color: ${({ theme }) => theme.white};
+    border: solid 1.5px ${({ theme }) => theme.black};
   }
   @media (${({ theme }) => theme.devices.break1}) {
     width: 50%;
@@ -41,9 +43,6 @@ const SignInButton = styled(BasicButton)`
 
 const GoogleLogo = styled.img`
   height: 40px;
-`;
-const LoginText = styled(H2)`
-  color: ${({ theme }) => theme.black};
 `;
 
 //?============================================================================================================
@@ -65,7 +64,7 @@ export default function Login() {
       <LoginWrapper>
         <H1>Login with your Google account</H1>
         <SignInButton onClick={loginWithGoogle}>
-          <LoginText>Login</LoginText>
+          Login
           <GoogleLogo src="/Google-logo.png" />
         </SignInButton>
       </LoginWrapper>
