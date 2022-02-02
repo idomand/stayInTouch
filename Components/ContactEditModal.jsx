@@ -7,6 +7,7 @@ import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput, InputSubmit } from "./Common/Input";
 import propTypes from "prop-types";
 import { H2 } from "./Common/Text";
+import ErrorWarning from "./ErrorWarning";
 //*============================================================================================================
 //?============================================================================================================
 
@@ -79,9 +80,9 @@ const InputWrapper = styled.div`
 const EditSubmitInput = styled(InputSubmit)`
   margin-top: 5px;
 `;
-const ErrorWrapper = styled.div`
-  border: solid red;
-`;
+// const ErrorWrapper = styled.div`
+//   border: solid red;
+// `;
 
 //?============================================================================================================
 //!============================================================================================================
@@ -141,12 +142,15 @@ export default function ContactEditModal({
 
   function nameChangeHandler(e) {
     setContactName(e.target.value);
+
     if (error) {
       setError(false);
     }
   }
   function onCloseModal() {
     setIsModalOpen(false);
+    setContactName(name);
+    setContactTime(time);
     if (error) {
       setError(false);
     }
@@ -191,11 +195,7 @@ export default function ContactEditModal({
             </InputWrapper>
             <EditSubmitInput type="submit" value="Submit" />
           </UpdateContactForm>
-          {error && (
-            <ErrorWrapper>
-              <H2>error: {error}</H2>
-            </ErrorWrapper>
-          )}
+          {error && <ErrorWarning errorMessage={error} />}
         </ModalInputWrapper>
       </ReactModal>
     </>
