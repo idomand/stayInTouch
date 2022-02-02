@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../lib/AuthContext";
 import { BasicButton } from "../../Components/Common/Button";
 import styled from "styled-components";
-import { H1, H2 } from "../../Components/Common/Text";
+import { H1 } from "../../Components/Common/Text";
 
 //*============================================================================================================
 //?============================================================================================================
