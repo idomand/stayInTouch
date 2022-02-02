@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { H1 } from "./Common/Text";
+import propTypes from "prop-types";
+
 //*============================================================================================================
 //?============================================================================================================
 
@@ -28,3 +30,7 @@ export default function ErrorWarning({ errorMessage }) {
     </ErrorWrapper>
   );
 }
+
+ErrorWarning.propTypes = {
+  errorMessage: propTypes.string,
+};
