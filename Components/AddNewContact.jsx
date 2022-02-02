@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import { BasicTextInput, InputSubmit } from "./Common/Input";
+import ErrorWrapper from "./ErrorWarning";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -65,9 +66,9 @@ const Popper = styled.div`
   z-index: 2;
 `;
 
-const ErrorWrapper = styled.div`
-  border: solid red;
-`;
+// const ErrorWrapper = styled.div`
+//   border: solid red;
+// `;
 
 //?============================================================================================================
 //!============================================================================================================
@@ -151,11 +152,7 @@ export default function AddNewContact() {
           />
         </DatePickerWrapper>
       </Form>
-      {error && (
-        <ErrorWrapper>
-          <h2>error: {error}</h2>
-        </ErrorWrapper>
-      )}
+      {error && <ErrorWrapper errorMessage={error} />}
     </>
   );
 }

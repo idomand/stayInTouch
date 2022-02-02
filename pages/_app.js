@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Staying in touch</title>
+        <title>Stay-in-Touch</title>
       </Head>
       <AuthProvider>
         <ThemeProvider theme={defaultTheme}>
