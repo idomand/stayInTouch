@@ -28,6 +28,16 @@ const NoContactsWrapper = styled.div`
 export default function ContactDetails() {
   const [arrayOfContacts, setArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
+
+  const oneDay = 86400000;
+  const currantTime = new Date().getTime();
+
+  console.log("arrayOfContacts :>> ", arrayOfContacts);
+
+  /* 
+//* the order needs to be "c" "b" "a" "d"
+*/
+
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, `${currentUser.email}${currentUser.uid}`),
@@ -36,13 +46,41 @@ export default function ContactDetails() {
           snapshot.docs.map((doc) => {
             let contactObject = doc.data();
             contactObject.contactId = doc.id;
+            contactObject.timeUntilNextTalk = +(
+              contactObject.time -
+              (currantTime - contactObject.timeFromLastTalk) / oneDay
+            ).toFixed(1);
             return contactObject;
           })
         );
+        setArrayOfContacts((oldArray) => {
+          console.log("oldArray :>> ", oldArray);
+          return oldArray.sort((a, b) => {
+            return a.timeUntilNextTalk - b.timeUntilNextTalk;
+          });
+        });
       }
     );
     return unsubscribe;
   }, [currentUser]);
+
+  //!===========working useEffect - start====================================
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(
+  //     collection(db, `${currentUser.email}${currentUser.uid}`),
+  //     (snapshot) => {
+  //       setArrayOfContacts(
+  //         snapshot.docs.map((doc) => {
+  //           let contactObject = doc.data();
+  //           contactObject.contactId = doc.id;
+  //           return contactObject;
+  //         })
+  //       );
+  //     }
+  //   );
+  //   return unsubscribe;
+  // }, [currentUser]);
+  //!===========working useEffect - end====================================
 
   let type = 0;
 
@@ -57,7 +95,7 @@ export default function ContactDetails() {
                 key={element.contactId}
                 name={element.name}
                 time={element.time}
-                timeCreated={element.timeCreated}
+                timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
                 type={type}
               />
