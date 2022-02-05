@@ -26,16 +26,25 @@ const NoContactsWrapper = styled.div`
 //?============================================================================================================
 
 export default function ContactDetails() {
-  const [arrayOfContacts, setArrayOfContacts] = useState([]);
+  const [basicArray, SetBasicArray] = useState([]);
+  const [arrayOfContacts, SetArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
+
+  const oneDay = 86400000;
+  const currantTime = new Date().getTime();
+
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, `${currentUser.email}${currentUser.uid}`),
       (snapshot) => {
-        setArrayOfContacts(
+        SetBasicArray(
           snapshot.docs.map((doc) => {
             let contactObject = doc.data();
             contactObject.contactId = doc.id;
+            contactObject.timeUntilNextTalk = +(
+              contactObject.time -
+              (currantTime - contactObject.timeFromLastTalk) / oneDay
+            ).toFixed(1);
             return contactObject;
           })
         );
@@ -44,12 +53,23 @@ export default function ContactDetails() {
     return unsubscribe;
   }, [currentUser]);
 
+  useEffect(() => {
+    let newArray = basicArray.sort((a, b) => {
+      if (a.timeUntilNextTalk > b.timeUntilNextTalk) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+    SetArrayOfContacts(newArray);
+  }, [basicArray]);
+
   let type = 0;
 
   return (
     <>
       <ContactList>
-        {arrayOfContacts.length > 0 &&
+        {basicArray.length > 0 &&
           arrayOfContacts.map((element) => {
             type++;
             return (
@@ -57,14 +77,14 @@ export default function ContactDetails() {
                 key={element.contactId}
                 name={element.name}
                 time={element.time}
-                timeCreated={element.timeCreated}
+                timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
                 type={type}
               />
             );
           })}
       </ContactList>
-      {arrayOfContacts.length === 0 && (
+      {basicArray.length === 0 && (
         <NoContactsWrapper>
           <H1>no contacts</H1>
         </NoContactsWrapper>
