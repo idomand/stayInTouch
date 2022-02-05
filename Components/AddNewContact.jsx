@@ -94,7 +94,8 @@ export default function AddNewContact() {
     let newContact = {
       name: name,
       time: +timeRef.current.value,
-      timeCreated: startDate.getTime(),
+      // timeCreated: startDate.getTime(),
+      timeFromLastTalk: startDate.getTime(),
     };
 
     const result = await addContactToFirestore(

@@ -125,7 +125,7 @@ const DeleteLogo = styled.img`
 export default function ContactItem({
   name,
   time,
-  timeCreated,
+  timeFromLastTalk,
   contactId,
   type,
 }) {
@@ -148,7 +148,7 @@ export default function ContactItem({
     const newContactData = {
       name: name,
       time: time,
-      timeCreated: currantTime,
+      timeFromLastTalk: currantTime,
     };
     resetTimerForContact(
       currentUser.uid,
@@ -165,19 +165,19 @@ export default function ContactItem({
   let lastTalkedToResponse;
   let lastTalkedToStatus;
 
-  if (currantTime - timeCreated < time * oneDay) {
+  if (currantTime - timeFromLastTalk < time * oneDay) {
     lastTalkedToStatus = true;
   } else {
     lastTalkedToStatus = false;
   }
 
-  if (currantTime - timeCreated < 0) {
+  if (currantTime - timeFromLastTalk < 0) {
     lastTalkedToResponse = <P>Last talk was today!</P>;
   } else {
     lastTalkedToResponse = (
       <P>
-        Last talk was {Math.floor((currantTime - timeCreated) / oneDay)} days
-        ago
+        Last talk was {Math.floor((currantTime - timeFromLastTalk) / oneDay)}{" "}
+        days ago
       </P>
     );
   }
@@ -189,7 +189,7 @@ export default function ContactItem({
         <ContactEditModal
           name={name}
           time={time}
-          timeCreated={timeCreated}
+          timeFromLastTalk={timeFromLastTalk}
           contactId={contactId}
         />
 
@@ -223,7 +223,7 @@ export default function ContactItem({
 ContactItem.propTypes = {
   name: propTypes.string,
   time: propTypes.number,
-  timeCreated: propTypes.number,
+  timeFromLastTalk: propTypes.number,
   contactId: propTypes.string,
   type: propTypes.number,
 };

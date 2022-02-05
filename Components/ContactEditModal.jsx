@@ -91,7 +91,7 @@ const EditSubmitInput = styled(InputSubmit)`
 export default function ContactEditModal({
   name,
   time,
-  timeCreated,
+  timeFromLastTalk,
   contactId,
 }) {
   const { currentUser } = useAuth();
@@ -106,9 +106,9 @@ export default function ContactEditModal({
     const newContactData = {
       name: contactName,
       time: +contactTime,
-      timeCreated: timeCreated,
+      timeFromLastTalk: timeFromLastTalk,
     };
-    const oldContactData = { name, time, timeCreated };
+    const oldContactData = { name, time, timeFromLastTalk };
 
     let result;
 
@@ -205,7 +205,7 @@ export default function ContactEditModal({
 ContactEditModal.propTypes = {
   name: propTypes.string,
   time: propTypes.number,
-  timeCreated: propTypes.number,
+  timeFromLastTalk: propTypes.number,
   contactId: propTypes.string,
 };
 
