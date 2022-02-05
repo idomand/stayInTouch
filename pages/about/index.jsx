@@ -3,6 +3,11 @@ import Layout from "../../Components/Layout";
 import { H1, P } from "../../Components/Common/Text.js";
 import styled from "styled-components";
 import { BasicLink } from "../../Components/Common/Links";
+import { BasicButton } from "../../Components/Common/Button";
+import { addDummyData } from "../../lib/Firebase";
+import { useAuth } from "../../lib/AuthContext";
+import { useRouter } from "next/router";
+
 //*============================================================================================================
 //?============================================================================================================
 
@@ -53,6 +58,14 @@ const AboutTheCreator = styled(AboutSubSection)`
 //?============================================================================================================
 
 export default function About() {
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
+  async function addDemoData() {
+    await addDummyData(currentUser.uid, currentUser.email);
+    router.push("/");
+  }
+
   return (
     <Layout>
       <AboutPageWrapper>
@@ -85,6 +98,7 @@ export default function About() {
             All you need to do is enter their names and how often you would like
             to contact them, and Stay-in-Touch will take care of the rest.{" "}
           </P>
+          <BasicButton onClick={addDemoData}>Demo</BasicButton>
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">
           <AboutHeader>About the site</AboutHeader>
