@@ -20,6 +20,11 @@ const AboutPageWrapper = styled.section`
   position: relative;
 `;
 
+const DemoButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const AboutHeader = styled(H1)`
   color: ${({ theme }) => theme.black};
   text-decoration: underline;
@@ -98,7 +103,9 @@ export default function About() {
             All you need to do is enter their names and how often you would like
             to contact them, and Stay-in-Touch will take care of the rest.{" "}
           </P>
-          <BasicButton onClick={addDemoData}>Demo</BasicButton>
+          <DemoButtonWrapper>
+            <BasicButton onClick={addDemoData}>Demo</BasicButton>
+          </DemoButtonWrapper>
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">
           <AboutHeader>About the site</AboutHeader>
