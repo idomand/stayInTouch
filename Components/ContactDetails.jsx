@@ -26,23 +26,18 @@ const NoContactsWrapper = styled.div`
 //?============================================================================================================
 
 export default function ContactDetails() {
-  const [arrayOfContacts, setArrayOfContacts] = useState([]);
+  const [basicArray, SetBasicArray] = useState([]);
+  const [arrayOfContacts, SetArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
 
   const oneDay = 86400000;
   const currantTime = new Date().getTime();
 
-  console.log("arrayOfContacts :>> ", arrayOfContacts);
-
-  /* 
-//* the order needs to be "c" "b" "a" "d"
-*/
-
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, `${currentUser.email}${currentUser.uid}`),
       (snapshot) => {
-        setArrayOfContacts(
+        SetBasicArray(
           snapshot.docs.map((doc) => {
             let contactObject = doc.data();
             contactObject.contactId = doc.id;
@@ -53,41 +48,28 @@ export default function ContactDetails() {
             return contactObject;
           })
         );
-        setArrayOfContacts((oldArray) => {
-          console.log("oldArray :>> ", oldArray);
-          return oldArray.sort((a, b) => {
-            return a.timeUntilNextTalk - b.timeUntilNextTalk;
-          });
-        });
       }
     );
     return unsubscribe;
   }, [currentUser]);
 
-  //!===========working useEffect - start====================================
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     collection(db, `${currentUser.email}${currentUser.uid}`),
-  //     (snapshot) => {
-  //       setArrayOfContacts(
-  //         snapshot.docs.map((doc) => {
-  //           let contactObject = doc.data();
-  //           contactObject.contactId = doc.id;
-  //           return contactObject;
-  //         })
-  //       );
-  //     }
-  //   );
-  //   return unsubscribe;
-  // }, [currentUser]);
-  //!===========working useEffect - end====================================
+  useEffect(() => {
+    let newArray = basicArray.sort((a, b) => {
+      if (a.timeUntilNextTalk > b.timeUntilNextTalk) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+    SetArrayOfContacts(newArray);
+  }, [basicArray]);
 
   let type = 0;
 
   return (
     <>
       <ContactList>
-        {arrayOfContacts.length > 0 &&
+        {basicArray.length > 0 &&
           arrayOfContacts.map((element) => {
             type++;
             return (
@@ -102,7 +84,7 @@ export default function ContactDetails() {
             );
           })}
       </ContactList>
-      {arrayOfContacts.length === 0 && (
+      {basicArray.length === 0 && (
         <NoContactsWrapper>
           <H1>no contacts</H1>
         </NoContactsWrapper>
