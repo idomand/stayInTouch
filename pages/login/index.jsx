@@ -2,14 +2,13 @@ import React, { useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { useRouter } from "next/router";
 import { useAuth } from "../../lib/AuthContext";
-import { BasicButton } from "../../Components/Common/Button";
-import styled from "styled-components";
 import { H1 } from "../../Components/Common/Text";
+// import { GoogleLogo, LoginWrapper, SignInButton } from "./styleLogin";
 
-//*============================================================================================================
-//?============================================================================================================
+import styled from "styled-components";
+import { BasicButton } from "../../Components/Common/Button";
 
-const LoginWrapper = styled.div`
+export const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,7 +20,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const SignInButton = styled(BasicButton)`
+export const SignInButton = styled(BasicButton)`
   display: flex;
   margin-top: 15px;
   padding: 10px;
@@ -41,13 +40,9 @@ const SignInButton = styled(BasicButton)`
   }
 `;
 
-const GoogleLogo = styled.img`
+export const GoogleLogo = styled.img`
   height: 40px;
 `;
-
-//?============================================================================================================
-//!============================================================================================================
-//?============================================================================================================
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth();

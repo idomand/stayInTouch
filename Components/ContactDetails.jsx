@@ -5,8 +5,7 @@ import { useAuth } from "../lib/AuthContext";
 import ContactItem from "./ContactItem";
 import { collection, onSnapshot } from "firebase/firestore";
 import { H1 } from "./Common/Text";
-//*============================================================================================================
-//?============================================================================================================
+import { oneDay } from "../lib/ConstantsFile";
 
 const ContactList = styled.ul`
   padding: 0;
@@ -21,16 +20,11 @@ const NoContactsWrapper = styled.div`
   justify-content: center;
 `;
 
-//?============================================================================================================
-//!============================================================================================================
-//?============================================================================================================
-
 export default function ContactDetails() {
   const [basicArray, SetBasicArray] = useState([]);
   const [arrayOfContacts, SetArrayOfContacts] = useState([]);
   const { currentUser } = useAuth();
 
-  const oneDay = 86400000;
   const currantTime = new Date().getTime();
 
   useEffect(() => {
@@ -51,6 +45,7 @@ export default function ContactDetails() {
       }
     );
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   useEffect(() => {

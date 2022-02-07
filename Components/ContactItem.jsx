@@ -5,16 +5,14 @@ import ContactEditModal from "./ContactEditModal";
 import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
-import useStyledTheme from "../utils/hooks/useStyledTheme";
 import { deleteContact } from "../lib/Firebase";
 import { P } from "./Common/Text";
-//*============================================================================================================
-//?============================================================================================================
+import { oneDay } from "../lib/ConstantsFile";
 
 const ContactItemWrapper = styled.li`
   display: flex;
   justify-content: space-between;
-  background-color: ${(element) => element.backgroundColor};
+  background-color: ${({ theme }) => theme.white};
   color: ${({ theme }) => theme.black};
   list-style-type: none;
   margin: 10px 5px;
@@ -118,27 +116,13 @@ const DeleteLogo = styled.img`
   height: 20px;
 `;
 
-//?============================================================================================================
-//!============================================================================================================
-//?============================================================================================================
-
 export default function ContactItem({
   name,
   time,
   timeFromLastTalk,
   contactId,
-  type,
 }) {
   const { currentUser } = useAuth();
-
-  const Theme = useStyledTheme();
-
-  let colorType;
-  if (type % 2 === 0) {
-    colorType = Theme.white;
-  } else {
-    colorType = Theme.white;
-  }
 
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
@@ -157,8 +141,6 @@ export default function ContactItem({
       newContactData
     );
   }
-
-  const oneDay = 86400000;
 
   const currantTime = new Date().getTime();
 
@@ -183,7 +165,7 @@ export default function ContactItem({
   }
 
   return (
-    <ContactItemWrapper backgroundColor={colorType}>
+    <ContactItemWrapper>
       <ButtonContainer>
         <ResetButton onClick={resetFunction}>Reset</ResetButton>
         <ContactEditModal
@@ -225,5 +207,4 @@ ContactItem.propTypes = {
   time: propTypes.number,
   timeFromLastTalk: propTypes.number,
   contactId: propTypes.string,
-  type: propTypes.number,
 };

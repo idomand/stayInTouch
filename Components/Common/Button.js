@@ -1,8 +1,5 @@
 import styled from "styled-components";
 
-//*============================================================================================================
-//?============================================================================================================
-
 export const BasicButton = styled.button.attrs((props) => {
   target: "_self";
 })`
@@ -32,8 +29,5 @@ export const BasicButton = styled.button.attrs((props) => {
 `;
 
 export const NavbarButton = styled(BasicButton)`
-  /* background-color: ${({ theme }) => theme.lightGreen}; ; */
-  /* color: ${({ theme }) => theme.boldRed}; */
-  /* border:solid 2px ${({ theme }) => theme.lightGreen} ; */
   margin: 3px;
 `;

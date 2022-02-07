@@ -8,9 +8,6 @@ import { addDummyData } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
 import { useRouter } from "next/router";
 
-//*============================================================================================================
-//?============================================================================================================
-
 const AboutPageWrapper = styled.section`
   margin-top: 10px;
   display: flex;
@@ -58,9 +55,6 @@ const AboutTheCreator = styled(AboutSubSection)`
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 `;
-
-//*============================================================================================================
-//?============================================================================================================
 
 export default function About() {
   const { currentUser } = useAuth();
