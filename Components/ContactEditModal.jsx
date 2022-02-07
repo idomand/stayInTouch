@@ -8,8 +8,6 @@ import { BasicTextInput, InputSubmit } from "./Common/Input";
 import propTypes from "prop-types";
 import { H2 } from "./Common/Text";
 import ErrorWarning from "./ErrorWarning";
-//*============================================================================================================
-//?============================================================================================================
 
 const EditButton = styled(BasicButton)`
   color: ${({ theme }) => theme.black};
@@ -80,13 +78,6 @@ const InputWrapper = styled.div`
 const EditSubmitInput = styled(InputSubmit)`
   margin-top: 5px;
 `;
-// const ErrorWrapper = styled.div`
-//   border: solid red;
-// `;
-
-//?============================================================================================================
-//!============================================================================================================
-//?============================================================================================================
 
 export default function ContactEditModal({
   name,
