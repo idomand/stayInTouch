@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-//*============================================================================================================
-//?============================================================================================================
-
 export const LinkPrototype = ({ as, children, className, href, target }) => (
   <Link href={href} as={as}>
     <a target={target} className={className}>
