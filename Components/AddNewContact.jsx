@@ -94,7 +94,6 @@ export default function AddNewContact() {
     let newContact = {
       name: name,
       time: +timeRef.current.value,
-      // timeCreated: startDate.getTime(),
       timeFromLastTalk: startDate.getTime(),
     };
 

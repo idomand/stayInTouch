@@ -32,6 +32,7 @@ export default function ScrollToTopButton() {
 
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   return (
