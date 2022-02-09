@@ -1,8 +1,7 @@
-import React from "react";
 import styled from "styled-components";
-import { LinkPrototype } from "./Common/StyledLinks";
+import { LinkPrototype } from "../Common/StyledLinks";
 
-const HowToUseLink = styled(LinkPrototype)`
+export const HowToUseLink = styled(LinkPrototype)`
   text-align: center;
   font-size: ${({ theme }) => theme.typeScale.header2};
   padding: 5px;
@@ -43,11 +42,3 @@ const HowToUseLink = styled(LinkPrototype)`
     }
   }
 `;
-
-export default function HowToUse() {
-  return (
-    <>
-      <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
-    </>
-  );
-}

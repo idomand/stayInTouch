@@ -1,50 +1,17 @@
 import React from "react";
-import styled from "styled-components";
-import { useAuth } from "../lib/AuthContext";
-import { NavLink } from "./Common/StyledLinks";
+import { useAuth } from "../../lib/AuthContext";
+import { NavLink } from "../Common/StyledLinks";
 import { useMedia } from "react-use";
-import { H1 } from "./Common/StyledText.js";
 import { useRouter } from "next/router";
 import { useTheme } from "styled-components";
-
-const LogoImg = styled.img`
-  margin: 5px 0 5px 20px;
-  height: 40px;
-`;
-
-const NavBarWrapper = styled.nav`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: ${({ theme }) => theme.blue1};
-  position: sticky;
-  z-index: 2;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const NavbarText = styled(H1)`
-  margin-left: 20px;
-`;
-const ButtonWrapper = styled.div``;
-
-const LoginButton = styled(NavLink)``;
-
-const LogoutButton = styled(NavLink)`
-  background-color: ${({ theme }) => theme.white};
-  color: ${({ theme }) => theme.black};
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.brown1};
-    color: ${({ theme }) => theme.black};
-    border: solid 2px ${({ theme }) => theme.black};
-  }
-`;
+import {
+  LoginButton,
+  ButtonWrapper,
+  LogoImg,
+  LogoutButton,
+  NavbarText,
+  NavBarWrapper,
+} from "./NavBarStyle";
 
 export default function NavBar() {
   const Theme = useTheme();
