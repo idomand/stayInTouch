@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { useRouter } from "next/router";
 import { useAuth } from "../../lib/AuthContext";
-import { H1 } from "../../Components/Common/Text";
+import { H1 } from "../../Components/Common/StyledText";
 // import { GoogleLogo, LoginWrapper, SignInButton } from "./styleLogin";
 
 import styled from "styled-components";
-import { BasicButton } from "../../Components/Common/Button";
+import { BasicButton } from "../../Components/Common/StyledButton";
 
 export const LoginWrapper = styled.div`
   display: flex;

@@ -4,7 +4,7 @@ import { db } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ContactItem from "./ContactItem";
 import { collection, onSnapshot } from "firebase/firestore";
-import { H1 } from "./Common/Text";
+import { H1 } from "./Common/StyledText";
 import { oneDay } from "../lib/ConstantsFile";
 
 const ContactList = styled.ul`

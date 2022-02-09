@@ -1,9 +1,9 @@
 import React from "react";
 import Layout from "../../Components/Layout";
-import { H1, P } from "../../Components/Common/Text.js";
+import { H1, P } from "../../Components/Common/StyledText.js";
 import styled from "styled-components";
-import { BasicLink } from "../../Components/Common/Links";
-import { BasicButton } from "../../Components/Common/Button";
+import { BasicLink } from "../../Components/Common/StyledLinks";
+import { BasicButton } from "../../Components/Common/StyledButton";
 import { addDummyData } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
 import { useRouter } from "next/router";

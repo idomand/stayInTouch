@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { LinkPrototype } from "./Common/Links";
+import { LinkPrototype } from "./Common/StyledLinks";
 
 const HowToUseLink = styled(LinkPrototype)`
   text-align: center;

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { H1 } from "./Common/Text";
+import { H1 } from "./Common/StyledText";
 import propTypes from "prop-types";
 
 const ErrorWrapper = styled.div`

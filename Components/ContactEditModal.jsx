@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
-import { BasicButton } from "./Common/Button";
+import { BasicButton } from "./Common/StyledButton";
 import { updateContactFull, updateContactTime } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
-import { BasicTextInput, InputSubmit } from "./Common/Input";
+import { BasicTextInput, InputSubmit } from "./Common/StyledInput";
 import propTypes from "prop-types";
-import { H2 } from "./Common/Text";
+import { H2 } from "./Common/StyledText";
 import ErrorWarning from "./ErrorWarning";
 
 const EditButton = styled(BasicButton)`
