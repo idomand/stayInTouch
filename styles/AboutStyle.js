@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { H1 } from "../../Components/Common/StyledText";
+import { H1 } from "../Components/Common/StyledText";
 
 export const AboutPageWrapper = styled.section`
   margin-top: 10px;

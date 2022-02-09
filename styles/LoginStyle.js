@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BasicButton } from "../../Components/Common/StyledButton";
+import { BasicButton } from "../Components/Common/StyledButton";
 
 export const LoginWrapper = styled.div`
   display: flex;
