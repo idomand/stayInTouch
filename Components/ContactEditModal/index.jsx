@@ -102,7 +102,7 @@ export default function ContactEditModal({
         <ModalInputWrapper>
           <UpdateContactForm onSubmit={updateContactOnSubmit}>
             <InputWrapper>
-              <label htmlFor="name">Name:</label>
+              <BasicLabel htmlFor="name">Name:</BasicLabel>
               <BasicTextInput
                 id="name"
                 type="text"
