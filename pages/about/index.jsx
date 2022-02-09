@@ -61,8 +61,12 @@ export default function About() {
   const router = useRouter();
 
   async function addDemoData() {
-    await addDummyData(currentUser.uid, currentUser.email);
-    router.push("/");
+    if (currentUser) {
+      await addDummyData(currentUser.uid, currentUser.email);
+      router.push("/");
+    } else {
+      router.push("/login");
+    }
   }
 
   return (
