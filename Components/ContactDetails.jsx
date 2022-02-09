@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { db } from "../lib/Firebase";
-import { useAuth } from "../lib/AuthContext";
 import ContactItem from "./ContactItem";
-import { collection, onSnapshot } from "firebase/firestore";
 import { H1 } from "./Common/StyledText";
-import { oneDay } from "../lib/ConstantsFile";
+import useSnapshotData from "../utils/hooks/useSnapshotData";
 
 const ContactList = styled.ul`
   padding: 0;
@@ -19,34 +16,10 @@ const NoContactsWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
-
 export default function ContactDetails() {
-  const [basicArray, SetBasicArray] = useState([]);
   const [arrayOfContacts, SetArrayOfContacts] = useState([]);
-  const { currentUser } = useAuth();
 
-  const currantTime = new Date().getTime();
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, `${currentUser.email}${currentUser.uid}`),
-      (snapshot) => {
-        SetBasicArray(
-          snapshot.docs.map((doc) => {
-            let contactObject = doc.data();
-            contactObject.contactId = doc.id;
-            contactObject.timeUntilNextTalk = +(
-              contactObject.time -
-              (currantTime - contactObject.timeFromLastTalk) / oneDay
-            ).toFixed(1);
-            return contactObject;
-          })
-        );
-      }
-    );
-    return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  const basicArray = useSnapshotData();
 
   useEffect(() => {
     let newArray = basicArray.sort((a, b) => {
