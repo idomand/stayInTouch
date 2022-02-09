@@ -1,5 +1,4 @@
 import { typeScale } from "./typography";
-import { devices } from "./devices";
 export const defaultTheme = {
   black: "#000000",
   white: "#ffffff",
@@ -13,5 +12,8 @@ export const defaultTheme = {
   red1: "#d0454c",
   red2: "#F3BAB8",
   typeScale,
-  devices,
+  devices: {
+    break1: `max-width: 550px`,
+    break2: `min-width: 550px`,
+  },
 };
