@@ -3,7 +3,11 @@ import Layout from "../../Components/Layout";
 import { useRouter } from "next/router";
 import { useAuth } from "../../lib/AuthContext";
 import { H1 } from "../../Components/Common/StyledText";
-import { GoogleLogo, LoginWrapper, SignInButton } from "./LoginStyle";
+import {
+  GoogleLogo,
+  LoginWrapper,
+  SignInButton,
+} from "../../styles/LoginStyle";
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth();

@@ -14,7 +14,7 @@ import {
   DemoButtonWrapper,
   HowToUseSection,
   IntroductionSection,
-} from "./AboutStyle";
+} from "../../styles/AboutStyle";
 
 export default function About() {
   const { currentUser } = useAuth();
