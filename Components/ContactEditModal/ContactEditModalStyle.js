@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BasicButton } from "../Common/StyledButton";
-import { InputSubmit } from "../Common/StyledInput";
+import { InputSubmit } from "../Common/StyledFormElements";
 import { H2 } from "../Common/StyledText";
 
 export const EditButton = styled(BasicButton)`
