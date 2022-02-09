@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import AddNewContact from "./AddNewContact";
-import { H1 } from "./Common/Text";
+import { H1 } from "./Common/StyledText";
 import HowToUse from "./HowToUse";
 
 const MainFormWrapper = styled.section`

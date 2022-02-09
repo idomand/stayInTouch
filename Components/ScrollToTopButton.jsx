@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { BasicButton } from "./Common/Button";
+import { BasicButton } from "./Common/StyledButton";
 const ScrollButtonWrapper = styled.div``;
 
 const ScrollButton = styled(BasicButton)`

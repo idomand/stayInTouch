@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
-import { BasicTextInput, InputSubmit } from "./Common/Input";
+import { BasicTextInput, InputSubmit } from "./Common/StyledInput";
 import ErrorWrapper from "./ErrorWarning";
 
 import DatePicker from "react-datepicker";

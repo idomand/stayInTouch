@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { BasicButton } from "./Common/Button";
+import { BasicButton } from "./Common/StyledButton";
 import ContactEditModal from "./ContactEditModal";
 import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
 import { deleteContact } from "../lib/Firebase";
-import { P } from "./Common/Text";
+import { P } from "./Common/StyledText";
 import { oneDay } from "../lib/ConstantsFile";
 
 const ContactItemWrapper = styled.li`

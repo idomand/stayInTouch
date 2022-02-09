@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
-import { NavLink } from "./Common/Links";
+import { NavLink } from "./Common/StyledLinks";
 import { useMedia } from "react-use";
-import { H1 } from "./Common/Text.js";
+import { H1 } from "./Common/StyledText.js";
 import useStyledTheme from "../utils/hooks/useStyledTheme";
 import { useRouter } from "next/router";
 
