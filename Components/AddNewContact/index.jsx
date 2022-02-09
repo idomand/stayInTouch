@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
+import { addDays } from "date-fns";
+
 import { addContactToFirestore } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
 import ErrorWrapper from "../ErrorWarning";
-import "react-datepicker/dist/react-datepicker.css";
-import { addDays } from "date-fns";
+import { P } from "../Common/StyledText";
+import { BasicForm, BasicLabel } from "../Common/StyledFormElements";
 import {
-  Form,
   InputText,
   DatePickerWrapper,
   InputTime,
@@ -31,7 +32,6 @@ export default function AddNewContact() {
 
   async function createNewContact(event) {
     event.preventDefault();
-
     let newContact = {
       name: name,
       time: +timeRef.current.value,
@@ -50,11 +50,12 @@ export default function AddNewContact() {
       timeRef.current.value = 3;
     }
   }
+
   return (
     <>
-      <Form onSubmit={createNewContact}>
+      <BasicForm onSubmit={createNewContact}>
         I would like to talk to:
-        <label>
+        <BasicLabel>
           <InputText
             type="text"
             name="name"
@@ -62,8 +63,8 @@ export default function AddNewContact() {
             required
             onChange={nameChangeHandler}
           />
-        </label>
-        <label>
+        </BasicLabel>
+        <BasicLabel>
           every
           <InputTime
             ref={timeRef}
@@ -75,9 +76,9 @@ export default function AddNewContact() {
             defaultValue={3}
           />
           days
-        </label>
+        </BasicLabel>
         <DatePickerWrapper>
-          <p>Last time we have talked was:</p>
+          <P>Last time we have talked was:</P>
           <DatePickerComponent
             maxDate={addDays(new Date(), 0)}
             CalendarContainer={Calendar}
@@ -92,7 +93,7 @@ export default function AddNewContact() {
             value="Add contact"
           />
         </DatePickerWrapper>
-      </Form>
+      </BasicForm>
       {error && <ErrorWrapper errorMessage={error} />}
     </>
   );

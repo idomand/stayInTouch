@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import { updateContactFull, updateContactTime } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
-import { BasicTextInput } from "../Common/StyledInput";
+import { BasicTextInput, BasicLabel } from "../Common/StyledFormElements";
 import propTypes from "prop-types";
 import ErrorWarning from "../ErrorWarning";
 import {
@@ -111,7 +111,7 @@ export default function ContactEditModal({
               />
             </InputWrapper>
             <InputWrapper>
-              <label htmlFor="time">Talk every X days?</label>
+              <BasicLabel htmlFor="time">Talk every X days?</BasicLabel>
               <BasicTextInput
                 id="time"
                 type="number"

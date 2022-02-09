@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { BasicTextInput, InputSubmit } from "../Common/StyledInput";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { BasicTextInput, InputSubmit } from "../Common/StyledFormElements";
 
 export const InputText = styled(BasicTextInput)`
   min-width: 70px;
@@ -12,14 +14,6 @@ export const InputTime = styled(BasicTextInput)`
 `;
 export const AddSubmitInput = styled(InputSubmit)`
   margin-left: 10px;
-`;
-
-export const Form = styled.form`
-  color: ${({ theme }) => theme.black};
-  margin: 10px;
-  border: solid 1px;
-  padding: 10px;
-  border-radius: 10px 10px 0 0;
 `;
 
 export const DatePickerWrapper = styled.div`
