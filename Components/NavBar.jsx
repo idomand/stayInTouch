@@ -4,8 +4,8 @@ import { useAuth } from "../lib/AuthContext";
 import { NavLink } from "./Common/StyledLinks";
 import { useMedia } from "react-use";
 import { H1 } from "./Common/StyledText.js";
-import useStyledTheme from "../utils/hooks/useStyledTheme";
 import { useRouter } from "next/router";
+import { useTheme } from "styled-components";
 
 const LogoImg = styled.img`
   margin: 5px 0 5px 20px;
@@ -47,7 +47,7 @@ const LogoutButton = styled(NavLink)`
 `;
 
 export default function NavBar() {
-  const Theme = useStyledTheme();
+  const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
   const { currentUser, logout } = useAuth();
 
