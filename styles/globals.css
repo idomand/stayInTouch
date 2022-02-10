@@ -4,7 +4,9 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 
-  background-color: white;
+  background-color: #f5f8ff;
+
+  /* background-color: #e5e5e5; */
 }
 
 a {
