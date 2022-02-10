@@ -9,20 +9,23 @@ export const LogoImg = styled.img`
 
 export const NavBarWrapper = styled.nav`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  background-color: ${({ theme }) => theme.blue1};
+  background-color: ${({ theme }) => theme.white};
   position: sticky;
   z-index: 2;
   top: 0;
   width: 100%;
   height: 60px;
+
+  box-shadow: 0px 1px 0px #e5e9f2;
+
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
 
 export const NavbarText = styled(H1)`
-  margin-left: 20px;
+  margin-left: 80px;
 `;
 export const ButtonWrapper = styled.div``;
 
