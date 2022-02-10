@@ -1,5 +1,10 @@
 import { typeScale } from "./typography";
 export const defaultTheme = {
+  //!========
+  blue_1: "#2C61E0",
+  blue_2: "#053BBC",
+  //!========
+
   black: "#000000",
   white: "#ffffff",
   grey: "#9a9a9a",
