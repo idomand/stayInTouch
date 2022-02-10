@@ -28,8 +28,8 @@ export const NavLink = styled(LinkPrototype)`
     isActive ? theme.white : theme.white};
   color: ${({ theme }) => theme.black};
   border: 2px solid ${({ theme }) => theme.black};
-  border-radius: 10px;
-  font-size: ${({ theme }) => theme.typeScale.header4};
+  border-radius: 6px;
+  font-size: ${({ theme }) => theme.typeScale.paragraph};
   align-items: center;
   padding: 10px 20px;
   margin: 5px;
