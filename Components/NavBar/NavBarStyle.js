@@ -23,7 +23,7 @@ export const NavBarWrapper = styled.nav`
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
-
+//!!!
 export const NavbarText = styled(H1)`
   margin-left: 80px;
 `;
