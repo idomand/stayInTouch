@@ -4,17 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { BasicTextInput, InputSubmit } from "../Common/StyledFormElements";
 
-export const InputText = styled(BasicTextInput)`
-  min-width: 70px;
-  margin: 5px;
-`;
-export const InputTime = styled(BasicTextInput)`
-  width: 45px;
-  margin: 5px;
-`;
-export const AddSubmitInput = styled(InputSubmit)`
-  margin-left: 10px;
-`;
+export const InputText = styled(BasicTextInput)``;
+export const InputTime = styled(BasicTextInput)``;
+export const AddSubmitInput = styled(InputSubmit)``;
 
 export const DatePickerWrapper = styled.div`
   display: flex;
@@ -45,6 +37,5 @@ export const DatePickerComponent = styled(({ className, ...props }) => (
     width: 90px;
 
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.white};
   }
 `;
