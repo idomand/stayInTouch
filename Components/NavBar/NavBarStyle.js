@@ -30,9 +30,8 @@ export const NavbarText = styled(H1)`
 export const ButtonWrapper = styled.div``;
 
 export const LoginButton = styled(NavLink)`
-  background: linear-gradient(98.64deg, #2c61e0 0%, #053bbc 98.85%);
+  background: ${({ theme }) => theme.blueButtonBackground};
   color: ${({ theme }) => theme.white};
-  border: none;
 `;
 
 export const LogoutButton = styled(NavLink)`
