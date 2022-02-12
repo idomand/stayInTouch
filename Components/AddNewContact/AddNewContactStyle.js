@@ -6,7 +6,18 @@ import { BasicTextInput, InputSubmit } from "../Common/StyledFormElements";
 
 export const InputText = styled(BasicTextInput)``;
 export const InputTime = styled(BasicTextInput)``;
-export const AddSubmitInput = styled(InputSubmit)``;
+
+export const AddSubmitInput = styled(InputSubmit)`
+  background-color: ${({ theme }) => theme.green_1};
+  color: ${({ theme }) => theme.white};
+  transition: all 0.5s;
+  &:hover,
+  &:focus {
+    background: rgba(2, 207, 96, 0.1);
+    border: 1.3px solid ${({ theme }) => theme.green_1};
+    color: ${({ theme }) => theme.green_1};
+  }
+`;
 
 export const DatePickerWrapper = styled.div`
   display: flex;
