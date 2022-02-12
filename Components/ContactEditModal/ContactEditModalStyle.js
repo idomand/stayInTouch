@@ -41,4 +41,16 @@ export const InputWrapper = styled.div`
     flex-direction: column;
   }
 `;
-export const EditSubmitInput = styled(InputSubmit)``;
+export const EditSubmitInput = styled(InputSubmit)`
+  background-color: ${({ theme }) => theme.blue_1};
+  color: ${({ theme }) => theme.white};
+  width: 415px;
+  height: 45px;
+  &:hover,
+  &:focus {
+    background: rgba(44, 97, 224, 0.1);
+
+    border: 1.3px solid ${({ theme }) => theme.blue_1};
+    color: ${({ theme }) => theme.blue_1};
+  }
+`;

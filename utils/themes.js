@@ -2,11 +2,17 @@ import { typeScale } from "./typography";
 
 export const defaultTheme = {
   //!========
-  blue_1: "#2C61E0",
-  blue_2: "#053BBC",
+  blue_1: "#053BBC",
+  blue_2: "#2C61E0",
+  blue_3: "#2c61e01A",
 
-  // blueButtonBackground: `linear-gradient(98.64deg, ${blue_1} 0%, ${blue_2} 98.85%)`,
-  blueButtonBackground: "linear-gradient(98.64deg, #2c61e0 0%, #053bbc 98.85%)",
+  green_1: "#02CF60",
+  green_2: "#00AE50",
+
+  // blueButtonBackground: "linear-gradient(98.64deg, #2c61e0 0%, #053bbc 98.85%)",
+  // blueButtonBackground2: "linear-gradient(98.64deg, #2c61e0 0%, #053bbc 98.85%)",
+
+  // greenButtonBackground: "linear-gradient(180deg, #02CF60 0%, #00AE50 100%)",
 
   //!========
 

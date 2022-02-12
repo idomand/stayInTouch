@@ -121,7 +121,11 @@ export default function ContactEditModal({
                 onChange={(e) => setContactTime(e.target.value)}
               />
             </InputWrapper>
-            <EditSubmitInput type="submit" value="Submit" />
+            <EditSubmitInput
+              disabled={contactName === ""}
+              type="submit"
+              value="Update Contact"
+            />
           </UpdateContactForm>
           {error && <ErrorWarning errorMessage={error} />}
         </ModalInputWrapper>
