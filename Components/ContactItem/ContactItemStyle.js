@@ -62,6 +62,7 @@ export const StatusContainer = styled.div`
 `;
 
 export const StatusPicture = styled.img`
+  height: 30px;
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
@@ -72,4 +73,6 @@ export const DeleteButton = styled(BasicButton)`
   }
 `;
 
-export const DeleteLogo = styled.img``;
+export const DeleteLogo = styled.img`
+  height: 20px;
+`;
