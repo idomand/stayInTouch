@@ -42,14 +42,18 @@ export const P1 = styled.p`
 export const P2 = styled.p`
   margin: 0;
   padding: 0;
-  font-weight: 500;
+  font-weight: 400;
   font-size: ${({ theme }) => theme.typeScale.p_normal};
 `;
 export const P3 = styled.p`
+  font-family: Inter;
   margin: 0;
   padding: 0;
   font-weight: 500;
-  font-size: ${({ theme }) => theme.typeScale.p_small};
+  line-height: 22px;
+  text-transform: capitalize;
+  color: ${({ theme }) => theme.black};
+  font-size: ${({ theme }) => theme.typeScale.p_normal};
 `;
 
 export const P = styled.p`
