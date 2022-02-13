@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import { useTheme } from "styled-components";
 import {
   LoginButton,
-  ButtonWrapper,
   LogoImg,
   LogoutButton,
   NavbarText,
   NavBarWrapper,
+  PageLinksWrapper,
 } from "./NavBarStyle";
 
 export default function NavBar() {
@@ -27,8 +27,7 @@ export default function NavBar() {
       ) : (
         <NavbarText>Stay-in-Touch!</NavbarText>
       )}
-      <div></div>
-      <ButtonWrapper>
+      <PageLinksWrapper>
         {currentUser && (
           <NavLink isActive={router.pathname == "/"} href="/">
             Home
@@ -37,16 +36,17 @@ export default function NavBar() {
         <NavLink isActive={router.pathname == "/about"} href="/about">
           About
         </NavLink>
-        {currentUser ? (
-          <LogoutButton as="button" onClick={logout}>
-            Logout
-          </LogoutButton>
-        ) : (
-          <LoginButton isActive={router.pathname == "/login"} href="/login">
-            Login
-          </LoginButton>
-        )}
-      </ButtonWrapper>
+      </PageLinksWrapper>
+
+      {currentUser ? (
+        <LogoutButton as="button" onClick={logout}>
+          Logout
+        </LogoutButton>
+      ) : (
+        <LoginButton isActive={router.pathname == "/login"} href="/login">
+          Login
+        </LoginButton>
+      )}
     </NavBarWrapper>
   );
 }

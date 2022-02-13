@@ -20,4 +20,6 @@ export const SignInButton = styled(BasicButton)`
   }
 `;
 
-export const GoogleLogo = styled.img``;
+export const GoogleLogo = styled.img`
+  height: 20px;
+`;

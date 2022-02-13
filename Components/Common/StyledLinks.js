@@ -22,7 +22,7 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
 
 export const NavLink = styled(LinkPrototype)`
   align-items: center;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s;
   &:hover,
   &:focus {
   }
