@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-export const BasicTextInput = styled.input``;
-
 export const InputSubmit = styled.input`
   cursor: pointer;
   transition: all 0.5s;
@@ -23,6 +21,17 @@ export const InputSubmit = styled.input`
   }
 `;
 
-export const BasicForm = styled.form``;
+export const BasicForm = styled.form`
+  border: solid red;
+  background-color: ${({ theme }) => theme.white};
+  border-radius: 10px;
+`;
+export const BasicInput = styled.input`
+  background-color: ${({ theme }) => theme.grey};
+  border-radius: 10px;
+  border: none;
+`;
 
-export const BasicLabel = styled.label``;
+export const BasicLabel = styled.label`
+  /* background-color: greenyellow; */
+`;

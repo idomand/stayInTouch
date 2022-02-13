@@ -1,21 +1,66 @@
 import React, { useRef, useState } from "react";
+import styled from "styled-components";
 import { addDays } from "date-fns";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ErrorWrapper from "./ErrorWarning";
 import { P } from "./Common/StyledText";
 import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
-import styled from "styled-components";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { BasicTextInput, InputSubmit } from "./Common/StyledFormElements";
+import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
 
-//!-==========================--
+const AddContactForm = styled(BasicForm)`
+  display: grid;
+  padding: 15px;
+  grid-template-areas:
+    "name howMuchTime tag"
+    "lastTalked notes"
+    "submit";
+  width: 50vw;
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 90vw;
+    grid-template-areas:
+      "name howMuchTime "
+      "tag lastTalked "
+      "notes"
+      "submit";
+  }
+`;
 
-const InputText = styled(BasicTextInput)``;
-const InputTime = styled(BasicTextInput)``;
+// const InputText = styled(BasicInput)``;
+// const InputTime = styled(BasicInput)``;
+
+const NameLabel = styled(BasicLabel)`
+  border: dotted blue;
+`;
+const NameInput = styled(BasicInput)`
+  border: solid blue;
+`;
+const TagLabel = styled(BasicLabel)`
+  border: dotted green;
+`;
+const TagInput = styled(BasicInput)`
+  border: solid green;
+`;
+const TimeLabel = styled(BasicLabel)`
+  border: dotted yellow;
+`;
+
+const TimeInput = styled(BasicInput)`
+  border: solid yellow;
+`;
+
+const NotesLabel = styled(BasicLabel)`
+  border: dotted orange;
+`;
+
+const NotesInput = styled(BasicInput)`
+  border: solid orange;
+`;
 
 const AddSubmitInput = styled(InputSubmit)`
+  grid-area: submit;
   background-color: ${({ theme }) => theme.green_1};
   color: ${({ theme }) => theme.white};
   transition: all 0.5s;
@@ -28,6 +73,8 @@ const AddSubmitInput = styled(InputSubmit)`
 `;
 
 const DatePickerWrapper = styled.div`
+  grid-area: lastTalked;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,8 +105,6 @@ const DatePickerComponent = styled(({ className, ...props }) => (
     border-radius: 5px;
   }
 `;
-
-//!================
 
 export default function AddNewContact() {
   const timeRef = useRef();
@@ -98,20 +143,21 @@ export default function AddNewContact() {
 
   return (
     <>
-      <BasicForm onSubmit={createNewContact}>
-        I would like to talk to:
-        <BasicLabel>
-          <InputText
+      <AddContactForm onSubmit={createNewContact}>
+        <NameLabel>
+          I would like to talk to:
+          <NameInput
             type="text"
             name="name"
             value={name}
             required
             onChange={nameChangeHandler}
+            placeholder="Enter name"
           />
-        </BasicLabel>
+        </NameLabel>
         <BasicLabel>
           every
-          <InputTime
+          <TimeInput
             ref={timeRef}
             type="number"
             name="time"
@@ -138,7 +184,7 @@ export default function AddNewContact() {
             value="Add contact"
           />
         </DatePickerWrapper>
-      </BasicForm>
+      </AddContactForm>
       {error && <ErrorWrapper errorMessage={error} />}
     </>
   );

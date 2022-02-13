@@ -14,9 +14,14 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
     target: "_blank",
   };
 })`
+  font-weight: 600;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.blue_2};
+  border-bottom: solid 2px transparent;
   transition: all 0.3s;
   &:hover,
   &:focus {
+    border-bottom: solid 2px ${({ theme }) => theme.blue_1};
   }
 `;
 

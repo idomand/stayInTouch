@@ -4,7 +4,7 @@ import ScrollButtonWrapper from "./ScrollToTopButton";
 import propTypes from "prop-types";
 import styled from "styled-components";
 
-const LayoutWrapper = styled.div``;
+const LayoutWrapper = styled.main``;
 
 export default function Layout({ children }) {
   return (

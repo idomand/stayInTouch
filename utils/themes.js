@@ -8,9 +8,9 @@ export const defaultTheme = {
   green_2: "#00AE50",
   //!========
 
+  grey: "#F6F6F6",
   black: "#000000",
   white: "#ffffff",
-  // grey: "#9a9a9a",
   // blue1: "#597FDB",
   // blue2: "#CFEBFF",
   // blue3: "#6DA7FF",
