@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { addDays } from "date-fns";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
@@ -9,7 +7,7 @@ import ErrorWrapper from "./ErrorWarning";
 import { P } from "./Common/StyledText";
 import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
 import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
-
+import DatePickerComponent from "./DatePickerComponent";
 const AddContactForm = styled(BasicForm)`
   display: grid;
   padding: 15px;
@@ -37,27 +35,27 @@ const NameLabel = styled(BasicLabel)`
 const NameInput = styled(BasicInput)`
   border: solid blue;
 `;
-const TagLabel = styled(BasicLabel)`
-  border: dotted green;
-`;
-const TagInput = styled(BasicInput)`
-  border: solid green;
-`;
-const TimeLabel = styled(BasicLabel)`
-  border: dotted yellow;
-`;
+// const TagLabel = styled(BasicLabel)`
+// border: dotted green;
+// `;
+// const TagInput = styled(BasicInput)`
+//   border: solid green;
+// `;
+// const TimeLabel = styled(BasicLabel)`
+//   border: dotted yellow;
+// `;
 
 const TimeInput = styled(BasicInput)`
   border: solid yellow;
 `;
 
-const NotesLabel = styled(BasicLabel)`
-  border: dotted orange;
-`;
+// const NotesLabel = styled(BasicLabel)`
+//   border: dotted orange;
+// `;
 
-const NotesInput = styled(BasicInput)`
-  border: solid orange;
-`;
+// const NotesInput = styled(BasicInput)`
+//   border: solid orange;
+// `;
 
 const AddSubmitInput = styled(InputSubmit)`
   grid-area: submit;
@@ -71,39 +69,12 @@ const AddSubmitInput = styled(InputSubmit)`
     color: ${({ theme }) => theme.green_1};
   }
 `;
-
 const DatePickerWrapper = styled.div`
   grid-area: lastTalked;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-const Calendar = styled.div`
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(27, 37, 86, 0.16);
-  overflow: hidden;
-`;
-const Popper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-`;
-
-const DatePickerComponent = styled(({ className, ...props }) => (
-  <DatePicker {...props} wrapperClassName={className} />
-))`
-  width: 90px;
-
-  & .react-datepicker__input-container {
-    width: 90px;
-  }
-  & .react-datepicker__input-container input {
-    width: 90px;
-
-    border-radius: 5px;
-  }
 `;
 
 export default function AddNewContact() {
@@ -171,12 +142,8 @@ export default function AddNewContact() {
         <DatePickerWrapper>
           <P>Last time we have talked was:</P>
           <DatePickerComponent
-            maxDate={addDays(new Date(), 0)}
-            CalendarContainer={Calendar}
-            popperContainer={Popper}
-            dateFormat="dd/MM/yyyy"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            setStartDate={setStartDate}
+            startDate={startDate}
           />
           <AddSubmitInput
             disabled={name === ""}
