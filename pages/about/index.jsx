@@ -6,15 +6,35 @@ import { BasicButton } from "../../Components/Common/StyledButton";
 import { addDummyData } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
 import { P } from "../../Components/Common/StyledText.js";
-import {
-  AboutHeader,
-  AboutPageWrapper,
-  AboutTheCreator,
-  AboutTheSite,
-  DemoButtonWrapper,
-  HowToUseSection,
-  IntroductionSection,
-} from "../../styles/AboutStyle";
+
+import styled from "styled-components";
+import { H1 } from "../../Components/Common/StyledText";
+
+const AboutPageWrapper = styled.section`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+`;
+
+const DemoButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const AboutHeader = styled(H1)``;
+
+const AboutSubSection = styled.div`
+  text-align: justify;
+  @media (${({ theme }) => theme.devices.break1}) {
+  }
+`;
+
+const IntroductionSection = styled(AboutSubSection)``;
+
+const HowToUseSection = styled(AboutSubSection)``;
+const AboutTheSite = styled(AboutSubSection)``;
+const AboutTheCreator = styled(AboutSubSection)``;
 
 export default function About() {
   const { currentUser } = useAuth();
