@@ -23,8 +23,14 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
 export const NavLink = styled(LinkPrototype)`
   align-items: center;
   transition: all 0.3s;
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.typeScale.p_large};
+  margin: 10px;
+  text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
+
   &:hover,
   &:focus {
+    color: ${({ theme }) => theme.blue_2};
   }
   @media (${({ theme }) => theme.devices.break1}) {
   }

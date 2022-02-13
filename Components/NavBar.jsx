@@ -4,7 +4,7 @@ import { NavLink } from "./Common/StyledLinks";
 import { useMedia } from "react-use";
 import { useRouter } from "next/router";
 import styled, { useTheme } from "styled-components";
-import { H1 } from "./Common/StyledText.js";
+import { H2 } from "./Common/StyledText.js";
 
 const LogoImg = styled.img`
   margin: 5px 0 5px 20px;
@@ -28,17 +28,20 @@ const NavBarWrapper = styled.nav`
   }
 `;
 
-const NavbarText = styled(H1)`
-  margin-left: 80px;
+const NavbarText = styled(H2)`
+  margin-left: 40px;
 `;
 
-const LoginButton = styled(NavLink)`
+const LoginButton = styled.button`
+  font-size: ${({ theme }) => theme.typeScale.p_small};
+  font-weight: 500;
   background: ${({ theme }) => theme.blue_1};
   color: ${({ theme }) => theme.white};
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 6px;
   border: 1.3px solid ${({ theme }) => theme.white};
-
+  transition: 0.3s all;
+  margin: 10px;
   &:hover,
   &:focus {
     background: rgba(44, 97, 224, 0.1);
@@ -47,17 +50,28 @@ const LoginButton = styled(NavLink)`
   }
 `;
 
-const LogoutButton = styled(NavLink)`
-  background-color: ${({ theme }) => theme.white};
-  color: ${({ theme }) => theme.black};
+const LogoutButton = styled.button`
   cursor: pointer;
-
+  display: flex;
+  align-items: center;
+  transition: 0.3s all;
+  background-color: transparent;
+  border: none;
+  font-size: ${({ theme }) => theme.typeScale.p_small};
+  font-weight: 500;
+  color: ${({ theme }) => theme.blue_1};
+  margin: 10px;
+  border-radius: 10px;
+  padding: 3px 5px;
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.brown1};
     color: ${({ theme }) => theme.black};
-    border: solid 2px ${({ theme }) => theme.black};
+    background: rgba(44, 97, 224, 0.1);
   }
+`;
+
+const LogoutLogo = styled.img`
+  margin-left: 5px;
 `;
 
 const PageLinksWrapper = styled.div`
@@ -90,11 +104,18 @@ export default function NavBar() {
       </PageLinksWrapper>
 
       {currentUser ? (
-        <LogoutButton as="button" onClick={logout}>
-          Logout
-        </LogoutButton>
+        <>
+          <LogoutButton onClick={logout}>
+            Log Out
+            <LogoutLogo src="/log-out.svg" />
+          </LogoutButton>
+        </>
       ) : (
-        <LoginButton isActive={router.pathname == "/login"} href="/login">
+        <LoginButton
+          as="a"
+          isActive={router.pathname == "/login"}
+          href="/login"
+        >
           Login
         </LoginButton>
       )}

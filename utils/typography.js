@@ -1,11 +1,11 @@
 export const typeScale = {
-  header1: "1.625rem",
-  header2: "1.5rem",
-  header3: "1.375rem",
-  header4: "1.25rem",
-  header5: "1.1rem",
-  p_large: "1rem",
-  p_normal: "0.875rem",
-  p_small: "0.75rem",
-  copyrightText: "0.7rem",
+  header1: "1.625rem", // 26px
+  header2: "1.5rem", // 24px
+  header3: "1.375rem", // 22px
+  header4: "1.25rem", // 20px
+  header5: "1.125rem", // 18px
+  p_large: "1rem", // 16px
+  p_normal: "0.875rem", // 14px
+  p_small: "0.75rem", // 12px
+  copyrightText: "0.625rem", // 10px
 };
