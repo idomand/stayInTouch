@@ -23,15 +23,24 @@ export const NavBarWrapper = styled.nav`
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
-//!!!
+
 export const NavbarText = styled(H1)`
   margin-left: 80px;
 `;
-export const ButtonWrapper = styled.div``;
 
 export const LoginButton = styled(NavLink)`
-  background: ${({ theme }) => theme.blueButtonBackground};
+  background: ${({ theme }) => theme.blue_1};
   color: ${({ theme }) => theme.white};
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 1.3px solid ${({ theme }) => theme.white};
+
+  &:hover,
+  &:focus {
+    background: rgba(44, 97, 224, 0.1);
+    border: 1.3px solid ${({ theme }) => theme.blue_1};
+    color: ${({ theme }) => theme.blue_1};
+  }
 `;
 
 export const LogoutButton = styled(NavLink)`
@@ -45,4 +54,8 @@ export const LogoutButton = styled(NavLink)`
     color: ${({ theme }) => theme.black};
     border: solid 2px ${({ theme }) => theme.black};
   }
+`;
+
+export const PageLinksWrapper = styled.div`
+  font-size: 20px;
 `;
