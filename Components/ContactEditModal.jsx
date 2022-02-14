@@ -75,6 +75,11 @@ const EditSubmitInput = styled(InputSubmit)`
     color: ${({ theme }) => theme.blue1};
   }
 `;
+//?================================================================================================
+//?================================================================================================
+
+//?================================================================================================
+//?================================================================================================
 
 export default function ContactEditModal({
   name,
@@ -151,6 +156,9 @@ export default function ContactEditModal({
         ariaHideApp={false}
         isOpen={isModalOpen}
         shouldFocusAfterRender={true}
+        shouldCloseOnOverlayClick={true}
+        shouldCloseOnEsc={true}
+        onRequestClose={onCloseModal}
         className={"contact-edit-modal"}
         overlayClassName={"contact-edit-modal-overlay"}
       >
@@ -192,7 +200,6 @@ export default function ContactEditModal({
       </ReactModal>
     </>
   );
-
   // return (
   //   <>
   //     <EditButton onClick={() => setIsModalOpen(true)}>More Options</EditButton>
@@ -200,6 +207,9 @@ export default function ContactEditModal({
   //       ariaHideApp={false}
   //       isOpen={isModalOpen}
   //       shouldFocusAfterRender={true}
+  //       shouldCloseOnOverlayClick={true}
+  //       shouldCloseOnEsc={true}
+  //       onRequestClose={onCloseModal}
   //       className={"contact-edit-modal"}
   //       overlayClassName={"contact-edit-modal-overlay"}
   //     >
@@ -212,7 +222,7 @@ export default function ContactEditModal({
   //         <UpdateContactForm onSubmit={updateContactOnSubmit}>
   //           <InputWrapper>
   //             <BasicLabel htmlFor="name">Name:</BasicLabel>
-  //             <BasicTextInput
+  //             <BasicInput
   //               id="name"
   //               type="text"
   //               value={contactName}
@@ -221,7 +231,7 @@ export default function ContactEditModal({
   //           </InputWrapper>
   //           <InputWrapper>
   //             <BasicLabel htmlFor="time">Talk every X days?</BasicLabel>
-  //             <BasicTextInput
+  //             <BasicInput
   //               id="time"
   //               type="number"
   //               max={31}

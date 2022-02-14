@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { addDays } from "date-fns";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Calendar = styled.div`
   border-radius: 10px;
@@ -10,6 +11,7 @@ const Calendar = styled.div`
 `;
 const Popper = styled.div`
   position: absolute;
+
   margin: auto;
   top: 0;
   left: 0;
@@ -38,13 +40,14 @@ export default function DatePickerComponent({ setStartDate, startDate }) {
   return (
     <>
       <StyledDatePicker
+        className="datePickerClass"
         maxDate={addDays(new Date(), 0)}
         CalendarContainer={Calendar}
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
         selected={startDate}
-        shouldCloseOnSelect={true}
         onChange={(date) => setStartDate(date)}
+        popperPlacement="auto"
       />
     </>
   );
