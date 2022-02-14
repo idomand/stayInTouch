@@ -55,7 +55,7 @@ const EditSubmitInput = styled(InputSubmit)`
   height: 45px;
   &:hover,
   &:focus {
-    background: rgba(44, 97, 224, 0.1);
+    background: ${({ theme }) => theme.blue_3};
     border: 1.3px solid ${({ theme }) => theme.blue_1};
     color: ${({ theme }) => theme.blue_1};
   }

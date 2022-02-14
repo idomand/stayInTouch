@@ -22,16 +22,22 @@ export const InputSubmit = styled.input`
 `;
 
 export const BasicForm = styled.form`
-  border: solid red;
   background-color: ${({ theme }) => theme.white};
   border-radius: 10px;
 `;
 export const BasicInput = styled.input`
-  background-color: ${({ theme }) => theme.grey};
+  background-color: Lightgrey;
+  /* background-color: ${({ theme }) => theme.grey}; */
+  height: 30px;
   border-radius: 10px;
   border: none;
+  margin-top: 5px;
 `;
 
 export const BasicLabel = styled.label`
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  justify-content: space-between;
   /* background-color: greenyellow; */
 `;

@@ -14,12 +14,13 @@ const AddContactForm = styled(BasicForm)`
   gap: 5px;
   grid-template-areas:
     "name howMuchTime tag"
-    "lastTalked . notes"
+    "lastTalked notes notes"
     "submit submit submit";
 
-  width: 50%;
+  width: 50vw;
   @media (${({ theme }) => theme.devices.break1}) {
-    width: 90%;
+    padding: 10px 5px;
+    width: 95vw;
     grid-template-areas:
       "name howMuchTime "
       "tag lastTalked "
@@ -30,29 +31,40 @@ const AddContactForm = styled(BasicForm)`
 
 const NameLabel = styled(BasicLabel)`
   grid-area: name;
-  border: dotted blue;
 `;
 const NameInput = styled(BasicInput)`
-  border: solid blue;
+  border: 1px solid ${({ theme }) => theme.grey_2};
 `;
+
 const TimeLabel = styled(BasicLabel)`
   grid-area: howMuchTime;
-
-  border: dotted yellow;
+  position: relative;
+  &::after {
+    content: "Days" attr(data-domain);
+    position: absolute;
+    top: 33px;
+    left: 20px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+  }
 `;
 
 const TimeInput = styled(BasicInput)`
-  border: solid yellow;
+  border: 1px solid ${({ theme }) => theme.grey_2};
+
+  border-radius: 8px;
 `;
 const TagLabel = styled(BasicLabel)`
   grid-area: tag;
-  border: dotted green;
 `;
-// const TagInput = styled(BasicInput)`
-//   border: solid green;
-// `;
 const TagInput = styled.select`
-  border: solid green;
+  border: 1px solid ${({ theme }) => theme.grey_2};
+
+  border-radius: 8px;
+  height: 30px;
+
+  background-color: ${({ theme }) => theme.grey_1};
 `;
 const TagOption = styled.option`
   background-color: goldenrod;
@@ -61,20 +73,19 @@ const TagOption = styled.option`
 
 const LastTalkedLabel = styled(BasicLabel)`
   grid-area: lastTalked;
-  border: dotted black;
+  align-items: center;
 `;
-
-// const lastTalkedInput = styled(BasicInput)`
-//   border: solid black;
-// `;
 
 const NotesLabel = styled(BasicLabel)`
   grid-area: notes;
-  border: dotted orange;
 `;
 
 const NotesInput = styled.textarea`
-  border: solid orange;
+  border: 1px solid ${({ theme }) => theme.grey_2};
+
+  border-radius: 8px;
+  height: 30px;
+  background-color: ${({ theme }) => theme.grey_1};
 `;
 
 const AddSubmitInput = styled(InputSubmit)`
@@ -82,9 +93,12 @@ const AddSubmitInput = styled(InputSubmit)`
   background-color: ${({ theme }) => theme.green_1};
   color: ${({ theme }) => theme.white};
   transition: all 0.5s;
+  height: 40px;
+  margin: 0px 5px;
   &:hover,
   &:focus {
-    background: rgba(2, 207, 96, 0.1);
+    background: ${({ theme }) => theme.green_3};
+
     border: 1.3px solid ${({ theme }) => theme.green_1};
     color: ${({ theme }) => theme.green_1};
   }
@@ -98,7 +112,7 @@ export default function AddNewContact() {
   const [error, setError] = useState(false);
   const [tagValue, setTagValue] = useState("");
   const [note, setNote] = useState("");
-
+  console.log("tagValue :>> ", tagValue);
   function nameChangeHandler(e) {
     setName(e.target.value);
     if (error) {
@@ -134,11 +148,11 @@ export default function AddNewContact() {
           I would like to talk to:
           <NameInput
             type="text"
+            placeholder="Enter Name"
             name="name"
             value={name}
             required
             onChange={nameChangeHandler}
-            placeholder="Enter name"
           />
         </NameLabel>
         <TimeLabel>
@@ -177,8 +191,9 @@ export default function AddNewContact() {
         </LastTalkedLabel>
 
         <NotesLabel>
-          Add a note
+          Add a Note
           <NotesInput
+            placeholder="Enter Note (optional)"
             value={note}
             onChange={(e) => {
               setNote(e.target.value);
