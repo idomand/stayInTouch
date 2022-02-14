@@ -6,7 +6,7 @@ export const BasicButton = styled.button.attrs((props) => {
   cursor: pointer;
   align-items: center;
   transition: 0.3s;
-  background-color: ${({ theme }) => theme.blue_1};
+  background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   border: 1.3px solid ${({ theme }) => theme.white};
   border-radius: 6px;
@@ -15,10 +15,10 @@ export const BasicButton = styled.button.attrs((props) => {
   padding: 5px 10px;
   &:hover,
   &:focus {
-    background: ${({ theme }) => theme.blue_3};
+    background: ${({ theme }) => theme.blue3};
 
-    border: 1.3px solid ${({ theme }) => theme.blue_1};
-    color: ${({ theme }) => theme.blue_1};
+    border: 1.3px solid ${({ theme }) => theme.blue1};
+    color: ${({ theme }) => theme.blue1};
   }
   @media (${({ theme }) => theme.devices.break1}) {
   }

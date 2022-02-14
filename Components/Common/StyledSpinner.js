@@ -35,7 +35,7 @@ const StyledSpinner = styled.svg`
   height: 50px;
 
   & .path {
-    stroke: ${({ theme }) => theme.blue_1};
+    stroke: ${({ theme }) => theme.blue1};
     stroke-linecap: round;
     animation: dash 1.5s ease-in-out infinite;
   }
