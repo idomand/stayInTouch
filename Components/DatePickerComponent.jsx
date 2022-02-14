@@ -10,6 +10,7 @@ const Calendar = styled.div`
 `;
 const Popper = styled.div`
   position: absolute;
+  margin: auto;
   top: 0;
   left: 0;
   z-index: 2;
@@ -18,15 +19,18 @@ const Popper = styled.div`
 const StyledDatePicker = styled(({ className, ...props }) => (
   <DatePicker {...props} wrapperClassName={className} />
 ))`
-  width: 90px;
+  /* width: 90px; */
 
   & .react-datepicker__input-container {
-    width: 90px;
+    /* width: 90px; */
   }
   & .react-datepicker__input-container input {
-    width: 90px;
-
-    border-radius: 5px;
+    /* width: 90px; */
+    background-color: lightgrey;
+    border-radius: 10px;
+    height: 30px;
+    text-align: center;
+    border: none;
   }
 `;
 
@@ -39,6 +43,7 @@ export default function DatePickerComponent({ setStartDate, startDate }) {
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
         selected={startDate}
+        shouldCloseOnSelect={true}
         onChange={(date) => setStartDate(date)}
       />
     </>
