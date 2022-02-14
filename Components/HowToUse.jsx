@@ -22,7 +22,7 @@ const HowToUseLink = styled(LinkPrototype)`
 
     &:after {
       content: "How to Use";
-      font-size: ${({ theme }) => theme.typeScale.paragraph};
+      font-size: ${({ theme }) => theme.typeScale.p_small};
       display: flex;
       border-style: solid;
       border-color: red transparent;
