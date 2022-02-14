@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import "react-datepicker/dist/react-datepicker.css";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ErrorWrapper from "./ErrorWarning";
@@ -39,13 +38,13 @@ const NameInput = styled(BasicInput)`
 const TimeLabel = styled(BasicLabel)`
   grid-area: howMuchTime;
   position: relative;
-  &::after {
+  &:after {
     content: "Days" attr(data-domain);
     position: absolute;
     top: 33px;
     left: 20px;
     font-size: 10px;
-    color: ${({ theme }) => theme.grey3}
+    color: ${({ theme }) => theme.grey3};
     font-weight: bold;
   }
 `;
@@ -71,7 +70,11 @@ const TagOption = styled.option`
   border: blue solid;
 `;
 
-const LastTalkedLabel = styled(BasicLabel)`
+const LastTalkedLabel = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  justify-content: space-between;
   grid-area: lastTalked;
   align-items: center;
 `;

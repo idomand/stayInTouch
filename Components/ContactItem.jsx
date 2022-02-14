@@ -1,5 +1,4 @@
 import React from "react";
-import ContactEditModal from "./ContactEditModal";
 import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
@@ -7,6 +6,7 @@ import { deleteContact } from "../lib/Firebase";
 import { oneDay } from "../lib/ConstantsFile";
 import styled from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
+import MoreOptions from "./MoreOptions";
 
 const ContactItemContainer = styled.li`
   display: flex;
@@ -16,7 +16,7 @@ const ContactItemContainer = styled.li`
   list-style-type: none;
   margin: 10px 5px;
 `;
-const ContactItemWrapper = styled.li`
+const ContactItemWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: space-between;
@@ -230,7 +230,7 @@ export default function ContactItem({
         </ContactDatesWrapper>
         <ContactButtonsWrapper>
           <MoreOptionsWrapper>
-            <ContactEditModal
+            <MoreOptions
               name={name}
               time={time}
               timeFromLastTalk={timeFromLastTalk}
