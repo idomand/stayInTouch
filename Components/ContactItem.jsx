@@ -4,86 +4,156 @@ import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
 import { deleteContact } from "../lib/Firebase";
-import { P } from "./Common/StyledText";
 import { oneDay } from "../lib/ConstantsFile";
-
 import styled from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
 
+const ContactItemContainer = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 85vw;
+  list-style-type: none;
+  margin: 10px 5px;
+`;
 const ContactItemWrapper = styled.li`
   display: flex;
+  flex-grow: 1;
   justify-content: space-between;
-  list-style-type: none;
+  background-color: ${({ theme }) => theme.white};
+  border-radius: 15px;
+  padding: 10px;
   @media (${({ theme }) => theme.devices.break2}) {
   }
 `;
 
-const ButtonContainer = styled.div`
-  width: min-content;
+const EmojiWrapper = styled.div`
+  margin-right: 10px;
+`;
+
+const ContactDetailsWrapper = styled.div`
+  display: flex;
+`;
+const ContactDetailsSubDiv = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: auto;
-  justify-content: space-around;
+  justify-content: center;
 `;
-
-const ResetButton = styled(BasicButton)``;
-
-const DataWrapper = styled.div`
-  display: grid;
-  justify-content: space-around;
-  grid-template-areas: "name howLong lastSpoke status";
-  align-items: center;
-  gap: 10px;
-  border-left: 1.5px ${({ theme }) => theme.black} solid;
-  flex-grow: 1;
-  @media (${({ theme }) => theme.devices.break1}) {
-    justify-items: center;
-    gap: 3px;
-    padding: 10px;
-
-    grid-template-areas:
-      "name  status"
-      "howLong lastSpoke";
-  }
-`;
-
 const NameContainer = styled.span`
-  grid-area: name;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.typeScale.header5};
+  line-height: 21px;
+  text-transform: capitalize;
+
   @media (${({ theme }) => theme.devices.break1}) {
     overflow: scroll;
   }
 `;
-const TimeContainer = styled.div`
-  grid-area: howLong;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
+const TagContainer = styled.span`
+  color: ${({ theme }) => theme.blue2};
+  font-weight: 400;
+  font-size: ${({ theme }) => theme.typeScale.p_large};
+  line-height: 21px;
 `;
 
-const LastTalkedContainer = styled.div`
-  grid-area: lastSpoke;
+const ContactImage = styled.img`
+  margin-right: 15px;
 `;
 
-const StatusContainer = styled.div`
-  grid-area: status;
+const ContactDatesWrapper = styled.div`
+  display: flex;
+`;
+const DateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 15px;
+`;
+const DateHeader = styled.div`
+  color: ${({ theme }) => theme.grey3};
+  font-size: ${({ theme }) => theme.typeScale.p_normal};
+  margin-bottom: 6px;
+`;
+const DateValue = styled.div`
+  font-weight: 600;
+  font-size: ${({ theme }) => theme.typeScale.p_large};
+  line-height: 20px;
+  text-align: center;
+  margin: 0;
+`;
+
+const ContactButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const MoreOptionsWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
-
-const StatusPicture = styled.img`
-  height: 30px;
-  @media (${({ theme }) => theme.devices.break1}) {
+const NotesButton = styled.button`
+  cursor: pointer;
+  height: 40px;
+  background-color: ${({ theme }) => theme.blue3};
+  border: none;
+  border-radius: 55px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s;
+  &:hover,
+  &:focus {
+    background-color: ${({ theme }) => theme.grey2};
   }
+`;
+
+const NotsNumber = styled.div`
+  border-radius: 38px;
+  text-align: center;
+  font-weight: 600;
+  height: 18px;
+  width: 18px;
+  position: absolute;
+  bottom: 25px;
+  left: 30px;
+  background-color: ${({ theme }) => theme.blue1};
+  color: ${({ theme }) => theme.white};
+  transition: all 0.3s;
+  border: solid 1px transparent;
+
+  ${NotesButton}:hover &,
+  ${NotesButton}:focus & {
+    background-color: ${({ theme }) => theme.white};
+    border: solid 1px ${({ theme }) => theme.blue1};
+
+    color: ${({ theme }) => theme.blue1};
+  }
+`;
+
+const NotesLogo = styled.img`
+  display: block;
+  margin-left: 5px;
+`;
+
+const ResetButton = styled(BasicButton)`
+  margin: 0 10px;
 `;
 
 const DeleteButton = styled(BasicButton)`
+  color: ${({ theme }) => theme.red1};
+  background-color: ${({ theme }) => theme.red2};
   &:hover,
   &:focus {
+    color: ${({ theme }) => theme.red2};
+    background-color: ${({ theme }) => theme.red1};
+    border: ${({ theme }) => theme.red2} 1.3px solid;
   }
-`;
-
-const DeleteLogo = styled.img`
-  height: 20px;
 `;
 
 export default function ContactItem({
@@ -124,51 +194,60 @@ export default function ContactItem({
   }
 
   if (currantTime - timeFromLastTalk < 0) {
-    lastTalkedToResponse = <P>Last talk was today!</P>;
+    lastTalkedToResponse = <DateValue>Last talk was today!</DateValue>;
   } else {
     lastTalkedToResponse = (
-      <P>
-        Last talk was {Math.floor((currantTime - timeFromLastTalk) / oneDay)}{" "}
-        days ago
-      </P>
+      <DateValue>
+        {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
+      </DateValue>
     );
   }
 
   return (
-    <ContactItemWrapper>
-      <ButtonContainer>
-        <ResetButton onClick={resetFunction}>Reset</ResetButton>
-        <ContactEditModal
-          name={name}
-          time={time}
-          timeFromLastTalk={timeFromLastTalk}
-          contactId={contactId}
-        />
-
-        <DeleteButton onClick={deleteContactFunc}>
-          <DeleteLogo src="/trash.svg" alt="delete" />
-        </DeleteButton>
-      </ButtonContainer>
-      <DataWrapper>
-        <NameContainer> {name} </NameContainer>
-        <TimeContainer>
-          I want to talk to them every: {time} days.
-        </TimeContainer>
-        <LastTalkedContainer>{lastTalkedToResponse}</LastTalkedContainer>
-
-        {lastTalkedToStatus ? (
-          <StatusContainer>
-            <P>Great!</P>
-            <StatusPicture src="/win.jpg" />
-          </StatusContainer>
-        ) : (
-          <StatusContainer>
-            <P>Bad...</P>
-            <StatusPicture src="/evil.jpg" />
-          </StatusContainer>
-        )}
-      </DataWrapper>
-    </ContactItemWrapper>
+    <ContactItemContainer>
+      <EmojiWrapper>{lastTalkedToStatus ? "😎" : "😡"}</EmojiWrapper>
+      <ContactItemWrapper>
+        <ContactDetailsWrapper>
+          <ContactImage src="/default_image.svg" />
+          <ContactDetailsSubDiv>
+            <NameContainer>{name}</NameContainer>
+            <TagContainer>Family</TagContainer>
+          </ContactDetailsSubDiv>
+        </ContactDetailsWrapper>
+        <ContactDatesWrapper>
+          <DateWrapper>
+            <DateHeader>Talk Every</DateHeader>
+            <DateValue>{time} days</DateValue>
+          </DateWrapper>
+          <DateWrapper>
+            <DateHeader>Last Talk</DateHeader>
+            <DateValue>{lastTalkedToResponse}</DateValue>
+          </DateWrapper>
+          <DateWrapper>
+            <DateHeader>Next Talk</DateHeader>
+            <DateValue>5 days</DateValue>
+          </DateWrapper>
+        </ContactDatesWrapper>
+        <ContactButtonsWrapper>
+          <MoreOptionsWrapper>
+            <ContactEditModal
+              name={name}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+            />
+          </MoreOptionsWrapper>
+          <ButtonsWrapper>
+            <NotesButton>
+              <NotsNumber>2</NotsNumber>
+              <NotesLogo src="/notes.svg" />
+            </NotesButton>
+            <ResetButton onClick={resetFunction}>Reset</ResetButton>
+            <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>
+          </ButtonsWrapper>
+        </ContactButtonsWrapper>
+      </ContactItemWrapper>
+    </ContactItemContainer>
   );
 }
 

@@ -1,19 +1,34 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import ReactModal from "react-modal";
+import propTypes from "prop-types";
+
 import { updateContactFull, updateContactTime } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
-import { BasicTextInput, BasicLabel } from "./Common/StyledFormElements";
-import propTypes from "prop-types";
+import { BasicInput, BasicLabel } from "./Common/StyledFormElements";
 import ErrorWarning from "./ErrorWarning";
-import styled from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
 import { InputSubmit } from "./Common/StyledFormElements";
 import { H2 } from "./Common/StyledText";
 
-const EditButton = styled(BasicButton)`
-  width: fill-available;
+const EditButton = styled.button`
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  border-bottom: solid;
+  margin-bottom: 5px;
+  transition: 0.3s all;
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.blue2};
+  }
 `;
 
+// 1
 const HeaderText = styled(H2)``;
 
 const ModalHeaderWrapper = styled.div`
@@ -49,15 +64,15 @@ const InputWrapper = styled.div`
   }
 `;
 const EditSubmitInput = styled(InputSubmit)`
-  background-color: ${({ theme }) => theme.blue_1};
+  background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   width: 415px;
   height: 45px;
   &:hover,
   &:focus {
-    background: ${({ theme }) => theme.blue_3};
-    border: 1.3px solid ${({ theme }) => theme.blue_1};
-    color: ${({ theme }) => theme.blue_1};
+    background: ${({ theme }) => theme.blue3};
+    border: 1.3px solid ${({ theme }) => theme.blue1};
+    color: ${({ theme }) => theme.blue1};
   }
 `;
 
@@ -131,7 +146,7 @@ export default function ContactEditModal({
 
   return (
     <>
-      <EditButton onClick={() => setIsModalOpen(true)}>Edit</EditButton>
+      <EditButton onClick={() => setIsModalOpen(true)}>More Options</EditButton>
       <ReactModal
         ariaHideApp={false}
         isOpen={isModalOpen}
@@ -148,7 +163,7 @@ export default function ContactEditModal({
           <UpdateContactForm onSubmit={updateContactOnSubmit}>
             <InputWrapper>
               <BasicLabel htmlFor="name">Name:</BasicLabel>
-              <BasicTextInput
+              <BasicInput
                 id="name"
                 type="text"
                 value={contactName}
@@ -157,7 +172,7 @@ export default function ContactEditModal({
             </InputWrapper>
             <InputWrapper>
               <BasicLabel htmlFor="time">Talk every X days?</BasicLabel>
-              <BasicTextInput
+              <BasicInput
                 id="time"
                 type="number"
                 max={31}
@@ -177,6 +192,55 @@ export default function ContactEditModal({
       </ReactModal>
     </>
   );
+
+  // return (
+  //   <>
+  //     <EditButton onClick={() => setIsModalOpen(true)}>More Options</EditButton>
+  //     <ReactModal
+  //       ariaHideApp={false}
+  //       isOpen={isModalOpen}
+  //       shouldFocusAfterRender={true}
+  //       className={"contact-edit-modal"}
+  //       overlayClassName={"contact-edit-modal-overlay"}
+  //     >
+  //       <ModalHeaderWrapper>
+  //         <HeaderText>Update Contact: {name}</HeaderText>
+  //         <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
+  //       </ModalHeaderWrapper>
+
+  //       <ModalInputWrapper>
+  //         <UpdateContactForm onSubmit={updateContactOnSubmit}>
+  //           <InputWrapper>
+  //             <BasicLabel htmlFor="name">Name:</BasicLabel>
+  //             <BasicTextInput
+  //               id="name"
+  //               type="text"
+  //               value={contactName}
+  //               onChange={nameChangeHandler}
+  //             />
+  //           </InputWrapper>
+  //           <InputWrapper>
+  //             <BasicLabel htmlFor="time">Talk every X days?</BasicLabel>
+  //             <BasicTextInput
+  //               id="time"
+  //               type="number"
+  //               max={31}
+  //               min={1}
+  //               value={contactTime}
+  //               onChange={(e) => setContactTime(e.target.value)}
+  //             />
+  //           </InputWrapper>
+  //           <EditSubmitInput
+  //             disabled={contactName === ""}
+  //             type="submit"
+  //             value="Update Contact"
+  //           />
+  //         </UpdateContactForm>
+  //         {error && <ErrorWarning errorMessage={error} />}
+  //       </ModalInputWrapper>
+  //     </ReactModal>
+  //   </>
+  // );
 }
 
 ContactEditModal.propTypes = {

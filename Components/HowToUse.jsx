@@ -19,7 +19,6 @@ const HowToUseLink = styled(LinkPrototype)`
   &:focus {
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.brown1};
-
     &:after {
       content: "How to Use";
       font-size: ${({ theme }) => theme.typeScale.p_small};

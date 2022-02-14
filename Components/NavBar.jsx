@@ -35,7 +35,7 @@ const NavbarText = styled(H2)`
 const LoginButton = styled.button`
   font-size: ${({ theme }) => theme.typeScale.p_small};
   font-weight: 500;
-  background: ${({ theme }) => theme.blue_1};
+  background: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   padding: 8px 16px;
   border-radius: 6px;
@@ -44,10 +44,10 @@ const LoginButton = styled.button`
   margin: 10px;
   &:hover,
   &:focus {
-    background: ${({ theme }) => theme.blue_3};
+    background: ${({ theme }) => theme.blue3};
 
-    border: 1.3px solid ${({ theme }) => theme.blue_1};
-    color: ${({ theme }) => theme.blue_1};
+    border: 1.3px solid ${({ theme }) => theme.blue1};
+    color: ${({ theme }) => theme.blue1};
   }
 `;
 
@@ -60,14 +60,14 @@ const LogoutButton = styled.button`
   border: none;
   font-size: ${({ theme }) => theme.typeScale.p_small};
   font-weight: 500;
-  color: ${({ theme }) => theme.blue_1};
+  color: ${({ theme }) => theme.blue1};
   margin: 10px;
   border-radius: 10px;
   padding: 3px 5px;
   &:hover,
   &:focus {
     color: ${({ theme }) => theme.black};
-    background: ${({ theme }) => theme.blue_3};
+    background: ${({ theme }) => theme.blue3};
   }
 `;
 

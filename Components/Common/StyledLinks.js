@@ -16,12 +16,12 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
 })`
   font-weight: 600;
   text-decoration: underline;
-  color: ${({ theme }) => theme.blue_2};
+  color: ${({ theme }) => theme.blue2};
   border-bottom: solid 2px transparent;
   transition: all 0.3s;
   &:hover,
   &:focus {
-    border-bottom: solid 2px ${({ theme }) => theme.blue_1};
+    border-bottom: solid 2px ${({ theme }) => theme.blue1};
   }
 `;
 
@@ -35,7 +35,7 @@ export const NavLink = styled(LinkPrototype)`
 
   &:hover,
   &:focus {
-    color: ${({ theme }) => theme.blue_2};
+    color: ${({ theme }) => theme.blue2};
   }
   @media (${({ theme }) => theme.devices.break1}) {
   }

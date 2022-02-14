@@ -33,7 +33,7 @@ const NameLabel = styled(BasicLabel)`
   grid-area: name;
 `;
 const NameInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey_2};
+  border: 1px solid ${({ theme }) => theme.grey2};
 `;
 
 const TimeLabel = styled(BasicLabel)`
@@ -45,13 +45,13 @@ const TimeLabel = styled(BasicLabel)`
     top: 33px;
     left: 20px;
     font-size: 10px;
-    color: rgba(0, 0, 0, 0.6);
+    color: ${({ theme }) => theme.grey3}
     font-weight: bold;
   }
 `;
 
 const TimeInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey_2};
+  border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
 `;
@@ -59,12 +59,12 @@ const TagLabel = styled(BasicLabel)`
   grid-area: tag;
 `;
 const TagInput = styled.select`
-  border: 1px solid ${({ theme }) => theme.grey_2};
+  border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
   height: 30px;
 
-  background-color: ${({ theme }) => theme.grey_1};
+  background-color: ${({ theme }) => theme.grey1};
 `;
 const TagOption = styled.option`
   background-color: goldenrod;
@@ -81,26 +81,26 @@ const NotesLabel = styled(BasicLabel)`
 `;
 
 const NotesInput = styled.textarea`
-  border: 1px solid ${({ theme }) => theme.grey_2};
+  border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
   height: 30px;
-  background-color: ${({ theme }) => theme.grey_1};
+  background-color: ${({ theme }) => theme.grey1};
 `;
 
 const AddSubmitInput = styled(InputSubmit)`
   grid-area: submit;
-  background-color: ${({ theme }) => theme.green_1};
+  background-color: ${({ theme }) => theme.green1};
   color: ${({ theme }) => theme.white};
   transition: all 0.5s;
   height: 40px;
   margin: 0px 5px;
   &:hover,
   &:focus {
-    background: ${({ theme }) => theme.green_3};
+    background: ${({ theme }) => theme.green3};
 
-    border: 1.3px solid ${({ theme }) => theme.green_1};
-    color: ${({ theme }) => theme.green_1};
+    border: 1.3px solid ${({ theme }) => theme.green1};
+    color: ${({ theme }) => theme.green1};
   }
 `;
 
