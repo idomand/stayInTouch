@@ -44,6 +44,7 @@ export default function ContactDetails() {
             type++;
             return (
               <ContactItem
+                notesArray={element.noteArray}
                 key={element.contactId}
                 name={element.name}
                 time={element.time}

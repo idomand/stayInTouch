@@ -12,25 +12,11 @@ import {
   InputSubmit,
 } from "./Common/StyledFormElements";
 import ErrorWarning from "./ErrorWarning";
-import { BasicButton } from "./Common/StyledButton";
+import { BasicButton, MinimalButton } from "./Common/StyledButton";
 import { H5, P1 } from "./Common/StyledText";
 
-const EditButton = styled.button`
-  cursor: pointer;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  border-bottom: solid;
-  margin-bottom: 5px;
-  transition: 0.3s all;
-  &:hover,
-  &:focus {
-    color: ${({ theme }) => theme.blue2};
-  }
-`;
+const MoreOptionsButton = styled(MinimalButton)``;
+
 const MoreOptionsWrapper = styled.section`
   display: flex;
   justify-content: center;
@@ -266,6 +252,11 @@ export default function MoreOptions({
       setError(false);
     }
   }
+  function onOpenModal(e) {
+    setIsModalOpen(true);
+    e.currentTarget.blur();
+  }
+
   function onCloseModal() {
     setIsModalOpen(false);
     setContactName(name);
@@ -277,7 +268,7 @@ export default function MoreOptions({
 
   return (
     <>
-      <EditButton onClick={() => setIsModalOpen(true)}>More Options</EditButton>
+      <MoreOptionsButton onClick={onOpenModal}>More Options</MoreOptionsButton>
       <ReactModal
         ariaHideApp={false}
         isOpen={isModalOpen}

@@ -1,11 +1,31 @@
 import styled from "styled-components";
 
-export const BasicButton = styled.button.attrs((props) => {
-  target: "_self";
-})`
+const ButtonPrototype = styled.button`
   cursor: pointer;
   align-items: center;
   transition: 0.3s;
+`;
+
+export const MinimalButton = styled(ButtonPrototype)`
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  border-bottom: solid;
+  margin-bottom: 5px;
+  transition: 0.3s all;
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.blue2};
+  }
+`;
+
+export const BasicButton = styled(ButtonPrototype).attrs((props) => {
+  target: "_self";
+})`
   background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   border: 1.3px solid ${({ theme }) => theme.white};
@@ -16,7 +36,6 @@ export const BasicButton = styled.button.attrs((props) => {
   &:hover,
   &:focus {
     background: ${({ theme }) => theme.blue3};
-
     border: 1.3px solid ${({ theme }) => theme.blue1};
     color: ${({ theme }) => theme.blue1};
   }
