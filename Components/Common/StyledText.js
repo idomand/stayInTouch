@@ -28,6 +28,7 @@ export const H4 = styled.h4`
 `;
 
 export const H5 = styled.h5`
+  font-weight: 400;
   margin: 0;
   padding: 0;
   font-size: ${({ theme }) => theme.typeScale.header5};

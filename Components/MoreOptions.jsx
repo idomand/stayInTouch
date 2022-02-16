@@ -13,7 +13,7 @@ import {
 } from "./Common/StyledFormElements";
 import ErrorWarning from "./ErrorWarning";
 import { BasicButton } from "./Common/StyledButton";
-import { H5, P3 } from "./Common/StyledText";
+import { H5, P1 } from "./Common/StyledText";
 
 const EditButton = styled.button`
   cursor: pointer;
@@ -31,47 +31,21 @@ const EditButton = styled.button`
     color: ${({ theme }) => theme.blue2};
   }
 `;
-
-const HeaderText = styled(H5)``;
-
-const ModalHeaderWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`;
-const CloseModalButton = styled(BasicButton)`
-  &:hover,
-  &:focus {
-  }
-`;
-
-const ModalInputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const UpdateContactForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  @media (${({ theme }) => theme.devices.break1}) {
-    flex-direction: column;
-  }
-`;
-//?================================================================================================
-//?================================================================================================
 const MoreOptionsWrapper = styled.section`
-  border: solid red;
   display: flex;
   justify-content: center;
+`;
+
+const CloseModalButton = styled(BasicButton)`
+  background-color: transparent;
+  color: ${({ theme }) => theme.black};
+  border: none;
+  font-size: larger;
+  &:hover,
+  &:focus {
+    background-color: ${({ theme }) => theme.blue3};
+    border: none;
+  }
 `;
 
 const EditingSubSection = styled.div``;
@@ -85,6 +59,7 @@ const EditHeader = styled.div`
 
 const ContactNameHeader = styled(H5)`
   color: ${({ theme }) => theme.blue2};
+  font-weight: 600;
   margin-left: 5px;
 `;
 
@@ -93,8 +68,9 @@ const EditContactForm = styled(BasicForm)`
   border-radius: 0;
   padding: 15px;
   margin: 10px;
-  gap: 5px;
-  border-right: 1px grey solid;
+  gap: 30px;
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+
   grid-template-areas:
     "name howMuchTime"
     "lastTalked tag"
@@ -107,16 +83,16 @@ const NameInput = styled(BasicInput)`
 `;
 
 const TimeLabel = styled(BasicLabel)`
-grid-area: howMuchTime;
+  grid-area: howMuchTime;
   position: relative;
   &::after {
     content: "Days" attr(data-domain);
+    font-weight: bold;
     position: absolute;
     top: 33px;
     left: 20px;
     font-size: 10px;
-    color: ${({ theme }) => theme.grey3}
-    font-weight: bold;
+    color: ${({ theme }) => theme.grey3};
   }
 `;
 
@@ -162,31 +138,60 @@ const EditSubmitInput = styled(InputSubmit)`
   }
 `;
 
-const CalendarSubSection = styled.div``;
+const CalendarSubSection = styled.div`
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 
 const CalendarHeader = styled.div`
-  margin-top: 25px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const SpecificTimeWrapper = styled(BasicForm)``;
-
-const SpecificTimeInput = styled(BasicInput)`
-  background-color: ${({ theme }) => theme.blue1};
-  transition: all 0.3s;
-  color: ${({ theme }) => theme.white};
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
+const CalenderText = styled(P1)`
+  margin-bottom: 10px;
 `;
+
+const SpecificTimeWrapper = styled(BasicForm)`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+// const SpecificTimeInput = styled(BasicInput)`
+//   background-color: ${({ theme }) => theme.blue1};
+//   transition: all 0.3s;
+//   color: ${({ theme }) => theme.white};
+//   &:hover,
+//   &:focus {
+//     background: ${({ theme }) => theme.blue3};
+//     border: 1.3px solid ${({ theme }) => theme.blue1};
+//     color: ${({ theme }) => theme.blue1};
+//   }
+// `;
 
 const SaveToGoogleCalender = styled(BasicButton)`
   width: 100%;
+  font-weight: 500;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: ${({ theme }) => theme.blue3};
+  border: 1.3px solid ${({ theme }) => theme.blue1};
+  color: ${({ theme }) => theme.blue1};
+  margin-top: 23px;
+  &:hover,
+  &:focus {
+    border: 1.3px solid ${({ theme }) => theme.green1};
+    color: ${({ theme }) => theme.green1};
+    background: ${({ theme }) => theme.green3};
+  }
 `;
 
 const CalenderLogo = styled.img`
@@ -290,14 +295,14 @@ export default function MoreOptions({
               <ContactNameHeader>{name}</ContactNameHeader>
             </EditHeader>
 
-            <EditContactForm>
+            <EditContactForm onSubmit={updateContactOnSubmit}>
               <NameLabel>
                 Change Name:
                 <NameInput
                   type="text"
                   placeholder="Enter Name"
                   name="name"
-                  value={name}
+                  value={contactName}
                   required
                   onChange={nameChangeHandler}
                 />
@@ -341,20 +346,23 @@ export default function MoreOptions({
                 type="submit"
                 value="Update Contact"
               />
+              {error && <ErrorWarning errorMessage={error} />}
             </EditContactForm>
           </EditingSubSection>
           <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>
+              <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
             </CalendarHeader>
 
             <SpecificTimeWrapper>
-              Add a specific Date Reminder
+              <CalenderText>
+                Add this reminder into Google Calender
+              </CalenderText>
               <DatePickerComponent
                 setStartDate={setSpecificReminder}
                 startDate={specificReminder}
               />
-              {/* <SpecificTimeInput type="submit" value="save specific Date" /> */}
             </SpecificTimeWrapper>
             <SaveToGoogleCalender>
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
@@ -362,42 +370,6 @@ export default function MoreOptions({
             </SaveToGoogleCalender>
           </CalendarSubSection>
         </MoreOptionsWrapper>
-
-        {/* <ModalHeaderWrapper>
-            <HeaderText>Update Contact: {name}</HeaderText>
-            <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
-          </ModalHeaderWrapper>
-
-          <ModalInputWrapper>
-            <UpdateContactForm onSubmit={updateContactOnSubmit}>
-              <InputWrapper>
-                <BasicLabel htmlFor="name">Name:</BasicLabel>
-                <BasicInput
-                  id="name"
-                  type="text"
-                  value={contactName}
-                  onChange={nameChangeHandler}
-                />
-              </InputWrapper>
-              <InputWrapper>
-                <BasicLabel htmlFor="time">Talk every X days?</BasicLabel>
-                <BasicInput
-                  id="time"
-                  type="number"
-                  max={31}
-                  min={1}
-                  value={contactTime}
-                  onChange={(e) => setContactTime(e.target.value)}
-                />
-              </InputWrapper>
-              <EditSubmitInput
-                disabled={contactName === ""}
-                type="submit"
-                value="Update Contact"
-              />
-            </UpdateContactForm>
-            {error && <ErrorWarning errorMessage={error} />}
-          </ModalInputWrapper> */}
       </ReactModal>
     </>
   );
