@@ -7,6 +7,7 @@ import { oneDay } from "../lib/ConstantsFile";
 import styled from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
 import MoreOptions from "./MoreOptions";
+import Notes from "./Notes";
 
 const ContactItemContainer = styled.li`
   display: flex;
@@ -98,48 +99,6 @@ const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
-const NotesButton = styled.button`
-  cursor: pointer;
-  height: 40px;
-  background-color: ${({ theme }) => theme.blue3};
-  border: none;
-  border-radius: 55px;
-  text-align: center;
-  position: relative;
-  transition: all 0.3s;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.grey2};
-  }
-`;
-
-const NotsNumber = styled.div`
-  border-radius: 38px;
-  text-align: center;
-  font-weight: 600;
-  height: 18px;
-  width: 18px;
-  position: absolute;
-  bottom: 25px;
-  left: 30px;
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  transition: all 0.3s;
-  border: solid 1px transparent;
-
-  ${NotesButton}:hover &,
-  ${NotesButton}:focus & {
-    background-color: ${({ theme }) => theme.white};
-    border: solid 1px ${({ theme }) => theme.blue1};
-
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const NotesLogo = styled.img`
-  display: block;
-  margin-left: 5px;
-`;
 
 const ResetButton = styled(BasicButton)`
   margin: 0 10px;
@@ -161,9 +120,10 @@ export default function ContactItem({
   time,
   timeFromLastTalk,
   contactId,
+  notesArray,
 }) {
   const { currentUser } = useAuth();
-
+  console.log("notesArray :>> ", notesArray);
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
   }
@@ -238,10 +198,8 @@ export default function ContactItem({
             />
           </MoreOptionsWrapper>
           <ButtonsWrapper>
-            <NotesButton>
-              <NotsNumber>2</NotsNumber>
-              <NotesLogo src="/notes.svg" />
-            </NotesButton>
+            <Notes name={name} notesArrayData={notesArray} />
+
             <ResetButton onClick={resetFunction}>Reset</ResetButton>
             <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>
           </ButtonsWrapper>

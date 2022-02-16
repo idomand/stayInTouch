@@ -7,6 +7,7 @@ export const InputSubmit = styled.input`
   font-size: ${({ theme }) => theme.typeScale.p_normal};
   border-radius: 8px;
   border: 1.3px solid ${({ theme }) => theme.white};
+  text-align: center;
 
   &:disabled {
     cursor: not-allowed;
