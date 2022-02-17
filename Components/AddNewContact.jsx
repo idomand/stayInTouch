@@ -17,7 +17,8 @@ const AddContactForm = styled(BasicForm)`
     "lastTalked notes notes"
     "submit submit submit";
 
-  width: 50vw;
+  width: auto;
+
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 10px 5px;
     width: 95vw;
