@@ -1,8 +1,10 @@
 import React from "react";
-import NavBar from "../NavBar";
-import ScrollButtonWrapper from "../ScrollToTopButton";
+import NavBar from "./NavBar";
+import ScrollButtonWrapper from "./ScrollToTopButton";
 import propTypes from "prop-types";
-import { LayoutWrapper } from "./LayoutStyle";
+import styled from "styled-components";
+
+const LayoutWrapper = styled.main``;
 
 export default function Layout({ children }) {
   return (
