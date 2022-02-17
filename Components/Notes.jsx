@@ -5,7 +5,7 @@ import { H5 } from "./Common/StyledText";
 import { BasicButton } from "./Common/StyledButton";
 import { BasicForm, InputSubmit } from "./Common/StyledFormElements";
 import NoteItem from "./NoteItem";
-import { updateContact } from "../lib/Firebase";
+import { updateContact, updateNote } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 
 const NotesButton = styled.button`
@@ -54,7 +54,7 @@ const NotesWrapper = styled.section``;
 const NotesHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 25px;
+  padding: 5px 25px;
 `;
 const ContactNameWrapper = styled.div`
   display: flex;
@@ -97,10 +97,27 @@ const NewNoteInput = styled.textarea`
   height: 73px;
 `;
 
+const ChancelEditButton = styled(BasicButton)`
+  background-color: ${({ theme }) => theme.blue1};
+  color: ${({ theme }) => theme.white};
+  /* margin: 5px auto; */
+  padding: 10px 15px;
+  &:hover,
+  &:focus {
+    background: ${({ theme }) => theme.blue3};
+    border: 1.3px solid ${({ theme }) => theme.blue1};
+    color: ${({ theme }) => theme.blue1};
+  }
+`;
+
+const NotesButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const NewNoteSubmit = styled(InputSubmit)`
   background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
-  margin: 5px auto;
   padding: 10px 15px;
   &:hover,
   &:focus {
@@ -116,22 +133,16 @@ const NotesListWrapper = styled.div`
 `;
 
 const NotesList = styled.ul`
-  border: solid red;
   padding: 0;
+  margin: 0;
 `;
 
-export default function Notes({
-  name,
-  notesArray,
-  time,
-  timeFromLastTalk,
-  contactId,
-  tag,
-}) {
+export default function Notes(props) {
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newNote, setNewNote] = useState("");
-
+  const [noteInputValue, setNoteInputValue] = useState("");
+  const [isEditMood, setIsEditMood] = useState(false);
+  const [editNoteId, setEditNoteId] = useState(null);
   function onCloseModal() {
     setIsModalOpen(false);
   }
@@ -141,53 +152,66 @@ export default function Notes({
     e.currentTarget.blur();
   }
 
+  function switchToEditMood(oldNoteData, OldNoteId) {
+    setIsEditMood(true);
+    setNoteInputValue(oldNoteData);
+    setEditNoteId(OldNoteId);
+  }
+
+  function cancelEdit() {
+    setIsEditMood(false);
+    setNoteInputValue("");
+  }
+
+  async function updatedNoteFunc(e) {
+    e.preventDefault();
+    await updateNote(
+      currentUser.uid,
+      currentUser.email,
+      props.contactId,
+      editNoteId,
+      noteInputValue
+    );
+    setIsEditMood(false);
+    setNoteInputValue("");
+    e.target.blur();
+  }
+
   async function addNewNoteToArray(e) {
     e.preventDefault();
-
     let biggestId;
-
-    if (notesArray.length === 0) {
+    if (props.notesArray.length === 0) {
       biggestId = 0;
     } else {
-      biggestId = notesArray[notesArray.length - 1].id;
+      biggestId = props.notesArray[props.notesArray.length - 1].id;
     }
+    const newNotesArray = [
+      ...props.notesArray,
+      { id: biggestId + 1, data: noteInputValue },
+    ];
 
-    const newNotesArray = [...notesArray, { id: biggestId + 1, data: newNote }];
-
-    const oldContactData = {
-      name,
-      notesArray,
-      time,
-      timeFromLastTalk,
-      contactId,
-      tag,
-    };
+    const oldContactData = { ...props };
     const newContactData = {
-      name,
+      ...props,
       notesArray: newNotesArray,
-      time,
-      timeFromLastTalk,
-      contactId,
-      tag,
     };
-
     await updateContact(
       currentUser.uid,
       currentUser.email,
-      contactId,
+      props.contactId,
       oldContactData,
       newContactData
     );
-
-    setNewNote("");
+    setNoteInputValue("");
+    e.target.blur();
   }
 
   return (
     <>
-      {notesArray && notesArray.length ? (
+      {props.notesArray && props.notesArray.length ? (
         <>
           <NotesButton onClick={onOpenModal}>
-            <NotsNumber>{notesArray.length}</NotsNumber>
+            <NotsNumber>{props.notesArray.length}</NotsNumber>
             <NotesLogo src="/notes.svg" />
           </NotesButton>
         </>
@@ -219,28 +243,43 @@ export default function Notes({
             <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
           </NotesHeader>
           <AddNewNoteWrapper>
-            <AddNewNoteForm onSubmit={addNewNoteToArray}>
+            <AddNewNoteForm
+              onSubmit={isEditMood ? updatedNoteFunc : addNewNoteToArray}
+            >
               <NewNoteInput
-                placeholder="Enter Note (optional)"
-                value={newNote}
+                required
+                placeholder="Enter Note..."
+                value={noteInputValue}
                 onChange={(e) => {
-                  setNewNote(e.target.value);
+                  setNoteInputValue(e.target.value);
                 }}
               />
-              <NewNoteSubmit value="Add Note" type="submit" />
+
+              <NotesButtonsWrapper>
+                {isEditMood && (
+                  <ChancelEditButton onClick={cancelEdit}>
+                    cancel
+                  </ChancelEditButton>
+                )}
+                <NewNoteSubmit
+                  value={isEditMood ? "Update Note" : "Add Note"}
+                  type="submit"
+                />
+              </NotesButtonsWrapper>
             </AddNewNoteForm>
           </AddNewNoteWrapper>
           <NotesListWrapper>
             <NotesList>
-              {notesArray &&
-                notesArray.length &&
-                notesArray.map((note) => {
+              {props.notesArray &&
+                props.notesArray.length &&
+                props.notesArray.map((note) => {
                   return (
                     <NoteItem
                       key={note.id}
                       data={note.data}
                       id={note.id}
-                      contactId={contactId}
+                      contactId={props.contactId}
+                      switchToEditMood={switchToEditMood}
                     />
                   );
                 })}
