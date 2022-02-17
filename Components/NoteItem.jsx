@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { MinimalButton } from "./Common/StyledButton";
 import { H4 } from "./Common/StyledText";
+import { useAuth } from "../lib/AuthContext";
+import { deleteNote } from "../lib/Firebase";
 const NoteItemWrapper = styled.li`
   list-style-type: none;
   padding: 5px;
@@ -35,7 +37,15 @@ const DeleteNoteButton = styled(MinimalButton)`
   margin-left: 15px;
 `;
 
-export default function NoteItem({ id, data }) {
+export default function NoteItem({ id, data, contactId }) {
+  const { currentUser } = useAuth();
+
+  function deleteNoteFunc() {
+    deleteNote(currentUser.uid, currentUser.email, contactId, id);
+  }
+
+  function editNote() {}
+
   return (
     <NoteItemWrapper>
       <NoteItemHeaderWrapper>
@@ -44,7 +54,7 @@ export default function NoteItem({ id, data }) {
         </NoteItemHeaderText>
         <NoteItemButtonWrapper>
           <EditNoteButton>Edit</EditNoteButton>
-          <DeleteNoteButton>Delete</DeleteNoteButton>
+          <DeleteNoteButton onClick={deleteNoteFunc}>Delete</DeleteNoteButton>
         </NoteItemButtonWrapper>
       </NoteItemHeaderWrapper>
       <NoteDataWrapper>{data}</NoteDataWrapper>

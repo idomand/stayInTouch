@@ -5,6 +5,8 @@ import { H5 } from "./Common/StyledText";
 import { BasicButton } from "./Common/StyledButton";
 import { BasicForm, InputSubmit } from "./Common/StyledFormElements";
 import NoteItem from "./NoteItem";
+import { updateContact } from "../lib/Firebase";
+import { useAuth } from "../lib/AuthContext";
 
 const NotesButton = styled.button`
   cursor: pointer;
@@ -118,10 +120,17 @@ const NotesList = styled.ul`
   padding: 0;
 `;
 
-export default function Notes({ name, notesArrayData }) {
+export default function Notes({
+  name,
+  notesArray,
+  time,
+  timeFromLastTalk,
+  contactId,
+  tag,
+}) {
+  const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newNote, setNewNote] = useState("");
-  const [notesArray, setNotesArray] = useState(notesArrayData);
 
   function onCloseModal() {
     setIsModalOpen(false);
@@ -132,12 +141,53 @@ export default function Notes({ name, notesArrayData }) {
     e.currentTarget.blur();
   }
 
+  async function addNewNoteToArray(e) {
+    e.preventDefault();
+
+    let biggestId;
+
+    if (notesArray.length === 0) {
+      biggestId = 0;
+    } else {
+      biggestId = notesArray[notesArray.length - 1].id;
+    }
+
+    const newNotesArray = [...notesArray, { id: biggestId + 1, data: newNote }];
+
+    const oldContactData = {
+      name,
+      notesArray,
+      time,
+      timeFromLastTalk,
+      contactId,
+      tag,
+    };
+    const newContactData = {
+      name,
+      notesArray: newNotesArray,
+      time,
+      timeFromLastTalk,
+      contactId,
+      tag,
+    };
+
+    await updateContact(
+      currentUser.uid,
+      currentUser.email,
+      contactId,
+      oldContactData,
+      newContactData
+    );
+
+    setNewNote("");
+  }
+
   return (
     <>
-      {notesArrayData && notesArrayData.length ? (
+      {notesArray && notesArray.length ? (
         <>
           <NotesButton onClick={onOpenModal}>
-            <NotsNumber>{notesArrayData.length}</NotsNumber>
+            <NotsNumber>{notesArray.length}</NotsNumber>
             <NotesLogo src="/notes.svg" />
           </NotesButton>
         </>
@@ -169,7 +219,7 @@ export default function Notes({ name, notesArrayData }) {
             <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
           </NotesHeader>
           <AddNewNoteWrapper>
-            <AddNewNoteForm>
+            <AddNewNoteForm onSubmit={addNewNoteToArray}>
               <NewNoteInput
                 placeholder="Enter Note (optional)"
                 value={newNote}
@@ -182,10 +232,17 @@ export default function Notes({ name, notesArrayData }) {
           </AddNewNoteWrapper>
           <NotesListWrapper>
             <NotesList>
-              {notesArrayData &&
-                notesArrayData.length &&
+              {notesArray &&
+                notesArray.length &&
                 notesArray.map((note) => {
-                  return <NoteItem key={note.id} data={note} id={note.id} />;
+                  return (
+                    <NoteItem
+                      key={note.id}
+                      data={note.data}
+                      id={note.id}
+                      contactId={contactId}
+                    />
+                  );
                 })}
             </NotesList>
           </NotesListWrapper>

@@ -1,8 +1,11 @@
 import React from "react";
-import { resetTimerForContact } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import propTypes from "prop-types";
-import { deleteContact } from "../lib/Firebase";
+import {
+  deleteContact,
+  // resetTimerForContact,
+  updateContact,
+} from "../lib/Firebase";
 import { oneDay } from "../lib/ConstantsFile";
 import styled from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
@@ -79,7 +82,6 @@ const DateHeader = styled.div`
 `;
 const DateValue = styled.div`
   color: ${({ theme, statusColor }) => {
-    console.log("statusColor :>> ", statusColor);
     if (!statusColor) {
       return theme.red1;
     } else {
@@ -133,22 +135,36 @@ export default function ContactItem({
   tag,
 }) {
   const { currentUser } = useAuth();
+
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
   }
-  console.log("tag :>> ", tag);
+
   function resetFunction() {
+    const oldContactData = {
+      name: name,
+      time: time,
+      timeFromLastTalk: timeFromLastTalk,
+    };
+
     const newContactData = {
       name: name,
       time: time,
       timeFromLastTalk: currantTime,
     };
-    resetTimerForContact(
+    updateContact(
       currentUser.uid,
       currentUser.email,
       contactId,
+      oldContactData,
       newContactData
     );
+    // resetTimerForContact(
+    //   currentUser.uid,
+    //   currentUser.email,
+    //   contactId,
+    //   newContactData
+    // );
   }
 
   const currantTime = new Date().getTime();
@@ -214,7 +230,15 @@ export default function ContactItem({
             />
           </MoreOptionsWrapper>
           <ButtonsWrapper>
-            <Notes name={name} notesArrayData={notesArray} />
+            <Notes
+              name={name}
+              notesArrayData={notesArray}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+              notesArray={notesArray}
+              tag={tag}
+            />
 
             <ResetButton onClick={resetFunction}>Reset</ResetButton>
             <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>

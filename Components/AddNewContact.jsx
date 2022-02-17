@@ -118,7 +118,7 @@ export default function AddNewContact() {
     let notesArray = [];
 
     if (note) {
-      notesArray[0] = note;
+      notesArray[0] = { id: 1, data: note };
     }
 
     let newContact = {
