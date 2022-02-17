@@ -78,6 +78,15 @@ const DateHeader = styled.div`
   margin-bottom: 6px;
 `;
 const DateValue = styled.div`
+  color: ${({ theme, statusColor }) => {
+    console.log("statusColor :>> ", statusColor);
+    if (!statusColor) {
+      return theme.red1;
+    } else {
+      return theme.grey3;
+    }
+  }};
+
   font-weight: 600;
   font-size: ${({ theme }) => theme.typeScale.p_large};
   line-height: 20px;
@@ -145,19 +154,23 @@ export default function ContactItem({
   const currantTime = new Date().getTime();
 
   let lastTalkedToResponse;
-  let lastTalkedToStatus;
+  let isTalkingStatusOK;
 
   if (currantTime - timeFromLastTalk < time * oneDay) {
-    lastTalkedToStatus = true;
+    isTalkingStatusOK = true;
   } else {
-    lastTalkedToStatus = false;
+    isTalkingStatusOK = false;
   }
 
   if (currantTime - timeFromLastTalk < 0) {
-    lastTalkedToResponse = <DateValue>Last talk was today!</DateValue>;
+    lastTalkedToResponse = (
+      <DateValue statusColor={isTalkingStatusOK}>
+        Last talk was today!
+      </DateValue>
+    );
   } else {
     lastTalkedToResponse = (
-      <DateValue>
+      <DateValue statusColor={isTalkingStatusOK}>
         {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
       </DateValue>
     );
@@ -165,7 +178,7 @@ export default function ContactItem({
 
   return (
     <ContactItemContainer>
-      <EmojiWrapper>{lastTalkedToStatus ? "😎" : "😡"}</EmojiWrapper>
+      <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
       <ContactItemWrapper>
         <ContactDetailsWrapper>
           <ContactImage src="/default_image.svg" />
@@ -177,15 +190,17 @@ export default function ContactItem({
         <ContactDatesWrapper>
           <DateWrapper>
             <DateHeader>Talk Every</DateHeader>
-            <DateValue>{time} days</DateValue>
+            <DateValue statusColor={isTalkingStatusOK}>{time} days</DateValue>
           </DateWrapper>
           <DateWrapper>
             <DateHeader>Last Talk</DateHeader>
-            <DateValue>{lastTalkedToResponse}</DateValue>
+            <DateValue statusColor={isTalkingStatusOK}>
+              {lastTalkedToResponse}
+            </DateValue>
           </DateWrapper>
           <DateWrapper>
             <DateHeader>Next Talk</DateHeader>
-            <DateValue>5 days</DateValue>
+            <DateValue statusColor={isTalkingStatusOK}>5 days</DateValue>
           </DateWrapper>
         </ContactDatesWrapper>
         <ContactButtonsWrapper>
