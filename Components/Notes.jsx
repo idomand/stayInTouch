@@ -89,11 +89,17 @@ const AddNewNoteForm = styled(BasicForm)`
 
 const NewNoteInput = styled.textarea`
   background-color: ${({ theme }) => theme.grey1};
+  border-radius: 10px;
+  padding: 10px;
+  width: 415px;
+  height: 73px;
 `;
 
 const NewNoteSubmit = styled(InputSubmit)`
   background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
+  margin: 5px auto;
+  padding: 10px 15px;
   &:hover,
   &:focus {
     background: ${({ theme }) => theme.blue3};
