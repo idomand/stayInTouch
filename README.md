@@ -5,11 +5,11 @@
 Contact app created to remind you to stay in touch with the people in your life.
 Created using Next.js, styling-component and firebase
 
+![](public/StayInTouch.PNG)
+
 ## Usage
 
-For live demo: https://stay-in-touch.vercel.app/
-
-from this point you are free to add your own contact.
+For the live App: https://stay-in-touch.vercel.app/
 
 ### to run on your own computer
 
@@ -21,9 +21,7 @@ open the terminal and run
 yarn add
 ```
 
-after that, opening the code in your browser of choice will result in this image:
 
-![](public/stayInTouch-picture.PNG)
 
 ## License
 

@@ -4,7 +4,9 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 
-  background-color: white;
+  /* background-color: #f5f8ff; */
+
+  background-color: #d1e1f1;
 }
 
 a {
@@ -19,9 +21,9 @@ a {
 
 .contact-edit-modal {
   position: absolute;
-  top: 40px;
-  left: 40px;
-  right: 40px;
+  top: 70px;
+  left: 80px;
+  right: 80px;
   bottom: 40px;
   border: 1px solid #ccc;
   background: #fff;
@@ -29,7 +31,6 @@ a {
   -webkit-overflow-scrolling: touch;
   border-radius: 5px;
   outline: none;
-  padding: 20px;
 }
 
 .contact-edit-modal-overlay {
