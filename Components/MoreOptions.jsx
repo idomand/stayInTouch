@@ -3,7 +3,11 @@ import styled from "styled-components";
 import ReactModal from "react-modal";
 import propTypes from "prop-types";
 import DatePickerComponent from "./DatePickerComponent";
-import { updateContactFull, updateContactTime } from "../lib/Firebase";
+import {
+  updateContactFull,
+  updateContactTime,
+  updateContact,
+} from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import {
   BasicForm,
@@ -197,9 +201,8 @@ export default function MoreOptions({
 }) {
   const { currentUser } = useAuth();
 
-  const timeRef = useRef();
+  // const timeRef = useRef();
   const [startDate, setStartDate] = useState(new Date());
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
@@ -209,41 +212,95 @@ export default function MoreOptions({
 
   async function updateContactOnSubmit(e) {
     e.preventDefault();
+
+    const oldContactData = {
+      name,
+      time,
+      timeFromLastTalk,
+      contactId,
+      tag,
+    };
+
     const newContactData = {
       name: contactName,
       time: +contactTime,
       timeFromLastTalk: timeFromLastTalk,
     };
-    const oldContactData = { name, time, timeFromLastTalk };
 
     let result;
+
+    /* //* if nothing was change ==> just return */
 
     if (
       oldContactData.name == newContactData.name &&
       oldContactData.time == newContactData.time
     ) {
       return setIsModalOpen(false);
-    } else if (oldContactData.name == newContactData.name) {
-      result = await updateContactTime(
-        currentUser.uid,
-        currentUser.email,
-        contactId,
-        newContactData
-      );
     } else {
-      result = await updateContactFull(
+      result = await updateContact(
         currentUser.uid,
         currentUser.email,
         contactId,
+        oldContactData,
         newContactData
       );
     }
-
     if (result === "bad") {
       setError("contact already in list");
     } else {
       setIsModalOpen(false);
     }
+  }
+
+  // async function updateContactOnSubmit(e) {
+  //   e.preventDefault();
+
+  //   const oldContactData = {
+  //     name,
+  //     time,
+  //     timeFromLastTalk,
+  //     contactId,
+  //     tag,
+  //   };
+
+  //   const newContactData = {
+  //     name: contactName,
+  //     time: +contactTime,
+  //     timeFromLastTalk: timeFromLastTalk,
+  //   };
+
+  //   let result;
+
+  //   if (
+  //     oldContactData.name == newContactData.name &&
+  //     oldContactData.time == newContactData.time
+  //   ) {
+  //     return setIsModalOpen(false);
+  //   } else if (oldContactData.name == newContactData.name) {
+  //     result = await updateContactTime(
+  //       currentUser.uid,
+  //       currentUser.email,
+  //       contactId,
+  //       newContactData
+  //     );
+  //   } else {
+  //     result = await updateContactFull(
+  //       currentUser.uid,
+  //       currentUser.email,
+  //       contactId,
+  //       newContactData
+  //     );
+  //   }
+
+  //   if (result === "bad") {
+  //     setError("contact already in list");
+  //   } else {
+  //     setIsModalOpen(false);
+  //   }
+  // }
+
+  function timeChangeHandler(e) {
+    setContactTime(e.target.value);
   }
 
   function nameChangeHandler(e) {
@@ -302,12 +359,14 @@ export default function MoreOptions({
               <TimeLabel>
                 Talk Every X Days:
                 <TimeInput
-                  ref={timeRef}
+                  // ref={timeRef}
                   type="number"
                   name="time"
                   id="time"
                   max={31}
                   min={1}
+                  value={contactTime}
+                  onChange={timeChangeHandler}
                   defaultValue={3}
                 />
               </TimeLabel>
