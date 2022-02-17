@@ -1,7 +1,8 @@
+import React from "react";
 import styled from "styled-components";
-import { LinkPrototype } from "../Common/StyledLinks";
+import { LinkPrototype } from "./Common/StyledLinks";
 
-export const HowToUseLink = styled(LinkPrototype)`
+const HowToUseLink = styled(LinkPrototype)`
   text-align: center;
   font-size: ${({ theme }) => theme.typeScale.header2};
   padding: 5px;
@@ -18,10 +19,9 @@ export const HowToUseLink = styled(LinkPrototype)`
   &:focus {
     color: ${({ theme }) => theme.black};
     background-color: ${({ theme }) => theme.brown1};
-
     &:after {
       content: "How to Use";
-      font-size: ${({ theme }) => theme.typeScale.paragraph};
+      font-size: ${({ theme }) => theme.typeScale.p_small};
       display: flex;
       border-style: solid;
       border-color: red transparent;
@@ -42,3 +42,11 @@ export const HowToUseLink = styled(LinkPrototype)`
     }
   }
 `;
+
+export default function HowToUse() {
+  return (
+    <>
+      <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
+    </>
+  );
+}

@@ -1,6 +1,12 @@
 import React from "react";
 import propTypes from "prop-types";
-import { ErrorText, ErrorWrapper } from "./ErrorWarningStyle";
+
+import styled from "styled-components";
+import { H1 } from "./Common/StyledText";
+
+const ErrorWrapper = styled.div``;
+
+const ErrorText = styled(H1)``;
 
 export default function ErrorWarning({ errorMessage }) {
   return (
