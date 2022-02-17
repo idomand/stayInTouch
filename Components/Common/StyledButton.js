@@ -40,6 +40,8 @@ export const BasicButton = styled(ButtonPrototype).attrs((props) => {
     color: ${({ theme }) => theme.blue1};
   }
   @media (${({ theme }) => theme.devices.break1}) {
+    width: 120px;
+    height: 40px;
   }
 `;
 

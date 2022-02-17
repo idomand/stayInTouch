@@ -1,5 +1,7 @@
 import React from "react";
 import { useAuth } from "../lib/AuthContext";
+import { useMedia } from "react-use";
+
 import propTypes from "prop-types";
 import {
   deleteContact,
@@ -7,7 +9,7 @@ import {
   updateContact,
 } from "../lib/Firebase";
 import { oneDay } from "../lib/ConstantsFile";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
 import MoreOptions from "./MoreOptions";
 import Notes from "./Notes";
@@ -19,24 +21,51 @@ const ContactItemContainer = styled.li`
   width: 85vw;
   list-style-type: none;
   margin: 10px 5px;
+  /* border: double black; */
 `;
 const ContactItemWrapper = styled.div`
-  display: flex;
+  display: grid;
   flex-grow: 1;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.white};
   border-radius: 15px;
   padding: 10px;
-  @media (${({ theme }) => theme.devices.break2}) {
+  /* gap: 10px; */
+  /* border: solid red; */
+  grid-template-areas:
+    "contactDetails contactDates moreOptions moreOptions"
+    "contactDetails contactDates notes buttons";
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    grid-template-areas:
+      "emojiStatus contactDetails contactDetails notes "
+      ". contactDetails contactDetails . "
+      "contactDates contactDates contactDates contactDates "
+      ". buttons buttons ."
+      " . moreOptions moreOptions .";
   }
+`;
+
+const NotesButtonWrapper = styled.div`
+  grid-area: notes;
 `;
 
 const EmojiWrapper = styled.div`
   margin-right: 10px;
+  @media (${({ theme }) => theme.devices.break1}) {
+    grid-area: emojiStatus;
+    margin-right: 0;
+    text-align: end;
+  }
 `;
 
 const ContactDetailsWrapper = styled.div`
+  grid-area: contactDetails;
   display: flex;
+  @media (${({ theme }) => theme.devices.break1}) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const ContactDetailsSubDiv = styled.div`
   display: flex;
@@ -49,9 +78,12 @@ const NameContainer = styled.span`
   font-size: ${({ theme }) => theme.typeScale.header5};
   line-height: 21px;
   text-transform: capitalize;
-
+  overflow: auto;
+  width: 100px;
   @media (${({ theme }) => theme.devices.break1}) {
     overflow: scroll;
+    text-align: center;
+    margin-bottom: 0px;
   }
 `;
 const TagContainer = styled.span`
@@ -59,14 +91,29 @@ const TagContainer = styled.span`
   font-weight: 400;
   font-size: ${({ theme }) => theme.typeScale.p_large};
   line-height: 21px;
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    text-align: center;
+  }
 `;
 
 const ContactImage = styled.img`
   margin-right: 15px;
+  @media (${({ theme }) => theme.devices.break1}) {
+    margin: 0;
+  }
 `;
 
 const ContactDatesWrapper = styled.div`
+  grid-area: contactDates;
   display: flex;
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
 `;
 const DateWrapper = styled.div`
   display: flex;
@@ -96,19 +143,21 @@ const DateValue = styled.div`
   margin: 0;
 `;
 
-const ContactButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const MoreOptionsWrapper = styled.div`
+  grid-area: moreOptions;
   display: flex;
   justify-content: flex-end;
+  @media (${({ theme }) => theme.devices.break1}) {
+    justify-content: center;
+    margin-top: 15px;
+  }
 `;
 
 const ButtonsWrapper = styled.div`
+  grid-area: buttons;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 const ResetButton = styled(BasicButton)`
@@ -135,6 +184,8 @@ export default function ContactItem({
   tag,
 }) {
   const { currentUser } = useAuth();
+  const Theme = useTheme();
+  const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
@@ -186,10 +237,32 @@ export default function ContactItem({
     );
   }
 
+  let nextTalkInDays =
+    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+
+  let nextTalkResponse;
+
+  if (nextTalkInDays > 0) {
+    nextTalkResponse = (
+      <DateValue statusColor={isTalkingStatusOK}>
+        {nextTalkInDays} days
+      </DateValue>
+    );
+  } else {
+    nextTalkResponse = (
+      <DateValue statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
+    );
+  }
+
   return (
     <ContactItemContainer>
-      <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
+      {!isMobile && (
+        <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
+      )}
       <ContactItemWrapper>
+        {isMobile && (
+          <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
+        )}
         <ContactDetailsWrapper>
           <ContactImage src="/default_image.svg" />
           <ContactDetailsSubDiv>
@@ -209,35 +282,35 @@ export default function ContactItem({
             </DateValue>
           </DateWrapper>
           <DateWrapper>
-            <DateHeader>Next Talk</DateHeader>
-            <DateValue statusColor={isTalkingStatusOK}>5 days</DateValue>
+            <DateHeader>Next Talk In</DateHeader>
+            {nextTalkResponse}
           </DateWrapper>
         </ContactDatesWrapper>
-        <ContactButtonsWrapper>
-          <MoreOptionsWrapper>
-            <MoreOptions
-              name={name}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              tag={tag}
-            />
-          </MoreOptionsWrapper>
-          <ButtonsWrapper>
-            <Notes
-              name={name}
-              notesArrayData={notesArray}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              notesArray={notesArray}
-              tag={tag}
-            />
 
-            <ResetButton onClick={resetFunction}>Reset</ResetButton>
-            <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>
-          </ButtonsWrapper>
-        </ContactButtonsWrapper>
+        <MoreOptionsWrapper>
+          <MoreOptions
+            name={name}
+            time={time}
+            timeFromLastTalk={timeFromLastTalk}
+            contactId={contactId}
+            tag={tag}
+          />
+        </MoreOptionsWrapper>
+        <NotesButtonWrapper>
+          <Notes
+            name={name}
+            notesArrayData={notesArray}
+            time={time}
+            timeFromLastTalk={timeFromLastTalk}
+            contactId={contactId}
+            notesArray={notesArray}
+            tag={tag}
+          />
+        </NotesButtonWrapper>
+        <ButtonsWrapper>
+          <ResetButton onClick={resetFunction}>Reset</ResetButton>
+          <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>
+        </ButtonsWrapper>
       </ContactItemWrapper>
     </ContactItemContainer>
   );
