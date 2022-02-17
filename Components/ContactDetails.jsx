@@ -44,13 +44,13 @@ export default function ContactDetails() {
             type++;
             return (
               <ContactItem
-                notesArray={element.noteArray}
+                notesArray={element.notesArray}
                 key={element.contactId}
                 name={element.name}
                 time={element.time}
                 timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
-                type={type}
+                tag={element.tag}
               />
             );
           })}

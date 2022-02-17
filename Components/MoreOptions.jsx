@@ -14,6 +14,7 @@ import {
 import ErrorWarning from "./ErrorWarning";
 import { BasicButton, MinimalButton } from "./Common/StyledButton";
 import { H5, P1 } from "./Common/StyledText";
+import TagSelect from "./TagSelect";
 
 const MoreOptionsButton = styled(MinimalButton)``;
 
@@ -90,7 +91,7 @@ const TimeInput = styled(BasicInput)`
 const TagLabel = styled(BasicLabel)`
   grid-area: tag;
 `;
-const TagInput = styled.select`
+/* const TagInput = styled.select`
   border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
@@ -102,7 +103,7 @@ const TagOption = styled.option`
   background-color: goldenrod;
   border: blue solid;
 `;
-
+ */
 const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
   display: flex;
@@ -320,17 +321,7 @@ export default function MoreOptions({
 
               <TagLabel>
                 Change Tag:
-                <TagInput
-                  onChange={(e) => {
-                    setTagValue(e.target.value);
-                  }}
-                >
-                  <TagOption>select</TagOption>
-                  <TagOption>Coworker</TagOption>
-                  <TagOption>Friend</TagOption>
-                  <TagOption>Family</TagOption>
-                  <TagOption>Other</TagOption>
-                </TagInput>
+                <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
               </TagLabel>
               <EditSubmitInput
                 disabled={contactName === ""}
