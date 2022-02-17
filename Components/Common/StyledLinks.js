@@ -14,38 +14,29 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
     target: "_blank",
   };
 })`
-  transition: all 0.3s;
-  color: ${({ theme }) => theme.blue4};
+  font-weight: 600;
   text-decoration: underline;
+  color: ${({ theme }) => theme.blue2};
+  border-bottom: solid 2px transparent;
+  transition: all 0.3s;
   &:hover,
   &:focus {
-    border-bottom: 2px solid ${({ theme }) => theme.blue4};
+    border-bottom: solid 2px ${({ theme }) => theme.blue1};
   }
 `;
 
 export const NavLink = styled(LinkPrototype)`
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.white : theme.white};
-  color: ${({ theme }) => theme.black};
-  border: 2px solid ${({ theme }) => theme.black};
-  border-radius: 6px;
-  font-size: ${({ theme }) => theme.typeScale.paragraph};
   align-items: center;
-  padding: 10px 20px;
-  margin: 5px;
-  min-width: 70px;
-  max-width: 120px;
-  text-decoration: none;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s;
+  font-weight: 500;
+  font-size: ${({ theme }) => theme.typeScale.p_large};
+  margin: 10px;
   text-decoration: ${({ isActive }) => (isActive ? "underline" : "none")};
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.blue4};
-    border: 2px solid ${({ theme }) => theme.white};
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.blue2};
   }
   @media (${({ theme }) => theme.devices.break1}) {
-    padding: 6px 12px;
   }
 `;
