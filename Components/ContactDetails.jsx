@@ -34,14 +34,11 @@ export default function ContactDetails() {
     SetArrayOfContacts(newArray);
   }, [basicArray]);
 
-  let type = 0;
-
   return (
     <>
       <ContactList>
         {basicArray.length > 0 &&
           arrayOfContacts.map((element) => {
-            type++;
             return (
               <ContactItem
                 notesArray={element.notesArray}

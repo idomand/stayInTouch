@@ -252,53 +252,6 @@ export default function MoreOptions({
     }
   }
 
-  // async function updateContactOnSubmit(e) {
-  //   e.preventDefault();
-
-  //   const oldContactData = {
-  //     name,
-  //     time,
-  //     timeFromLastTalk,
-  //     contactId,
-  //     tag,
-  //   };
-
-  //   const newContactData = {
-  //     name: contactName,
-  //     time: +contactTime,
-  //     timeFromLastTalk: timeFromLastTalk,
-  //   };
-
-  //   let result;
-
-  //   if (
-  //     oldContactData.name == newContactData.name &&
-  //     oldContactData.time == newContactData.time
-  //   ) {
-  //     return setIsModalOpen(false);
-  //   } else if (oldContactData.name == newContactData.name) {
-  //     result = await updateContactTime(
-  //       currentUser.uid,
-  //       currentUser.email,
-  //       contactId,
-  //       newContactData
-  //     );
-  //   } else {
-  //     result = await updateContactFull(
-  //       currentUser.uid,
-  //       currentUser.email,
-  //       contactId,
-  //       newContactData
-  //     );
-  //   }
-
-  //   if (result === "bad") {
-  //     setError("contact already in list");
-  //   } else {
-  //     setIsModalOpen(false);
-  //   }
-  // }
-
   function timeChangeHandler(e) {
     setContactTime(e.target.value);
   }
