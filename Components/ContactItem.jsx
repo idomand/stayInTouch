@@ -159,12 +159,6 @@ export default function ContactItem({
       oldContactData,
       newContactData
     );
-    // resetTimerForContact(
-    //   currentUser.uid,
-    //   currentUser.email,
-    //   contactId,
-    //   newContactData
-    // );
   }
 
   const currantTime = new Date().getTime();
