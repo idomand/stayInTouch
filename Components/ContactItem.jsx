@@ -121,13 +121,13 @@ export default function ContactItem({
   timeFromLastTalk,
   contactId,
   notesArray,
+  tag,
 }) {
   const { currentUser } = useAuth();
-  console.log("notesArray :>> ", notesArray);
   function deleteContactFunc() {
     deleteContact(currentUser.uid, currentUser.email, contactId);
   }
-
+  console.log("tag :>> ", tag);
   function resetFunction() {
     const newContactData = {
       name: name,
@@ -171,7 +171,7 @@ export default function ContactItem({
           <ContactImage src="/default_image.svg" />
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
-            <TagContainer>Family</TagContainer>
+            <TagContainer>{tag === null ? "" : tag}</TagContainer>
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
@@ -195,6 +195,7 @@ export default function ContactItem({
               time={time}
               timeFromLastTalk={timeFromLastTalk}
               contactId={contactId}
+              tag={tag}
             />
           </MoreOptionsWrapper>
           <ButtonsWrapper>

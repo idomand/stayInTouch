@@ -27,8 +27,11 @@ export const BasicForm = styled.form`
   border-radius: 10px;
 `;
 export const BasicInput = styled.input`
+  cursor: pointer;
   background-color: Lightgrey;
-  /* background-color: ${({ theme }) => theme.grey}; */
+
+  font-size: ${({ theme }) => theme.p_normal};
+
   height: 30px;
   border-radius: 10px;
   border: none;

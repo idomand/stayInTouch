@@ -179,9 +179,7 @@ export default function Notes({ name, notesArrayData }) {
               {notesArrayData &&
                 notesArrayData.length &&
                 notesArray.map((note) => {
-                  return (
-                    <NoteItem key={note.id} data={note.data} id={note.id} />
-                  );
+                  return <NoteItem key={note.id} data={note} id={note.id} />;
                 })}
             </NotesList>
           </NotesListWrapper>

@@ -6,6 +6,7 @@ import ErrorWrapper from "./ErrorWarning";
 import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
 import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
 import DatePickerComponent from "./DatePickerComponent";
+import TagSelect from "./TagSelect";
 
 const AddContactForm = styled(BasicForm)`
   display: grid;
@@ -57,18 +58,6 @@ const TimeInput = styled(BasicInput)`
 const TagLabel = styled(BasicLabel)`
   grid-area: tag;
 `;
-const TagInput = styled.select`
-  border: 1px solid ${({ theme }) => theme.grey2};
-
-  border-radius: 8px;
-  height: 30px;
-
-  background-color: ${({ theme }) => theme.grey1};
-`;
-const TagOption = styled.option`
-  background-color: goldenrod;
-  border: blue solid;
-`;
 
 const LastTalkedLabel = styled.div`
   display: flex;
@@ -113,9 +102,9 @@ export default function AddNewContact() {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState(false);
-  const [tagValue, setTagValue] = useState("");
   const [note, setNote] = useState("");
-  console.log("tagValue :>> ", tagValue);
+  const [tagValue, setTagValue] = useState({ value: null, label: "Select" });
+
   function nameChangeHandler(e) {
     setName(e.target.value);
     if (error) {
@@ -125,10 +114,19 @@ export default function AddNewContact() {
 
   async function createNewContact(event) {
     event.preventDefault();
+
+    let notesArray = [];
+
+    if (note) {
+      notesArray[0] = note;
+    }
+
     let newContact = {
       name: name,
       time: +timeRef.current.value,
       timeFromLastTalk: startDate.getTime(),
+      notesArray: notesArray,
+      tag: tagValue.value,
     };
 
     const result = await addContactToFirestore(
@@ -139,6 +137,9 @@ export default function AddNewContact() {
     if (result === "bad") {
       setError("contact already in list");
     } else {
+      setTagValue({ value: null, label: "Select" });
+      setNote("");
+      setStartDate(new Date());
       setName("");
       timeRef.current.value = 3;
     }
@@ -170,19 +171,10 @@ export default function AddNewContact() {
             defaultValue={3}
           />
         </TimeLabel>
+
         <TagLabel>
-          Add a Tag:
-          <TagInput
-            onChange={(e) => {
-              setTagValue(e.target.value);
-            }}
-          >
-            <TagOption>select</TagOption>
-            <TagOption>Coworker</TagOption>
-            <TagOption>Friend</TagOption>
-            <TagOption>Family</TagOption>
-            <TagOption>Other</TagOption>
-          </TagInput>
+          Add a Tag (optional)
+          <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
         </TagLabel>
 
         <LastTalkedLabel>
@@ -194,9 +186,9 @@ export default function AddNewContact() {
         </LastTalkedLabel>
 
         <NotesLabel>
-          Add a Note
+          Add a Note (optional)
           <NotesInput
-            placeholder="Enter Note (optional)"
+            placeholder="Enter Note..."
             value={note}
             onChange={(e) => {
               setNote(e.target.value);
