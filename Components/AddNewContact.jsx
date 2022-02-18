@@ -34,6 +34,9 @@ const AddContactForm = styled(BasicForm)`
 
 const NameLabel = styled(BasicLabel)`
   grid-area: name;
+  @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 120px;
+  }
 `;
 const NameInput = styled(BasicInput)`
   border: 1px solid ${({ theme }) => theme.grey2};
@@ -51,6 +54,9 @@ const TimeLabel = styled(BasicLabel)`
     color: ${({ theme }) => theme.grey3};
     font-weight: bold;
   }
+  @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 120px;
+  }
 `;
 
 const TimeInput = styled(BasicInput)`
@@ -60,6 +66,9 @@ const TimeInput = styled(BasicInput)`
 `;
 const TagLabel = styled(BasicLabel)`
   grid-area: tag;
+  @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 120px;
+  }
 `;
 
 const LastTalkedLabel = styled.div`
@@ -69,10 +78,16 @@ const LastTalkedLabel = styled.div`
   justify-content: space-between;
   grid-area: lastTalked;
   align-items: center;
+  @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 120px;
+  }
 `;
 
 const NotesLabel = styled(BasicLabel)`
   grid-area: notes;
+  @media (${({ theme }) => theme.devices.break1}) {
+    /* max-width: 120px; */
+  }
 `;
 
 const NotesInput = styled.textarea`
