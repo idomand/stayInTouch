@@ -18,10 +18,12 @@ const ContactItemContainer = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 85vw;
+  width: 75vw;
   list-style-type: none;
   margin: 10px 5px;
-  /* border: double black; */
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 85vw;
+  }
 `;
 const ContactItemWrapper = styled.div`
   display: grid;
@@ -30,8 +32,6 @@ const ContactItemWrapper = styled.div`
   background-color: ${({ theme }) => theme.white};
   border-radius: 15px;
   padding: 10px;
-  /* gap: 10px; */
-  /* border: solid red; */
   grid-template-areas:
     "contactDetails contactDates moreOptions moreOptions"
     "contactDetails contactDates notes buttons";
