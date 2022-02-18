@@ -122,19 +122,7 @@ const TimeInput = styled(BasicInput)`
 const TagLabel = styled(BasicLabel)`
   grid-area: tag;
 `;
-/* const TagInput = styled.select`
-  border: 1px solid ${({ theme }) => theme.grey2};
 
-  border-radius: 8px;
-  height: 30px;
-
-  background-color: ${({ theme }) => theme.grey1};
-`;
-const TagOption = styled.option`
-  background-color: goldenrod;
-  border: blue solid;
-`;
- */
 const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
   display: flex;
@@ -229,24 +217,10 @@ const SaveToGoogleCalender = styled(BasicButton)`
     align-self: center;
   }
 `;
-// const SpecificTimeInput = styled(BasicInput)`
-//   background-color: ${({ theme }) => theme.blue1};
-//   transition: all 0.3s;
-//   color: ${({ theme }) => theme.white};
-//   &:hover,
-//   &:focus {
-//     background: ${({ theme }) => theme.blue3};
-//     border: 1.3px solid ${({ theme }) => theme.blue1};
-//     color: ${({ theme }) => theme.blue1};
-//   }
-// `;
 
 const CalenderLogo = styled.img`
   justify-self: flex-start;
 `;
-
-//?================================================================================================
-//?================================================================================================
 
 export default function MoreOptions({
   name,
@@ -374,7 +348,6 @@ export default function MoreOptions({
               <TimeLabel>
                 Talk Every X Days:
                 <TimeInput
-                  // ref={timeRef}
                   type="number"
                   name="time"
                   id="time"

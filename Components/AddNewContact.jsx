@@ -54,8 +54,11 @@ const TimeLabel = styled(BasicLabel)`
     color: ${({ theme }) => theme.grey3};
     font-weight: bold;
   }
+
   @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 120px;
+    &::after {
+      top: 50px;
+    }
   }
 `;
 
