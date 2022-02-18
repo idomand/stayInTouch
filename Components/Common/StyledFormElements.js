@@ -44,8 +44,9 @@ export const BasicLabel = styled.label`
   width: auto;
 
   @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 120px;
-    width: 100%;
+    /* max-width: 120px; */
+    /* max-width: 80%; */
+    /* width: 100%; */
   }
 
   /* background-color: greenyellow; */

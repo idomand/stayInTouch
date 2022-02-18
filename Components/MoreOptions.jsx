@@ -382,7 +382,6 @@ export default function MoreOptions({
                   min={1}
                   value={contactTime}
                   onChange={timeChangeHandler}
-                  defaultValue={3}
                 />
               </TimeLabel>
               <LastTalkedLabel>
