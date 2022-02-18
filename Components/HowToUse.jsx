@@ -1,6 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { LinkPrototype } from "./Common/StyledLinks";
+import { useMedia } from "react-use";
 
 const HowToUseLink = styled(LinkPrototype)`
   text-align: center;
@@ -44,9 +45,14 @@ const HowToUseLink = styled(LinkPrototype)`
 `;
 
 export default function HowToUse() {
+  const Theme = useTheme();
+  const isMobile = useMedia(`(${Theme.devices.break1})`);
+
   return (
     <>
-      <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
+      {!isMobile && (
+        <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
+      )}
     </>
   );
 }
