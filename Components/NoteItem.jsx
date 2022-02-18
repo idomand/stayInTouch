@@ -31,6 +31,10 @@ const NoteDataWrapper = styled.div`
   width: 380px;
   height: 50px;
   font-size: ${({ theme }) => theme.typeScale.p_normal};
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
 `;
 
 const EditNoteButton = styled(MinimalButton)`
