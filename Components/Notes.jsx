@@ -95,6 +95,10 @@ const NewNoteInput = styled.textarea`
   padding: 10px;
   width: 415px;
   height: 73px;
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
 `;
 
 const ChancelEditButton = styled(BasicButton)`

@@ -39,7 +39,7 @@ const CloseModalButton = styled(BasicButton)`
   }
   @media (${({ theme }) => theme.devices.break1}) {
     width: auto;
-    margin: auto;
+    /* margin: auto; */
   }
 `;
 
@@ -51,9 +51,14 @@ const EditHeader = styled.div`
   display: flex;
   align-items: center;
   @media (${({ theme }) => theme.devices.break1}) {
+    justify-content: space-between;
     /* margin-top: 10px; */
     margin: 10px 15px;
   }
+`;
+
+const HeaderName = styled.div`
+  display: flex;
 `;
 
 const ContactNameHeader = styled(H5)`
@@ -345,9 +350,10 @@ export default function MoreOptions({
         <MoreOptionsWrapper>
           <EditingSubSection>
             <EditHeader>
-              <H5>Editing Contact:</H5>
-              <ContactNameHeader>{name}</ContactNameHeader>
-
+              <HeaderName>
+                <H5>Editing Contact:</H5>
+                <ContactNameHeader>{name}</ContactNameHeader>
+              </HeaderName>
               {isMobile && (
                 <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
               )}
@@ -376,7 +382,6 @@ export default function MoreOptions({
                   min={1}
                   value={contactTime}
                   onChange={timeChangeHandler}
-                  defaultValue={3}
                 />
               </TimeLabel>
               <LastTalkedLabel>
