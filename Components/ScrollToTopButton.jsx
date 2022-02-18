@@ -9,6 +9,12 @@ const ScrollButton = styled(BasicButton)`
   bottom: 20px;
   right: 20px;
   z-index: 3;
+  display: flex;
+  justify-content: center;
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 40px;
+    bottom: 40px;
+  }
 `;
 const ScrollButtonWrapper = styled.div``;
 
@@ -37,7 +43,7 @@ export default function ScrollToTopButton() {
 
   return (
     <ScrollButtonWrapper>
-      {isVisible && <ScrollButton onClick={scrollToTop}>top</ScrollButton>}
+      {isVisible && <ScrollButton onClick={scrollToTop}>Top</ScrollButton>}
     </ScrollButtonWrapper>
   );
 }
