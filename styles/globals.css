@@ -5,8 +5,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 
   /* background-color: #f5f8ff; */
-
-  background-color: #d1e1f1;
+  background-color: #e5e5e5;
+  /* background-color: #d1e1f1; */
 }
 
 a {
@@ -44,7 +44,8 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.75);
+  /* background-color: rgba(255, 255, 255, 0.75); */
+  background-color: #e5e5e5;
 }
 
 @media only screen and (max-width: 550px) {
