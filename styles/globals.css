@@ -31,6 +31,7 @@ a {
   -webkit-overflow-scrolling: touch;
   border-radius: 5px;
   outline: none;
+  /* z-index: 10; */
 }
 
 .contact-edit-modal-overlay {
@@ -40,4 +41,16 @@ a {
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.75);
+}
+
+@media only screen and (max-width: 550px) {
+  .contact-edit-modal {
+    top: 50px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+  .contact-edit-modal-overlay {
+    z-index: 10;
+  }
 }

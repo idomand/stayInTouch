@@ -290,3 +290,7 @@ export default function Notes(props) {
     </>
   );
 }
+
+//?========================
+//* The styles of the Modal are in the global.css file
+//?========================
