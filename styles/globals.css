@@ -19,6 +19,10 @@ a {
   outline: none;
 }
 
+.ReactModal__Body--open {
+  overflow: hidden;
+}
+
 .contact-edit-modal {
   position: absolute;
   top: 70px;
