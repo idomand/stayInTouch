@@ -21,7 +21,9 @@ const AddContactForm = styled(BasicForm)`
 
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 10px 5px;
-    width: 95vw;
+    /* width: 95vw; */
+    gap: 0;
+
     grid-template-areas:
       "name howMuchTime "
       "tag lastTalked "
