@@ -29,9 +29,7 @@ export const BasicForm = styled.form`
 export const BasicInput = styled.input`
   cursor: pointer;
   background-color: Lightgrey;
-
   font-size: ${({ theme }) => theme.p_normal};
-
   height: 30px;
   border-radius: 10px;
   border: none;
@@ -43,5 +41,11 @@ export const BasicLabel = styled.label`
   flex-direction: column;
   margin: 5px;
   justify-content: space-between;
+  width: auto;
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 120px;
+  }
+
   /* background-color: greenyellow; */
 `;

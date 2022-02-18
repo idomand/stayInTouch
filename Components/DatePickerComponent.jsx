@@ -34,6 +34,12 @@ const StyledDatePicker = styled(({ className, ...props }) => (
     text-align: center;
     border: none;
   }
+
+  @media (${({ theme }) => theme.devices.break1}) {
+    .react-datepicker__input-container input {
+      width: 100%;
+    }
+  }
 `;
 
 export default function DatePickerComponent({ setStartDate, startDate }) {
