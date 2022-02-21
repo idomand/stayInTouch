@@ -31,12 +31,15 @@ export const StyledDatePicker = styled(({ className, ...props }) => (
     height: 30px;
     text-align: center;
     border: none;
+    border: 1px solid ${({ theme }) => theme.grey1};
+
+    &:focus {
+      border: 1px solid ${({ theme }) => theme.blue1};
+    }
   }
 
   @media (${({ theme }) => theme.devices.break1}) {
     .react-datepicker__input-container input {
-      /* max-width: 100%; */
-      /* border: solid red; */
       width: 100%;
     }
   }
