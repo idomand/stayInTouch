@@ -3,11 +3,7 @@ import { useAuth } from "../lib/AuthContext";
 import { useMedia } from "react-use";
 
 import propTypes from "prop-types";
-import {
-  deleteContact,
-  // resetTimerForContact,
-  updateContact,
-} from "../lib/Firebase";
+import { deleteContact, updateContact } from "../lib/Firebase";
 import { oneDay } from "../lib/ConstantsFile";
 import styled, { useTheme } from "styled-components";
 import { BasicButton } from "./Common/StyledButton";
@@ -88,16 +84,6 @@ const NameContainer = styled.span`
     margin-bottom: 0px;
   }
 `;
-// const TagContainer = styled.span`
-//   color: ${({ theme }) => theme.blue2};
-//   font-weight: 400;
-//   font-size: ${({ theme }) => theme.typeScale.p_large};
-//   line-height: 21px;
-
-//   @media (${({ theme }) => theme.devices.break1}) {
-//     text-align: center;
-//   }
-// `;
 
 const ContactImage = styled.img`
   margin-right: 15px;
@@ -183,7 +169,6 @@ export default function ContactItem({
   timeFromLastTalk,
   contactId,
   notesArray,
-  tag,
 }) {
   const { currentUser } = useAuth();
   const currantTime = new Date().getTime();
@@ -224,7 +209,7 @@ export default function ContactItem({
     isTalkingStatusOK = false;
   }
 
-  if (currantTime - timeFromLastTalk < 15000) {
+  if (currantTime - timeFromLastTalk < 86000000) {
     lastTalkedToResponse = (
       <DateValue statusColor={isTalkingStatusOK}>Today!</DateValue>
     );
@@ -266,7 +251,6 @@ export default function ContactItem({
           <ContactImage src="/default_image.svg" />
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
-            {/* <TagContainer>{tag === null ? "" : tag}</TagContainer> */}
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
@@ -292,7 +276,6 @@ export default function ContactItem({
             time={time}
             timeFromLastTalk={timeFromLastTalk}
             contactId={contactId}
-            tag={tag}
           />
         </MoreOptionsWrapper>
         <NotesButtonWrapper>
@@ -303,7 +286,6 @@ export default function ContactItem({
             timeFromLastTalk={timeFromLastTalk}
             contactId={contactId}
             notesArray={notesArray}
-            tag={tag}
           />
         </NotesButtonWrapper>
         <ButtonsWrapper>
