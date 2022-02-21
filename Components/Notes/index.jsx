@@ -1,145 +1,27 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import ReactModal from "react-modal";
-import { H5 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
-import { BasicForm, InputSubmit } from "./Common/StyledFormElements";
-import NoteItem from "./NoteItem";
-import { updateContact, updateNote } from "../lib/Firebase";
-import { useAuth } from "../lib/AuthContext";
-
-const NotesButton = styled.button`
-  cursor: pointer;
-  height: 40px;
-  background-color: ${({ theme }) => theme.blue3};
-  border: none;
-  border-radius: 55px;
-  text-align: center;
-  position: relative;
-  transition: all 0.3s;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.grey2};
-  }
-`;
-
-const NotsNumber = styled.div`
-  border-radius: 38px;
-  text-align: center;
-  font-weight: 600;
-  height: 18px;
-  width: 18px;
-  position: absolute;
-  bottom: 25px;
-  left: 30px;
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  transition: all 0.3s;
-  border: solid 1px transparent;
-  ${NotesButton}:hover &,
-  ${NotesButton}:focus & {
-    background-color: ${({ theme }) => theme.white};
-    border: solid 1px ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const NotesLogo = styled.img`
-  display: block;
-  margin-left: 5px;
-`;
-
-const NotesWrapper = styled.section``;
-
-const NotesHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 25px;
-`;
-const ContactNameWrapper = styled.div`
-  display: flex;
-  margin: auto;
-`;
-
-const ContactNameText = styled(H5)`
-  color: ${({ theme }) => theme.blue2};
-  font-weight: 600;
-  margin-left: 5px;
-`;
-const CloseModalButton = styled(BasicButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.black};
-  border: none;
-  font-size: larger;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.blue3};
-    border: none;
-  }
-`;
-
-const AddNewNoteWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const AddNewNoteForm = styled(BasicForm)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const NewNoteInput = styled.textarea`
-  background-color: ${({ theme }) => theme.grey1};
-  border-radius: 10px;
-  padding: 10px;
-  width: 415px;
-  height: 73px;
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;
-
-const ChancelEditButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  /* margin: 5px auto; */
-  padding: 10px 15px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const NotesButtonsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const NewNoteSubmit = styled(InputSubmit)`
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  padding: 10px 15px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-const NotesListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const NotesList = styled.ul`
-  padding: 0;
-  margin: 0;
-`;
+import NoteItem from "../NoteItem";
+import { updateContact, updateNote } from "../../lib/Firebase";
+import { useAuth } from "../../lib/AuthContext";
+import {
+  AddNewNoteForm,
+  AddNewNoteWrapper,
+  ChancelEditButton,
+  CloseModalButton,
+  ContactNameText,
+  ContactNameWrapper,
+  NewNoteInput,
+  NewNoteSubmit,
+  NotesButton,
+  NotesButtonsWrapper,
+  NotesHeader,
+  NotesList,
+  NotesListWrapper,
+  NotesLogo,
+  NotesWrapper,
+  NotsNumber,
+} from "./NotesStyle";
+import { H5 } from "../Common/StyledText";
 
 export default function Notes(props) {
   const { currentUser } = useAuth();
