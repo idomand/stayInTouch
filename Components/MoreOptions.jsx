@@ -233,7 +233,6 @@ export default function MoreOptions({
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
   const [lastTalk, setLastTalk] = useState(timeFromLastTalk);
-  // const [startDate, setStartDate] = useState(timeFromLastTalk);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
@@ -244,26 +243,32 @@ export default function MoreOptions({
   async function updateContactOnSubmit(e) {
     e.preventDefault();
 
+    let timeFromLastTalkVar = lastTalk;
+
+    if (typeof lastTalk !== "number") {
+      timeFromLastTalkVar = lastTalk.getTime();
+    }
+
     const oldContactData = {
       name,
       time,
       timeFromLastTalk,
       contactId,
-      tag,
     };
     const newContactData = {
       name: contactName,
       time: +contactTime,
-      timeFromLastTalk: lastTalk.getTime(),
-      tag: tag,
+      timeFromLastTalk: timeFromLastTalkVar,
     };
+
     let result;
 
     /* //* if nothing was change ==> just return */
 
     if (
       oldContactData.name == newContactData.name &&
-      oldContactData.time == newContactData.time
+      oldContactData.time == newContactData.time &&
+      oldContactData.timeFromLastTalk == newContactData.timeFromLastTalk
     ) {
       return setIsModalOpen(false);
     } else {
