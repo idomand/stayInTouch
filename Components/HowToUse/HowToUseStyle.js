@@ -1,9 +1,7 @@
-import React from "react";
-import styled, { useTheme } from "styled-components";
-import { LinkPrototype } from "./Common/StyledLinks";
-import { useMedia } from "react-use";
+import styled from "styled-components";
+import { LinkPrototype } from "../Common/StyledLinks";
 
-const HowToUseLink = styled(LinkPrototype)`
+export const HowToUseLink = styled(LinkPrototype)`
   text-align: center;
   font-size: ${({ theme }) => theme.typeScale.header2};
   padding: 5px;
@@ -43,16 +41,3 @@ const HowToUseLink = styled(LinkPrototype)`
     }
   }
 `;
-
-export default function HowToUse() {
-  const Theme = useTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
-
-  return (
-    <>
-      {!isMobile && (
-        <HowToUseLink href={"/about/#HowToUseSection"}>?</HowToUseLink>
-      )}
-    </>
-  );
-}
