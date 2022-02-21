@@ -232,8 +232,8 @@ export default function MoreOptions({
   const { currentUser } = useAuth();
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-
-  const [startDate, setStartDate] = useState(timeFromLastTalk);
+  const [lastTalk, setLastTalk] = useState(timeFromLastTalk);
+  // const [startDate, setStartDate] = useState(timeFromLastTalk);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
@@ -251,13 +251,12 @@ export default function MoreOptions({
       contactId,
       tag,
     };
-
     const newContactData = {
       name: contactName,
       time: +contactTime,
-      timeFromLastTalk: timeFromLastTalk,
+      timeFromLastTalk: lastTalk.getTime(),
+      tag: tag,
     };
-
     let result;
 
     /* //* if nothing was change ==> just return */
@@ -360,8 +359,8 @@ export default function MoreOptions({
               <LastTalkedLabel>
                 Last Time We Have Spoken
                 <DatePickerComponent
-                  setStartDate={setStartDate}
-                  startDate={startDate}
+                  setStartDate={setLastTalk}
+                  startDate={lastTalk}
                 />
               </LastTalkedLabel>
 

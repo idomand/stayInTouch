@@ -225,11 +225,9 @@ export default function ContactItem({
     isTalkingStatusOK = false;
   }
 
-  if (currantTime - timeFromLastTalk < 0) {
+  if (currantTime - timeFromLastTalk < 15000) {
     lastTalkedToResponse = (
-      <DateValue statusColor={isTalkingStatusOK}>
-        Last talk was today!
-      </DateValue>
+      <DateValue statusColor={isTalkingStatusOK}>Today!</DateValue>
     );
   } else {
     lastTalkedToResponse = (
@@ -238,6 +236,20 @@ export default function ContactItem({
       </DateValue>
     );
   }
+
+  // if (currantTime - timeFromLastTalk < 0) {
+  //   lastTalkedToResponse = (
+  //     <DateValue statusColor={isTalkingStatusOK}>
+  //       Last talk was today!
+  //     </DateValue>
+  //   );
+  // } else {
+  //   lastTalkedToResponse = (
+  //     <DateValue statusColor={isTalkingStatusOK}>
+  //       {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
+  //     </DateValue>
+  //   );
+  // }
 
   let nextTalkInDays =
     time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
