@@ -1,49 +1,21 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Layout from "../../Components/Layout";
-import { BasicLink } from "../../Components/Common/StyledLinks";
-import { BasicButton } from "../../Components/Common/StyledButton";
 import { addDummyData } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
-import { P3 } from "../../Components/Common/StyledText.js";
+import { P3 } from "../../Components/Common/StyledText";
+import { BasicButton } from "../../Components/Common/StyledButton";
+import { BasicLink } from "../../Components/Common/StyledLinks";
 
-import styled from "styled-components";
-import { H1 } from "../../Components/Common/StyledText";
-
-const AboutPageWrapper = styled.section`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 70%;
-  margin: auto;
-`;
-
-const DemoButtonWrapper = styled.div`
-  display: flex;
-  /* justify-content: center; */
-`;
-
-const AboutHeader = styled(H1)``;
-
-const AboutSubSection = styled.div`
-  background-color: ${({ theme }) => theme.white};
-  margin: 7.5px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  text-align: justify;
-  text-transform: capitalize;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const IntroductionSection = styled(AboutSubSection)``;
-
-const HowToUseSection = styled(AboutSubSection)``;
-const AboutTheSite = styled(AboutSubSection)``;
-const AboutTheCreator = styled(AboutSubSection)``;
+import {
+  AboutTheCreator,
+  AboutHeader,
+  AboutPageWrapper,
+  AboutTheSite,
+  DemoButtonWrapper,
+  HowToUseSection,
+  IntroductionSection,
+} from "../../styles/AboutPageStyle";
 
 export default function About() {
   const { currentUser } = useAuth();
