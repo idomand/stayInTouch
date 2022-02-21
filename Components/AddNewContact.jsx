@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
@@ -6,7 +6,6 @@ import ErrorWrapper from "./ErrorWarning";
 import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
 import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
 import DatePickerComponent from "./DatePickerComponent";
-// import TagSelect from "./TagSelect";
 
 const AddContactForm = styled(BasicForm)`
   display: grid;
@@ -66,12 +65,6 @@ const TimeInput = styled(BasicInput)`
 
   border-radius: 8px;
 `;
-// const TagLabel = styled(BasicLabel)`
-//   grid-area: tag;
-//   @media (${({ theme }) => theme.devices.break1}) {
-//     max-width: 120px;
-//   }
-// `;
 
 const LastTalkedLabel = styled.div`
   display: flex;
@@ -81,14 +74,12 @@ const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
   align-items: center;
   @media (${({ theme }) => theme.devices.break1}) {
-    /* max-width: 120px; */
   }
 `;
 
 const NotesLabel = styled(BasicLabel)`
   grid-area: notes;
   @media (${({ theme }) => theme.devices.break1}) {
-    /* max-width: 120px; */
   }
 `;
 
@@ -123,7 +114,15 @@ export default function AddNewContact() {
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState(false);
   const [note, setNote] = useState("");
-  // const [tagValue, setTagValue] = useState({ value: null, label: "Select" });
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        console.log("2");
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
 
   function nameChangeHandler(e) {
     setName(e.target.value);
@@ -146,7 +145,6 @@ export default function AddNewContact() {
       time: +timeRef.current.value,
       timeFromLastTalk: startDate.getTime(),
       notesArray: notesArray,
-      // tag: tagValue.value,
     };
 
     const result = await addContactToFirestore(
@@ -156,8 +154,8 @@ export default function AddNewContact() {
     );
     if (result === "bad") {
       setError("contact already in list");
+      setName("");
     } else {
-      // setTagValue({ value: null, label: "Select" });
       setNote("");
       setStartDate(new Date());
       setName("");
@@ -191,11 +189,6 @@ export default function AddNewContact() {
             defaultValue={3}
           />
         </TimeLabel>
-
-        {/* <TagLabel>
-          Add a Tag (optional)
-          <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
-        </TagLabel> */}
 
         <LastTalkedLabel>
           Last Time We Have Spoken

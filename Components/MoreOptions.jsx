@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 import ReactModal from "react-modal";
 import propTypes from "prop-types";
@@ -14,7 +14,6 @@ import {
 import ErrorWarning from "./ErrorWarning";
 import { BasicButton, MinimalButton } from "./Common/StyledButton";
 import { H5, P1 } from "./Common/StyledText";
-import TagSelect from "./TagSelect";
 import { useMedia } from "react-use";
 
 const MoreOptionsButton = styled(MinimalButton)``;
@@ -119,9 +118,6 @@ const TimeInput = styled(BasicInput)`
 
   border-radius: 8px;
 `;
-// const TagLabel = styled(BasicLabel)`
-//   grid-area: tag;
-// `;
 
 const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
@@ -227,7 +223,6 @@ export default function MoreOptions({
   time,
   timeFromLastTalk,
   contactId,
-  // tag,
 }) {
   const { currentUser } = useAuth();
   const Theme = useTheme();
@@ -236,9 +231,16 @@ export default function MoreOptions({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  // const [tagValue, setTagValue] = useState(tag);
   const [specificReminder, setSpecificReminder] = useState(timeFromLastTalk);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
 
   async function updateContactOnSubmit(e) {
     e.preventDefault();
@@ -282,6 +284,7 @@ export default function MoreOptions({
     }
     if (result === "bad") {
       setError("contact already in list");
+      setContactName(name);
     } else {
       setIsModalOpen(false);
     }
@@ -369,10 +372,6 @@ export default function MoreOptions({
                 />
               </LastTalkedLabel>
 
-              {/* <TagLabel>
-                Change Tag:
-                <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
-              </TagLabel> */}
               <EditSubmitInput
                 disabled={contactName === ""}
                 type="submit"
