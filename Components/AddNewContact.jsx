@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
@@ -6,14 +6,13 @@ import ErrorWrapper from "./ErrorWarning";
 import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
 import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
 import DatePickerComponent from "./DatePickerComponent";
-import TagSelect from "./TagSelect";
 
 const AddContactForm = styled(BasicForm)`
   display: grid;
   padding: 15px;
   gap: 5px;
   grid-template-areas:
-    "name howMuchTime tag"
+    "name howMuchTime howMuchTime"
     "lastTalked notes notes"
     "submit submit submit";
 
@@ -21,12 +20,11 @@ const AddContactForm = styled(BasicForm)`
 
   @media (${({ theme }) => theme.devices.break1}) {
     padding: 10px 5px;
-    /* width: 95vw; */
+    width: 85vw;
     gap: 0;
-
     grid-template-areas:
-      "name howMuchTime "
-      "tag lastTalked "
+      "name howMuchTime"
+      "lastTalked lastTalked"
       "notes notes"
       "submit submit";
   }
@@ -35,7 +33,7 @@ const AddContactForm = styled(BasicForm)`
 const NameLabel = styled(BasicLabel)`
   grid-area: name;
   @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 120px;
+    /* max-width: 120px; */
   }
 `;
 const NameInput = styled(BasicInput)`
@@ -57,7 +55,7 @@ const TimeLabel = styled(BasicLabel)`
 
   @media (${({ theme }) => theme.devices.break1}) {
     &::after {
-      top: 50px;
+      /* top: 50px; */
     }
   }
 `;
@@ -66,12 +64,6 @@ const TimeInput = styled(BasicInput)`
   border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
-`;
-const TagLabel = styled(BasicLabel)`
-  grid-area: tag;
-  @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 120px;
-  }
 `;
 
 const LastTalkedLabel = styled.div`
@@ -82,14 +74,12 @@ const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
   align-items: center;
   @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 120px;
   }
 `;
 
 const NotesLabel = styled(BasicLabel)`
   grid-area: notes;
   @media (${({ theme }) => theme.devices.break1}) {
-    /* max-width: 120px; */
   }
 `;
 
@@ -124,7 +114,15 @@ export default function AddNewContact() {
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState(false);
   const [note, setNote] = useState("");
-  const [tagValue, setTagValue] = useState({ value: null, label: "Select" });
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        console.log("2");
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
 
   function nameChangeHandler(e) {
     setName(e.target.value);
@@ -147,7 +145,6 @@ export default function AddNewContact() {
       time: +timeRef.current.value,
       timeFromLastTalk: startDate.getTime(),
       notesArray: notesArray,
-      tag: tagValue.value,
     };
 
     const result = await addContactToFirestore(
@@ -157,8 +154,8 @@ export default function AddNewContact() {
     );
     if (result === "bad") {
       setError("contact already in list");
+      setName("");
     } else {
-      setTagValue({ value: null, label: "Select" });
       setNote("");
       setStartDate(new Date());
       setName("");
@@ -192,11 +189,6 @@ export default function AddNewContact() {
             defaultValue={3}
           />
         </TimeLabel>
-
-        <TagLabel>
-          Add a Tag (optional)
-          <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
-        </TagLabel>
 
         <LastTalkedLabel>
           Last Time We Have Spoken

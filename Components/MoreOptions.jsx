@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 import ReactModal from "react-modal";
 import propTypes from "prop-types";
@@ -14,7 +14,6 @@ import {
 import ErrorWarning from "./ErrorWarning";
 import { BasicButton, MinimalButton } from "./Common/StyledButton";
 import { H5, P1 } from "./Common/StyledText";
-import TagSelect from "./TagSelect";
 import { useMedia } from "react-use";
 
 const MoreOptionsButton = styled(MinimalButton)``;
@@ -76,7 +75,7 @@ const EditContactForm = styled(BasicForm)`
   border-right: 1px solid rgba(0, 0, 0, 0.3);
   grid-template-areas:
     "name howMuchTime"
-    "lastTalked tag"
+    "lastTalked lastTalked"
     "submit submit";
 
   @media (${({ theme }) => theme.devices.break1}) {
@@ -88,7 +87,7 @@ const EditContactForm = styled(BasicForm)`
     grid-template-areas:
       "name name"
       "howMuchTime howMuchTime"
-      "lastTalked tag"
+      "lastTalked lastTalked"
       "submit submit";
   }
 `;
@@ -118,9 +117,6 @@ const TimeInput = styled(BasicInput)`
   border: 1px solid ${({ theme }) => theme.grey2};
 
   border-radius: 8px;
-`;
-const TagLabel = styled(BasicLabel)`
-  grid-area: tag;
 `;
 
 const LastTalkedLabel = styled.div`
@@ -227,35 +223,44 @@ export default function MoreOptions({
   time,
   timeFromLastTalk,
   contactId,
-  tag,
 }) {
   const { currentUser } = useAuth();
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-
-  const [startDate, setStartDate] = useState(timeFromLastTalk);
+  const [lastTalk, setLastTalk] = useState(timeFromLastTalk);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  const [tagValue, setTagValue] = useState(tag);
   const [specificReminder, setSpecificReminder] = useState(timeFromLastTalk);
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
+
   async function updateContactOnSubmit(e) {
     e.preventDefault();
+
+    let timeFromLastTalkVar = lastTalk;
+
+    if (typeof lastTalk !== "number") {
+      timeFromLastTalkVar = lastTalk.getTime();
+    }
 
     const oldContactData = {
       name,
       time,
       timeFromLastTalk,
       contactId,
-      tag,
     };
-
     const newContactData = {
       name: contactName,
       time: +contactTime,
-      timeFromLastTalk: timeFromLastTalk,
+      timeFromLastTalk: timeFromLastTalkVar,
     };
 
     let result;
@@ -264,7 +269,8 @@ export default function MoreOptions({
 
     if (
       oldContactData.name == newContactData.name &&
-      oldContactData.time == newContactData.time
+      oldContactData.time == newContactData.time &&
+      oldContactData.timeFromLastTalk == newContactData.timeFromLastTalk
     ) {
       return setIsModalOpen(false);
     } else {
@@ -278,6 +284,7 @@ export default function MoreOptions({
     }
     if (result === "bad") {
       setError("contact already in list");
+      setContactName(name);
     } else {
       setIsModalOpen(false);
     }
@@ -306,6 +313,10 @@ export default function MoreOptions({
     if (error) {
       setError(false);
     }
+  }
+
+  function calenderFunction() {
+    setError("coming soon");
   }
 
   return (
@@ -346,7 +357,7 @@ export default function MoreOptions({
                 />
               </NameLabel>
               <TimeLabel>
-                Talk Every X Days:
+                Change Talk Every X Days:
                 <TimeInput
                   type="number"
                   name="time"
@@ -358,17 +369,13 @@ export default function MoreOptions({
                 />
               </TimeLabel>
               <LastTalkedLabel>
-                Last Time We Have Spoken
+                Change Last Time We Have Spoken
                 <DatePickerComponent
-                  setStartDate={setStartDate}
-                  startDate={startDate}
+                  setStartDate={setLastTalk}
+                  startDate={lastTalk}
                 />
               </LastTalkedLabel>
 
-              <TagLabel>
-                Change Tag:
-                <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
-              </TagLabel>
               <EditSubmitInput
                 disabled={contactName === ""}
                 type="submit"
@@ -397,7 +404,7 @@ export default function MoreOptions({
                 />
               </CalenderDatePickerWrapper>
             </SpecificTimeWrapper>
-            <SaveToGoogleCalender>
+            <SaveToGoogleCalender onClick={calenderFunction}>
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>

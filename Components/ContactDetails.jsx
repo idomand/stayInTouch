@@ -47,7 +47,6 @@ export default function ContactDetails() {
                 time={element.time}
                 timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
-                tag={element.tag}
               />
             );
           })}

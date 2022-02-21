@@ -37,7 +37,9 @@ const StyledDatePicker = styled(({ className, ...props }) => (
 
   @media (${({ theme }) => theme.devices.break1}) {
     .react-datepicker__input-container input {
-      max-width: 100%;
+      /* max-width: 100%; */
+      /* border: solid red; */
+      width: 100%;
     }
   }
 `;
@@ -52,7 +54,7 @@ export default function DatePickerComponent({ setStartDate, startDate }) {
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
         selected={startDate}
-        onChange={(date) => setStartDate(date)}
+        onChange={setStartDate}
         popperPlacement="auto"
       />
     </>
