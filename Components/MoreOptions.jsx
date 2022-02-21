@@ -315,6 +315,10 @@ export default function MoreOptions({
     }
   }
 
+  function calenderFunction() {
+    setError("coming soon");
+  }
+
   return (
     <>
       <MoreOptionsButton onClick={onOpenModal}>More Options</MoreOptionsButton>
@@ -353,7 +357,7 @@ export default function MoreOptions({
                 />
               </NameLabel>
               <TimeLabel>
-                Talk Every X Days:
+                Change Talk Every X Days:
                 <TimeInput
                   type="number"
                   name="time"
@@ -365,7 +369,7 @@ export default function MoreOptions({
                 />
               </TimeLabel>
               <LastTalkedLabel>
-                Last Time We Have Spoken
+                Change Last Time We Have Spoken
                 <DatePickerComponent
                   setStartDate={setLastTalk}
                   startDate={lastTalk}
@@ -400,7 +404,7 @@ export default function MoreOptions({
                 />
               </CalenderDatePickerWrapper>
             </SpecificTimeWrapper>
-            <SaveToGoogleCalender>
+            <SaveToGoogleCalender onClick={calenderFunction}>
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>
