@@ -52,7 +52,7 @@ export default function DatePickerComponent({ setStartDate, startDate }) {
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
         selected={startDate}
-        onChange={(date) => setStartDate(date)}
+        onChange={setStartDate}
         popperPlacement="auto"
       />
     </>

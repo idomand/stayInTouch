@@ -186,6 +186,8 @@ export default function ContactItem({
   tag,
 }) {
   const { currentUser } = useAuth();
+  const currantTime = new Date().getTime();
+
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
 
@@ -199,7 +201,6 @@ export default function ContactItem({
       time: time,
       timeFromLastTalk: timeFromLastTalk,
     };
-
     const newContactData = {
       name: name,
       time: time,
@@ -213,8 +214,6 @@ export default function ContactItem({
       newContactData
     );
   }
-
-  const currantTime = new Date().getTime();
 
   let lastTalkedToResponse;
   let isTalkingStatusOK;
@@ -236,20 +235,6 @@ export default function ContactItem({
       </DateValue>
     );
   }
-
-  // if (currantTime - timeFromLastTalk < 0) {
-  //   lastTalkedToResponse = (
-  //     <DateValue statusColor={isTalkingStatusOK}>
-  //       Last talk was today!
-  //     </DateValue>
-  //   );
-  // } else {
-  //   lastTalkedToResponse = (
-  //     <DateValue statusColor={isTalkingStatusOK}>
-  //       {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
-  //     </DateValue>
-  //   );
-  // }
 
   let nextTalkInDays =
     time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
