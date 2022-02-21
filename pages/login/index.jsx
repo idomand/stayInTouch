@@ -98,17 +98,17 @@ export default function Login() {
           <H1>About the App</H1>
           <LoginPageText>
             Sign in to your Google Account to create a secure user that can
-            access Google Cloud's database.
+            access Google Cloud database.
           </LoginPageText>
           <LoginPageText>
-            Inside, you'll be able to create personal reminders for talking to
+            Inside, you will be able to create personal reminders for talking to
             friends and family. The About section of the app contains detailed
             information about using the app, as well as a live demonstration.
           </LoginPageText>
           <LoginPageText>
             The app does not save or use any personal data, except to interact
             with the private database. The app would never send you spam emails
-            or pass any information on to third parties.{" "}
+            or pass any information on to third parties.
           </LoginPageText>
         </AboutSubSection>
       </LoginPageWrapper>
