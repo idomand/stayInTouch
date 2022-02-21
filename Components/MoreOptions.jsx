@@ -76,7 +76,7 @@ const EditContactForm = styled(BasicForm)`
   border-right: 1px solid rgba(0, 0, 0, 0.3);
   grid-template-areas:
     "name howMuchTime"
-    "lastTalked tag"
+    "lastTalked lastTalked"
     "submit submit";
 
   @media (${({ theme }) => theme.devices.break1}) {
@@ -88,7 +88,7 @@ const EditContactForm = styled(BasicForm)`
     grid-template-areas:
       "name name"
       "howMuchTime howMuchTime"
-      "lastTalked tag"
+      "lastTalked lastTalked"
       "submit submit";
   }
 `;
@@ -119,9 +119,9 @@ const TimeInput = styled(BasicInput)`
 
   border-radius: 8px;
 `;
-const TagLabel = styled(BasicLabel)`
-  grid-area: tag;
-`;
+// const TagLabel = styled(BasicLabel)`
+//   grid-area: tag;
+// `;
 
 const LastTalkedLabel = styled.div`
   grid-area: lastTalked;
@@ -227,7 +227,7 @@ export default function MoreOptions({
   time,
   timeFromLastTalk,
   contactId,
-  tag,
+  // tag,
 }) {
   const { currentUser } = useAuth();
   const Theme = useTheme();
@@ -236,7 +236,7 @@ export default function MoreOptions({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  const [tagValue, setTagValue] = useState(tag);
+  // const [tagValue, setTagValue] = useState(tag);
   const [specificReminder, setSpecificReminder] = useState(timeFromLastTalk);
   const [error, setError] = useState(false);
 
@@ -369,10 +369,10 @@ export default function MoreOptions({
                 />
               </LastTalkedLabel>
 
-              <TagLabel>
+              {/* <TagLabel>
                 Change Tag:
                 <TagSelect tagValue={tagValue} setTagValue={setTagValue} />
-              </TagLabel>
+              </TagLabel> */}
               <EditSubmitInput
                 disabled={contactName === ""}
                 type="submit"

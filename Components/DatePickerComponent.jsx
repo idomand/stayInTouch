@@ -37,7 +37,9 @@ const StyledDatePicker = styled(({ className, ...props }) => (
 
   @media (${({ theme }) => theme.devices.break1}) {
     .react-datepicker__input-container input {
-      max-width: 100%;
+      /* max-width: 100%; */
+      /* border: solid red; */
+      width: 100%;
     }
   }
 `;

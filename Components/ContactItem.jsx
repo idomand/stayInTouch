@@ -73,7 +73,7 @@ const ContactDetailsSubDiv = styled.div`
   justify-content: center;
 `;
 const NameContainer = styled.span`
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-weight: 500;
   font-size: ${({ theme }) => theme.typeScale.header5};
   line-height: 21px;
@@ -88,16 +88,16 @@ const NameContainer = styled.span`
     margin-bottom: 0px;
   }
 `;
-const TagContainer = styled.span`
-  color: ${({ theme }) => theme.blue2};
-  font-weight: 400;
-  font-size: ${({ theme }) => theme.typeScale.p_large};
-  line-height: 21px;
+// const TagContainer = styled.span`
+//   color: ${({ theme }) => theme.blue2};
+//   font-weight: 400;
+//   font-size: ${({ theme }) => theme.typeScale.p_large};
+//   line-height: 21px;
 
-  @media (${({ theme }) => theme.devices.break1}) {
-    text-align: center;
-  }
-`;
+//   @media (${({ theme }) => theme.devices.break1}) {
+//     text-align: center;
+//   }
+// `;
 
 const ContactImage = styled.img`
   margin-right: 15px;
@@ -266,7 +266,7 @@ export default function ContactItem({
           <ContactImage src="/default_image.svg" />
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
-            <TagContainer>{tag === null ? "" : tag}</TagContainer>
+            {/* <TagContainer>{tag === null ? "" : tag}</TagContainer> */}
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
