@@ -89,6 +89,7 @@ export const NameLabel = styled(BasicLabel)`
 `;
 export const NameInput = styled(BasicInput)`
   border: 1px solid ${({ theme }) => theme.grey2};
+  padding: 5px;
 `;
 
 export const TimeLabel = styled(BasicLabel)`
