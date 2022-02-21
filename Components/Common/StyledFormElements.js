@@ -34,6 +34,9 @@ export const BasicInput = styled.input`
   border-radius: 10px;
   border: none;
   margin-top: 5px;
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.blue1};
+  }
 `;
 
 export const BasicLabel = styled.label`

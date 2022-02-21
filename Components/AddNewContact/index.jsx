@@ -117,11 +117,7 @@ export default function AddNewContact() {
           />
         </NotesLabel>
 
-        <AddSubmitInput
-          disabled={name === ""}
-          type="submit"
-          value="Add contact"
-        />
+        <AddSubmitInput type="submit" value="Add contact" />
       </AddContactForm>
       {error && <ErrorWrapper errorMessage={error} />}
     </>
