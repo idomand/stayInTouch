@@ -14,6 +14,7 @@ const LoginPageWrapper = styled.section`
   margin: 40px;
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;
+    margin: 20px;
   }
 `;
 const LoginPageSubSection = styled.div`
@@ -26,13 +27,25 @@ const LoginPageSubSection = styled.div`
   height: 60vh;
   @media (${({ theme }) => theme.devices.break1}) {
     height: auto;
+    margin: 15px;
   }
 `;
-const LoginSubSection = styled(LoginPageSubSection)``;
+const LoginSubSection = styled(LoginPageSubSection)`
+  width: 60vw;
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
+`;
 const AboutSubSection = styled(LoginPageSubSection)``;
 
+const LoginPageText = styled(P2)`
+  line-height: 20px;
+  margin-top: 7px;
+  text-transform: capitalize;
+`;
+
 const SignInButton = styled(BasicButton)`
-  margin-top: 20px;
+  margin: 20px auto 0;
   transition: 0.3s all;
   display: flex;
   justify-content: center;
@@ -49,6 +62,8 @@ const SignInButton = styled(BasicButton)`
     border: solid;
   }
   @media (${({ theme }) => theme.devices.break1}) {
+    max-width: max-content;
+    margin: 10px auto 0;
   }
 `;
 
@@ -80,18 +95,21 @@ export default function Login() {
           </SignInButton>
         </LoginSubSection>
         <AboutSubSection>
-          <H1>About the app</H1>
-          <P2>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-            accusamus quasi
-          </P2>
-          <P2>
-            voluptas similique voluptates consequuntur asperiores corporis,{" "}
-          </P2>
-          <P2>
-            sed, quod assumenda ut ducimus tempore facilis reiciendis autem
-            dolorum nisi accusantium rem?
-          </P2>
+          <H1>About the App</H1>
+          <LoginPageText>
+            Sign in to your Google Account to create a secure user that can
+            access Google Cloud's database.
+          </LoginPageText>
+          <LoginPageText>
+            Inside, you'll be able to create personal reminders for talking to
+            friends and family. The About section of the app contains detailed
+            information about using the app, as well as a live demonstration.
+          </LoginPageText>
+          <LoginPageText>
+            The app does not save or use any personal data, except to interact
+            with the private database. The app would never send you spam emails
+            or pass any information on to third parties.{" "}
+          </LoginPageText>
         </AboutSubSection>
       </LoginPageWrapper>
     </Layout>
