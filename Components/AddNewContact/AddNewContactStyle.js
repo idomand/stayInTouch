@@ -79,10 +79,12 @@ export const NotesLabel = styled(BasicLabel)`
 
 export const NotesInput = styled.textarea`
   border: 1px solid ${({ theme }) => theme.grey2};
-
   border-radius: 8px;
   height: 30px;
   background-color: ${({ theme }) => theme.grey1};
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.blue1};
+  }
 `;
 
 export const AddSubmitInput = styled(InputSubmit)`
