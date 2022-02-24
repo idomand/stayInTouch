@@ -34,7 +34,7 @@ export const BasicButton = styled(ButtonPrototype).attrs((props) => {
   font-weight: 500;
   padding: 5px 10px;
   &:hover,
-  &:focus {
+  &:active {
     background: ${({ theme }) => theme.blue3};
     border: 1.3px solid ${({ theme }) => theme.blue1};
     color: ${({ theme }) => theme.blue1};
