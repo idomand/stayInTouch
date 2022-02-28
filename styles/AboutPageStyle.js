@@ -26,12 +26,12 @@ export const AboutSubSection = styled.div`
   padding: 25px;
   text-align: justify;
   text-transform: capitalize;
+  width: 100%;
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
 
 export const IntroductionSection = styled(AboutSubSection)``;
-
 export const HowToUseSection = styled(AboutSubSection)``;
 export const AboutTheSite = styled(AboutSubSection)``;
 export const AboutTheCreator = styled(AboutSubSection)``;
