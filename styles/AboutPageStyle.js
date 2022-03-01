@@ -13,7 +13,6 @@ export const AboutPageWrapper = styled.section`
 
 export const DemoButtonWrapper = styled.div`
   display: flex;
-  /* justify-content: center; */
 `;
 
 export const AboutHeader = styled(H1)``;
