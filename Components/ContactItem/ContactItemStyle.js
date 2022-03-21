@@ -86,6 +86,7 @@ export const ContactImage = styled.img`
 export const ContactDatesWrapper = styled.div`
   grid-area: contactDates;
   display: flex;
+  justify-content: center;
 
   @media (${({ theme }) => theme.devices.break1}) {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
