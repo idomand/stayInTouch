@@ -23,7 +23,26 @@ import {
 } from "./NotesStyle";
 import { H5 } from "../Common/StyledText";
 
-export default function Notes(props) {
+type Props = {
+  contactId: string;
+  name: string;
+  time: number;
+  timeFromLastTalk: number;
+  notesArray: any;
+  notesArrayData: any;
+};
+
+/* 
+contactId: "4qAJBxVyHDFYQPbjmGNu"
+name: "aaa"
+notesArray: [{…}]
+notesArrayData: [{…}]
+time: 3
+timeFromLastTalk: 1649156957442
+*/
+
+export default function Notes(props: Props) {
+  console.log("props :>> ", props);
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
