@@ -19,7 +19,7 @@ export default function NoteItem({ id, data, contactId, switchToEditMood }) {
     deleteNote(currentUser.uid, currentUser.email, contactId, id);
   }
 
-  function editNote() {
+  function editNote(data: any, id: any) {
     switchToEditMood(data, id);
   }
 
