@@ -27,7 +27,13 @@ export const NavbarText = styled(H2)`
   margin-left: 40px;
 `;
 
-export const LoginButton = styled.button`
+interface LoginButtonProps {
+  as: string;
+  isActive: boolean;
+  href: string;
+}
+
+export const LoginButton = styled.button<LoginButtonProps>`
   font-size: ${({ theme }) => theme.typeScale.p_small};
   font-weight: 500;
   background: ${({ theme }) => theme.blue1};
@@ -40,7 +46,6 @@ export const LoginButton = styled.button`
   &:hover,
   &:focus {
     background: ${({ theme }) => theme.blue3};
-
     border: 1.3px solid ${({ theme }) => theme.blue1};
     color: ${({ theme }) => theme.blue1};
   }
