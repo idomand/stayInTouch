@@ -17,7 +17,7 @@ export const HowToUseLink = styled(LinkPrototype)`
   &:hover,
   &:focus {
     color: ${({ theme }) => theme.black};
-    background-color: ${({ theme }) => theme.brown1};
+    background-color: ${({ theme }) => theme.green3};
     &:after {
       content: "How to Use";
       font-size: ${({ theme }) => theme.typeScale.p_small};
