@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.43",
+    "@types/react-datepicker": "^4.3.4",
     "@types/react-modal": "^3.13.1",
     "@types/styled-components": "^5.1.24",
     "eslint": "8.6.0",

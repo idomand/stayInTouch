@@ -2,7 +2,17 @@ import React from "react";
 import { addDays } from "date-fns";
 import { Calendar, Popper, StyledDatePicker } from "./DatePickerComponentStyle";
 
-export default function DatePickerComponent({ setStartDate, startDate }) {
+interface DatePickerComponentProps {
+  setStartDate: any;
+  startDate: Date;
+}
+
+export default function DatePickerComponent({
+  setStartDate,
+  startDate,
+}: DatePickerComponentProps) {
+  console.log("setStartDate :>> ", setStartDate);
+  console.log("typeof setStartDate :>> ", typeof setStartDate);
   return (
     <>
       <StyledDatePicker
