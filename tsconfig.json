@@ -1,3 +1,4 @@
+// !original
 {
   "compilerOptions": {
     "target": "es5",
@@ -12,34 +13,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    // "incremental": true,
-    "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
-
-// !original
-// {
-//   "compilerOptions": {
-//     "target": "es5",
-//     "lib": ["dom", "dom.iterable", "esnext"],
-//     "allowJs": true,
-//     "skipLibCheck": true,
-//     "strict": true,
-//     "forceConsistentCasingInFileNames": true,
-//     "noEmit": true,
-//     "esModuleInterop": true,
-//     "module": "esnext",
-//     "moduleResolution": "node",
-//     "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     "incremental": true,
-//     "jsx": "preserve"
-//   },
-//   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-//   "exclude": ["node_modules"]
-// }

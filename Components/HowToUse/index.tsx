@@ -5,6 +5,7 @@ import { HowToUseLink } from "./HowToUseStyle";
 
 export default function HowToUse() {
   const Theme = useTheme();
+
   const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   return (

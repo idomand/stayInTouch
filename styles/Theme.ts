@@ -1,6 +1,7 @@
+import { DefaultTheme } from "styled-components";
 import { typeScale } from "./typography";
 
-export const defaultTheme = {
+export const defaultTheme: DefaultTheme = {
   black: "#000000",
   white: "#ffffff",
   grey1: "#D3D3D3",
@@ -12,10 +13,8 @@ export const defaultTheme = {
   green1: "#02CF60",
   green2: "#00AE50",
   green3: " rgba(2, 207, 96, 0.1)",
-
   red1: "#FF0000",
   red2: "#FFD8D8",
-
   typeScale,
   devices: {
     break1: `max-width: 550px`,
