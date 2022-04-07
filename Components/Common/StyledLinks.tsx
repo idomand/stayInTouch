@@ -1,7 +1,21 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-export const LinkPrototype = ({ as, children, className, href, target }) => (
+interface LinkPrototypeProps {
+  as?: any;
+  children?: any;
+  className?: any;
+  href?: any;
+  target?: any;
+}
+
+export const LinkPrototype = ({
+  as,
+  children,
+  className,
+  href,
+  target,
+}: LinkPrototypeProps) => (
   <Link href={href} as={as}>
     <a target={target} className={className}>
       {children}
@@ -25,7 +39,11 @@ export const BasicLink = styled(LinkPrototype).attrs(() => {
   }
 `;
 
-export const NavLink = styled(LinkPrototype)`
+type NavLinkProps = {
+  isActive: boolean; // making this props optional
+};
+
+export const NavLink = styled(LinkPrototype)<NavLinkProps>`
   align-items: center;
   transition: all 0.3s;
   font-weight: 500;
