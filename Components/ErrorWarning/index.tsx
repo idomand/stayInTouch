@@ -1,7 +1,11 @@
 import React from "react";
 import { ErrorLogo, ErrorText, ErrorWrapper } from "./ErrorWarningStyle";
 
-export default function ErrorWarning({ errorMessage }) {
+interface ErrorWarningProps {
+  errorMessage: string;
+}
+
+export default function ErrorWarning({ errorMessage }: ErrorWarningProps) {
   return (
     <ErrorWrapper>
       <ErrorText>
