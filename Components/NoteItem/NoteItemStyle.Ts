@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { H4 } from "../Common/StyledText";
 import { MinimalButton } from "../Common/StyledButton";
 
 export const NoteItemWrapper = styled.li`

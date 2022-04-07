@@ -12,25 +12,35 @@ import {
   NoteItemWrapper,
 } from "./NoteItemStyle";
 
-export default function NoteItem({ id, data, contactId, switchToEditMood }) {
+type Props = {
+  noteId: number;
+  data: string;
+  contactId: string;
+  switchToEditMood: any;
+};
+
+export default function NoteItem({
+  noteId,
+  data,
+  contactId,
+  switchToEditMood,
+}: Props) {
   const { currentUser } = useAuth();
 
   function deleteNoteFunc() {
-    deleteNote(currentUser.uid, currentUser.email, contactId, id);
-  }
-
-  function editNote(data: any, id: any) {
-    switchToEditMood(data, id);
+    deleteNote(currentUser.uid, currentUser.email, contactId, noteId);
   }
 
   return (
     <NoteItemWrapper>
       <NoteItemHeaderWrapper>
         <NoteItemHeaderText>
-          <H4>Note Number: #{id}</H4>
+          <H4>Note Number: #{noteId}</H4>
         </NoteItemHeaderText>
         <NoteItemButtonWrapper>
-          <EditNoteButton onClick={editNote}>Edit</EditNoteButton>
+          <EditNoteButton onClick={() => switchToEditMood(data, noteId)}>
+            Edit
+          </EditNoteButton>
           <DeleteNoteButton onClick={deleteNoteFunc}>Delete</DeleteNoteButton>
         </NoteItemButtonWrapper>
       </NoteItemHeaderWrapper>

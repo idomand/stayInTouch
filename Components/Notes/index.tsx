@@ -32,32 +32,27 @@ type Props = {
   notesArrayData: any;
 };
 
-/* 
-contactId: "4qAJBxVyHDFYQPbjmGNu"
-name: "aaa"
-notesArray: [{…}]
-notesArrayData: [{…}]
-time: 3
-timeFromLastTalk: 1649156957442
-*/
-
 export default function Notes(props: Props) {
-  console.log("props :>> ", props);
   const { currentUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
-  const [editNoteId, setEditNoteId] = useState(null);
+  const [editNoteId, setEditNoteId] = useState<null | number>(null);
+
   function onCloseModal() {
     setIsModalOpen(false);
   }
 
-  function onOpenModal(e) {
+  function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
-    e.currentTarget.blur();
+    (e.target as HTMLButtonElement).blur();
   }
 
-  function switchToEditMood(oldNoteData, OldNoteId) {
+  function onSubmitFunc(e: React.FormEvent<HTMLFormElement>) {
+    isEditMood ? updatedNoteFunc(e) : addNewNoteToArray(e);
+  }
+
+  function switchToEditMood(oldNoteData: string, OldNoteId: number) {
     setIsEditMood(true);
     setNoteInputValue(oldNoteData);
     setEditNoteId(OldNoteId);
@@ -67,8 +62,7 @@ export default function Notes(props: Props) {
     setIsEditMood(false);
     setNoteInputValue("");
   }
-
-  async function updatedNoteFunc(e) {
+  async function updatedNoteFunc(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     await updateNote(
       currentUser.uid,
@@ -79,10 +73,10 @@ export default function Notes(props: Props) {
     );
     setIsEditMood(false);
     setNoteInputValue("");
-    e.target.blur();
+    (e.target as HTMLFormElement).blur();
   }
 
-  async function addNewNoteToArray(e) {
+  async function addNewNoteToArray(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     let biggestId;
     if (props.notesArray.length === 0) {
@@ -108,7 +102,7 @@ export default function Notes(props: Props) {
       newContactData
     );
     setNoteInputValue("");
-    e.target.blur();
+    (e.target as HTMLFormElement).blur();
   }
 
   return (
@@ -143,14 +137,12 @@ export default function Notes(props: Props) {
           <NotesHeader>
             <ContactNameWrapper>
               <H5>Contact Notes: </H5>
-              <ContactNameText>{name}</ContactNameText>
+              <ContactNameText>{props.name}</ContactNameText>
             </ContactNameWrapper>
             <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
           </NotesHeader>
           <AddNewNoteWrapper>
-            <AddNewNoteForm
-              onSubmit={isEditMood ? updatedNoteFunc : addNewNoteToArray}
-            >
+            <AddNewNoteForm onSubmit={onSubmitFunc}>
               <NewNoteInput
                 required
                 placeholder="Enter Note..."
@@ -159,7 +151,6 @@ export default function Notes(props: Props) {
                   setNoteInputValue(e.target.value);
                 }}
               />
-
               <NotesButtonsWrapper>
                 {isEditMood && (
                   <ChancelEditButton onClick={cancelEdit}>
@@ -177,12 +168,12 @@ export default function Notes(props: Props) {
             <NotesList>
               {props.notesArray &&
                 props.notesArray.length &&
-                props.notesArray.map((note) => {
+                props.notesArray.map((note: { data: string; id: number }) => {
                   return (
                     <NoteItem
                       key={note.id}
                       data={note.data}
-                      id={note.id}
+                      noteId={note.id}
                       contactId={props.contactId}
                       switchToEditMood={switchToEditMood}
                     />
