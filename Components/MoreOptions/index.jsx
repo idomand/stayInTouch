@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
-import propTypes from "prop-types";
 import DatePickerComponent from "../DatePickerComponent";
 import { updateContact } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
@@ -228,13 +227,6 @@ export default function MoreOptions({
     </>
   );
 }
-
-MoreOptions.propTypes = {
-  name: propTypes.string,
-  time: propTypes.number,
-  timeFromLastTalk: propTypes.number,
-  contactId: propTypes.string,
-};
 
 //?========================
 //* The styles of the Modal are in the global.css file

@@ -1,5 +1,4 @@
 import React from "react";
-import propTypes from "prop-types";
 import { useTheme } from "styled-components";
 import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
@@ -159,10 +158,3 @@ export default function ContactItem({
     </ContactItemContainer>
   );
 }
-
-ContactItem.propTypes = {
-  name: propTypes.string,
-  time: propTypes.number,
-  timeFromLastTalk: propTypes.number,
-  contactId: propTypes.string,
-};

@@ -1,20 +1,18 @@
 import React from "react";
 import NavBar from "../NavBar";
 import ScrollButtonWrapper from "../ScrollToTopButton";
-import propTypes from "prop-types";
 import { LayoutWrapper } from "./LayoutStyle";
 
-export default function Layout({ children }) {
+interface LayoutProps {
+  children: React.FC;
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <LayoutWrapper>
       <NavBar />
-
       {children}
       <ScrollButtonWrapper />
     </LayoutWrapper>
   );
 }
-
-LayoutWrapper.propTypes = {
-  children: propTypes.any,
-};

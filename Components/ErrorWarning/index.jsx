@@ -1,5 +1,4 @@
 import React from "react";
-import propTypes from "prop-types";
 import { ErrorLogo, ErrorText, ErrorWrapper } from "./ErrorWarningStyle";
 
 export default function ErrorWarning({ errorMessage }) {
@@ -12,7 +11,3 @@ export default function ErrorWarning({ errorMessage }) {
     </ErrorWrapper>
   );
 }
-
-ErrorWarning.propTypes = {
-  errorMessage: propTypes.string,
-};
