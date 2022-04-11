@@ -29,7 +29,7 @@ export const BasicForm = styled.form`
 export const BasicInput = styled.input`
   cursor: pointer;
   background-color: Lightgrey;
-  font-size: ${({ theme }) => theme.p_normal};
+  font-size: ${({ theme }) => theme.typeScale.p_normal};
   height: 30px;
   border-radius: 10px;
   border: none;
