@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import DatePickerComponent from "../DatePickerComponent";
-import { updateContact } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
-import ErrorWarning from "../ErrorWarning";
 import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
+import { updateContact } from "../../lib/Firebase";
+
 import {
   CalendarHeader,
   CalendarSubSection,
   CalenderDatePickerWrapper,
   CalenderLogo,
   CalenderText,
-  CloseModalButton,
+  MoreOptionsButton,
+  MoreOptionsWrapper,
+  SaveToGoogleCalender,
+  SpecificTimeWrapper,
   ContactNameHeader,
   EditContactForm,
   EditHeader,
@@ -20,32 +23,39 @@ import {
   EditSubmitInput,
   HeaderName,
   LastTalkedLabel,
-  MoreOptionsButton,
-  MoreOptionsWrapper,
   NameInput,
   NameLabel,
-  SaveToGoogleCalender,
-  SpecificTimeWrapper,
   TimeInput,
   TimeLabel,
+  CloseModalButton,
 } from "./MoreOptionsStyle";
 import { H5 } from "../Common/StyledText";
+import ErrorWarning from "../ErrorWarning";
+
+interface moreOptionsProps {
+  name: string;
+  time: number;
+  timeFromLastTalk: number;
+  contactId: string;
+}
 
 export default function MoreOptions({
   name,
   time,
   timeFromLastTalk,
   contactId,
-}) {
+}: moreOptionsProps) {
   const { currentUser } = useAuth();
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-  const [lastTalk, setLastTalk] = useState(timeFromLastTalk);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [lastTalk, setLastTalk] = useState<number | Date>(timeFromLastTalk);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  const [specificReminder, setSpecificReminder] = useState(timeFromLastTalk);
-  const [error, setError] = useState(false);
+  const [specificReminder, setSpecificReminder] = useState<number | Date>(
+    timeFromLastTalk
+  );
+  const [error, setError] = useState<string | boolean>(false);
 
   useEffect(() => {
     if (error) {
@@ -55,12 +65,11 @@ export default function MoreOptions({
     }
   }, [error]);
 
-  async function updateContactOnSubmit(e) {
+  async function updateContactOnSubmit(e: React.FocusEvent<HTMLFormElement>) {
     e.preventDefault();
-
     let timeFromLastTalkVar = lastTalk;
 
-    if (typeof lastTalk !== "number") {
+    if (lastTalk instanceof Date) {
       timeFromLastTalkVar = lastTalk.getTime();
     }
 
@@ -103,18 +112,19 @@ export default function MoreOptions({
     }
   }
 
-  function timeChangeHandler(e) {
-    setContactTime(e.target.value);
+  function timeChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setContactTime(+e.target.value);
   }
 
-  function nameChangeHandler(e) {
+  function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setContactName(e.target.value);
 
     if (error) {
       setError(false);
     }
   }
-  function onOpenModal(e) {
+
+  function onOpenModal(e: React.MouseEvent<HTMLElement>) {
     setIsModalOpen(true);
     e.currentTarget.blur();
   }
@@ -197,6 +207,7 @@ export default function MoreOptions({
               {error && <ErrorWarning errorMessage={error} />}
             </EditContactForm>
           </EditingSubSection>
+
           <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>

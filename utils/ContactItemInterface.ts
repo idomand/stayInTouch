@@ -3,6 +3,6 @@ export interface ContactItemInterface {
   contactId: string;
   name: string;
   time: number;
-  timeFromLastTalk: number;
+  timeFromLastTalk: number | Date;
   timeUntilNextTalk: number;
 }
