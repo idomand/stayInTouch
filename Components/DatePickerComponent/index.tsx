@@ -4,7 +4,7 @@ import { Calendar, Popper, StyledDatePicker } from "./DatePickerComponentStyle";
 
 interface DatePickerComponentProps {
   setStartDate: any;
-  startDate: Date;
+  startDate: Date | number;
 }
 
 export default function DatePickerComponent({
