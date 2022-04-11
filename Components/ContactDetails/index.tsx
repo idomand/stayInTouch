@@ -3,9 +3,12 @@ import ContactItem from "../ContactItem";
 import useSnapshotData from "../../utils/hooks/useSnapshotData";
 import { ContactList, NoContactsWrapper } from "./ContactDetailsStyle";
 import { H1 } from "../Common/StyledText";
+import { ContactItemInterface } from "../../utils/ContactItemInterface";
 
 export default function ContactDetails() {
-  const [arrayOfContacts, SetArrayOfContacts] = useState([]);
+  const [arrayOfContacts, SetArrayOfContacts] = useState<
+    ContactItemInterface[]
+  >([]);
 
   const basicArray = useSnapshotData();
 
@@ -24,7 +27,7 @@ export default function ContactDetails() {
     <>
       <ContactList>
         {basicArray.length > 0 &&
-          arrayOfContacts.map((element) => {
+          arrayOfContacts.map((element: ContactItemInterface) => {
             return (
               <ContactItem
                 notesArray={element.notesArray}

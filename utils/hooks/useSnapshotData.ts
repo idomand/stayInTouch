@@ -3,9 +3,10 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../../lib/AuthContext";
 import { db } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
+import { ContactItemInterface } from "../ContactItemInterface";
 
 export default function useSnapshotData() {
-  const [basicArray, SetBasicArray] = useState([]);
+  const [basicArray, SetBasicArray] = useState<ContactItemInterface[]>([]);
 
   const { currentUser } = useAuth();
 
@@ -17,7 +18,7 @@ export default function useSnapshotData() {
       (snapshot) => {
         SetBasicArray(
           snapshot.docs.map((doc) => {
-            let contactObject = doc.data();
+            let contactObject = doc.data() as ContactItemInterface;
             contactObject.contactId = doc.id;
             contactObject.timeUntilNextTalk = +(
               contactObject.time -
@@ -28,6 +29,7 @@ export default function useSnapshotData() {
         );
       }
     );
+
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);

@@ -11,8 +11,6 @@ export default function DatePickerComponent({
   setStartDate,
   startDate,
 }: DatePickerComponentProps) {
-  console.log("setStartDate :>> ", setStartDate);
-  console.log("typeof setStartDate :>> ", typeof setStartDate);
   return (
     <>
       <StyledDatePicker
