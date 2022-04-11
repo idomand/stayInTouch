@@ -23,9 +23,7 @@ export const MinimalButton = styled(ButtonPrototype)`
   }
 `;
 
-export const BasicButton = styled(ButtonPrototype).attrs((props) => {
-  target: "_self";
-})`
+export const BasicButton = styled(ButtonPrototype)`
   background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   border: 1.3px solid ${({ theme }) => theme.white};

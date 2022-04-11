@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { H2 } from "../Common/StyledText.js";
+import { H2 } from "../Common/StyledText";
 
 export const LogoImg = styled.img`
   margin: 5px 0 5px 20px;
