@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { addContactToFirestore } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
 import ErrorWrapper from "../ErrorWarning";
@@ -16,11 +16,11 @@ import {
 } from "./AddNewContactStyle";
 
 export default function AddNewContact() {
-  const timeRef = useRef();
+  const [time, setTime] = useState(3);
   const { currentUser } = useAuth();
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | boolean>(false);
   const [note, setNote] = useState("");
 
   useEffect(() => {
@@ -32,25 +32,24 @@ export default function AddNewContact() {
     }
   }, [error]);
 
-  function nameChangeHandler(e) {
+  function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
     if (error) {
       setError(false);
     }
   }
 
-  async function createNewContact(event) {
-    event.preventDefault();
+  async function createNewContact(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
     let notesArray = [];
 
     if (note) {
       notesArray[0] = { id: 1, data: note };
     }
-
     let newContact = {
       name: name,
-      time: +timeRef.current.value,
+      time: time,
       timeFromLastTalk: startDate.getTime(),
       notesArray: notesArray,
     };
@@ -67,7 +66,7 @@ export default function AddNewContact() {
       setNote("");
       setStartDate(new Date());
       setName("");
-      timeRef.current.value = 3;
+      setTime(3);
     }
   }
 
@@ -88,13 +87,15 @@ export default function AddNewContact() {
         <TimeLabel>
           Every
           <TimeInput
-            ref={timeRef}
+            value={time}
+            onChange={(e) => {
+              setTime(+e.target.value);
+            }}
             type="number"
             name="time"
             id="time"
             max={31}
             min={1}
-            defaultValue={3}
           />
         </TimeLabel>
 

@@ -27,7 +27,6 @@ export const AddContactForm = styled(BasicForm)`
 export const NameLabel = styled(BasicLabel)`
   grid-area: name;
   @media (${({ theme }) => theme.devices.break1}) {
-    /* max-width: 120px; */
   }
 `;
 export const NameInput = styled(BasicInput)`
@@ -56,7 +55,6 @@ export const TimeLabel = styled(BasicLabel)`
 
 export const TimeInput = styled(BasicInput)`
   border: 1px solid ${({ theme }) => theme.grey2};
-
   border-radius: 8px;
 `;
 
