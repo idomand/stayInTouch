@@ -4,7 +4,7 @@ import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
 import { deleteContact, updateContact } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
-import MoreOptions from "../MoreOptions";
+import MoreOptions from "../MoreOptions/Index";
 import Notes from "../Notes";
 import {
   ButtonsWrapper,
