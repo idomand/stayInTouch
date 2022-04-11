@@ -36,6 +36,7 @@ export default function ContactDetails() {
                 time={element.time}
                 timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
+                timeUntilNextTalk={element.timeUntilNextTalk}
               />
             );
           })}

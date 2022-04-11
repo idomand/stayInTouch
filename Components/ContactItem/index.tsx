@@ -25,42 +25,21 @@ import {
   ResetButton,
 } from "./ContactItemStyle";
 
+import { ContactItemInterface } from "../../utils/ContactItemInterface";
+
 export default function ContactItem({
   name,
   time,
   timeFromLastTalk,
   contactId,
   notesArray,
-}) {
+}: ContactItemInterface) {
   const { currentUser } = useAuth();
   const currantTime = new Date().getTime();
-
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
 
-  function deleteContactFunc() {
-    deleteContact(currentUser.uid, currentUser.email, contactId);
-  }
-
-  function resetFunction() {
-    const oldContactData = {
-      name: name,
-      time: time,
-      timeFromLastTalk: timeFromLastTalk,
-    };
-    const newContactData = {
-      name: name,
-      time: time,
-      timeFromLastTalk: currantTime,
-    };
-    updateContact(
-      currentUser.uid,
-      currentUser.email,
-      contactId,
-      oldContactData,
-      newContactData
-    );
-  }
+  let nextTalkResponse;
 
   let lastTalkedToResponse;
   let isTalkingStatusOK;
@@ -86,8 +65,6 @@ export default function ContactItem({
   let nextTalkInDays =
     time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
 
-  let nextTalkResponse;
-
   if (nextTalkInDays > 0) {
     nextTalkResponse = (
       <DateValue statusColor={isTalkingStatusOK}>
@@ -97,6 +74,30 @@ export default function ContactItem({
   } else {
     nextTalkResponse = (
       <DateValue statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
+    );
+  }
+
+  function deleteContactFunc() {
+    deleteContact(currentUser.uid, currentUser.email, contactId);
+  }
+
+  function resetFunction() {
+    const oldContactData = {
+      name: name,
+      time: time,
+      timeFromLastTalk: timeFromLastTalk,
+    };
+    const newContactData = {
+      name: name,
+      time: time,
+      timeFromLastTalk: currantTime,
+    };
+    updateContact(
+      currentUser.uid,
+      currentUser.email,
+      contactId,
+      oldContactData,
+      newContactData
     );
   }
 

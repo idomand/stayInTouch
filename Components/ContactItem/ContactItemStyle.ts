@@ -60,7 +60,6 @@ export const ContactDetailsSubDiv = styled.div`
   justify-content: center;
 `;
 export const NameContainer = styled.span`
-  /* margin-bottom: 10px; */
   font-weight: 500;
   font-size: ${({ theme }) => theme.typeScale.header5};
   line-height: 21px;
@@ -70,7 +69,6 @@ export const NameContainer = styled.span`
   @media (${({ theme }) => theme.devices.break1}) {
     width: 160px;
     overflow: scroll;
-
     text-align: center;
     margin-bottom: 0px;
   }
@@ -107,7 +105,12 @@ export const DateHeader = styled.div`
   font-size: ${({ theme }) => theme.typeScale.p_normal};
   margin-bottom: 6px;
 `;
-export const DateValue = styled.div`
+
+interface DateValueProps {
+  readonly statusColor: boolean;
+}
+
+export const DateValue = styled.div<DateValueProps>`
   color: ${({ theme, statusColor }) => {
     if (!statusColor) {
       return theme.red1;
