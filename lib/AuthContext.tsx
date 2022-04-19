@@ -1,22 +1,29 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth, provider } from "./Firebase.js";
-import { signOut, signInWithRedirect } from "firebase/auth";
+import { signOut, signInWithRedirect, User } from "firebase/auth";
 import { Result } from "../Components/Common/StyledSpinner";
-const AuthContext = React.createContext();
+
+interface AuthContextInterface {
+  currentUser: any;
+  logout: any;
+  loginWithGoogle: any;
+}
+
+const AuthContext = React.createContext<AuthContextInterface | null>(null);
 
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-export default function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(undefined);
+export default function AuthProvider({ children }: any) {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   function logout() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        setCurrentUser(undefined);
+        setCurrentUser(null);
       })
       .catch((error) => {
         console.log(`error`, error);
@@ -29,6 +36,7 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log("user :>> ", user);
       setCurrentUser(user);
       setLoading(false);
     });
