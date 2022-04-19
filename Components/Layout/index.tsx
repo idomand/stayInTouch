@@ -4,7 +4,7 @@ import ScrollButtonWrapper from "../ScrollToTopButton";
 import { LayoutWrapper } from "./LayoutStyle";
 
 interface LayoutProps {
-  children: React.FC;
+  children: any;
 }
 
 export default function Layout({ children }: LayoutProps) {
