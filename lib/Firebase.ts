@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { DocumentData, getFirestore } from "firebase/firestore";
 import {
   collection,
   addDoc,
@@ -11,6 +11,8 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
+import { ContactItemInterface } from "../utils/ContactItemInterface";
+import { NoteInterface } from "../utils/NoteInterface";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -33,29 +35,34 @@ const Dummy_Data = [
     time: 3,
     timeFromLastTalk: 1644068546000,
     notesArray: [
-      { id: 1, data: "Long live the queen" },
-      { id: 2, data: "The british empire will never fall!" },
+      { noteId: 1, data: "Long live the queen" },
+      { noteId: 2, data: "The british empire will never fall!" },
     ],
   },
   {
     name: "Barack Obama",
     time: 5,
     timeFromLastTalk: 1643204546000,
-    notesArray: [{ id: 1, data: "Peace & Love" }],
+    notesArray: [{ noteId: 1, data: "Peace & Love" }],
   },
-  { name: "Mom", time: 7, timeFromLastTalk: 1641994946000 },
+  { name: "Mom", time: 7, timeFromLastTalk: 1641994946000, notesArray: [] },
   {
     name: "Kanye West",
     time: 14,
     timeFromLastTalk: 1643636546000,
-    notesArray: [{ id: 1, data: "My girl is not a hobbit" }],
+    notesArray: [{ noteId: 1, data: "My girl is not a hobbit" }],
   },
-  { name: "Mr. Bean", time: 21, timeFromLastTalk: 1643809453000 },
+  {
+    name: "Mr. Bean",
+    time: 21,
+    timeFromLastTalk: 1643809453000,
+    notesArray: [],
+  },
 ];
 
-export async function addDummyData(userId, userEmail) {
+export async function addDummyData(userId: string, userEmail: string) {
   const querySnapshot = await getDocs(collection(db, `${userEmail}${userId}`));
-  const oldArray = [];
+  const oldArray: DocumentData[] = [];
   querySnapshot.forEach((doc) => {
     oldArray.push(doc.data());
   });
@@ -69,9 +76,14 @@ export async function addDummyData(userId, userEmail) {
   });
 }
 
-async function checkIfContactExists(userId, userEmail, userData) {
+async function checkIfContactExists(
+  userId: string,
+  userEmail: string,
+  userData: ContactItemInterface
+) {
+  console.log("userData", userData);
   const querySnapshot = await getDocs(collection(db, `${userEmail}${userId}`));
-  const oldArray = [];
+  const oldArray: DocumentData[] = [];
   querySnapshot.forEach((doc) => {
     oldArray.push(doc.data());
   });
@@ -89,7 +101,11 @@ async function checkIfContactExists(userId, userEmail, userData) {
 
 // !==========FIRESTORE FUNCTIONS:=======
 
-export async function addContactToFirestore(userId, userEmail, userData) {
+export async function addContactToFirestore(
+  userId: string,
+  userEmail: string,
+  userData: ContactItemInterface
+) {
   const isNewContactUnique = await checkIfContactExists(
     userId,
     userEmail,
@@ -106,11 +122,11 @@ export async function addContactToFirestore(userId, userEmail, userData) {
 }
 
 export async function updateContact(
-  userId,
-  userEmail,
-  contactId,
-  oldContactData,
-  newContactData
+  userId: string,
+  userEmail: string,
+  contactId: string,
+  oldContactData: ContactItemInterface,
+  newContactData: ContactItemInterface
 ) {
   if (oldContactData.name === newContactData.name) {
     await setDoc(doc(db, `${userEmail}${userId}`, contactId), {
@@ -134,12 +150,18 @@ export async function updateContact(
   }
 }
 
-export async function deleteNote(userId, userEmail, contactId, noteId) {
+export async function deleteNote(
+  userId: string,
+  userEmail: string,
+  contactId: string,
+  noteId: number
+) {
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
   const docData = docSnapRef.data();
-  const newArray = docData.notesArray.filter((note) => {
-    if (note.id !== noteId) {
+  const newArray = docData?.notesArray.filter((note: NoteInterface) => {
+    console.log("note", note);
+    if (note.noteId !== noteId) {
       return note;
     }
   });
@@ -149,17 +171,17 @@ export async function deleteNote(userId, userEmail, contactId, noteId) {
 }
 
 export async function updateNote(
-  userId,
-  userEmail,
-  contactId,
-  noteId,
-  newNoteData
+  userId: string,
+  userEmail: string,
+  contactId: string,
+  noteId: number,
+  newNoteData: string
 ) {
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
   const docData = docSnapRef.data();
-  const newArray = docData.notesArray.map((note) => {
-    if (note.id === noteId) {
+  const newArray = docData?.notesArray.map((note: NoteInterface) => {
+    if (note.noteId === noteId) {
       let newNote = note;
       newNote.data = newNoteData;
       return newNote;
@@ -172,7 +194,11 @@ export async function updateNote(
   });
 }
 
-export async function deleteContact(userId, userEmail, contactId) {
+export async function deleteContact(
+  userId: string,
+  userEmail: string,
+  contactId: string
+) {
   await deleteDoc(doc(db, `${userEmail}${userId}`, contactId));
 }
 export default FirebaseApp;

@@ -82,11 +82,12 @@ export default function Notes(props: Props) {
     if (props.notesArray.length === 0) {
       biggestId = 0;
     } else {
-      biggestId = props.notesArray[props.notesArray.length - 1].id;
+      biggestId = props.notesArray[props.notesArray.length - 1].noteId;
+      console.log("biggestId", biggestId);
     }
     const newNotesArray = [
       ...props.notesArray,
-      { id: biggestId + 1, data: noteInputValue },
+      { noteId: biggestId + 1, data: noteInputValue },
     ];
 
     const oldContactData = { ...props };
@@ -168,17 +169,19 @@ export default function Notes(props: Props) {
             <NotesList>
               {props.notesArray &&
                 props.notesArray.length &&
-                props.notesArray.map((note: { data: string; id: number }) => {
-                  return (
-                    <NoteItem
-                      key={note.id}
-                      data={note.data}
-                      noteId={note.id}
-                      contactId={props.contactId}
-                      switchToEditMood={switchToEditMood}
-                    />
-                  );
-                })}
+                props.notesArray.map(
+                  (note: { data: string; noteId: number }) => {
+                    return (
+                      <NoteItem
+                        key={note.noteId}
+                        data={note.data}
+                        noteId={note.noteId}
+                        contactId={props.contactId}
+                        switchToEditMood={switchToEditMood}
+                      />
+                    );
+                  }
+                )}
             </NotesList>
           </NotesListWrapper>
         </NotesWrapper>
