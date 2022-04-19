@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
-import { auth, provider } from "./Firebase.js";
+import { auth, provider } from "./Firebase";
 import { signOut, signInWithRedirect, User } from "firebase/auth";
 import { Result } from "../Components/Common/StyledSpinner";
 
 interface AuthContextInterface {
-  currentUser: any;
+  currentUser?: User | null;
   logout: any;
   loginWithGoogle: any;
+  loading?: boolean;
 }
 
 const AuthContext = React.createContext<AuthContextInterface | null>(null);

@@ -11,20 +11,14 @@ import {
   NoteItemHeaderWrapper,
   NoteItemWrapper,
 } from "./NoteItemStyle";
-
-type Props = {
-  noteId: number;
-  data: string;
-  contactId: string;
-  switchToEditMood: any;
-};
+import { NoteInterface } from "../../utils/NoteInterface";
 
 export default function NoteItem({
   noteId,
   data,
   contactId,
   switchToEditMood,
-}: Props) {
+}: NoteInterface) {
   const { currentUser } = useAuth();
 
   function deleteNoteFunc() {
