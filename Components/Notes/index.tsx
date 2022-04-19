@@ -83,7 +83,6 @@ export default function Notes(props: Props) {
       biggestId = 0;
     } else {
       biggestId = props.notesArray[props.notesArray.length - 1].noteId;
-      console.log("biggestId", biggestId);
     }
     const newNotesArray = [
       ...props.notesArray,

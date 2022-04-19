@@ -19,6 +19,7 @@ import {
 
 export default function About() {
   const { currentUser } = useAuth();
+
   const router = useRouter();
 
   async function addDemoData() {
@@ -35,7 +36,6 @@ export default function About() {
       <AboutPageWrapper>
         <IntroductionSection>
           <AboutHeader>Welcome!</AboutHeader>
-
           <P3>
             This site was created as a way to help people (including myself) to
             stay in touch with the people they care about.

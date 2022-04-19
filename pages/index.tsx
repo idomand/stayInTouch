@@ -8,7 +8,7 @@ import Layout from "../Components/Layout";
 export default function Home() {
   const router = useRouter();
 
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
 
   useEffect(() => {
     if (!currentUser) {

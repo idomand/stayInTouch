@@ -26,7 +26,6 @@ export default function AddNewContact() {
   useEffect(() => {
     if (error) {
       setTimeout(() => {
-        console.log("2");
         setError(false);
       }, 2000);
     }

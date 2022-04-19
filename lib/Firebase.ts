@@ -81,7 +81,6 @@ async function checkIfContactExists(
   userEmail: string,
   userData: ContactItemInterface
 ) {
-  console.log("userData", userData);
   const querySnapshot = await getDocs(collection(db, `${userEmail}${userId}`));
   const oldArray: DocumentData[] = [];
   querySnapshot.forEach((doc) => {
@@ -160,7 +159,6 @@ export async function deleteNote(
   const docSnapRef = await getDoc(notesArrayDocRef);
   const docData = docSnapRef.data();
   const newArray = docData?.notesArray.filter((note: NoteInterface) => {
-    console.log("note", note);
     if (note.noteId !== noteId) {
       return note;
     }
