@@ -8,11 +8,13 @@ import { ContactItemInterface } from "../ContactItemInterface";
 export default function useSnapshotData() {
   const [basicArray, SetBasicArray] = useState<ContactItemInterface[]>([]);
 
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
 
   const currantTime = new Date().getTime();
 
   useEffect(() => {
+    if (currentUser == null || currentUser.email == null) return;
+
     const unsubscribe = onSnapshot(
       collection(db, `${currentUser.email}${currentUser.uid}`),
       (snapshot) => {

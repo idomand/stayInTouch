@@ -14,7 +14,7 @@ import {
 import { H1, P2 } from "../../Components/Common/StyledText";
 
 export default function Login() {
-  const { loginWithGoogle, currentUser } = useAuth();
+  const { loginWithGoogle, currentUser } = useAuth()!;
   const router = useRouter();
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export default function ContactDetails() {
 
   useEffect(() => {
     let newArray = basicArray.sort((a, b) => {
-      if (a.timeUntilNextTalk > b.timeUntilNextTalk) {
+      if (a.timeUntilNextTalk! > b.timeUntilNextTalk!) {
         return 1;
       } else {
         return -1;

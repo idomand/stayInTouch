@@ -18,11 +18,12 @@ import {
 } from "../../styles/AboutPageStyle";
 
 export default function About() {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
 
   const router = useRouter();
 
   async function addDemoData() {
+    if (currentUser == null || currentUser.email == null) return;
     if (currentUser) {
       await addDummyData(currentUser.uid, currentUser.email);
       router.push("/");

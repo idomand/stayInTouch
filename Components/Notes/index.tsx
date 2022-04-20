@@ -22,18 +22,10 @@ import {
   NotsNumber,
 } from "./NotesStyle";
 import { H5 } from "../Common/StyledText";
+import { ContactItemInterface } from "../../utils/ContactItemInterface";
 
-type Props = {
-  contactId: string;
-  name: string;
-  time: number;
-  timeFromLastTalk: number;
-  notesArray: any;
-  notesArrayData: any;
-};
-
-export default function Notes(props: Props) {
-  const { currentUser } = useAuth();
+export default function Notes(props: ContactItemInterface) {
+  const { currentUser } = useAuth()!;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
@@ -64,6 +56,15 @@ export default function Notes(props: Props) {
   }
   async function updatedNoteFunc(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (
+      currentUser == null ||
+      currentUser.email == null ||
+      editNoteId == null ||
+      props.contactId == null
+    )
+      return;
+
     await updateNote(
       currentUser.uid,
       currentUser.email,
@@ -78,6 +79,15 @@ export default function Notes(props: Props) {
 
   async function addNewNoteToArray(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (
+      currentUser == null ||
+      currentUser.email == null ||
+      props.contactId == null ||
+      props.notesArray == null
+    )
+      return;
+
     let biggestId;
     if (props.notesArray.length === 0) {
       biggestId = 0;
@@ -175,7 +185,7 @@ export default function Notes(props: Props) {
                         key={note.noteId}
                         data={note.data}
                         noteId={note.noteId}
-                        contactId={props.contactId}
+                        contactId={props.contactId!}
                         switchToEditMood={switchToEditMood}
                       />
                     );

@@ -17,7 +17,7 @@ import {
 export default function NavBar() {
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout } = useAuth()!;
 
   const router = useRouter();
 

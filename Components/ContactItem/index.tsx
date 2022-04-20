@@ -34,7 +34,7 @@ export default function ContactItem({
   contactId,
   notesArray,
 }: ContactItemInterface) {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
@@ -78,19 +78,27 @@ export default function ContactItem({
   }
 
   function deleteContactFunc() {
+    if (currentUser == null || currentUser.email == null || contactId == null)
+      return;
+
     deleteContact(currentUser.uid, currentUser.email, contactId);
   }
 
   function resetFunction() {
+    if (currentUser == null || currentUser.email == null || contactId == null)
+      return;
+
     const oldContactData = {
       name: name,
       time: time,
       timeFromLastTalk: timeFromLastTalk,
+      notesArray: notesArray,
     };
     const newContactData = {
       name: name,
       time: time,
       timeFromLastTalk: currantTime,
+      notesArray: notesArray,
     };
     updateContact(
       currentUser.uid,
@@ -139,12 +147,12 @@ export default function ContactItem({
             time={time}
             timeFromLastTalk={timeFromLastTalk}
             contactId={contactId}
+            notesArray={notesArray}
           />
         </MoreOptionsWrapper>
         <NotesButtonWrapper>
           <Notes
             name={name}
-            notesArrayData={notesArray}
             time={time}
             timeFromLastTalk={timeFromLastTalk}
             contactId={contactId}
