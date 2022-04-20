@@ -5,8 +5,6 @@ import { BasicButton } from "../Components/Common/StyledButton";
 export const LoginPageWrapper = styled.section`
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
-  /* border: solid red; */
   margin: 40px;
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;

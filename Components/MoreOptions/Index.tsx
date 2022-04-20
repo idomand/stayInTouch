@@ -31,31 +31,26 @@ import {
 } from "./MoreOptionsStyle";
 import { H5 } from "../Common/StyledText";
 import ErrorWarning from "../ErrorWarning";
-
-interface moreOptionsProps {
-  name: string;
-  time: number;
-  timeFromLastTalk: number;
-  contactId: string;
-}
+import { ContactItemInterface } from "../../utils/ContactItemInterface";
 
 export default function MoreOptions({
   name,
   time,
   timeFromLastTalk,
   contactId,
-}: moreOptionsProps) {
-  const { currentUser } = useAuth();
+  notesArray,
+}: ContactItemInterface) {
+  const { currentUser } = useAuth()!;
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [lastTalk, setLastTalk] = useState<number | Date>(timeFromLastTalk);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
   const [specificReminder, setSpecificReminder] = useState<number | Date>(
     timeFromLastTalk
   );
   const [error, setError] = useState<string | boolean>(false);
+  const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
 
   useEffect(() => {
     if (error) {
@@ -67,6 +62,9 @@ export default function MoreOptions({
 
   async function updateContactOnSubmit(e: React.FocusEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (currentUser == null || currentUser.email == null || contactId == null)
+      return;
+
     let timeFromLastTalkVar = lastTalk;
 
     if (lastTalk instanceof Date) {
@@ -78,11 +76,13 @@ export default function MoreOptions({
       time,
       timeFromLastTalk,
       contactId,
+      notesArray,
     };
     const newContactData = {
       name: contactName,
       time: +contactTime,
       timeFromLastTalk: timeFromLastTalkVar,
+      notesArray: notesArray,
     };
 
     let result;

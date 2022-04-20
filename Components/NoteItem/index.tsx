@@ -19,9 +19,10 @@ export default function NoteItem({
   contactId,
   switchToEditMood,
 }: NoteInterface) {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
 
   function deleteNoteFunc() {
+    if (currentUser == null || currentUser.email == null) return;
     deleteNote(currentUser.uid, currentUser.email, contactId, noteId);
   }
 

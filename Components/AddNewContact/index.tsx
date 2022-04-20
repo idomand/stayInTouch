@@ -17,7 +17,7 @@ import {
 
 export default function AddNewContact() {
   const [time, setTime] = useState(3);
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState<string | boolean>(false);
@@ -40,11 +40,11 @@ export default function AddNewContact() {
 
   async function createNewContact(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    if (currentUser == null || currentUser.email == null) return;
     let notesArray = [];
 
     if (note) {
-      notesArray[0] = { id: 1, data: note };
+      notesArray[0] = { noteId: 1, data: note };
     }
     let newContact = {
       name: name,

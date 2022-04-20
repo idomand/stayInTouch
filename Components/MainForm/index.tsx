@@ -5,13 +5,13 @@ import HowToUse from "../HowToUse";
 import { HeaderWrapper, MainFormWrapper, MainHeader } from "./MainFormStyle";
 
 export default function MainForm() {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth()!;
 
   return (
     <>
       <MainFormWrapper>
         <HeaderWrapper>
-          <MainHeader>Hi {currentUser.displayName}</MainHeader>
+          <MainHeader>Hi {currentUser?.displayName}</MainHeader>
           <HowToUse />
         </HeaderWrapper>
         <AddNewContact />
