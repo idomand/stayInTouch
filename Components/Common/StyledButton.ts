@@ -6,8 +6,6 @@ const ButtonPrototype = styled.button`
   transition: 0.3s;
 `;
 
-const test = "test";
-
 export const MinimalButton = styled(ButtonPrototype)`
   cursor: pointer;
   font-style: normal;
