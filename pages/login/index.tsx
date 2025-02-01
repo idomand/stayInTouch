@@ -27,7 +27,7 @@ export default function Login() {
     <Layout>
       <LoginPageWrapper>
         <LoginSubSection>
-          <P2>Welcome Back</P2>
+          <P2>Welcome Back !!!!</P2>
           <H1>Login to your account</H1>
 
           <SignInButton onClick={loginWithGoogle}>
