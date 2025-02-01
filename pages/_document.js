@@ -1,22 +1,39 @@
+// pages/_document.js
 import Document, { Html, Head, Main, NextScript } from "next/document";
-// Import styled components ServerStyleSheet
 import { ServerStyleSheet } from "styled-components";
+import React from "react";
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    // Step 1: Create an instance of ServerStyleSheet
+  static async getInitialProps(ctx) {
+    // Create an instance of ServerStyleSheet
     const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
 
-    // Step 2: Retrieve styles from components in the page
-    const page = renderPage(
-      (App) => (props) => sheet.collectStyles(<App {...props} />)
-    );
+    try {
+      // Run the React rendering logic synchronously
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        });
 
-    // Step 3: Extract the styles as <style> tags
-    const styleTags = sheet.getStyleElement();
+      // Retrieve initial document props, including the rendered HTML
+      const initialProps = await Document.getInitialProps(ctx);
 
-    // Step 4: Pass styleTags as a prop
-    return { ...page, styleTags };
+      return {
+        ...initialProps,
+        // Combine any existing styles with the styled-components styles
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      // Seal the sheet to prevent memory leaks
+      sheet.seal();
+    }
   }
 
   render() {
@@ -25,10 +42,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#053BBC" />
-
-          {/* <title>Stying In Touch</title> */}
-          {/* Step 5: Output the styles in the head  */}
-          {this.props.styleTags}
+          {/* The styles will be injected by the getInitialProps above */}
         </Head>
         <body>
           <Main />
