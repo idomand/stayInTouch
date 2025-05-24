@@ -16,7 +16,7 @@ export default function DatePickerComponent({
     <>
       <StyledDatePicker
         className="datePickerClass"
-        maxDate={addDays(new Date(), 0)}
+        maxDate={addDays(new Date(), 90)}
         CalendarContainer={Calendar}
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
