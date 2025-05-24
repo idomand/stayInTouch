@@ -38,6 +38,7 @@ export const NotesButtonWrapper = styled.div`
 `;
 
 export const EmojiWrapper = styled.div`
+  font-size: ${({ theme }) => theme.typeScale.header2};
   margin-right: 10px;
   @media (${({ theme }) => theme.devices.break1}) {
     grid-area: emojiStatus;
@@ -61,7 +62,7 @@ export const ContactDetailsSubDiv = styled.div`
 `;
 export const NameContainer = styled.span`
   font-weight: 500;
-  font-size: ${({ theme }) => theme.typeScale.header5};
+  font-size: ${({ theme }) => theme.typeScale.header4};
   line-height: 21px;
   text-transform: capitalize;
   overflow: auto;
