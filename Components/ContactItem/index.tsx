@@ -119,7 +119,7 @@ export default function ContactItem({
           <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
         )}
         <ContactDetailsWrapper>
-          <ContactImage src="/default_image.svg" />
+          {/* <ContactImage src="/default_image.svg" /> */}
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
           </ContactDetailsSubDiv>
