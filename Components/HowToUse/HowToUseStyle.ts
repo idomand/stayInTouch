@@ -13,7 +13,6 @@ export const HowToUseLink = styled(LinkPrototype)`
   border: solid 1px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.black};
   border-radius: 20px;
-
   &:hover,
   &:focus {
     color: ${({ theme }) => theme.black};

@@ -17,12 +17,11 @@ export const LinkPrototype = ({
   href,
   target,
 }: LinkPrototypeProps) => (
-  <Link href={href} as={as} legacyBehavior>
-    <a target={target} className={className}>
+  <Link href={href} as={as} className={className}>
       {children}
-    </a>
   </Link>
 );
+
 
 export const BasicLink = styled(LinkPrototype).attrs(() => ({
   target: "_blank",
