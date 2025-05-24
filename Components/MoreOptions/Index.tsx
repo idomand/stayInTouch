@@ -185,7 +185,7 @@ export default function MoreOptions({
                   type="number"
                   name="time"
                   id="time"
-                  max={31}
+                  max={60}
                   min={1}
                   value={contactTime}
                   onChange={timeChangeHandler}
