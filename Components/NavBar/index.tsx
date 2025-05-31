@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../lib/AuthContext";
 import { NavLink } from "../Common/StyledLinks";
 import { useMedia } from "react-use";
@@ -13,11 +13,13 @@ import {
   NavBarWrapper,
   PageLinksWrapper,
 } from "./NavBarStyle";
+import SafeCloseDialog from "../SafeCloseDialog";
 
 export default function NavBar() {
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
   const { currentUser, logout } = useAuth()!;
+  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   const router = useRouter();
 
@@ -41,7 +43,17 @@ export default function NavBar() {
 
       {currentUser ? (
         <>
-          <LogoutButton onClick={logout}>
+          <SafeCloseDialog
+            dialogText={`Are you sure you want log out`}
+            customFunction={logout}
+            openDialog={showSafeCloseDialog}
+            closeDialog={() => setShowSafeCloseDialog(false)}
+          />{" "}
+          <LogoutButton
+            onClick={() => {
+              setShowSafeCloseDialog(true);
+            }}
+          >
             Log Out
             <LogoutLogo src="/log-out.svg" />
           </LogoutButton>
