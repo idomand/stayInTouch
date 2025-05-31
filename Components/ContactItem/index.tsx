@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "styled-components";
 import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
@@ -24,8 +24,8 @@ import {
   NotesButtonWrapper,
   ResetButton,
 } from "./ContactItemStyle";
-
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
+import SafeCloseDialog from "../SafeCloseDialog";
 
 export default function ContactItem({
   name,
@@ -34,6 +34,8 @@ export default function ContactItem({
   contactId,
   notesArray,
 }: ContactItemInterface) {
+  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
   const Theme = useTheme();
@@ -140,7 +142,6 @@ export default function ContactItem({
             {nextTalkResponse}
           </DateWrapper>
         </ContactDatesWrapper>
-
         <MoreOptionsWrapper>
           <MoreOptions
             name={name}
@@ -161,7 +162,19 @@ export default function ContactItem({
         </NotesButtonWrapper> */}
         <ButtonsWrapper>
           <ResetButton onClick={resetFunction}>Reset</ResetButton>
-          <DeleteButton onClick={deleteContactFunc}>Delete</DeleteButton>
+          <DeleteButton
+            onClick={() => {
+              setShowSafeCloseDialog(true);
+            }}
+          >
+            Delete
+          </DeleteButton>
+          <SafeCloseDialog
+            dialogText={`Are you sure you want to delete ${name}`}
+            customFunction={deleteContactFunc}
+            openDialog={showSafeCloseDialog}
+            closeDialog={() => setShowSafeCloseDialog(false)}
+          />
         </ButtonsWrapper>
       </ContactItemWrapper>
     </ContactItemContainer>
