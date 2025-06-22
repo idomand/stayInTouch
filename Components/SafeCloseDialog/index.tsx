@@ -18,7 +18,6 @@ export default function SafeCloseDialog({
   const ref = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
-    console.log("openDialog :>> ", openDialog);
     if (openDialog) {
       ref.current?.showModal();
     } else {
