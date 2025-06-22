@@ -20,3 +20,6 @@ export const HeaderWrapper = styled.div`
   width: 100%;
   align-items: center;
 `;
+export const GameStartText = styled.span<{$gameStart:boolean}>`
+  color: ${({ $gameStart }) => ($gameStart ? "red" : "black")};
+  cursor: pointer;`;
