@@ -39,7 +39,7 @@ export default function NoteItem({
           <DeleteNoteButton onClick={deleteNoteFunc}>Delete</DeleteNoteButton>
         </NoteItemButtonWrapper>
       </NoteItemHeaderWrapper>
-      <NoteDataWrapper>{data}</NoteDataWrapper>
+      <NoteDataWrapper $data={data}>{data}</NoteDataWrapper>
     </NoteItemWrapper>
   );
 }

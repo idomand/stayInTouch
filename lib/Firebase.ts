@@ -98,6 +98,27 @@ async function checkIfContactExists(
   }
 }
 
+function addLastTalkNote(contactData: ContactItemInterface) {
+  const noteText = "Talk on: " + new Date().toLocaleDateString();
+
+  let biggestId;
+  if (contactData.notesArray.length === 0) {
+    biggestId = 0;
+  } else {
+    biggestId =
+      contactData.notesArray[contactData.notesArray.length - 1].noteId;
+  }
+  const newNotesArray = [
+    ...contactData.notesArray,
+    { noteId: biggestId + 1, data: noteText },
+  ];
+  const newContactData = {
+    ...contactData,
+    notesArray: newNotesArray,
+  };
+  return newContactData;
+}
+
 // !==========FIRESTORE FUNCTIONS:=======
 
 export async function addContactToFirestore(
@@ -128,8 +149,9 @@ export async function updateContact(
   newContactData: ContactItemInterface
 ) {
   if (oldContactData.name === newContactData.name) {
+    const newContactDataWithTimeStamp = addLastTalkNote(newContactData);
     await setDoc(doc(db, `${userEmail}${userId}`, contactId), {
-      ...newContactData,
+      ...newContactDataWithTimeStamp,
     });
   } else {
     const isNewContactUnique = await checkIfContactExists(

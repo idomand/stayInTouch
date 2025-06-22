@@ -18,11 +18,11 @@ export const NoteItemHeaderText = styled.div``;
 
 export const NoteItemButtonWrapper = styled.div``;
 
-export const NoteDataWrapper = styled.div`
+export const NoteDataWrapper = styled.div<{ $data: string }>`
   padding: 5px;
   background-color: ${({ theme }) => theme.grey1};
-  border: solid 1px ${({ theme }) => theme.blue2};
-  border-radius: 10px;
+  border: solid 1px
+    ${({ $data }) => ($data.startsWith("Talk on: ") ? "red" : "green")};
   overflow: auto;
   width: 380px;
   height: 50px;
