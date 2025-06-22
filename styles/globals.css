@@ -33,6 +33,7 @@ a {
   border-radius: 5px;
   outline: none;
   /* z-index: 10; */
+  max-height: 60vh;
 }
 
 .contact-edit-modal-overlay {
@@ -46,10 +47,10 @@ a {
 
 @media only screen and (max-width: 550px) {
   .contact-edit-modal {
-    top: 50px;
+    top:20%;
     left: 20px;
     right: 20px;
-    bottom: 20px;
+    height: fit-content;
   }
   .contact-edit-modal-overlay {
     z-index: 10;

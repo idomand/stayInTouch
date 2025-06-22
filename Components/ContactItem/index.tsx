@@ -11,7 +11,6 @@ import {
   ContactDatesWrapper,
   ContactDetailsSubDiv,
   ContactDetailsWrapper,
-  ContactImage,
   ContactItemContainer,
   ContactItemWrapper,
   DateHeader,
@@ -151,7 +150,7 @@ export default function ContactItem({
             notesArray={notesArray}
           />
         </MoreOptionsWrapper>
-        {/* <NotesButtonWrapper>
+        <NotesButtonWrapper>
           <Notes
             name={name}
             time={time}
@@ -159,7 +158,7 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
-        </NotesButtonWrapper> */}
+        </NotesButtonWrapper>
         <ButtonsWrapper>
           <ResetButton onClick={resetFunction}>Reset</ResetButton>
           <DeleteButton
