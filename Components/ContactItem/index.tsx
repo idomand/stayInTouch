@@ -22,6 +22,7 @@ import {
   NameContainer,
   NotesButtonWrapper,
   ResetButton,
+  AddToGoogle,
 } from "./ContactItemStyle";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
@@ -83,6 +84,10 @@ export default function ContactItem({
       return;
 
     deleteContact(currentUser.uid, currentUser.email, contactId);
+  }
+
+  function addToGoogle() {
+    console.log("addToGoogle");
   }
 
   function resetFunction() {
@@ -162,6 +167,7 @@ export default function ContactItem({
         </NotesButtonWrapper>
         <ButtonsWrapper>
           <ResetButton onClick={resetFunction}>Reset</ResetButton>
+          <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle>
           <DeleteButton
             onClick={() => {
               setShowSafeCloseDialog(true);
