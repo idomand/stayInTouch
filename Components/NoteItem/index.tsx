@@ -10,7 +10,7 @@ import {
   NoteItemHeaderText,
   NoteItemHeaderWrapper,
   NoteItemWrapper,
-} from "./NoteItemStyle";
+} from "./NoteItemStyles";
 import { NoteInterface } from "../../utils/NoteInterface";
 
 export default function NoteItem({
