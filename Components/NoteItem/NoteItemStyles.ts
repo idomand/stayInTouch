@@ -18,16 +18,26 @@ export const NoteItemHeaderText = styled.div``;
 
 export const NoteItemButtonWrapper = styled.div``;
 
-export const NoteDataWrapper = styled.div<{ $data: string }>`
-  border: solid 1px
-    ${({ $data }) => ($data.startsWith("Talk on: ") ? "red" : "green")};
+export const NoteDataWrapper = styled.div`
+  border: solid 1px ${({ theme }) => theme.blue2};
   padding: 5px;
   background-color: ${({ theme }) => theme.grey1};
   overflow: auto;
   width: 380px;
   height: 50px;
   font-size: ${({ theme }) => theme.typeScale.p_normal};
-
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
+`;
+export const TalkedOnWrapper = styled.div`
+  border: solid 1px ${({ theme }) => theme.green2};
+  padding: 5px;
+  background-color: ${({ theme }) => theme.grey1};
+  overflow: auto;
+  width: 380px;
+  height: 50px;
+  font-size: ${({ theme }) => theme.typeScale.p_normal};
   @media (${({ theme }) => theme.devices.break1}) {
     width: auto;
   }

@@ -109,7 +109,8 @@ export default function Notes(props: ContactItemInterface) {
       currentUser.email,
       props.contactId,
       oldContactData,
-      newContactData
+      newContactData,
+      "addNote"
     );
     setNoteInputValue("");
     (e.target as HTMLFormElement).blur();
