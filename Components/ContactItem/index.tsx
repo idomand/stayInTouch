@@ -167,7 +167,7 @@ export default function ContactItem({
         </NotesButtonWrapper>
         <ButtonsWrapper>
           <ResetButton onClick={resetFunction}>Reset</ResetButton>
-          <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle>
+          {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
           <DeleteButton
             onClick={() => {
               setShowSafeCloseDialog(true);
