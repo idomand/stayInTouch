@@ -38,8 +38,8 @@ export const BasicButton = styled(ButtonPrototype)`
     color: ${({ theme }) => theme.blue1};
   }
   @media (${({ theme }) => theme.devices.break1}) {
-    width: 100px;
-    max-width: 100px;
+    width: 90px;
+    max-width: 90px;
     height: 40px;
   }
 `;

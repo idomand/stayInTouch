@@ -144,9 +144,7 @@ export const ButtonsWrapper = styled.div`
   justify-content: center;
 `;
 
-export const ResetButton = styled(BasicButton)`
-  margin: 0 10px;
-`;
+export const ResetButton = styled(BasicButton)``;
 
 export const DeleteButton = styled(BasicButton)`
   color: ${({ theme }) => theme.red1};
@@ -156,5 +154,15 @@ export const DeleteButton = styled(BasicButton)`
     color: ${({ theme }) => theme.red2};
     background-color: ${({ theme }) => theme.red1};
     border: ${({ theme }) => theme.red2} 1.3px solid;
+  }
+`;
+export const AddToGoogle = styled(BasicButton)`
+  color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.green2};
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.green2};
+    background-color: ${({ theme }) => theme.green1};
+    border: ${({ theme }) => theme.green2} 1.3px solid;
   }
 `;
