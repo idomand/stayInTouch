@@ -101,7 +101,8 @@ export default function MoreOptions({
         currentUser.email,
         contactId,
         oldContactData,
-        newContactData
+        newContactData,
+        "edit"
       );
     }
     if (result === "bad") {

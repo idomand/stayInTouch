@@ -9,7 +9,7 @@ import {
   NoteItemButtonWrapper,
   NoteItemHeaderText,
   NoteItemHeaderWrapper,
-  NoteItemWrapper,
+  NoteItemWrapper,TalkedOnWrapper
 } from "./NoteItemStyles";
 import { NoteInterface } from "../../utils/NoteInterface";
 
@@ -39,7 +39,12 @@ export default function NoteItem({
           <DeleteNoteButton onClick={deleteNoteFunc}>Delete</DeleteNoteButton>
         </NoteItemButtonWrapper>
       </NoteItemHeaderWrapper>
-      <NoteDataWrapper $data={data}>{data}</NoteDataWrapper>
+
+      {data.startsWith("Talked on: ") ? (
+        <TalkedOnWrapper >{data}</TalkedOnWrapper>
+      ) : (
+        <NoteDataWrapper >{data}</NoteDataWrapper>
+      )}
     </NoteItemWrapper>
   );
 }

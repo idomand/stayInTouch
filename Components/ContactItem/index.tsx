@@ -106,7 +106,8 @@ export default function ContactItem({
       currentUser.email,
       contactId,
       oldContactData,
-      newContactData
+      newContactData,
+      "reset"
     );
   }
 

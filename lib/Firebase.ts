@@ -99,7 +99,7 @@ async function checkIfContactExists(
 }
 
 function addLastTalkNote(contactData: ContactItemInterface) {
-  const noteText = "Talk on: " + new Date().toLocaleDateString();
+  const noteText = "Talked on: " + new Date().toLocaleDateString();
 
   let biggestId;
   if (contactData.notesArray.length === 0) {
@@ -146,10 +146,16 @@ export async function updateContact(
   userEmail: string,
   contactId: string,
   oldContactData: ContactItemInterface,
-  newContactData: ContactItemInterface
+  newContactData: ContactItemInterface,
+  submitType: "reset" | "edit" | "addNote"
 ) {
   if (oldContactData.name === newContactData.name) {
-    const newContactDataWithTimeStamp = addLastTalkNote(newContactData);
+    let newContactDataWithTimeStamp = newContactData;
+
+    if (submitType === "reset") {
+      newContactDataWithTimeStamp = addLastTalkNote(newContactData);
+    }
+
     await setDoc(doc(db, `${userEmail}${userId}`, contactId), {
       ...newContactDataWithTimeStamp,
     });
