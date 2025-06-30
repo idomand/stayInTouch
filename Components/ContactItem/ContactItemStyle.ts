@@ -65,7 +65,6 @@ export const NameContainer = styled.span`
   font-size: ${({ theme }) => theme.typeScale.header4};
   line-height: 21px;
   text-transform: capitalize;
-  overflow: auto;
   width: 100px;
   @media (${({ theme }) => theme.devices.break1}) {
     width: 160px;
