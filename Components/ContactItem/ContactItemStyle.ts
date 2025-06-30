@@ -68,7 +68,6 @@ export const NameContainer = styled.span`
   width: 100px;
   @media (${({ theme }) => theme.devices.break1}) {
     width: 160px;
-    overflow: scroll;
     text-align: center;
     margin-bottom: 0px;
   }
