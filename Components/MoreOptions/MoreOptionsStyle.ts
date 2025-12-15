@@ -210,3 +210,14 @@ export const SaveToGoogleCalender = styled(BasicButton)`
 export const CalenderLogo = styled.img`
   justify-self: flex-start;
 `;
+
+export const DeleteButton = styled(BasicButton)`
+  color: ${({ theme }) => theme.red1};
+  background-color: ${({ theme }) => theme.red2};
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.red2};
+    background-color: ${({ theme }) => theme.red1};
+    border: ${({ theme }) => theme.red2} 1.3px solid;
+  }
+`;
