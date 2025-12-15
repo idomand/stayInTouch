@@ -109,7 +109,7 @@ interface DateValueProps {
   readonly statusColor: boolean;
 }
 
-export const DateValue = styled.div<DateValueProps>`
+export const DateValue = styled.span<DateValueProps>`
   color: ${({ theme, statusColor }) => {
     if (!statusColor) {
       return theme.red1;
@@ -144,16 +144,6 @@ export const ButtonsWrapper = styled.div`
 
 export const ResetButton = styled(BasicButton)``;
 
-export const DeleteButton = styled(BasicButton)`
-  color: ${({ theme }) => theme.red1};
-  background-color: ${({ theme }) => theme.red2};
-  &:hover,
-  &:focus {
-    color: ${({ theme }) => theme.red2};
-    background-color: ${({ theme }) => theme.red1};
-    border: ${({ theme }) => theme.red2} 1.3px solid;
-  }
-`;
 export const AddToGoogle = styled(BasicButton)`
   color: ${({ theme }) => theme.white};
   background-color: ${({ theme }) => theme.green2};

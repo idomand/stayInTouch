@@ -16,7 +16,6 @@ import {
   DateHeader,
   DateValue,
   DateWrapper,
-  DeleteButton,
   EmojiWrapper,
   MoreOptionsWrapper,
   NameContainer,
@@ -34,7 +33,7 @@ export default function ContactItem({
   contactId,
   notesArray,
 }: ContactItemInterface) {
-  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
@@ -59,7 +58,7 @@ export default function ContactItem({
   } else {
     lastTalkedToResponse = (
       <DateValue statusColor={isTalkingStatusOK}>
-        {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
+        {Math.floor((currantTime - timeFromLastTalk) / oneDay)}
       </DateValue>
     );
   }
@@ -70,7 +69,7 @@ export default function ContactItem({
   if (nextTalkInDays > 0) {
     nextTalkResponse = (
       <DateValue statusColor={isTalkingStatusOK}>
-        {nextTalkInDays} days
+        Talk in {nextTalkInDays} days
       </DateValue>
     );
   } else {
@@ -79,12 +78,12 @@ export default function ContactItem({
     );
   }
 
-  function deleteContactFunc() {
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
+  // function deleteContactFunc() {
+  //   if (currentUser == null || currentUser.email == null || contactId == null)
+  //     return;
 
-    deleteContact(currentUser.uid, currentUser.email, contactId);
-  }
+  //   deleteContact(currentUser.uid, currentUser.email, contactId);
+  // }
 
   function addToGoogle() {
     console.log("addToGoogle");
@@ -132,18 +131,17 @@ export default function ContactItem({
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
-          <DateWrapper>
+          {/* <DateWrapper>
             <DateHeader>Talk Every</DateHeader>
             <DateValue statusColor={isTalkingStatusOK}>{time} days</DateValue>
-          </DateWrapper>
+          </DateWrapper> */}
           <DateWrapper>
-            <DateHeader>Last Talk</DateHeader>
             <DateValue statusColor={isTalkingStatusOK}>
-              {lastTalkedToResponse}
+              Didn’t talk for {lastTalkedToResponse} days
             </DateValue>
           </DateWrapper>
           <DateWrapper>
-            <DateHeader>Next Talk In</DateHeader>
+            {/* <DateHeader>Next Talk In</DateHeader> */}
             {nextTalkResponse}
           </DateWrapper>
         </ContactDatesWrapper>
@@ -168,19 +166,6 @@ export default function ContactItem({
         <ButtonsWrapper>
           <ResetButton onClick={resetFunction}>Reset</ResetButton>
           {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
-          <DeleteButton
-            onClick={() => {
-              setShowSafeCloseDialog(true);
-            }}
-          >
-            Delete
-          </DeleteButton>
-          <SafeCloseDialog
-            dialogText={`Are you sure you want to delete ${name}`}
-            customFunction={deleteContactFunc}
-            openDialog={showSafeCloseDialog}
-            closeDialog={() => setShowSafeCloseDialog(false)}
-          />
         </ButtonsWrapper>
       </ContactItemWrapper>
     </ContactItemContainer>
