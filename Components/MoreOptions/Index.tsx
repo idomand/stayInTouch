@@ -219,6 +219,7 @@ export default function MoreOptions({
               />
               {error && <ErrorWarning errorMessage={error} />}
               <DeleteButton
+                type="button"
                 onClick={() => {
                   setShowSafeCloseDialog(true);
                 }}
