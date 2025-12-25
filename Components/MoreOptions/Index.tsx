@@ -4,7 +4,7 @@ import DatePickerComponent from "../DatePickerComponent";
 import { useAuth } from "../../lib/AuthContext";
 import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
-import { updateContact } from "../../lib/Firebase";
+import { deleteContact, updateContact } from "../../lib/Firebase";
 
 import {
   CalendarHeader,
@@ -28,10 +28,12 @@ import {
   TimeInput,
   TimeLabel,
   CloseModalButton,
+  DeleteButton,
 } from "./MoreOptionsStyle";
 import { H5 } from "../Common/StyledText";
 import ErrorWarning from "../ErrorWarning";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
+import SafeCloseDialog from "../SafeCloseDialog";
 
 export default function MoreOptions({
   name,
@@ -51,6 +53,7 @@ export default function MoreOptions({
   );
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
+  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -143,6 +146,12 @@ export default function MoreOptions({
     setError("coming soon");
   }
 
+  function deleteContactFunc() {
+    if (currentUser == null || currentUser.email == null || contactId == null)
+      return;
+
+    deleteContact(currentUser.uid, currentUser.email, contactId);
+  }
   return (
     <>
       <MoreOptionsButton onClick={onOpenModal}>More Options</MoreOptionsButton>
@@ -206,7 +215,20 @@ export default function MoreOptions({
                 value="Update Contact"
               />
               {error && <ErrorWarning errorMessage={error} />}
+              <DeleteButton
+                onClick={() => {
+                  setShowSafeCloseDialog(true);
+                }}
+              >
+                Delete
+              </DeleteButton>
             </EditContactForm>
+            <SafeCloseDialog
+              dialogText={`Are you sure you want to delete ${name}`}
+              customFunction={deleteContactFunc}
+              openDialog={showSafeCloseDialog}
+              closeDialog={() => setShowSafeCloseDialog(false)}
+            />
           </EditingSubSection>
 
           <CalendarSubSection>

@@ -25,26 +25,16 @@ export const ContactItemWrapper = styled.div`
 
   @media (${({ theme }) => theme.devices.break1}) {
     grid-template-areas:
-      "emojiStatus contactDetails contactDetails notes "
-      ". contactDetails contactDetails . "
-      "contactDates contactDates contactDates contactDates "
-      ". buttons buttons ."
-      " . moreOptions moreOptions .";
+      "contactDetails notes ."
+      "contactDetails . ."
+      "contactDates contactDates . "
+      "buttons buttons ."
+      "moreOptions moreOptions .";
   }
 `;
 
 export const NotesButtonWrapper = styled.div`
   grid-area: notes;
-`;
-
-export const EmojiWrapper = styled.div`
-  font-size: ${({ theme }) => theme.typeScale.header2};
-  margin-right: 10px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    grid-area: emojiStatus;
-    margin-right: 0;
-    text-align: end;
-  }
 `;
 
 export const ContactDetailsWrapper = styled.div`
@@ -53,6 +43,7 @@ export const ContactDetailsWrapper = styled.div`
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;
     align-items: center;
+    justify-content: center;
   }
 `;
 export const ContactDetailsSubDiv = styled.div`
@@ -106,12 +97,12 @@ export const DateHeader = styled.div`
 `;
 
 interface DateValueProps {
-  readonly statusColor: boolean;
+  readonly $statusColor: boolean;
 }
 
-export const DateValue = styled.div<DateValueProps>`
-  color: ${({ theme, statusColor }) => {
-    if (!statusColor) {
+export const DateValue = styled.span<DateValueProps>`
+  color: ${({ theme, $statusColor }) => {
+    if (!$statusColor) {
       return theme.red1;
     } else {
       return theme.grey3;
@@ -144,16 +135,6 @@ export const ButtonsWrapper = styled.div`
 
 export const ResetButton = styled(BasicButton)``;
 
-export const DeleteButton = styled(BasicButton)`
-  color: ${({ theme }) => theme.red1};
-  background-color: ${({ theme }) => theme.red2};
-  &:hover,
-  &:focus {
-    color: ${({ theme }) => theme.red2};
-    background-color: ${({ theme }) => theme.red1};
-    border: ${({ theme }) => theme.red2} 1.3px solid;
-  }
-`;
 export const AddToGoogle = styled(BasicButton)`
   color: ${({ theme }) => theme.white};
   background-color: ${({ theme }) => theme.green2};
