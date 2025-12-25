@@ -15,7 +15,7 @@ export const ContactItemContainer = styled.li`
 export const ContactItemWrapper = styled.div`
   display: grid;
   flex-grow: 1;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: ${({ theme }) => theme.white};
   border-radius: 15px;
   padding: 10px;

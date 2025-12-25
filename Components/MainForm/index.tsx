@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useAuth } from "../../lib/AuthContext";
 import AddNewContact from "../AddNewContact";
-import HowToUse from "../HowToUse";
 import {
   HeaderWrapper,
   MainFormWrapper,
   MainHeader,
   GameStartText,
+  MakeAFriend,
 } from "./MainFormStyle";
 import { showArt } from "../SecretGame";
-
 export default function MainForm() {
   const { currentUser } = useAuth()!;
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);
+  const [showMainForm, setShowMainForm] = useState(false);
 
   function startGame() {
     setHiddenGameIndicator((value) => !value);
@@ -30,9 +30,13 @@ export default function MainForm() {
             </GameStartText>{" "}
             {currentUser?.displayName}
           </MainHeader>
-          {/* <HowToUse /> */}
         </HeaderWrapper>
-        <AddNewContact />
+        <div>
+          <MakeAFriend onClick={() => setShowMainForm(!showMainForm)}>
+            Make a friend
+          </MakeAFriend>
+        </div>
+        {showMainForm && <AddNewContact />}
       </MainFormWrapper>
     </>
   );
