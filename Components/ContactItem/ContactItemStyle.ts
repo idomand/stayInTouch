@@ -25,26 +25,16 @@ export const ContactItemWrapper = styled.div`
 
   @media (${({ theme }) => theme.devices.break1}) {
     grid-template-areas:
-      "emojiStatus contactDetails contactDetails notes "
-      ". contactDetails contactDetails . "
-      "contactDates contactDates contactDates contactDates "
-      ". buttons buttons ."
-      " . moreOptions moreOptions .";
+      "contactDetails notes ."
+      "contactDetails . ."
+      "contactDates contactDates . "
+      "buttons buttons ."
+      "moreOptions moreOptions .";
   }
 `;
 
 export const NotesButtonWrapper = styled.div`
   grid-area: notes;
-`;
-
-export const EmojiWrapper = styled.div`
-  font-size: ${({ theme }) => theme.typeScale.header2};
-  margin-right: 10px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    grid-area: emojiStatus;
-    margin-right: 0;
-    text-align: end;
-  }
 `;
 
 export const ContactDetailsWrapper = styled.div`
@@ -53,6 +43,7 @@ export const ContactDetailsWrapper = styled.div`
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;
     align-items: center;
+    justify-content: center;
   }
 `;
 export const ContactDetailsSubDiv = styled.div`
