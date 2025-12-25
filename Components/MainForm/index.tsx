@@ -36,8 +36,8 @@ export default function MainForm() {
             Make a friend
           </MakeAFriend>
         </div>
-        {showMainForm && <AddNewContact />}
       </MainFormWrapper>
+      {showMainForm && <AddNewContact />}
     </>
   );
 }
