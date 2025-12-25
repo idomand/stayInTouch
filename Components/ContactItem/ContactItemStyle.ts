@@ -106,12 +106,12 @@ export const DateHeader = styled.div`
 `;
 
 interface DateValueProps {
-  readonly statusColor: boolean;
+  readonly $statusColor: boolean;
 }
 
 export const DateValue = styled.span<DateValueProps>`
-  color: ${({ theme, statusColor }) => {
-    if (!statusColor) {
+  color: ${({ theme, $statusColor }) => {
+    if (!$statusColor) {
       return theme.red1;
     } else {
       return theme.grey3;
