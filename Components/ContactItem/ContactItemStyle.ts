@@ -5,7 +5,7 @@ export const ContactItemContainer = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 75vw;
+  /* width: 75vw; */
   list-style-type: none;
   margin: 10px 5px;
   @media (${({ theme }) => theme.devices.break1}) {
@@ -15,31 +15,34 @@ export const ContactItemContainer = styled.li`
 export const ContactItemWrapper = styled.div`
   display: grid;
   flex-grow: 1;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: ${({ theme }) => theme.white};
   border-radius: 15px;
   padding: 10px;
-  grid-template-areas:
-    "contactDetails contactDates moreOptions moreOptions"
-    "contactDetails contactDates notes buttons";
+  grid-template-areas: "contactDetails contactDates notes buttons";
 
   @media (${({ theme }) => theme.devices.break1}) {
     grid-template-areas:
-      "contactDetails notes ."
-      "contactDetails . ."
-      "contactDates contactDates . "
-      "buttons buttons ."
-      "moreOptions moreOptions .";
+      "contactDetails  notes "
+      "contactDates  buttons ";
   }
 `;
 
 export const NotesButtonWrapper = styled.div`
   grid-area: notes;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-right: 20px;
+  @media (${({ theme }) => theme.devices.break1}) {
+    margin-right: 0;
+  }
 `;
 
 export const ContactDetailsWrapper = styled.div`
   grid-area: contactDetails;
   display: flex;
+  width: 200px;
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;
     align-items: center;
@@ -56,7 +59,7 @@ export const NameContainer = styled.span`
   font-size: ${({ theme }) => theme.typeScale.header4};
   line-height: 21px;
   text-transform: capitalize;
-  width: 100px;
+  width: max-content;
   @media (${({ theme }) => theme.devices.break1}) {
     width: 160px;
     text-align: center;
@@ -74,13 +77,14 @@ export const ContactImage = styled.img`
 export const ContactDatesWrapper = styled.div`
   grid-area: contactDates;
   display: flex;
-  justify-content: center;
+  width: 400px;
 
   @media (${({ theme }) => theme.devices.break1}) {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding-top: 15px;
     margin-top: 15px;
     margin-bottom: 20px;
+    max-width: 200px;
   }
 `;
 export const DateWrapper = styled.div`
@@ -130,7 +134,7 @@ export const ButtonsWrapper = styled.div`
   grid-area: buttons;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 `;
 
 export const ResetButton = styled(BasicButton)``;
