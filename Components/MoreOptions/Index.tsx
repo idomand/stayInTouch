@@ -34,6 +34,7 @@ import { H5 } from "../Common/StyledText";
 import ErrorWarning from "../ErrorWarning";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
+import { SlOptions } from "react-icons/sl";
 
 export default function MoreOptions({
   name,
@@ -154,7 +155,9 @@ export default function MoreOptions({
   }
   return (
     <>
-      <MoreOptionsButton onClick={onOpenModal}>More Options</MoreOptionsButton>
+      <MoreOptionsButton onClick={onOpenModal}>
+        <SlOptions style={{ marginLeft: "20px" }} />
+      </MoreOptionsButton>
       <ReactModal
         ariaHideApp={false}
         isOpen={isModalOpen}
@@ -231,7 +234,7 @@ export default function MoreOptions({
             />
           </EditingSubSection>
 
-          <CalendarSubSection>
+          {/* <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>
 
@@ -255,7 +258,7 @@ export default function MoreOptions({
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>
-          </CalendarSubSection>
+          </CalendarSubSection> */}
         </MoreOptionsWrapper>
       </ReactModal>
     </>

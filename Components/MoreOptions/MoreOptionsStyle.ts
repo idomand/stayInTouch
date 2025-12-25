@@ -8,7 +8,11 @@ import {
 import { H5, P1 } from "../Common/StyledText";
 import styled from "styled-components";
 
-export const MoreOptionsButton = styled(MinimalButton)``;
+export const MoreOptionsButton = styled.button`
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+`;
 
 export const MoreOptionsWrapper = styled.section`
   display: flex;
