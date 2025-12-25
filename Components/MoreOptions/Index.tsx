@@ -215,14 +215,14 @@ export default function MoreOptions({
                 value="Update Contact"
               />
               {error && <ErrorWarning errorMessage={error} />}
+              <DeleteButton
+                onClick={() => {
+                  setShowSafeCloseDialog(true);
+                }}
+              >
+                Delete
+              </DeleteButton>
             </EditContactForm>
-            <DeleteButton
-              onClick={() => {
-                setShowSafeCloseDialog(true);
-              }}
-            >
-              Delete
-            </DeleteButton>
             <SafeCloseDialog
               dialogText={`Are you sure you want to delete ${name}`}
               customFunction={deleteContactFunc}
