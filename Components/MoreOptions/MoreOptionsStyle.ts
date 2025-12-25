@@ -68,7 +68,8 @@ export const EditContactForm = styled(BasicForm)`
   grid-template-areas:
     "name howMuchTime"
     "lastTalked lastTalked"
-    "submit submit";
+    "submit submit"
+    "delete delete";
 
   @media (${({ theme }) => theme.devices.break1}) {
     border-right: none;
@@ -80,7 +81,8 @@ export const EditContactForm = styled(BasicForm)`
       "name name"
       "howMuchTime howMuchTime"
       "lastTalked lastTalked"
-      "submit submit";
+      "submit submit"
+      "delete ";
   }
 `;
 
@@ -118,22 +120,6 @@ export const LastTalkedLabel = styled.div`
   flex-direction: column;
   margin: 5px;
   justify-content: space-between;
-`;
-export const EditSubmitInput = styled(InputSubmit)`
-  grid-area: submit;
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  width: 415px;
-  height: 45px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
 `;
 
 export const CalendarSubSection = styled.div`
@@ -209,4 +195,37 @@ export const SaveToGoogleCalender = styled(BasicButton)`
 
 export const CalenderLogo = styled.img`
   justify-self: flex-start;
+`;
+
+export const EditSubmitInput = styled(InputSubmit)`
+  grid-area: submit;
+  background-color: ${({ theme }) => theme.blue1};
+  color: ${({ theme }) => theme.white};
+  width: 415px;
+  height: 45px;
+  &:hover,
+  &:focus {
+    background: ${({ theme }) => theme.blue3};
+    border: 1.3px solid ${({ theme }) => theme.blue1};
+    color: ${({ theme }) => theme.blue1};
+  }
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
+`;
+export const DeleteButton = styled(BasicButton)`
+  grid-area: delete;
+  color: ${({ theme }) => theme.red1};
+  background-color: ${({ theme }) => theme.red2};
+  width: 415px;
+  height: 45px;
+  &:hover,
+  &:focus {
+    color: ${({ theme }) => theme.red2};
+    background-color: ${({ theme }) => theme.red1};
+    border: ${({ theme }) => theme.red2} 1.3px solid;
+  }
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: auto;
+  }
 `;
