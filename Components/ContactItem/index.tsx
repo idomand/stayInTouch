@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTheme } from "styled-components";
 import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
-import { deleteContact, updateContact } from "../../lib/Firebase";
+import { updateContact } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
 import MoreOptions from "../MoreOptions/Index";
 import Notes from "../Notes";
@@ -16,7 +16,6 @@ import {
   DateHeader,
   DateValue,
   DateWrapper,
-  EmojiWrapper,
   MoreOptionsWrapper,
   NameContainer,
   NotesButtonWrapper,
@@ -78,13 +77,6 @@ export default function ContactItem({
     );
   }
 
-  // function deleteContactFunc() {
-  //   if (currentUser == null || currentUser.email == null || contactId == null)
-  //     return;
-
-  //   deleteContact(currentUser.uid, currentUser.email, contactId);
-  // }
-
   function addToGoogle() {
     console.log("addToGoogle");
   }
@@ -117,13 +109,7 @@ export default function ContactItem({
 
   return (
     <ContactItemContainer>
-      {!isMobile && (
-        <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
-      )}
       <ContactItemWrapper>
-        {isMobile && (
-          <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
-        )}
         <ContactDetailsWrapper>
           {/* <ContactImage src="/default_image.svg" /> */}
           <ContactDetailsSubDiv>
