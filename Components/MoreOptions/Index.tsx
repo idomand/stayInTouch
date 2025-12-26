@@ -5,6 +5,7 @@ import { useAuth } from "../../lib/AuthContext";
 import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
 import { deleteContact, updateContact } from "../../lib/Firebase";
+import { createGoogleCalendarEvent } from "../../lib/CalenderFunctions";
 
 import {
   CalendarHeader,
@@ -144,7 +145,13 @@ export default function MoreOptions({
   }
 
   function calenderFunction() {
-    setError("coming soon");
+    // Open Google Calendar dialog directly
+    const eventDate =
+      specificReminder instanceof Date
+        ? specificReminder
+        : new Date(specificReminder);
+
+    createGoogleCalendarEvent(name, eventDate);
   }
 
   function deleteContactFunc() {
@@ -235,7 +242,7 @@ export default function MoreOptions({
             />
           </EditingSubSection>
 
-          {/* <CalendarSubSection>
+          <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>
 
@@ -259,7 +266,7 @@ export default function MoreOptions({
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>
-          </CalendarSubSection> */}
+          </CalendarSubSection>
         </MoreOptionsWrapper>
       </ReactModal>
     </>
