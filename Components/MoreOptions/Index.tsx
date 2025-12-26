@@ -5,6 +5,7 @@ import { useAuth } from "../../lib/AuthContext";
 import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
 import { deleteContact, updateContact } from "../../lib/Firebase";
+import { createGoogleCalendarEvent } from "../../lib/CalenderFunctions";
 
 import {
   CalendarHeader,
@@ -35,6 +36,7 @@ import ErrorWarning from "../ErrorWarning";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
 import { SlOptions } from "react-icons/sl";
+import { oneDay } from "../../lib/ConstantsFile";
 
 export default function MoreOptions({
   name,
@@ -49,12 +51,27 @@ export default function MoreOptions({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  const [specificReminder, setSpecificReminder] = useState<number | Date>(
-    timeFromLastTalk
-  );
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
   const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  const currantTime = new Date().getTime();
+
+  let nextTalkInDays =
+    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+
+  // Calculate the specific reminder date based on nextTalkInDays
+  const calculateReminderDate = () => {
+    if (nextTalkInDays <= 0) {
+      return new Date(); // If overdue, use today
+    }
+    const reminderDate = new Date();
+    reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
+    return reminderDate;
+  };
+
+  const [specificReminder, setSpecificReminder] = useState<number | Date>(
+    calculateReminderDate()
+  );
 
   useEffect(() => {
     if (error) {
@@ -144,7 +161,13 @@ export default function MoreOptions({
   }
 
   function calenderFunction() {
-    setError("coming soon");
+    // Open Google Calendar dialog directly
+    const eventDate =
+      specificReminder instanceof Date
+        ? specificReminder
+        : new Date(specificReminder);
+
+    createGoogleCalendarEvent(name, eventDate);
   }
 
   function deleteContactFunc() {
@@ -235,7 +258,7 @@ export default function MoreOptions({
             />
           </EditingSubSection>
 
-          {/* <CalendarSubSection>
+          <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>
 
@@ -259,7 +282,7 @@ export default function MoreOptions({
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>
-          </CalendarSubSection> */}
+          </CalendarSubSection>
         </MoreOptionsWrapper>
       </ReactModal>
     </>
