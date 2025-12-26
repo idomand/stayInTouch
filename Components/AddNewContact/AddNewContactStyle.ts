@@ -3,6 +3,8 @@ import { BasicForm, BasicLabel } from "../Common/StyledFormElements";
 import { BasicInput, InputSubmit } from "../Common/StyledFormElements";
 
 export const AddContactForm = styled(BasicForm)`
+  max-width: 50%;
+  margin: auto;
   display: grid;
   padding: 15px;
   gap: 5px;
@@ -13,6 +15,7 @@ export const AddContactForm = styled(BasicForm)`
     "submit submit submit";
 
   @media (${({ theme }) => theme.devices.break1}) {
+    max-width: 100%;
     padding: 10px 5px;
     width: 85vw;
     gap: 0;

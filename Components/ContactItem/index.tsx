@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTheme } from "styled-components";
 import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
-import { deleteContact, updateContact } from "../../lib/Firebase";
+import { updateContact } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
 import MoreOptions from "../MoreOptions/Index";
 import Notes from "../Notes";
@@ -16,8 +16,6 @@ import {
   DateHeader,
   DateValue,
   DateWrapper,
-  DeleteButton,
-  EmojiWrapper,
   MoreOptionsWrapper,
   NameContainer,
   NotesButtonWrapper,
@@ -26,6 +24,9 @@ import {
 } from "./ContactItemStyle";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
+import { SlOptions } from "react-icons/sl";
+import { IoCheckboxOutline } from "react-icons/io5";
+import { BsExclamationSquare } from "react-icons/bs";
 
 export default function ContactItem({
   name,
@@ -34,7 +35,7 @@ export default function ContactItem({
   contactId,
   notesArray,
 }: ContactItemInterface) {
-  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
@@ -54,12 +55,12 @@ export default function ContactItem({
 
   if (currantTime - timeFromLastTalk < 86000000) {
     lastTalkedToResponse = (
-      <DateValue statusColor={isTalkingStatusOK}>Today!</DateValue>
+      <DateValue $statusColor={isTalkingStatusOK}>Today!</DateValue>
     );
   } else {
     lastTalkedToResponse = (
-      <DateValue statusColor={isTalkingStatusOK}>
-        {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days ago
+      <DateValue $statusColor={isTalkingStatusOK}>
+        {Math.floor((currantTime - timeFromLastTalk) / oneDay)}
       </DateValue>
     );
   }
@@ -69,21 +70,14 @@ export default function ContactItem({
 
   if (nextTalkInDays > 0) {
     nextTalkResponse = (
-      <DateValue statusColor={isTalkingStatusOK}>
-        {nextTalkInDays} days
+      <DateValue $statusColor={isTalkingStatusOK}>
+        Talk in {nextTalkInDays} days
       </DateValue>
     );
   } else {
     nextTalkResponse = (
-      <DateValue statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
+      <DateValue $statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
     );
-  }
-
-  function deleteContactFunc() {
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
-
-    deleteContact(currentUser.uid, currentUser.email, contactId);
   }
 
   function addToGoogle() {
@@ -118,36 +112,21 @@ export default function ContactItem({
 
   return (
     <ContactItemContainer>
-      {!isMobile && (
-        <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
-      )}
       <ContactItemWrapper>
-        {isMobile && (
-          <EmojiWrapper>{isTalkingStatusOK ? "😎" : "😡"}</EmojiWrapper>
-        )}
         <ContactDetailsWrapper>
-          {/* <ContactImage src="/default_image.svg" /> */}
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
           <DateWrapper>
-            <DateHeader>Talk Every</DateHeader>
-            <DateValue statusColor={isTalkingStatusOK}>{time} days</DateValue>
-          </DateWrapper>
-          <DateWrapper>
-            <DateHeader>Last Talk</DateHeader>
-            <DateValue statusColor={isTalkingStatusOK}>
-              {lastTalkedToResponse}
+            <DateValue $statusColor={isTalkingStatusOK}>
+              Didn’t talk for {lastTalkedToResponse} days
             </DateValue>
           </DateWrapper>
-          <DateWrapper>
-            <DateHeader>Next Talk In</DateHeader>
-            {nextTalkResponse}
-          </DateWrapper>
+          <DateWrapper>{nextTalkResponse}</DateWrapper>
         </ContactDatesWrapper>
-        <MoreOptionsWrapper>
+        {/* <MoreOptionsWrapper>
           <MoreOptions
             name={name}
             time={time}
@@ -155,7 +134,7 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
-        </MoreOptionsWrapper>
+        </MoreOptionsWrapper> */}
         <NotesButtonWrapper>
           <Notes
             name={name}
@@ -164,23 +143,41 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
+          {isMobile && (
+            <MoreOptions
+              name={name}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+              notesArray={notesArray}
+            />
+          )}
         </NotesButtonWrapper>
         <ButtonsWrapper>
-          <ResetButton onClick={resetFunction}>Reset</ResetButton>
-          <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle>
-          <DeleteButton
-            onClick={() => {
-              setShowSafeCloseDialog(true);
-            }}
-          >
-            Delete
-          </DeleteButton>
-          <SafeCloseDialog
-            dialogText={`Are you sure you want to delete ${name}`}
-            customFunction={deleteContactFunc}
-            openDialog={showSafeCloseDialog}
-            closeDialog={() => setShowSafeCloseDialog(false)}
-          />
+          {isTalkingStatusOK ? (
+            <IoCheckboxOutline
+              onClick={resetFunction}
+              color={Theme.green1}
+              size={50}
+            />
+          ) : (
+            <BsExclamationSquare
+              onClick={resetFunction}
+              color={Theme.red1}
+              size={50}
+            />
+          )}
+          {!isMobile && (
+            <MoreOptions
+              name={name}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+              notesArray={notesArray}
+            />
+          )}
+
+          {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
         </ButtonsWrapper>
       </ContactItemWrapper>
     </ContactItemContainer>
