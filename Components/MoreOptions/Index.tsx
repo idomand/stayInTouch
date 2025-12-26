@@ -36,6 +36,7 @@ import ErrorWarning from "../ErrorWarning";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
 import { SlOptions } from "react-icons/sl";
+import { oneDay } from "../../lib/ConstantsFile";
 
 export default function MoreOptions({
   name,
@@ -50,12 +51,27 @@ export default function MoreOptions({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
   const [contactTime, setContactTime] = useState(time);
-  const [specificReminder, setSpecificReminder] = useState<number | Date>(
-    timeFromLastTalk
-  );
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
   const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  const currantTime = new Date().getTime();
+
+  let nextTalkInDays =
+    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+
+  // Calculate the specific reminder date based on nextTalkInDays
+  const calculateReminderDate = () => {
+    if (nextTalkInDays <= 0) {
+      return new Date(); // If overdue, use today
+    }
+    const reminderDate = new Date();
+    reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
+    return reminderDate;
+  };
+
+  const [specificReminder, setSpecificReminder] = useState<number | Date>(
+    calculateReminderDate()
+  );
 
   useEffect(() => {
     if (error) {
