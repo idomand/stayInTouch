@@ -1,5 +1,5 @@
 export const typeScale = {
-  header1: "1.625rem", // 26px
+  header1: "2rem", // 32px
   header2: "1.5rem", // 24px
   header3: "1.375rem", // 22px
   header4: "1.25rem", // 20px

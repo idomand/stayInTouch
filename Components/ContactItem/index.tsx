@@ -24,6 +24,9 @@ import {
 } from "./ContactItemStyle";
 import { ContactItemInterface } from "../../utils/ContactItemInterface";
 import SafeCloseDialog from "../SafeCloseDialog";
+import { SlOptions } from "react-icons/sl";
+import { IoCheckboxOutline } from "react-icons/io5";
+import { BsExclamationSquare } from "react-icons/bs";
 
 export default function ContactItem({
   name,
@@ -111,27 +114,19 @@ export default function ContactItem({
     <ContactItemContainer>
       <ContactItemWrapper>
         <ContactDetailsWrapper>
-          {/* <ContactImage src="/default_image.svg" /> */}
           <ContactDetailsSubDiv>
             <NameContainer>{name}</NameContainer>
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
-          {/* <DateWrapper>
-            <DateHeader>Talk Every</DateHeader>
-            <DateValue $statusColor={isTalkingStatusOK}>{time} days</DateValue>
-          </DateWrapper> */}
           <DateWrapper>
             <DateValue $statusColor={isTalkingStatusOK}>
               Didn’t talk for {lastTalkedToResponse} days
             </DateValue>
           </DateWrapper>
-          <DateWrapper>
-            {/* <DateHeader>Next Talk In</DateHeader> */}
-            {nextTalkResponse}
-          </DateWrapper>
+          <DateWrapper>{nextTalkResponse}</DateWrapper>
         </ContactDatesWrapper>
-        <MoreOptionsWrapper>
+        {/* <MoreOptionsWrapper>
           <MoreOptions
             name={name}
             time={time}
@@ -139,7 +134,7 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
-        </MoreOptionsWrapper>
+        </MoreOptionsWrapper> */}
         <NotesButtonWrapper>
           <Notes
             name={name}
@@ -148,9 +143,40 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
+          {isMobile && (
+            <MoreOptions
+              name={name}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+              notesArray={notesArray}
+            />
+          )}
         </NotesButtonWrapper>
         <ButtonsWrapper>
-          <ResetButton onClick={resetFunction}>Reset</ResetButton>
+          {isTalkingStatusOK ? (
+            <IoCheckboxOutline
+              onClick={resetFunction}
+              color={Theme.green1}
+              size={50}
+            />
+          ) : (
+            <BsExclamationSquare
+              onClick={resetFunction}
+              color={Theme.red1}
+              size={50}
+            />
+          )}
+          {!isMobile && (
+            <MoreOptions
+              name={name}
+              time={time}
+              timeFromLastTalk={timeFromLastTalk}
+              contactId={contactId}
+              notesArray={notesArray}
+            />
+          )}
+
           {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
         </ButtonsWrapper>
       </ContactItemWrapper>

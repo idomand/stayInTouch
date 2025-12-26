@@ -8,7 +8,11 @@ import {
 import { H5, P1 } from "../Common/StyledText";
 import styled from "styled-components";
 
-export const MoreOptionsButton = styled(MinimalButton)``;
+export const MoreOptionsButton = styled.button`
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+`;
 
 export const MoreOptionsWrapper = styled.section`
   display: flex;
@@ -82,7 +86,7 @@ export const EditContactForm = styled(BasicForm)`
       "howMuchTime howMuchTime"
       "lastTalked lastTalked"
       "submit submit"
-      "delete ";
+      "delete delete";
   }
 `;
 
@@ -226,6 +230,7 @@ export const DeleteButton = styled(BasicButton)`
     border: ${({ theme }) => theme.red2} 1.3px solid;
   }
   @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
+    max-width: 300px;
+    margin: auto;
   }
 `;
