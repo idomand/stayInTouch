@@ -31,31 +31,21 @@ export const db = getFirestore();
 
 const Dummy_Data = [
   {
-    name: "Queen Elizabeth II",
-    time: 3,
-    timeFromLastTalk: 1644068546000,
-    notesArray: [
-      { noteId: 1, data: "Long live the queen" },
-      { noteId: 2, data: "The british empire will never fall!" },
-    ],
+    name: "Your Mom",
+    time: 7,
+    timeFromLastTalk: Date.now(),
+    notesArray: [],
   },
   {
-    name: "Barack Obama",
-    time: 5,
-    timeFromLastTalk: 1643204546000,
-    notesArray: [{ noteId: 1, data: "Peace & Love" }],
+    name: "the Pope",
+    time: 14,
+    timeFromLastTalk: Date.now(),
+    notesArray: [],
   },
-  { name: "Mom", time: 7, timeFromLastTalk: 1641994946000, notesArray: [] },
   {
     name: "Kanye West",
-    time: 14,
-    timeFromLastTalk: 1643636546000,
-    notesArray: [{ noteId: 1, data: "My girl is not a hobbit" }],
-  },
-  {
-    name: "Mr. Bean",
     time: 21,
-    timeFromLastTalk: 1643809453000,
+    timeFromLastTalk: Date.now(),
     notesArray: [],
   },
 ];
@@ -99,7 +89,7 @@ async function checkIfContactExists(
 }
 
 function addLastTalkNote(contactData: ContactItemInterface) {
-  const noteText = "Talked on: " + new Date().toLocaleDateString();
+  const noteText = "Talked on: " + new Date().toLocaleDateString("en-GB");
 
   let biggestId;
   if (contactData.notesArray.length === 0) {
