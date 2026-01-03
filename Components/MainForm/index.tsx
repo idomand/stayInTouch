@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../lib/AuthContext";
 import AddNewContact from "../AddNewContact";
+import { showArt } from "../SecretGame";
 import {
+  GameStartText,
   HeaderWrapper,
   MainFormWrapper,
   MainHeader,
-  GameStartText,
   MakeAFriend,
 } from "./MainFormStyle";
-import { showArt } from "../SecretGame";
 export default function MainForm() {
   const { currentUser } = useAuth()!;
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);

@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import styled from "styled-components";
 
 export const Calendar = styled.div`
   border-radius: 10px;

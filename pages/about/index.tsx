@@ -1,16 +1,15 @@
-import React from "react";
 import { useRouter } from "next/router";
-import Layout from "../../Components/Layout";
-import { addDummyData } from "../../lib/Firebase";
-import { useAuth } from "../../lib/AuthContext";
-import { P3 } from "../../Components/Common/StyledText";
 import { BasicButton } from "../../Components/Common/StyledButton";
 import { BasicLink } from "../../Components/Common/StyledLinks";
+import { P3 } from "../../Components/Common/StyledText";
+import Layout from "../../Components/Layout";
+import { useAuth } from "../../lib/AuthContext";
+import { addDummyData } from "../../lib/Firebase";
 
 import {
-  AboutTheCreator,
   AboutHeader,
   AboutPageWrapper,
+  AboutTheCreator,
   AboutTheSite,
   DemoButtonWrapper,
   HowToUseSection,

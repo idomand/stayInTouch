@@ -1,6 +1,6 @@
-import { P2 } from "../Components/Common/StyledText";
 import styled from "styled-components";
 import { BasicButton } from "../Components/Common/StyledButton";
+import { P2 } from "../Components/Common/StyledText";
 
 export const LoginPageWrapper = styled.section`
   display: flex;

@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import ContactDetails from "../Components/ContactDetails";
+import Layout from "../Components/Layout";
 import MainForm from "../Components/MainForm";
 import { useAuth } from "../lib/AuthContext";
-import Layout from "../Components/Layout";
 
 export default function Home() {
   const router = useRouter();

@@ -1,4 +1,3 @@
-import React from "react";
 import { ErrorLogo, ErrorText, ErrorWrapper } from "./ErrorWarningStyle";
 
 interface ErrorWarningProps {

@@ -6,6 +6,8 @@ import DatePickerComponent from "../DatePickerComponent";
 import {
   AddContactForm,
   AddSubmitInput,
+  EmailInput,
+  EmailInputLabel,
   LastTalkedLabel,
   NameInput,
   NameLabel,
@@ -22,7 +24,7 @@ export default function AddNewContact() {
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState<string | boolean>(false);
   const [note, setNote] = useState("");
-
+  const [friendEmail, setFriendEmail] = useState("");
   useEffect(() => {
     if (error) {
       setTimeout(() => {
@@ -51,6 +53,7 @@ export default function AddNewContact() {
       time: time,
       timeFromLastTalk: startDate.getTime(),
       notesArray: notesArray,
+      friendEmail: friendEmail,
     };
 
     const result = await addContactToFirestore(
@@ -105,7 +108,6 @@ export default function AddNewContact() {
             startDate={startDate}
           />
         </LastTalkedLabel>
-
         <NotesLabel>
           Add a Note (optional)
           <NotesInput
@@ -116,6 +118,17 @@ export default function AddNewContact() {
             }}
           />
         </NotesLabel>
+        <EmailInputLabel>
+          friend Email (optional)
+          <EmailInput
+            placeholder="new-friend@friendship.com"
+            value={friendEmail}
+            onChange={(e) => {
+              setFriendEmail(e.target.value);
+            }}
+            type="email"
+          />
+        </EmailInputLabel>
 
         <AddSubmitInput type="submit" value="Add contact" />
       </AddContactForm>

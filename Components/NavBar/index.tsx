@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useMedia } from "react-use";
+import { useTheme } from "styled-components";
 import { useAuth } from "../../lib/AuthContext";
 import { NavLink } from "../Common/StyledLinks";
-import { useMedia } from "react-use";
-import { useRouter } from "next/router";
-import { useTheme } from "styled-components";
+import SafeCloseDialog from "../SafeCloseDialog";
 import {
   LoginButton,
   LogoImg,
@@ -13,7 +14,6 @@ import {
   NavBarWrapper,
   PageLinksWrapper,
 } from "./NavBarStyle";
-import SafeCloseDialog from "../SafeCloseDialog";
 
 export default function NavBar() {
   const Theme = useTheme();

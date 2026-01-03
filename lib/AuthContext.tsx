@@ -1,12 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
-import { auth, provider } from "./Firebase";
 import {
-  signOut,
-  signInWithPopup,
-  User,
   GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  User,
 } from "firebase/auth";
+import React, { useContext, useEffect, useState } from "react";
 import { Result } from "../Components/Common/StyledSpinner";
+import { auth, provider } from "./Firebase";
 
 interface AuthContextInterface {
   currentUser?: User | null;
