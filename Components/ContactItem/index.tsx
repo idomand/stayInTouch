@@ -74,9 +74,9 @@ export default function ContactItem({
     );
   }
 
-  function addToGoogle() {
-    console.log("addToGoogle");
-  }
+  // function addToGoogle() {
+  //   console.log("addToGoogle");
+  // }
 
   function resetFunction() {
     if (currentUser == null || currentUser.email == null || contactId == null)

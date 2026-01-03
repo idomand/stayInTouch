@@ -174,7 +174,7 @@ export default function MoreOptions({
         ? specificReminder
         : new Date(specificReminder);
 
-    createGoogleCalendarEvent(name, eventDate);
+    createGoogleCalendarEvent(name, eventDate, friendEmail);
   }
 
   function deleteContactFunc() {

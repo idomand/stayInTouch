@@ -1,42 +1,42 @@
 import { auth } from "./Firebase";
 
-let cachedAccessToken: string | null = null;
+// let cachedAccessToken: string | null = null;
 
 /**
  * Sets the Google OAuth access token for API calls
  * This should be called after successful Google sign-in
  */
-export function setGoogleAccessToken(token: string | null) {
-  cachedAccessToken = token;
-}
+// export function setGoogleAccessToken(token: string | null) {
+//   cachedAccessToken = token;
+// }
 
 /**
  * Gets the stored Google OAuth access token
  */
-function getGoogleAccessToken(): string | null {
-  // Try to get from cache first
-  if (cachedAccessToken) {
-    return cachedAccessToken;
-  }
-  // Fall back to localStorage
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("googleAccessToken");
-  }
-  return null;
-}
+// function getGoogleAccessToken(): string | null {
+//   // Try to get from cache first
+//   if (cachedAccessToken) {
+//     return cachedAccessToken;
+//   }
+//   // Fall back to localStorage
+//   if (typeof window !== "undefined") {
+//     return localStorage.getItem("googleAccessToken");
+//   }
+//   return null;
+// }
 
-interface CalendarEvent {
-  summary: string;
-  description?: string;
-  start: {
-    dateTime: string;
-    timeZone: string;
-  };
-  end: {
-    dateTime: string;
-    timeZone: string;
-  };
-}
+// interface CalendarEvent {
+//   summary: string;
+//   description?: string;
+//   start: {
+//     dateTime: string;
+//     timeZone: string;
+//   };
+//   end: {
+//     dateTime: string;
+//     timeZone: string;
+//   };
+// }
 
 /**
  * Formats a date to Google Calendar URL format (YYYYMMDDTHHmmssZ)
@@ -62,6 +62,7 @@ function formatDateForGoogleCalendar(date: Date): string {
 export async function createGoogleCalendarEvent(
   eventName: string,
   eventDate: Date = new Date(),
+  friendEmail?: string,
   description?: string
 ): Promise<any> {
   try {
@@ -73,10 +74,10 @@ export async function createGoogleCalendarEvent(
 
     // Set the event to be at a specific time
     const startDateTime = new Date(eventDate);
-    startDateTime.setHours(10, 0, 0, 0); // Set to 10:00 AM
+    startDateTime.setHours(19, 0, 0, 0); // Set to 7:00 PM
 
     const endDateTime = new Date(eventDate);
-    endDateTime.setHours(11, 0, 0, 0); // Set to 11:00 AM (1 hour duration)
+    endDateTime.setHours(20, 0, 0, 0); // Set to 8:00 PM (1 hour duration)
 
     // Format dates for Google Calendar URL
     const startFormatted = formatDateForGoogleCalendar(startDateTime);
@@ -90,7 +91,7 @@ export async function createGoogleCalendarEvent(
       text: `${eventName} - ${userName}`,
       dates: `${startFormatted}/${endFormatted}`,
       details: description || "",
-      //   add: "idomand@google.com", // Add guest/attendee
+      add: friendEmail || "",
     });
 
     const calendarUrl = `https://calendar.google.com/calendar/render?${params.toString()}`;
