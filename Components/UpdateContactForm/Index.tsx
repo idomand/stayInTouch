@@ -40,33 +40,12 @@ export default function UpdateContactForm({
   onClose,
 }: UpdateContactFormState) {
   const { currentUser } = useAuth()!;
-  // const Theme = useTheme();
-  // const isMobile = useMedia(`(${Theme.devices.break1})`);
   const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
   const [contactName, setContactName] = useState(name);
   const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
-  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
-  // const currantTime = new Date().getTime();
-
-  // let nextTalkInDays =
-  //   time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
-
-  // Calculate the specific reminder date based on nextTalkInDays
-  // const calculateReminderDate = () => {
-  //   if (nextTalkInDays <= 0) {
-  //     return new Date(); // If overdue, use today
-  //   }
-  //   const reminderDate = new Date();
-  //   reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
-  //   return reminderDate;
-  // };
-
-  // const [specificReminder, setSpecificReminder] = useState<number | Date>(
-  //   calculateReminderDate()
-  // );
 
   useEffect(() => {
     setIsModalOpen(isModalOpenProp);
@@ -110,7 +89,6 @@ export default function UpdateContactForm({
     let result;
 
     /* //* if nothing was change ==> just return */
-
     if (
       oldContactData.name == newContactData.name &&
       oldContactData.time == newContactData.time &&
@@ -147,11 +125,6 @@ export default function UpdateContactForm({
     }
   }
 
-  // function onOpenModal(e: React.MouseEvent<HTMLElement>) {
-  //   setIsModalOpen(true);
-  //   e.currentTarget.blur();
-  // }
-
   function onCloseModal() {
     setIsModalOpen(false);
     setContactName(name);
@@ -164,22 +137,6 @@ export default function UpdateContactForm({
     }
   }
 
-  // function calenderFunction() {
-  //   // Open Google Calendar dialog directly
-  //   const eventDate =
-  //     specificReminder instanceof Date
-  //       ? specificReminder
-  //       : new Date(specificReminder);
-
-  //   createGoogleCalendarEvent(name, eventDate, friendEmail);
-  // }
-
-  // function deleteContactFunc() {
-  //   if (currentUser == null || currentUser.email == null || contactId == null)
-  //     return;
-
-  //   deleteContact(currentUser.uid, currentUser.email, contactId);
-  // }
   return (
     <>
       <ReactModal
@@ -201,7 +158,6 @@ export default function UpdateContactForm({
               </HeaderName>
               <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
             </EditHeader>
-
             <EditContactForm onSubmit={updateContactOnSubmit}>
               <NameLabel>
                 Change Name:
@@ -252,45 +208,8 @@ export default function UpdateContactForm({
                 value="Update Contact"
               />
               {error && <ErrorWarning errorMessage={error} />}
-              {/* <DeleteButton
-                type="button"
-                onClick={() => {
-                  setShowSafeCloseDialog(true);
-                }}
-              >
-                Delete
-              </DeleteButton> */}
             </EditContactForm>
-            {/* <SafeCloseDialog
-              dialogText={`Are you sure you want to delete ${name}`}
-              customFunction={deleteContactFunc}
-              openDialog={showSafeCloseDialog}
-              closeDialog={() => setShowSafeCloseDialog(false)}
-            /> */}
           </EditingSubSection>
-
-          {/* <CalendarSubSection>
-            <CalendarHeader>
-              <H5>Calendar Options</H5>
-
-            </CalendarHeader>
-
-            <SpecificTimeWrapper>
-              <CalenderText>
-                Add this reminder into Google Calender
-              </CalenderText>
-              <CalenderDatePickerWrapper>
-                <DatePickerComponent
-                  setStartDate={setSpecificReminder}
-                  startDate={specificReminder}
-                />
-              </CalenderDatePickerWrapper>
-            </SpecificTimeWrapper>
-            <SaveToGoogleCalender onClick={calenderFunction}>
-              <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
-              Save to Calender
-            </SaveToGoogleCalender>
-          </CalendarSubSection> */}
         </MoreOptionsWrapper>
       </ReactModal>
     </>

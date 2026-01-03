@@ -30,22 +30,12 @@ export default function AppointmentForm({
   name,
   time,
   timeFromLastTalk,
-  // contactId,
-  // notesArray,
   friendEmail,
   isModalOpenProp,
   onClose,
 }: AppointmentFormState) {
-  // const { currentUser } = useAuth()!;
-  // const Theme = useTheme();
-  // const isMobile = useMedia(`(${Theme.devices.break1})`);
   const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
-  // const [contactName, setContactName] = useState(name);
-  // const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
-  // const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
-  // const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
-  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
   const currantTime = new Date().getTime();
 
   let nextTalkInDays =
@@ -77,82 +67,8 @@ export default function AppointmentForm({
     }
   }, [error]);
 
-  // async function updateContactOnSubmit(e: React.FocusEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-  //   if (currentUser == null || currentUser.email == null || contactId == null)
-  //     return;
-
-  //   let timeFromLastTalkVar = lastTalk;
-
-  //   if (lastTalk instanceof Date) {
-  //     timeFromLastTalkVar = lastTalk.getTime();
-  //   }
-
-  //   const oldContactData = {
-  //     name,
-  //     time,
-  //     timeFromLastTalk,
-  //     contactId,
-  //     notesArray,
-  //     friendEmail,
-  //   };
-  //   const newContactData = {
-  //     name: contactName,
-  //     time: +contactTime,
-  //     timeFromLastTalk: timeFromLastTalkVar,
-  //     notesArray: notesArray,
-  //     friendEmail: newFriendEmail,
-  //   };
-
-  //   let result;
-
-  //   /* //* if nothing was change ==> just return */
-
-  //   if (
-  //     oldContactData.name == newContactData.name &&
-  //     oldContactData.time == newContactData.time &&
-  //     oldContactData.timeFromLastTalk == newContactData.timeFromLastTalk
-  //   ) {
-  //     return setIsModalOpen(false);
-  //   } else {
-  //     result = await updateContact(
-  //       currentUser.uid,
-  //       currentUser.email,
-  //       contactId,
-  //       oldContactData,
-  //       newContactData,
-  //       "edit"
-  //     );
-  //   }
-  //   if (result === "bad") {
-  //     setError("contact already in list");
-  //     setContactName(name);
-  //   } else {
-  //     setIsModalOpen(false);
-  //   }
-  // }
-
-  // function timeChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setContactTime(+e.target.value);
-  // }
-
-  // function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setContactName(e.target.value);
-
-  //   if (error) {
-  //     setError(false);
-  //   }
-  // }
-
-  // function onOpenModal(e: React.MouseEvent<HTMLElement>) {
-  //   setIsModalOpen(true);
-  //   e.currentTarget.blur();
-  // }
-
   function onCloseModal() {
     setIsModalOpen(false);
-    // setContactName(name);
-    // setContactTime(time);
     if (error) {
       setError(false);
     }
@@ -171,12 +87,6 @@ export default function AppointmentForm({
     createGoogleCalendarEvent(name, eventDate, friendEmail);
   }
 
-  // function deleteContactFunc() {
-  //   if (currentUser == null || currentUser.email == null || contactId == null)
-  //     return;
-
-  //   deleteContact(currentUser.uid, currentUser.email, contactId);
-  // }
   return (
     <>
       <ReactModal
