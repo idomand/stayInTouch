@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../lib/AuthContext";
-import { db } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
-import { ContactItemInterface } from "../ContactItemInterface";
+import { db } from "../../lib/Firebase";
+import { ContactItemType } from "../../types/ContactItemType";
 
 export default function useSnapshotData() {
-  const [basicArray, SetBasicArray] = useState<ContactItemInterface[]>([]);
+  const [basicArray, SetBasicArray] = useState<ContactItemType[]>([]);
 
   const { currentUser } = useAuth()!;
 
@@ -20,7 +20,7 @@ export default function useSnapshotData() {
       (snapshot) => {
         SetBasicArray(
           snapshot.docs.map((doc) => {
-            let contactObject = doc.data() as ContactItemInterface;
+            let contactObject = doc.data() as ContactItemType;
             contactObject.contactId = doc.id;
             contactObject.timeUntilNextTalk = +(
               contactObject.time -

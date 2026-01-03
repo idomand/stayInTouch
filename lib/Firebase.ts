@@ -1,18 +1,19 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { DocumentData, getFirestore } from "firebase/firestore";
 import {
-  collection,
   addDoc,
-  doc,
-  setDoc,
-  getDoc,
+  collection,
   deleteDoc,
+  doc,
+  DocumentData,
+  getDoc,
   getDocs,
+  getFirestore,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { ContactItemInterface } from "../utils/ContactItemInterface";
-import { NoteInterface } from "../utils/NoteInterface";
+import { ContactItemType } from "../types/ContactItemType";
+import { NoteType } from "../types/NoteType";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -29,24 +30,27 @@ export const db = getFirestore();
 
 // !==========HELPER FUNCTIONS:=======
 
-const Dummy_Data = [
+const Dummy_Data: ContactItemType[] = [
   {
     name: "Your Mom",
     time: 7,
     timeFromLastTalk: Date.now(),
     notesArray: [],
+    friendEmail: "",
   },
   {
     name: "the Pope",
     time: 14,
     timeFromLastTalk: Date.now(),
     notesArray: [],
+    friendEmail: "",
   },
   {
     name: "Kanye West",
     time: 21,
     timeFromLastTalk: Date.now(),
     notesArray: [],
+    friendEmail: "",
   },
 ];
 
@@ -69,7 +73,7 @@ export async function addDummyData(userId: string, userEmail: string) {
 async function checkIfContactExists(
   userId: string,
   userEmail: string,
-  userData: ContactItemInterface
+  userData: ContactItemType
 ) {
   const querySnapshot = await getDocs(collection(db, `${userEmail}${userId}`));
   const oldArray: DocumentData[] = [];
@@ -88,7 +92,7 @@ async function checkIfContactExists(
   }
 }
 
-function addLastTalkNote(contactData: ContactItemInterface) {
+function addLastTalkNote(contactData: ContactItemType) {
   const noteText = "Talked on: " + new Date().toLocaleDateString("en-GB");
 
   let biggestId;
@@ -114,7 +118,7 @@ function addLastTalkNote(contactData: ContactItemInterface) {
 export async function addContactToFirestore(
   userId: string,
   userEmail: string,
-  userData: ContactItemInterface
+  userData: ContactItemType
 ) {
   const isNewContactUnique = await checkIfContactExists(
     userId,
@@ -135,8 +139,8 @@ export async function updateContact(
   userId: string,
   userEmail: string,
   contactId: string,
-  oldContactData: ContactItemInterface,
-  newContactData: ContactItemInterface,
+  oldContactData: ContactItemType,
+  newContactData: ContactItemType,
   submitType: "reset" | "edit" | "addNote"
 ) {
   if (oldContactData.name === newContactData.name) {
@@ -176,7 +180,7 @@ export async function deleteNote(
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
   const docData = docSnapRef.data();
-  const newArray = docData?.notesArray.filter((note: NoteInterface) => {
+  const newArray = docData?.notesArray.filter((note: NoteType) => {
     if (note.noteId !== noteId) {
       return note;
     }
@@ -196,7 +200,7 @@ export async function updateNote(
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
   const docData = docSnapRef.data();
-  const newArray = docData?.notesArray.map((note: NoteInterface) => {
+  const newArray = docData?.notesArray.map((note: NoteType) => {
     if (note.noteId === noteId) {
       let newNote = note;
       newNote.data = newNoteData;

@@ -51,6 +51,4 @@ export const BasicLabel = styled.label`
     /* max-width: 80%; */
     /* width: 100%; */
   }
-
-  /* background-color: greenyellow; */
 `;

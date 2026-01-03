@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-import NoteItem from "../NoteItem";
-import { updateContact, updateNote } from "../../lib/Firebase";
 import { useAuth } from "../../lib/AuthContext";
+import { updateContact, updateNote } from "../../lib/Firebase";
+import { ContactItemType } from "../../types/ContactItemType";
+import { H5 } from "../Common/StyledText";
+import NoteItem from "../NoteItem";
 import {
   AddNewNoteForm,
   AddNewNoteWrapper,
@@ -21,10 +23,8 @@ import {
   NotesWrapper,
   NotsNumber,
 } from "./NotesStyle";
-import { H5 } from "../Common/StyledText";
-import { ContactItemInterface } from "../../utils/ContactItemInterface";
 
-export default function Notes(props: ContactItemInterface) {
+export default function Notes(props: ContactItemType) {
   const { currentUser } = useAuth()!;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");

@@ -12,6 +12,7 @@ export const AddContactForm = styled(BasicForm)`
   grid-template-areas:
     "name howMuchTime howMuchTime"
     "lastTalked notes notes"
+    "emailInput emailInput emailInput"
     "submit submit submit";
 
   @media (${({ theme }) => theme.devices.break1}) {
@@ -23,6 +24,7 @@ export const AddContactForm = styled(BasicForm)`
       "name howMuchTime"
       "lastTalked lastTalked"
       "notes notes"
+      "emailInput emailInput "
       "submit submit";
   }
 `;
@@ -86,6 +88,16 @@ export const NotesInput = styled.textarea`
   &:focus {
     border: 1px solid ${({ theme }) => theme.blue1};
   }
+`;
+
+export const EmailInputLabel = styled(BasicLabel)`
+  grid-area: emailInput;
+  @media (${({ theme }) => theme.devices.break1}) {
+  }
+`;
+export const EmailInput = styled(BasicInput)`
+  grid-area: emailInput;
+  border: 1px solid ${({ theme }) => theme.grey2};
 `;
 
 export const AddSubmitInput = styled(InputSubmit)`

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { BsExclamationSquare } from "react-icons/bs";
+import { IoCheckboxOutline } from "react-icons/io5";
+// import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
-import { useMedia } from "react-use";
 import { useAuth } from "../../lib/AuthContext";
-import { updateContact } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
-import MoreOptions from "../MoreOptions/Index";
+import { updateContact } from "../../lib/Firebase";
+import { ContactItemType } from "../../types/ContactItemType";
+import MoreOptionsDropdown from "../MoreOptionsDropdown";
 import Notes from "../Notes";
 import {
   ButtonsWrapper,
@@ -13,20 +15,11 @@ import {
   ContactDetailsWrapper,
   ContactItemContainer,
   ContactItemWrapper,
-  DateHeader,
   DateValue,
   DateWrapper,
-  MoreOptionsWrapper,
   NameContainer,
   NotesButtonWrapper,
-  ResetButton,
-  AddToGoogle,
 } from "./ContactItemStyle";
-import { ContactItemInterface } from "../../utils/ContactItemInterface";
-import SafeCloseDialog from "../SafeCloseDialog";
-import { SlOptions } from "react-icons/sl";
-import { IoCheckboxOutline } from "react-icons/io5";
-import { BsExclamationSquare } from "react-icons/bs";
 
 export default function ContactItem({
   name,
@@ -34,13 +27,14 @@ export default function ContactItem({
   timeFromLastTalk,
   contactId,
   notesArray,
-}: ContactItemInterface) {
+  friendEmail,
+}: ContactItemType) {
   // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
   const Theme = useTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
+  // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let nextTalkResponse;
 
@@ -80,9 +74,9 @@ export default function ContactItem({
     );
   }
 
-  function addToGoogle() {
-    console.log("addToGoogle");
-  }
+  // function addToGoogle() {
+  //   console.log("addToGoogle");
+  // }
 
   function resetFunction() {
     if (currentUser == null || currentUser.email == null || contactId == null)
@@ -93,12 +87,14 @@ export default function ContactItem({
       time: time,
       timeFromLastTalk: timeFromLastTalk,
       notesArray: notesArray,
+      friendEmail: friendEmail,
     };
     const newContactData = {
       name: name,
       time: time,
       timeFromLastTalk: currantTime,
       notesArray: notesArray,
+      friendEmail: friendEmail,
     };
     updateContact(
       currentUser.uid,
@@ -137,21 +133,13 @@ export default function ContactItem({
         </MoreOptionsWrapper> */}
         <NotesButtonWrapper>
           <Notes
+            friendEmail={friendEmail}
             name={name}
             time={time}
             timeFromLastTalk={timeFromLastTalk}
             contactId={contactId}
             notesArray={notesArray}
           />
-          {isMobile && (
-            <MoreOptions
-              name={name}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              notesArray={notesArray}
-            />
-          )}
         </NotesButtonWrapper>
         <ButtonsWrapper>
           {isTalkingStatusOK ? (
@@ -167,15 +155,15 @@ export default function ContactItem({
               size={50}
             />
           )}
-          {!isMobile && (
-            <MoreOptions
-              name={name}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              notesArray={notesArray}
-            />
-          )}
+
+          <MoreOptionsDropdown
+            friendEmail={friendEmail}
+            name={name}
+            time={time}
+            timeFromLastTalk={timeFromLastTalk}
+            contactId={contactId}
+            notesArray={notesArray}
+          />
 
           {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
         </ButtonsWrapper>
