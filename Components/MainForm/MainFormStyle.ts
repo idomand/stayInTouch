@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { H1 } from "../Common/StyledText";
 import { BasicButton } from "../Common/StyledButton";
+import { H1 } from "../Common/StyledText";
 
 export const MainFormWrapper = styled.section`
   margin-left: 20px;

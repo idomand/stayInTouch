@@ -47,7 +47,7 @@ a {
 
 @media only screen and (max-width: 550px) {
   .contact-edit-modal {
-    top:20%;
+    top: 20%;
     left: 20px;
     right: 20px;
     height: fit-content;

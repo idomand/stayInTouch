@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import ContactItem from "../ContactItem";
+import { useEffect, useState } from "react";
+import { ContactItemType } from "../../types/ContactItemType";
 import useSnapshotData from "../../utils/hooks/useSnapshotData";
-import { ContactList, NoContactsWrapper } from "./ContactDetailsStyle";
 import { H1 } from "../Common/StyledText";
-import { ContactItemInterface } from "../../utils/ContactItemInterface";
+import ContactItem from "../ContactItem";
+import { ContactList, NoContactsWrapper } from "./ContactDetailsStyle";
 
 export default function ContactDetails() {
-  const [arrayOfContacts, SetArrayOfContacts] = useState<
-    ContactItemInterface[]
-  >([]);
+  const [arrayOfContacts, SetArrayOfContacts] = useState<ContactItemType[]>([]);
 
   const basicArray = useSnapshotData();
 
@@ -27,7 +25,7 @@ export default function ContactDetails() {
     <>
       <ContactList>
         {basicArray.length > 0 &&
-          arrayOfContacts.map((element: ContactItemInterface) => {
+          arrayOfContacts.map((element: ContactItemType) => {
             return (
               <ContactItem
                 notesArray={element.notesArray}
@@ -37,6 +35,7 @@ export default function ContactDetails() {
                 timeFromLastTalk={element.timeFromLastTalk}
                 contactId={element.contactId}
                 timeUntilNextTalk={element.timeUntilNextTalk}
+                friendEmail={element.friendEmail}
               />
             );
           })}

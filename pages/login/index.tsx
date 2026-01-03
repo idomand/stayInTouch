@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import Layout from "../../Components/Layout";
-
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { H1, P2 } from "../../Components/Common/StyledText";
+import Layout from "../../Components/Layout";
 import { useAuth } from "../../lib/AuthContext";
 import {
   AboutSubSection,
@@ -11,7 +11,6 @@ import {
   LoginSubSection,
   SignInButton,
 } from "../../styles/LoginPageStyle";
-import { H1, P2 } from "../../Components/Common/StyledText";
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth()!;

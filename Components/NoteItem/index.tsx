@@ -1,6 +1,6 @@
-import React from "react";
 import { useAuth } from "../../lib/AuthContext";
 import { deleteNote } from "../../lib/Firebase";
+import { NoteType } from "../../types/NoteType";
 import { H4 } from "../Common/StyledText";
 import {
   DeleteNoteButton,
@@ -9,16 +9,16 @@ import {
   NoteItemButtonWrapper,
   NoteItemHeaderText,
   NoteItemHeaderWrapper,
-  NoteItemWrapper,TalkedOnWrapper
+  NoteItemWrapper,
+  TalkedOnWrapper,
 } from "./NoteItemStyles";
-import { NoteInterface } from "../../utils/NoteInterface";
 
 export default function NoteItem({
   noteId,
   data,
   contactId,
   switchToEditMood,
-}: NoteInterface) {
+}: NoteType) {
   const { currentUser } = useAuth()!;
 
   function deleteNoteFunc() {
@@ -41,9 +41,9 @@ export default function NoteItem({
       </NoteItemHeaderWrapper>
 
       {data.startsWith("Talked on: ") ? (
-        <TalkedOnWrapper >{data}</TalkedOnWrapper>
+        <TalkedOnWrapper>{data}</TalkedOnWrapper>
       ) : (
-        <NoteDataWrapper >{data}</NoteDataWrapper>
+        <NoteDataWrapper>{data}</NoteDataWrapper>
       )}
     </NoteItemWrapper>
   );

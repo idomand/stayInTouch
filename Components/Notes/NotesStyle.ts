@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { H5 } from "../Common/StyledText";
 import { BasicButton } from "../Common/StyledButton";
 import { BasicForm, InputSubmit } from "../Common/StyledFormElements";
+import { H5 } from "../Common/StyledText";
 
 export const NotesButton = styled.button`
   cursor: pointer;

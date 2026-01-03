@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { useTheme } from "styled-components";
+import { BsExclamationSquare } from "react-icons/bs";
+import { IoCheckboxOutline } from "react-icons/io5";
 import { useMedia } from "react-use";
+import { useTheme } from "styled-components";
 import { useAuth } from "../../lib/AuthContext";
-import { updateContact } from "../../lib/Firebase";
 import { oneDay } from "../../lib/ConstantsFile";
+import { updateContact } from "../../lib/Firebase";
+import { ContactItemType } from "../../types/ContactItemType";
 import MoreOptions from "../MoreOptions/Index";
 import Notes from "../Notes";
 import {
@@ -13,20 +15,11 @@ import {
   ContactDetailsWrapper,
   ContactItemContainer,
   ContactItemWrapper,
-  DateHeader,
   DateValue,
   DateWrapper,
-  MoreOptionsWrapper,
   NameContainer,
   NotesButtonWrapper,
-  ResetButton,
-  AddToGoogle,
 } from "./ContactItemStyle";
-import { ContactItemInterface } from "../../utils/ContactItemInterface";
-import SafeCloseDialog from "../SafeCloseDialog";
-import { SlOptions } from "react-icons/sl";
-import { IoCheckboxOutline } from "react-icons/io5";
-import { BsExclamationSquare } from "react-icons/bs";
 
 export default function ContactItem({
   name,
@@ -34,7 +27,8 @@ export default function ContactItem({
   timeFromLastTalk,
   contactId,
   notesArray,
-}: ContactItemInterface) {
+  friendEmail,
+}: ContactItemType) {
   // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
 
   const { currentUser } = useAuth()!;
@@ -93,12 +87,14 @@ export default function ContactItem({
       time: time,
       timeFromLastTalk: timeFromLastTalk,
       notesArray: notesArray,
+      friendEmail: friendEmail,
     };
     const newContactData = {
       name: name,
       time: time,
       timeFromLastTalk: currantTime,
       notesArray: notesArray,
+      friendEmail: friendEmail,
     };
     updateContact(
       currentUser.uid,
@@ -137,6 +133,7 @@ export default function ContactItem({
         </MoreOptionsWrapper> */}
         <NotesButtonWrapper>
           <Notes
+            friendEmail={friendEmail}
             name={name}
             time={time}
             timeFromLastTalk={timeFromLastTalk}
@@ -145,6 +142,7 @@ export default function ContactItem({
           />
           {isMobile && (
             <MoreOptions
+              friendEmail={friendEmail}
               name={name}
               time={time}
               timeFromLastTalk={timeFromLastTalk}
@@ -169,6 +167,7 @@ export default function ContactItem({
           )}
           {!isMobile && (
             <MoreOptions
+              friendEmail={friendEmail}
               name={name}
               time={time}
               timeFromLastTalk={timeFromLastTalk}
