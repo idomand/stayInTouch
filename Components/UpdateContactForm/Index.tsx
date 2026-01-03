@@ -1,27 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
-import { useMedia } from "react-use";
-import { useTheme } from "styled-components";
 import { useAuth } from "../../lib/AuthContext";
-import { createGoogleCalendarEvent } from "../../lib/CalenderFunctions";
-import { deleteContact, updateContact } from "../../lib/Firebase";
-import DatePickerComponent from "../DatePickerComponent";
-
-import { SlOptions } from "react-icons/sl";
-import { oneDay } from "../../lib/ConstantsFile";
+import { updateContact } from "../../lib/Firebase";
 import { ContactItemType } from "../../types/ContactItemType";
 import { H5 } from "../Common/StyledText";
+import DatePickerComponent from "../DatePickerComponent";
 import ErrorWarning from "../ErrorWarning";
-import SafeCloseDialog from "../SafeCloseDialog";
 import {
-  CalendarHeader,
-  CalendarSubSection,
-  CalenderDatePickerWrapper,
-  CalenderLogo,
-  CalenderText,
   CloseModalButton,
   ContactNameHeader,
-  DeleteButton,
   EditContactForm,
   EditHeader,
   EditingSubSection,
@@ -30,53 +17,60 @@ import {
   EmailInputLabel,
   HeaderName,
   LastTalkedLabel,
-  MoreOptionsButton,
   MoreOptionsWrapper,
   NameInput,
   NameLabel,
-  SaveToGoogleCalender,
-  SpecificTimeWrapper,
   TimeInput,
   TimeLabel,
-} from "./MoreOptionsStyle";
+} from "./UpdateContactFormStyle";
 
-export default function MoreOptions({
+type UpdateContactFormState = ContactItemType & {
+  isModalOpenProp: boolean;
+  onClose?: () => void;
+};
+
+export default function UpdateContactForm({
   name,
   time,
   timeFromLastTalk,
   contactId,
   notesArray,
   friendEmail,
-}: ContactItemType) {
-  console.log("friendEmail :>> ", friendEmail);
+  isModalOpenProp,
+  onClose,
+}: UpdateContactFormState) {
   const { currentUser } = useAuth()!;
-  const Theme = useTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const Theme = useTheme();
+  // const isMobile = useMedia(`(${Theme.devices.break1})`);
+  const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
   const [contactName, setContactName] = useState(name);
   const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
-  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
-  const currantTime = new Date().getTime();
+  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  // const currantTime = new Date().getTime();
 
-  let nextTalkInDays =
-    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+  // let nextTalkInDays =
+  //   time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
 
   // Calculate the specific reminder date based on nextTalkInDays
-  const calculateReminderDate = () => {
-    if (nextTalkInDays <= 0) {
-      return new Date(); // If overdue, use today
-    }
-    const reminderDate = new Date();
-    reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
-    return reminderDate;
-  };
+  // const calculateReminderDate = () => {
+  //   if (nextTalkInDays <= 0) {
+  //     return new Date(); // If overdue, use today
+  //   }
+  //   const reminderDate = new Date();
+  //   reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
+  //   return reminderDate;
+  // };
 
-  const [specificReminder, setSpecificReminder] = useState<number | Date>(
-    calculateReminderDate()
-  );
+  // const [specificReminder, setSpecificReminder] = useState<number | Date>(
+  //   calculateReminderDate()
+  // );
+
+  useEffect(() => {
+    setIsModalOpen(isModalOpenProp);
+  }, [isModalOpenProp]);
 
   useEffect(() => {
     if (error) {
@@ -153,10 +147,10 @@ export default function MoreOptions({
     }
   }
 
-  function onOpenModal(e: React.MouseEvent<HTMLElement>) {
-    setIsModalOpen(true);
-    e.currentTarget.blur();
-  }
+  // function onOpenModal(e: React.MouseEvent<HTMLElement>) {
+  //   setIsModalOpen(true);
+  //   e.currentTarget.blur();
+  // }
 
   function onCloseModal() {
     setIsModalOpen(false);
@@ -165,29 +159,29 @@ export default function MoreOptions({
     if (error) {
       setError(false);
     }
+    if (onClose) {
+      onClose();
+    }
   }
 
-  function calenderFunction() {
-    // Open Google Calendar dialog directly
-    const eventDate =
-      specificReminder instanceof Date
-        ? specificReminder
-        : new Date(specificReminder);
+  // function calenderFunction() {
+  //   // Open Google Calendar dialog directly
+  //   const eventDate =
+  //     specificReminder instanceof Date
+  //       ? specificReminder
+  //       : new Date(specificReminder);
 
-    createGoogleCalendarEvent(name, eventDate, friendEmail);
-  }
+  //   createGoogleCalendarEvent(name, eventDate, friendEmail);
+  // }
 
-  function deleteContactFunc() {
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
+  // function deleteContactFunc() {
+  //   if (currentUser == null || currentUser.email == null || contactId == null)
+  //     return;
 
-    deleteContact(currentUser.uid, currentUser.email, contactId);
-  }
+  //   deleteContact(currentUser.uid, currentUser.email, contactId);
+  // }
   return (
     <>
-      <MoreOptionsButton onClick={onOpenModal}>
-        <SlOptions style={{ marginLeft: "20px" }} />
-      </MoreOptionsButton>
       <ReactModal
         ariaHideApp={false}
         isOpen={isModalOpen}
@@ -205,9 +199,7 @@ export default function MoreOptions({
                 <H5>Editing Contact:</H5>
                 <ContactNameHeader>{name}</ContactNameHeader>
               </HeaderName>
-              {isMobile && (
-                <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
-              )}
+              <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
             </EditHeader>
 
             <EditContactForm onSubmit={updateContactOnSubmit}>
@@ -260,30 +252,27 @@ export default function MoreOptions({
                 value="Update Contact"
               />
               {error && <ErrorWarning errorMessage={error} />}
-              <DeleteButton
+              {/* <DeleteButton
                 type="button"
                 onClick={() => {
                   setShowSafeCloseDialog(true);
                 }}
               >
                 Delete
-              </DeleteButton>
+              </DeleteButton> */}
             </EditContactForm>
-            <SafeCloseDialog
+            {/* <SafeCloseDialog
               dialogText={`Are you sure you want to delete ${name}`}
               customFunction={deleteContactFunc}
               openDialog={showSafeCloseDialog}
               closeDialog={() => setShowSafeCloseDialog(false)}
-            />
+            /> */}
           </EditingSubSection>
 
-          <CalendarSubSection>
+          {/* <CalendarSubSection>
             <CalendarHeader>
               <H5>Calendar Options</H5>
 
-              {!isMobile && (
-                <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
-              )}
             </CalendarHeader>
 
             <SpecificTimeWrapper>
@@ -301,7 +290,7 @@ export default function MoreOptions({
               <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
               Save to Calender
             </SaveToGoogleCalender>
-          </CalendarSubSection>
+          </CalendarSubSection> */}
         </MoreOptionsWrapper>
       </ReactModal>
     </>

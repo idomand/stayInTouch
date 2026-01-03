@@ -1,12 +1,12 @@
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
-import { useMedia } from "react-use";
+// import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
 import { useAuth } from "../../lib/AuthContext";
 import { oneDay } from "../../lib/ConstantsFile";
 import { updateContact } from "../../lib/Firebase";
 import { ContactItemType } from "../../types/ContactItemType";
-import MoreOptions from "../MoreOptions/Index";
+import MoreOptionsDropdown from "../MoreOptionsDropdown";
 import Notes from "../Notes";
 import {
   ButtonsWrapper,
@@ -34,7 +34,7 @@ export default function ContactItem({
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
   const Theme = useTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
+  // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let nextTalkResponse;
 
@@ -140,16 +140,6 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
-          {isMobile && (
-            <MoreOptions
-              friendEmail={friendEmail}
-              name={name}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              notesArray={notesArray}
-            />
-          )}
         </NotesButtonWrapper>
         <ButtonsWrapper>
           {isTalkingStatusOK ? (
@@ -165,16 +155,15 @@ export default function ContactItem({
               size={50}
             />
           )}
-          {!isMobile && (
-            <MoreOptions
-              friendEmail={friendEmail}
-              name={name}
-              time={time}
-              timeFromLastTalk={timeFromLastTalk}
-              contactId={contactId}
-              notesArray={notesArray}
-            />
-          )}
+
+          <MoreOptionsDropdown
+            friendEmail={friendEmail}
+            name={name}
+            time={time}
+            timeFromLastTalk={timeFromLastTalk}
+            contactId={contactId}
+            notesArray={notesArray}
+          />
 
           {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
         </ButtonsWrapper>
