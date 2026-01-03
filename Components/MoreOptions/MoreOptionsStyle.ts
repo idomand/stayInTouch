@@ -1,4 +1,5 @@
-import { BasicButton, MinimalButton } from "../Common/StyledButton";
+import styled from "styled-components";
+import { BasicButton } from "../Common/StyledButton";
 import {
   BasicForm,
   BasicInput,
@@ -6,7 +7,6 @@ import {
   InputSubmit,
 } from "../Common/StyledFormElements";
 import { H5, P1 } from "../Common/StyledText";
-import styled from "styled-components";
 
 export const MoreOptionsButton = styled.button`
   background-color: transparent;
@@ -72,6 +72,7 @@ export const EditContactForm = styled(BasicForm)`
   grid-template-areas:
     "name howMuchTime"
     "lastTalked lastTalked"
+    "emailInput emailInput"
     "submit submit"
     "delete delete";
 
@@ -85,6 +86,7 @@ export const EditContactForm = styled(BasicForm)`
       "name name"
       "howMuchTime howMuchTime"
       "lastTalked lastTalked"
+      "emailInput emailInput"
       "submit submit"
       "delete delete";
   }
@@ -233,4 +235,14 @@ export const DeleteButton = styled(BasicButton)`
     max-width: 300px;
     margin: auto;
   }
+`;
+
+export const EmailInputLabel = styled(BasicLabel)`
+  grid-area: emailInput;
+  @media (${({ theme }) => theme.devices.break1}) {
+  }
+`;
+export const EmailInput = styled(BasicInput)`
+  grid-area: emailInput;
+  border: 1px solid ${({ theme }) => theme.grey2};
 `;

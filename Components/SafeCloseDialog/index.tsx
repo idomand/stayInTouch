@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Dialog, DialogHeader, DialogButton } from "./SafeCloseDialogStyle";
+import { useEffect, useRef } from "react";
+import { Dialog, DialogButton, DialogHeader } from "./SafeCloseDialogStyle";
 type SafeCloseDialogProps = {
   dialogText: string;
   openDialog: any;

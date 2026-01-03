@@ -1,42 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
-import DatePickerComponent from "../DatePickerComponent";
-import { useAuth } from "../../lib/AuthContext";
 import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
-import { deleteContact, updateContact } from "../../lib/Firebase";
+import { useAuth } from "../../lib/AuthContext";
 import { createGoogleCalendarEvent } from "../../lib/CalenderFunctions";
+import { deleteContact, updateContact } from "../../lib/Firebase";
+import DatePickerComponent from "../DatePickerComponent";
 
+import { SlOptions } from "react-icons/sl";
+import { oneDay } from "../../lib/ConstantsFile";
+import { ContactItemType } from "../../types/ContactItemType";
+import { H5 } from "../Common/StyledText";
+import ErrorWarning from "../ErrorWarning";
+import SafeCloseDialog from "../SafeCloseDialog";
 import {
   CalendarHeader,
   CalendarSubSection,
   CalenderDatePickerWrapper,
   CalenderLogo,
   CalenderText,
-  MoreOptionsButton,
-  MoreOptionsWrapper,
-  SaveToGoogleCalender,
-  SpecificTimeWrapper,
+  CloseModalButton,
   ContactNameHeader,
+  DeleteButton,
   EditContactForm,
   EditHeader,
   EditingSubSection,
   EditSubmitInput,
+  EmailInput,
+  EmailInputLabel,
   HeaderName,
   LastTalkedLabel,
+  MoreOptionsButton,
+  MoreOptionsWrapper,
   NameInput,
   NameLabel,
+  SaveToGoogleCalender,
+  SpecificTimeWrapper,
   TimeInput,
   TimeLabel,
-  CloseModalButton,
-  DeleteButton,
 } from "./MoreOptionsStyle";
-import { H5 } from "../Common/StyledText";
-import ErrorWarning from "../ErrorWarning";
-import { ContactItemInterface } from "../../utils/ContactItemInterface";
-import SafeCloseDialog from "../SafeCloseDialog";
-import { SlOptions } from "react-icons/sl";
-import { oneDay } from "../../lib/ConstantsFile";
 
 export default function MoreOptions({
   name,
@@ -44,12 +46,15 @@ export default function MoreOptions({
   timeFromLastTalk,
   contactId,
   notesArray,
-}: ContactItemInterface) {
+  friendEmail,
+}: ContactItemType) {
+  console.log("friendEmail :>> ", friendEmail);
   const { currentUser } = useAuth()!;
   const Theme = useTheme();
   const isMobile = useMedia(`(${Theme.devices.break1})`);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contactName, setContactName] = useState(name);
+  const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
@@ -98,12 +103,14 @@ export default function MoreOptions({
       timeFromLastTalk,
       contactId,
       notesArray,
+      friendEmail,
     };
     const newContactData = {
       name: contactName,
       time: +contactTime,
       timeFromLastTalk: timeFromLastTalkVar,
       notesArray: notesArray,
+      friendEmail: newFriendEmail,
     };
 
     let result;
@@ -234,6 +241,18 @@ export default function MoreOptions({
                   startDate={lastTalk}
                 />
               </LastTalkedLabel>
+
+              <EmailInputLabel>
+                Change Friend Email:
+                <EmailInput
+                  type="email"
+                  value={newFriendEmail}
+                  required
+                  onChange={(e) => {
+                    setNewFriendEmail(e.target.value);
+                  }}
+                />
+              </EmailInputLabel>
 
               <EditSubmitInput
                 disabled={contactName === ""}

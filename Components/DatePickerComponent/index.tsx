@@ -1,4 +1,3 @@
-import React from "react";
 import { addDays } from "date-fns";
 import { Calendar, Popper, StyledDatePicker } from "./DatePickerComponentStyle";
 
