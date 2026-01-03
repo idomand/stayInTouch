@@ -50,7 +50,7 @@ a {
     top: 20%;
     left: 20px;
     right: 20px;
-    height: fit-content;
+    height: auto;
   }
   .contact-edit-modal-overlay {
     z-index: 10;
