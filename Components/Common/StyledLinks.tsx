@@ -1,6 +1,6 @@
-import styled from "styled-components";
 import Link from "next/link";
 import React from "react";
+import styled from "styled-components";
 
 interface LinkPrototypeProps {
   as?: any;
@@ -15,13 +15,11 @@ export const LinkPrototype = ({
   children,
   className,
   href,
-  target,
 }: LinkPrototypeProps) => (
   <Link href={href} as={as} className={className}>
-      {children}
+    {children}
   </Link>
 );
-
 
 export const BasicLink = styled(LinkPrototype).attrs(() => ({
   target: "_blank",
@@ -31,7 +29,7 @@ export const BasicLink = styled(LinkPrototype).attrs(() => ({
   color: ${({ theme }) => theme.blue2};
   border-bottom: solid 2px transparent;
   transition: all 0.3s;
-  
+
   &:hover,
   &:focus {
     border-bottom: solid 2px ${({ theme }) => theme.blue1};
@@ -54,7 +52,7 @@ export const NavLink = styled(LinkPrototype)<NavLinkProps>`
   &:focus {
     color: ${({ theme }) => theme.blue2};
   }
-  
+
   @media (${({ theme }) => theme.devices.break1}) {
     /* Responsive styles */
   }
