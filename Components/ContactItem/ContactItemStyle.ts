@@ -1,3 +1,5 @@
+import { BsExclamationSquare } from "react-icons/bs";
+import { IoCheckboxOutline } from "react-icons/io5";
 import styled from "styled-components";
 import { BasicButton } from "../Common/StyledButton";
 
@@ -135,6 +137,9 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+  &:hover,
+  &:focus {
+  }
 `;
 
 export const ResetButton = styled(BasicButton)``;
@@ -147,5 +152,25 @@ export const AddToGoogle = styled(BasicButton)`
     color: ${({ theme }) => theme.green2};
     background-color: ${({ theme }) => theme.green1};
     border: ${({ theme }) => theme.green2} 1.3px solid;
+  }
+`;
+
+type IconProps = {
+  $baseColor: string;
+};
+
+export const ClickableCheckbox = styled(IoCheckboxOutline)<IconProps>`
+  cursor: pointer;
+  color: ${({ $baseColor }) => $baseColor};
+  &:hover {
+    color: ${({ theme }) => theme.blue1};
+  }
+`;
+
+export const ClickableExclamation = styled(BsExclamationSquare)<IconProps>`
+  cursor: pointer;
+  color: ${({ $baseColor }) => $baseColor};
+  &:hover {
+    color: ${({ theme }) => theme.blue1};
   }
 `;
