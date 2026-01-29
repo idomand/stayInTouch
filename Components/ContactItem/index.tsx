@@ -1,5 +1,3 @@
-import { BsExclamationSquare } from "react-icons/bs";
-import { IoCheckboxOutline } from "react-icons/io5";
 // import { useMedia } from "react-use";
 import { useTheme } from "styled-components";
 import { useAuth } from "../../lib/AuthContext";
@@ -10,6 +8,8 @@ import MoreOptionsDropdown from "../MoreOptionsDropdown";
 import Notes from "../Notes";
 import {
   ButtonsWrapper,
+  ClickableCheckbox,
+  ClickableExclamation,
   ContactDatesWrapper,
   ContactDetailsSubDiv,
   ContactDetailsWrapper,
@@ -102,7 +102,7 @@ export default function ContactItem({
       contactId,
       oldContactData,
       newContactData,
-      "reset"
+      "reset",
     );
   }
 
@@ -143,15 +143,15 @@ export default function ContactItem({
         </NotesButtonWrapper>
         <ButtonsWrapper>
           {isTalkingStatusOK ? (
-            <IoCheckboxOutline
+            <ClickableCheckbox
               onClick={resetFunction}
-              color={Theme.green1}
+              $baseColor={Theme.green1}
               size={50}
             />
           ) : (
-            <BsExclamationSquare
+            <ClickableExclamation
               onClick={resetFunction}
-              color={Theme.red1}
+              $baseColor={Theme.red1}
               size={50}
             />
           )}
