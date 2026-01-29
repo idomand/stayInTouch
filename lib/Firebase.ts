@@ -73,7 +73,7 @@ export async function addDummyData(userId: string, userEmail: string) {
 async function checkIfContactExists(
   userId: string,
   userEmail: string,
-  userData: ContactItemType
+  userData: ContactItemType,
 ) {
   const querySnapshot = await getDocs(collection(db, `${userEmail}${userId}`));
   const oldArray: DocumentData[] = [];
@@ -118,12 +118,12 @@ function addLastTalkNote(contactData: ContactItemType) {
 export async function addContactToFirestore(
   userId: string,
   userEmail: string,
-  userData: ContactItemType
+  userData: ContactItemType,
 ) {
   const isNewContactUnique = await checkIfContactExists(
     userId,
     userEmail,
-    userData
+    userData,
   );
   if (isNewContactUnique) {
     await addDoc(collection(db, `${userEmail}${userId}`), {
@@ -141,10 +141,14 @@ export async function updateContact(
   contactId: string,
   oldContactData: ContactItemType,
   newContactData: ContactItemType,
-  submitType: "reset" | "edit" | "addNote"
+  submitType: "reset" | "edit" | "addNote",
 ) {
   if (oldContactData.name === newContactData.name) {
     let newContactDataWithTimeStamp = newContactData;
+
+    if (!oldContactData.friendEmail) {
+      newContactData.friendEmail = "";
+    }
 
     if (submitType === "reset") {
       newContactDataWithTimeStamp = addLastTalkNote(newContactData);
@@ -157,7 +161,7 @@ export async function updateContact(
     const isNewContactUnique = await checkIfContactExists(
       userId,
       userEmail,
-      newContactData
+      newContactData,
     );
 
     if (isNewContactUnique) {
@@ -175,7 +179,7 @@ export async function deleteNote(
   userId: string,
   userEmail: string,
   contactId: string,
-  noteId: number
+  noteId: number,
 ) {
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
@@ -195,7 +199,7 @@ export async function updateNote(
   userEmail: string,
   contactId: string,
   noteId: number,
-  newNoteData: string
+  newNoteData: string,
 ) {
   const notesArrayDocRef = doc(db, `${userEmail}${userId}`, contactId);
   const docSnapRef = await getDoc(notesArrayDocRef);
@@ -217,7 +221,7 @@ export async function updateNote(
 export async function deleteContact(
   userId: string,
   userEmail: string,
-  contactId: string
+  contactId: string,
 ) {
   await deleteDoc(doc(db, `${userEmail}${userId}`, contactId));
 }

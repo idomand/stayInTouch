@@ -102,7 +102,7 @@ export default function UpdateContactForm({
         contactId,
         oldContactData,
         newContactData,
-        "edit"
+        "edit",
       );
     }
     if (result === "bad") {
@@ -205,7 +205,7 @@ export default function UpdateContactForm({
               <EditSubmitInput
                 disabled={contactName === ""}
                 type="submit"
-                value="Update Contact"
+                value="Update"
               />
               {error && <ErrorWarning errorMessage={error} />}
             </EditContactForm>
