@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "npm@11.16.0",
   "scripts": {
+    "postinstall": "git config core.hooksPath scripts/git-hooks",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
