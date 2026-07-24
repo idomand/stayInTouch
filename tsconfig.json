@@ -21,7 +21,7 @@
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true,
+    "incremental": false,
     "jsx": "react-jsx",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
