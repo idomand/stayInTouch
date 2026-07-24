@@ -1,9 +1,131 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { BasicButton } from "../Common/StyledButton";
-import { BasicForm } from "../Common/StyledFormElements";
-import { H5, P1 } from "../Common/StyledText";
+import ReactModal from "react-modal";
+import { createGoogleCalendarEvent } from "../lib/CalenderFunctions";
+import { oneDay } from "../lib/ConstantsFile";
+import { ContactItemType } from "../types/ContactItemType";
+import { H5, P1 } from "./Common/StyledText";
+import { BasicButton } from "./Common/StyledButton";
+import { BasicForm } from "./Common/StyledFormElements";
+import DatePickerComponent from "./DatePickerComponent";
 
-export const CalendarSubSection = styled.div`
+type AppointmentFormState = Omit<
+  ContactItemType,
+  "contactId" | "notesArray"
+> & {
+  isModalOpenProp: boolean;
+  onClose?: () => void;
+};
+
+export default function AppointmentForm({
+  name,
+  time,
+  timeFromLastTalk,
+  friendEmail,
+  isModalOpenProp,
+  onClose,
+}: AppointmentFormState) {
+  const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
+  const [error, setError] = useState<string | boolean>(false);
+  const currantTime = new Date().getTime();
+
+  let nextTalkInDays =
+    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+
+  // Calculate the specific reminder date based on nextTalkInDays
+  const calculateReminderDate = () => {
+    if (nextTalkInDays <= 0) {
+      return new Date(); // If overdue, use today
+    }
+    const reminderDate = new Date();
+    reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
+    return reminderDate;
+  };
+
+  const [specificReminder, setSpecificReminder] = useState<number | Date>(
+    calculateReminderDate()
+  );
+
+  useEffect(() => {
+    setIsModalOpen(isModalOpenProp);
+  }, [isModalOpenProp]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
+
+  function onCloseModal() {
+    setIsModalOpen(false);
+    if (error) {
+      setError(false);
+    }
+    if (onClose) {
+      onClose();
+    }
+  }
+
+  function calenderFunction() {
+    // Open Google Calendar dialog directly
+    const eventDate =
+      specificReminder instanceof Date
+        ? specificReminder
+        : new Date(specificReminder);
+
+    createGoogleCalendarEvent(name, eventDate, friendEmail);
+  }
+
+  return (
+    <>
+      <ReactModal
+        ariaHideApp={false}
+        isOpen={isModalOpen}
+        shouldFocusAfterRender={true}
+        shouldCloseOnOverlayClick={true}
+        shouldCloseOnEsc={true}
+        onRequestClose={onCloseModal}
+        className={"contact-edit-modal"}
+        overlayClassName={"contact-edit-modal-overlay"}
+      >
+        <MoreOptionsWrapper>
+          <CalendarSubSection>
+            <EditHeader>
+              <div>
+                <H5>Make Appointment with</H5>
+                <ContactNameHeader>{name}</ContactNameHeader>
+              </div>
+              <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
+            </EditHeader>
+            <SpecificTimeWrapper>
+              <CalenderText>
+                Add this reminder into Google Calender
+              </CalenderText>
+              <CalenderDatePickerWrapper>
+                <DatePickerComponent
+                  setStartDate={setSpecificReminder}
+                  startDate={specificReminder}
+                />
+              </CalenderDatePickerWrapper>
+            </SpecificTimeWrapper>
+            <SaveToGoogleCalender onClick={calenderFunction}>
+              <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
+              Save to Calender
+            </SaveToGoogleCalender>
+          </CalendarSubSection>
+        </MoreOptionsWrapper>
+      </ReactModal>
+    </>
+  );
+}
+
+//?========================
+//* The styles of the Modal are in the global.css file
+//?========================
+
+const CalendarSubSection = styled.div`
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -12,23 +134,23 @@ export const CalendarSubSection = styled.div`
   }
 `;
 
-export const CalenderDatePickerWrapper = styled.div`
+const CalenderDatePickerWrapper = styled.div`
   @media (${({ theme }) => theme.devices.break1}) {
     margin: auto;
   }
 `;
 
-export const CalenderLogo = styled.img`
+const CalenderLogo = styled.img`
   justify-self: flex-start;
 `;
-export const CalenderText = styled(P1)`
+const CalenderText = styled(P1)`
   margin-bottom: 10px;
   @media (${({ theme }) => theme.devices.break1}) {
     margin-left: 15px;
     text-align: start;
   }
 `;
-export const CloseModalButton = styled(BasicButton)`
+const CloseModalButton = styled(BasicButton)`
   background-color: transparent;
   color: ${({ theme }) => theme.black};
   border: none;
@@ -43,12 +165,12 @@ export const CloseModalButton = styled(BasicButton)`
     /* margin: auto; */
   }
 `;
-export const ContactNameHeader = styled(H5)`
+const ContactNameHeader = styled(H5)`
   color: ${({ theme }) => theme.blue2};
   font-weight: 600;
   margin-left: 5px;
 `;
-export const EditHeader = styled.div`
+const EditHeader = styled.div`
   margin-left: 30px;
   margin-top: 25px;
   display: flex;
@@ -60,7 +182,7 @@ export const EditHeader = styled.div`
   }
 `;
 
-export const MoreOptionsWrapper = styled.section`
+const MoreOptionsWrapper = styled.section`
   display: flex;
   justify-content: center;
   @media (${({ theme }) => theme.devices.break1}) {
@@ -68,7 +190,7 @@ export const MoreOptionsWrapper = styled.section`
   }
 `;
 
-export const SaveToGoogleCalender = styled(BasicButton)`
+const SaveToGoogleCalender = styled(BasicButton)`
   width: 100%;
   font-weight: 500;
   font-size: 16px;
@@ -94,7 +216,7 @@ export const SaveToGoogleCalender = styled(BasicButton)`
   }
 `;
 
-export const SpecificTimeWrapper = styled(BasicForm)`
+const SpecificTimeWrapper = styled(BasicForm)`
   margin-top: 20px;
   display: flex;
   flex-direction: column;

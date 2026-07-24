@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ScrollButton, ScrollButtonWrapper } from "./ScrollToTopButtonStyle";
+import styled from "styled-components";
+import { BasicButton } from "./Common/StyledButton";
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,3 +31,18 @@ export default function ScrollToTopButton() {
     </ScrollButtonWrapper>
   );
 }
+
+const ScrollButton = styled(BasicButton)`
+  transition: all 0.3s;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  @media (${({ theme }) => theme.devices.break1}) {
+    width: 40px;
+    bottom: 40px;
+  }
+`;
+const ScrollButtonWrapper = styled.div``;

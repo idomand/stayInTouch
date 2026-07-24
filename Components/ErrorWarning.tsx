@@ -1,7 +1,22 @@
 import styled, { keyframes } from "styled-components";
-import { H5 } from "../Common/StyledText";
+import { H5 } from "./Common/StyledText";
 
-export const slide = keyframes`
+interface ErrorWarningProps {
+  errorMessage: string | boolean;
+}
+
+export default function ErrorWarning({ errorMessage }: ErrorWarningProps) {
+  return (
+    <ErrorWrapper>
+      <ErrorText>
+        <ErrorLogo src="/Error.svg" />
+        {errorMessage}
+      </ErrorText>
+    </ErrorWrapper>
+  );
+}
+
+const slide = keyframes`
   from {
     transform: translateY(0);
     opacity: 0
@@ -12,7 +27,7 @@ export const slide = keyframes`
   }
 `;
 
-export const ErrorWrapper = styled.div`
+const ErrorWrapper = styled.div`
   border: solid ${({ theme }) => theme.red1};
   background-color: ${({ theme }) => theme.red2};
   box-shadow: 0px 4px 28px rgba(0, 0, 0, 0.25);
@@ -22,11 +37,11 @@ export const ErrorWrapper = styled.div`
   animation: ${slide} 300ms forwards;
 `;
 
-export const ErrorLogo = styled.img`
+const ErrorLogo = styled.img`
   margin-right: 10px;
 `;
 
-export const ErrorText = styled(H5)`
+const ErrorText = styled(H5)`
   color: ${({ theme }) => theme.red1};
   display: flex;
   align-items: center;
