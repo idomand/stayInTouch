@@ -1,5 +1,5 @@
 export type ContactItemType = {
-  name: string;
+  name: number;
   time: number;
   timeFromLastTalk: number;
   notesArray: { data: string; noteId: number }[];
