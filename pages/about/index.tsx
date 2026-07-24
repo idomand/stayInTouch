@@ -1,20 +1,11 @@
+import { BasicButton } from "@/Components/Common/StyledButton";
+import { BasicLink } from "@/Components/Common/StyledLinks";
+import { H1, P3 } from "@/Components/Common/StyledText";
+import Layout from "@/Components/Layout";
+import { useAuth } from "@/lib/AuthContext";
+import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
-import { BasicButton } from "../../Components/Common/StyledButton";
-import { BasicLink } from "../../Components/Common/StyledLinks";
-import { P3 } from "../../Components/Common/StyledText";
-import Layout from "../../Components/Layout";
-import { useAuth } from "../../lib/AuthContext";
-import { addDummyData } from "../../lib/Firebase";
-
-import {
-  AboutHeader,
-  AboutPageWrapper,
-  AboutTheCreator,
-  AboutTheSite,
-  DemoButtonWrapper,
-  HowToUseSection,
-  IntroductionSection,
-} from "../../styles/AboutPageStyle";
+import styled from "styled-components";
 
 export default function About() {
   const { currentUser } = useAuth()!;
@@ -122,3 +113,37 @@ export default function About() {
     </Layout>
   );
 }
+
+const AboutPageWrapper = styled.section`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 70%;
+  margin: auto;
+`;
+
+const DemoButtonWrapper = styled.div`
+  display: flex;
+`;
+
+const AboutHeader = styled(H1)``;
+
+const AboutSubSection = styled.div`
+  background-color: ${({ theme }) => theme.white};
+  margin: 7.5px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  text-align: justify;
+  text-transform: capitalize;
+  width: 100%;
+  @media (${({ theme }) => theme.devices.break1}) {
+  }
+`;
+
+const IntroductionSection = styled(AboutSubSection)``;
+const HowToUseSection = styled(AboutSubSection)``;
+const AboutTheSite = styled(AboutSubSection)``;
+const AboutTheCreator = styled(AboutSubSection)``;
