@@ -29,5 +29,8 @@ declare module "styled-components" {
       break1: string;
       break2: string;
     };
+    sizes:{
+      borderRadius:string
+    }
   }
 }

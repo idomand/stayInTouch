@@ -27,7 +27,7 @@ export const BasicButton = styled(ButtonPrototype)`
   background-color: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   border: 1.3px solid ${({ theme }) => theme.white};
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.sizes.borderRadius};
   font-size: ${({ theme }) => theme.typeScale.p_normal};
   font-weight: 500;
   padding: 5px 10px;

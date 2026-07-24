@@ -58,6 +58,7 @@ const Dialog = styled.dialog`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: ${({ theme }) => theme.sizes.borderRadius};
 `;
 
 const DialogHeader = styled(H2)`
