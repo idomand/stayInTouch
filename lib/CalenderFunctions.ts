@@ -1,43 +1,5 @@
 import { auth } from "./Firebase";
 
-// let cachedAccessToken: string | null = null;
-
-/**
- * Sets the Google OAuth access token for API calls
- * This should be called after successful Google sign-in
- */
-// export function setGoogleAccessToken(token: string | null) {
-//   cachedAccessToken = token;
-// }
-
-/**
- * Gets the stored Google OAuth access token
- */
-// function getGoogleAccessToken(): string | null {
-//   // Try to get from cache first
-//   if (cachedAccessToken) {
-//     return cachedAccessToken;
-//   }
-//   // Fall back to localStorage
-//   if (typeof window !== "undefined") {
-//     return localStorage.getItem("googleAccessToken");
-//   }
-//   return null;
-// }
-
-// interface CalendarEvent {
-//   summary: string;
-//   description?: string;
-//   start: {
-//     dateTime: string;
-//     timeZone: string;
-//   };
-//   end: {
-//     dateTime: string;
-//     timeZone: string;
-//   };
-// }
-
 /**
  * Formats a date to Google Calendar URL format (YYYYMMDDTHHmmssZ)
  */

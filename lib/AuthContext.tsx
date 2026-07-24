@@ -5,8 +5,8 @@ import {
   User,
 } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
-import { Result } from "../Components/Common/StyledSpinner";
 import { auth, provider } from "@/lib/Firebase";
+import { Result } from "@/Components/Common/StyledSpinner";
 
 interface AuthContextInterface {
   currentUser?: User | null;

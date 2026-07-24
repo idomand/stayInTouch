@@ -55,7 +55,7 @@ export default function Notes(props: ContactItemType) {
       currentUser.email,
       props.contactId,
       editNoteId,
-      noteInputValue
+      noteInputValue,
     );
     setIsEditMood(false);
     setNoteInputValue("");
@@ -95,7 +95,7 @@ export default function Notes(props: ContactItemType) {
       props.contactId,
       oldContactData,
       newContactData,
-      "addNote"
+      "addNote",
     );
     setNoteInputValue("");
     (e.target as HTMLFormElement).blur();
@@ -175,7 +175,7 @@ export default function Notes(props: ContactItemType) {
                         switchToEditMood={switchToEditMood}
                       />
                     );
-                  }
+                  },
                 )}
             </NotesList>
           </NotesListWrapper>
