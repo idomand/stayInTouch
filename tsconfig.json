@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -12,20 +17,24 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
     "jsx": "react-jsx",
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "paths": {
+     "@/*": ["./*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "src/**/*",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

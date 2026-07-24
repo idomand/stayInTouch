@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { Result } from "../Components/Common/StyledSpinner";
-import { auth, provider } from "./Firebase";
+import { auth, provider } from "@/lib/Firebase";
 
 interface AuthContextInterface {
   currentUser?: User | null;
@@ -30,7 +30,7 @@ export default function AuthProvider({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(
-    null
+    null,
   );
 
   function logout() {
