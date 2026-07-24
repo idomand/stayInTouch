@@ -101,7 +101,7 @@ const LoginButton = styled.button<LoginButtonProps>`
   background: ${({ theme }) => theme.blue1};
   color: ${({ theme }) => theme.white};
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.sizes.borderRadius};
   border: 1.3px solid ${({ theme }) => theme.white};
   transition: 0.3s all;
   margin: 10px;

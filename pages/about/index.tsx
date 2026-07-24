@@ -32,7 +32,7 @@ export default function About() {
             stay in touch with the people they care about.
           </P3>
           <P3>
-            As working adults in 2022, we face so many distractions and
+            As working adults in 2026, we face so many distractions and
             responsibilities that maintaining a stable connection with even our
             closest friends can be difficult.
           </P3>
