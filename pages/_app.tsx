@@ -1,10 +1,11 @@
 import Head from "next/head";
+import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
-import AuthProvider from "../lib/AuthContext";
-import "../styles/globals.css";
-import { defaultTheme } from "../styles/Theme";
+import AuthProvider from "@/lib/AuthContext";
+import "@/styles/globals.css";
+import { defaultTheme } from "@/styles/Theme";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
