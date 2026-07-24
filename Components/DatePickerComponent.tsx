@@ -1,13 +1,40 @@
+import { addDays } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 
-export const Calendar = styled.div`
+interface DatePickerComponentProps {
+  setStartDate: any;
+  // startDate: Date | number;
+  startDate: any;
+}
+
+export default function DatePickerComponent({
+  setStartDate,
+  startDate,
+}: DatePickerComponentProps) {
+  return (
+    <>
+      <StyledDatePicker
+        className="datePickerClass"
+        maxDate={addDays(new Date(), 90)}
+        CalendarContainer={Calendar}
+        popperContainer={Popper}
+        dateFormat="dd/MM/yyyy"
+        selected={startDate}
+        onChange={setStartDate}
+        popperPlacement="auto"
+      />
+    </>
+  );
+}
+
+const Calendar = styled.div`
   border-radius: 10px;
   box-shadow: 0 6px 12px rgba(27, 37, 86, 0.16);
   overflow: hidden;
 `;
-export const Popper = styled.div`
+const Popper = styled.div`
   position: absolute;
 
   margin: auto;
@@ -16,7 +43,7 @@ export const Popper = styled.div`
   z-index: 2;
 `;
 
-export const StyledDatePicker = styled(({ className, ...props }) => (
+const StyledDatePicker = styled(({ className, ...props }) => (
   <DatePicker {...props} wrapperClassName={className} />
 ))`
   /* width: 90px; */

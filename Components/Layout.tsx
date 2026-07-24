@@ -1,6 +1,6 @@
-import NavBar from "../NavBar";
-import ScrollButtonWrapper from "../ScrollToTopButton";
-import { LayoutWrapper } from "./LayoutStyle";
+import styled from "styled-components";
+import NavBar from "./NavBar";
+import ScrollButtonWrapper from "./ScrollToTopButton";
 
 interface LayoutProps {
   children: any;
@@ -15,3 +15,5 @@ export default function Layout({ children }: LayoutProps) {
     </LayoutWrapper>
   );
 }
+
+const LayoutWrapper = styled.main``;

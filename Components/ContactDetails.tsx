@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import useSnapshotData from "../../utils/hooks/useSnapshotData";
-import { H1 } from "../Common/StyledText";
-import ContactItem from "../ContactItem";
-import { ContactList, NoContactsWrapper } from "./ContactDetailsStyle";
+import styled from "styled-components";
+import useSnapshotData from "../utils/hooks/useSnapshotData";
+import { H1 } from "./Common/StyledText";
+import ContactItem from "./ContactItem";
 import { ContactItemType } from "@/types/ContactItemType";
 
 export default function ContactDetails() {
@@ -48,3 +48,16 @@ export default function ContactDetails() {
     </>
   );
 }
+
+const ContactList = styled.ul`
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+`;
+
+const NoContactsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
