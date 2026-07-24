@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { ContactItemType } from "../../types/ContactItemType";
 import useSnapshotData from "../../utils/hooks/useSnapshotData";
 import { H1 } from "../Common/StyledText";
 import ContactItem from "../ContactItem";
 import { ContactList, NoContactsWrapper } from "./ContactDetailsStyle";
+import { ContactItemType } from "@/types/ContactItemType";
 
 export default function ContactDetails() {
   const [arrayOfContacts, SetArrayOfContacts] = useState<ContactItemType[]>([]);
