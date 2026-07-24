@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# in purple
+log() {
+  printf "\033[35m %s \033[0m\n" "$1"
+}
+
+# Load nvm to ensure correct Node version (needed for VS Code GUI operations)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm use 2>/dev/null
+
+log "pre-push: using Node $(node -v)"
+
+log "pre-push: checking types..."
+./node_modules/.bin/tsc --noEmit || { log "pre-push: type checking failed, aborting push"; exit 1; }
