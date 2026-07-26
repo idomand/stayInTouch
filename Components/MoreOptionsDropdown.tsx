@@ -31,7 +31,6 @@ export default function MoreOptionsDropdown({
   };
 
   const handleUpdateContact = () => {
-    console.log("update contact");
     setIsUpdateContactModalOpen(true);
     setIsOpen(false);
   };
