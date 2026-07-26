@@ -37,12 +37,13 @@ export default function ContactItem({
 
   if (currantTime - timeFromLastTalk < 86000000) {
     lastTalkedToResponse = (
-      <DateValue $statusColor={isTalkingStatusOK}>Today!</DateValue>
+      <DateValue $statusColor={isTalkingStatusOK}>Talked today</DateValue>
     );
   } else {
     lastTalkedToResponse = (
       <DateValue $statusColor={isTalkingStatusOK}>
-        {Math.floor((currantTime - timeFromLastTalk) / oneDay)}
+        Didn’t talk for{" "}
+        {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days
       </DateValue>
     );
   }
@@ -103,11 +104,7 @@ export default function ContactItem({
           </ContactDetailsSubDiv>
         </ContactDetailsWrapper>
         <ContactDatesWrapper>
-          <DateWrapper>
-            <DateValue $statusColor={isTalkingStatusOK}>
-              Didn’t talk for {lastTalkedToResponse} days
-            </DateValue>
-          </DateWrapper>
+          <DateWrapper>{lastTalkedToResponse}</DateWrapper>
           <DateWrapper>{nextTalkResponse}</DateWrapper>
         </ContactDatesWrapper>
         {/* <MoreOptionsWrapper>

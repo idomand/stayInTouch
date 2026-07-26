@@ -186,7 +186,6 @@ export default function UpdateContactForm({
                 <EmailInput
                   type="email"
                   value={newFriendEmail}
-                  required
                   onChange={(e) => {
                     setNewFriendEmail(e.target.value);
                   }}
