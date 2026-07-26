@@ -51,7 +51,7 @@ export default function About() {
           </P3>
           <P3>
             All you need to do is enter their names and how often you would like
-            to contact them, and Stay-in-Touch will take care of the rest.{" "}
+            to contact them, and Stay-in-Touch will take care of the rest.
           </P3>
           <DemoButtonWrapper>
             <BasicButton onClick={addDemoData}>Demo</BasicButton>
@@ -77,8 +77,7 @@ export default function About() {
             on this website.
           </P3>
           <P3>
-            {" "}
-            you can see the code itself in my GitHub repo right{" "}
+            You can see the code itself in my GitHub repo,{" "}
             <BasicLink href={"https://github.com/idomand/stayInTouch"}>
               here.
             </BasicLink>
@@ -91,12 +90,12 @@ export default function About() {
           </P3>
           <P3>
             Originally from Israel, I have moved to Berlin with my wife to start
-            a new life in this beautiful city. And I can not wait to join Berlin
-            Startups community.
+            a new life in this beautiful city. I cannot wait to join the Berlin
+            startup community.
           </P3>
           <P3>
-            In my free time I love reading programming, history and science
-            fiction books, cooking and learning German.
+            In my free time I love reading programming, history, and
+            science-fiction books, cooking and learning German.
           </P3>
           <P3>
             You can see more of my projects on my{" "}
@@ -137,7 +136,6 @@ const AboutSubSection = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 25px;
   text-align: justify;
-  text-transform: capitalize;
   width: 100%;
   @media (${({ theme }) => theme.devices.break1}) {
   }

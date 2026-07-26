@@ -55,7 +55,7 @@ const StyledDatePicker = styled(({ className, ...props }) => (
     /* width: 90px; */
     background-color: lightgrey;
     border-radius: 10px;
-    height: 30px;
+    height: 40px;
     text-align: center;
     border: none;
     border: 1px solid ${({ theme }) => theme.grey1};

@@ -9,7 +9,7 @@ import { H1 } from "./Common/StyledText";
 export default function MainForm() {
   const { currentUser } = useAuth()!;
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);
-  const [showMainForm, setShowMainForm] = useState(false);
+  const [showMainForm, setShowMainForm] = useState(true);
 
   function startGame() {
     setHiddenGameIndicator((value) => !value);
@@ -29,9 +29,9 @@ export default function MainForm() {
           </MainHeader>
         </HeaderWrapper>
         <div>
-          <MakeAFriend onClick={() => setShowMainForm(!showMainForm)}>
+          <BasicButton onClick={() => setShowMainForm(!showMainForm)}>
             Make a friend
-          </MakeAFriend>
+          </BasicButton>
         </div>
       </MainFormWrapper>
       {showMainForm && <AddNewContact />}
@@ -60,15 +60,4 @@ const HeaderWrapper = styled.div`
 const GameStartText = styled.span<{ $gameStart: boolean }>`
   color: ${({ $gameStart }) => ($gameStart ? "red" : "black")};
   cursor: pointer;
-`;
-
-const MakeAFriend = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.green1};
-  color: black;
-  &:hover,
-  &:active {
-    background: ${({ theme }) => theme.green3};
-    border: 1.3px solid ${({ theme }) => theme.black};
-    color: ${({ theme }) => theme.blue1};
-  }
 `;
