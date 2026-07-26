@@ -47,7 +47,6 @@ export const P2 = styled.p`
   font-size: ${({ theme }) => theme.typeScale.p_normal};
 `;
 export const P3 = styled.p`
-  font-family: Inter;
   margin: 0;
   padding: 0;
   font-weight: 500;

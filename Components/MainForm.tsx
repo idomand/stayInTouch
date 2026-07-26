@@ -9,7 +9,7 @@ import { H1 } from "./Common/StyledText";
 export default function MainForm() {
   const { currentUser } = useAuth()!;
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);
-  const [showMainForm, setShowMainForm] = useState(true);
+  const [showMainForm, setShowMainForm] = useState(false);
 
   function startGame() {
     setHiddenGameIndicator((value) => !value);
