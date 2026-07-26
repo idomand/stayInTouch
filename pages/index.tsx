@@ -4,6 +4,7 @@ import ContactDetails from "../Components/ContactDetails";
 import Layout from "../Components/Layout";
 import MainForm from "../Components/MainForm";
 import { useAuth } from "../lib/AuthContext";
+import { showArt } from "@/Components/SecretGame";
 
 export default function Home() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function Home() {
   useEffect(() => {
     if (!currentUser) {
       router.push("/login");
+      showArt();
     }
   }, [currentUser, router]);
 

@@ -42,8 +42,8 @@ export default function ContactItem({
   } else {
     lastTalkedToResponse = (
       <DateValue $statusColor={isTalkingStatusOK}>
-        Didn’t talk for{" "}
-        {Math.floor((currantTime - timeFromLastTalk) / oneDay)} days
+        Didn’t talk for {Math.floor((currantTime - timeFromLastTalk) / oneDay)}{" "}
+        days
       </DateValue>
     );
   }
@@ -62,10 +62,6 @@ export default function ContactItem({
       <DateValue $statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
     );
   }
-
-  // function addToGoogle() {
-  //   console.log("addToGoogle");
-  // }
 
   function resetFunction() {
     if (currentUser == null || currentUser.email == null || contactId == null)

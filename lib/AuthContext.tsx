@@ -74,7 +74,6 @@ export default function AuthProvider({
     }
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log("User:", user);
       setCurrentUser(user);
       setLoading(false);
     });
