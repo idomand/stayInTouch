@@ -30,7 +30,7 @@ export const BasicInput = styled.input`
   cursor: pointer;
   background-color: Lightgrey;
   font-size: ${({ theme }) => theme.typeScale.p_normal};
-  height: 30px;
+  height: 40px;
   border-radius: 10px;
   border: none;
   margin-top: 5px;

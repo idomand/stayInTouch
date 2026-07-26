@@ -32,23 +32,23 @@ export const db = getFirestore();
 
 const Dummy_Data: ContactItemType[] = [
   {
-    name: "Your Mom",
+    name: "Mom",
     time: 7,
     timeFromLastTalk: Date.now(),
     notesArray: [],
     friendEmail: "",
   },
   {
-    name: "the Pope",
+    name: "Your best friend",
     time: 14,
-    timeFromLastTalk: Date.now(),
+    timeFromLastTalk: Date.now() - 3 * 24 * 60 * 60 * 1000,
     notesArray: [],
     friendEmail: "",
   },
   {
-    name: "Kanye West",
+    name: "Heidi Klum",
     time: 21,
-    timeFromLastTalk: Date.now(),
+    timeFromLastTalk: Date.now() - 30 * 24 * 60 * 60 * 1000,
     notesArray: [],
     friendEmail: "",
   },

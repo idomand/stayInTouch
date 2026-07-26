@@ -22,7 +22,7 @@ who's next.
 The project is a **PWA (Progressive Web App)**: it can be installed and used
 offline on Android, PC, or Mac.
 
-![](public/StayInTouch.PNG)
+![](public/Stay_In_Touch.PNG)
 
 ## Features
 
@@ -40,15 +40,15 @@ offline on Android, PC, or Mac.
 
 ## Tech Stack
 
-| Area        | Technology                                             |
-| ----------- | ------------------------------------------------------ |
-| Framework   | [Next.js 16](https://nextjs.org/) (Pages Router)       |
-| UI          | [React 19](https://react.dev/)                         |
-| Language    | [TypeScript](https://www.typescriptlang.org/)          |
-| Backend     | [Firebase](https://firebase.google.com/) — Auth + Firestore |
-| Styling     | [styled-components](https://styled-components.com/) (CSS-in-JS design system) |
-| PWA         | [next-pwa](https://github.com/shadowwalker/next-pwa)   |
-| Dates       | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
+| Area      | Technology                                                                          |
+| --------- | ----------------------------------------------------------------------------------- |
+| Framework | [Next.js 16](https://nextjs.org/) (Pages Router)                                    |
+| UI        | [React 19](https://react.dev/)                                                      |
+| Language  | [TypeScript](https://www.typescriptlang.org/)                                       |
+| Backend   | [Firebase](https://firebase.google.com/) — Auth + Firestore                         |
+| Styling   | [styled-components](https://styled-components.com/) (CSS-in-JS design system)       |
+| PWA       | [next-pwa](https://github.com/shadowwalker/next-pwa)                                |
+| Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
 
 ## Project Structure
 

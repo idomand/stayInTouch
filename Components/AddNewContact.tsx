@@ -49,7 +49,7 @@ export default function AddNewContact() {
     const result = await addContactToFirestore(
       currentUser.uid,
       currentUser.email,
-      newContact
+      newContact,
     );
     if (result === "bad") {
       setError("contact already in list");
@@ -109,7 +109,7 @@ export default function AddNewContact() {
           />
         </NotesLabel>
         <EmailInputLabel>
-          friend Email (optional)
+          Friend's Email (optional)
           <EmailInput
             placeholder="new-friend@friendship.com"
             value={friendEmail}
@@ -169,8 +169,8 @@ const TimeLabel = styled(BasicLabel)`
   &:after {
     content: "Days" attr(data-domain);
     position: absolute;
-    top: 33px;
-    left: 20px;
+    top: 37px;
+    left: 15px;
     font-size: 10px;
     color: ${({ theme }) => theme.grey3};
     font-weight: bold;
@@ -194,7 +194,6 @@ const LastTalkedLabel = styled.div`
   margin: 5px;
   justify-content: space-between;
   grid-area: lastTalked;
-  align-items: center;
   @media (${({ theme }) => theme.devices.break1}) {
   }
 `;
@@ -206,9 +205,9 @@ const NotesLabel = styled(BasicLabel)`
 `;
 
 const NotesInput = styled.textarea`
+  height: 40px;
   border: 1px solid ${({ theme }) => theme.grey2};
   border-radius: 8px;
-  height: 30px;
   background-color: ${({ theme }) => theme.grey1};
   &:focus {
     border: 1px solid ${({ theme }) => theme.blue1};
