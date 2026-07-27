@@ -25,7 +25,7 @@ export async function createGoogleCalendarEvent(
   eventName: string,
   eventDate: Date = new Date(),
   friendEmail?: string,
-  description?: string
+  description?: string,
 ): Promise<any> {
   try {
     const user = auth.currentUser;
@@ -82,7 +82,7 @@ export async function createGoogleCalendarEvent(
  */
 export async function createContactReminderEvent(
   contactName: string,
-  reminderDate: Date
+  reminderDate: Date,
 ): Promise<any> {
   const eventName = `Call ${contactName}`;
   const description = `Reminder to reach out to ${contactName}`;

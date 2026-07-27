@@ -1,9 +1,4 @@
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  User,
-} from "firebase/auth";
+import { signInWithPopup, signOut, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
 import { Result } from "@/Components/Common/StyledSpinner";
@@ -13,7 +8,6 @@ interface AuthContextInterface {
   logout: () => void;
   loginWithGoogle: () => Promise<void>;
   loading?: boolean;
-  googleAccessToken?: string | null;
 }
 
 const AuthContext = React.createContext<AuthContextInterface | null>(null);
@@ -29,16 +23,12 @@ export default function AuthProvider({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(
-    null,
-  );
 
   function logout() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
         setCurrentUser(null);
-        setGoogleAccessToken(null);
       })
       .catch((error) => {
         console.error("Error signing out:", error);
@@ -47,19 +37,7 @@ export default function AuthProvider({
 
   async function loginWithGoogle() {
     try {
-      // Add Google Calendar scope to request calendar permissions
-      provider.addScope("https://www.googleapis.com/auth/calendar.events");
-      const result = await signInWithPopup(auth, provider);
-
-      // Get the OAuth access token from the credential
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const accessToken = credential?.accessToken;
-
-      if (accessToken) {
-        setGoogleAccessToken(accessToken);
-        // Store in localStorage for persistence
-        localStorage.setItem("googleAccessToken", accessToken);
-      }
+      await signInWithPopup(auth, provider);
       // The onAuthStateChanged listener will update the currentUser state
     } catch (error) {
       console.error("Error during Google sign-in:", error);
@@ -67,11 +45,8 @@ export default function AuthProvider({
   }
 
   useEffect(() => {
-    // Try to restore access token from localStorage
-    const storedToken = localStorage.getItem("googleAccessToken");
-    if (storedToken) {
-      setGoogleAccessToken(storedToken);
-    }
+    // Clean up the calendar access token left over from earlier sessions
+    localStorage.removeItem("googleAccessToken");
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -80,8 +55,7 @@ export default function AuthProvider({
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, logout, loginWithGoogle, googleAccessToken };
-
+  const value = { currentUser, logout, loginWithGoogle };
   return (
     <AuthContext.Provider value={value}>
       {loading && <Result />}
