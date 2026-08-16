@@ -12,10 +12,12 @@
     "typecheck:watch": "tsc -w"
   },
   "dependencies": {
+    "@next/third-parties": "^16.3.1",
+    "@vercel/analytics": "^2.0.1",
     "babel-plugin-styled-components": "2.1.4",
     "date-fns": "4.1.0",
     "firebase": "11.10.0",
-    "next": "16.1.1",
+    "next": "^16.3.1",
     "next-pwa": "5.6.0",
     "react": "19.2.3",
     "react-datepicker": "8.10.0",
