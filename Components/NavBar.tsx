@@ -5,7 +5,7 @@ import styled, { useTheme } from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { H2 } from "./Common/StyledText";
 import SafeCloseDialog from "./SafeCloseDialog";
-import { Link } from "./ui/Link";
+import Link from "./ui/Link";
 
 export default function NavBar() {
   const Theme = useTheme();

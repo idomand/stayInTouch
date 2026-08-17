@@ -11,7 +11,7 @@ type Props = {
   target?: React.HTMLAttributeAnchorTarget;
 };
 
-export function Link({
+export default function Link({
   href,
   children,
   extraClasses,
