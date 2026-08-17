@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import styled from "styled-components";
-import { BasicButton } from "@/Components/Common/StyledButton";
 import { useAuth } from "@/lib/AuthContext";
 import Layout from "@/Components/Layout";
 import { H1, P2 } from "@/Components/Common/StyledText";
