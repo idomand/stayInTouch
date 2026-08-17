@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import AddNewContact from "./AddNewContact";
 import { showArt } from "./SecretGame";
-import { BasicButton } from "./Common/StyledButton";
 import { H1 } from "./Common/StyledText";
+import Button from "./ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
@@ -29,9 +29,10 @@ export default function MainForm() {
           </MainHeader>
         </HeaderWrapper>
         <div>
-          <BasicButton onClick={() => setShowMainForm(!showMainForm)}>
-            Make a friend
-          </BasicButton>
+          <Button
+            buttonText="Make a friend!"
+            onClick={() => setShowMainForm(!showMainForm)}
+          />
         </div>
       </MainFormWrapper>
       {showMainForm && <AddNewContact />}

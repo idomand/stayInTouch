@@ -1,3 +1,21 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-grey1: #D3D3D3;
+  --color-grey2: rgba(201, 201, 201, 0.7);
+  --color-grey3: rgba(0, 0, 0, 0.6);
+  --color-blue1: #053BBC;
+  --color-blue2: #2C61E0;
+  --color-blue3: rgba(44, 97, 224, 0.1);
+  --color-green1: #02CF60;
+  --color-green2: #00AE50;
+  --color-green3: rgba(2, 207, 96, 0.1);
+  --color-red1: #FF0000;
+  --color-red2: #FFD8D8;
+}
+
+
+
 html,
 body {
   padding: 0;

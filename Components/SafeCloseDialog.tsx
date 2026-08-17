@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { H2 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
+import Button from "./ui/Button";
 
 type SafeCloseDialogProps = {
   dialogText: string;
@@ -46,8 +46,8 @@ export default function SafeCloseDialog({
         <DialogHeader>{dialogText}</DialogHeader>
         {children}
         <div>
-          <DialogButton onClick={closeDialog}>close</DialogButton>
-          <DialogButton onClick={customFunction}>submit</DialogButton>
+          <Button onClick={closeDialog} buttonText="close" />
+          <Button onClick={customFunction} buttonText="submit" />
         </div>
       </Dialog>
     )
@@ -64,5 +64,3 @@ const Dialog = styled.dialog`
 const DialogHeader = styled(H2)`
   margin-bottom: 50px;
 `;
-
-const DialogButton = styled(BasicButton)``;
