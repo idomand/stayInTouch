@@ -1,7 +1,7 @@
-import { BasicLink } from "@/Components/Common/StyledLinks";
 import { H1, P3 } from "@/Components/Common/StyledText";
 import Layout from "@/Components/Layout";
 import Button from "@/Components/ui/Button";
+import { Link } from "@/Components/ui/Link";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
@@ -53,9 +53,7 @@ export default function About() {
             All you need to do is enter their names and how often you would like
             to contact them, and Stay-in-Touch will take care of the rest.
           </P3>
-          <DemoButtonWrapper>
-            <Button onClick={addDemoData} buttonText="Demo" />
-          </DemoButtonWrapper>
+          <Button onClick={addDemoData} buttonText="Demo" variant="Primary" />
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">
           <AboutHeader>About the site</AboutHeader>
@@ -77,10 +75,15 @@ export default function About() {
             on this website.
           </P3>
           <P3>
-            You can see the code itself in my GitHub repo,{" "}
-            <BasicLink href={"https://github.com/idomand/stayInTouch"}>
-              here.
-            </BasicLink>
+            You can see the code itself in my GitHub repo,
+            <Link
+              href={"https://github.com/idomand/stayInTouch"}
+              variant="Text"
+              target="_blank"
+            >
+              Here
+            </Link>
+            .
           </P3>
         </AboutTheSite>
         <AboutTheCreator id="AboutTheCreator">
@@ -98,14 +101,26 @@ export default function About() {
             science-fiction books, cooking and learning German.
           </P3>
           <P3>
-            You can see more of my projects on my{" "}
-            <BasicLink href={"https://www.hire-ido.com"}>website.</BasicLink>
+            You can see more of my projects on my
+            <Link
+              href={"https://www.hire-ido.com"}
+              variant="Text"
+              target="_blank"
+            >
+              website
+            </Link>
+            .
           </P3>
           <P3>
-            And talk to me on{" "}
-            <BasicLink href={"https://www.linkedin.com/in/ido-mandelman"}>
-              LinkedIn.
-            </BasicLink>
+            And talk to me on
+            <Link
+              href={"https://www.linkedin.com/in/ido-mandelman"}
+              variant="Text"
+              target="_blank"
+            >
+              LinkedIn
+            </Link>
+            .
           </P3>
         </AboutTheCreator>
       </AboutPageWrapper>
