@@ -17,9 +17,10 @@ export default function Button({
   variant = "Primary",
 }: Props) {
   const baseClasses =
-    "justify-center cursor-pointer flex items-center transition ease-in duration-300 text-sm rounded-md border-current font-medium";
+    "justify-center cursor-pointer flex items-center transition ease-in duration-200 text-sm rounded-md border-current font-medium";
 
-  const basicClasses = "bg-blue1 text-white py-1 px-2 hover:bg-blue3 border";
+  const primaryClasses =
+    "bg-blue1 text-white py-1 px-2 hover:bg-blue3 border hover:text-blue1";
 
   const secondaryButtonClasses = "border-b-3 rounded-none  p-1 ";
 
@@ -27,7 +28,7 @@ export default function Button({
     " px-1 bg-transparent text-2xl text-black border-none  hover:bg-grey1 ";
 
   const variantClasses = {
-    Primary: basicClasses,
+    Primary: primaryClasses,
     Secondary: secondaryButtonClasses,
     Ghost: ghostButtonClass,
   }[variant];

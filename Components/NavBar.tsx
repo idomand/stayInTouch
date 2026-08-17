@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useMedia } from "react-use";
 import styled, { useTheme } from "styled-components";
 import { useAuth } from "../lib/AuthContext";
-import { NavLink } from "./Common/StyledLinks";
 import { H2 } from "./Common/StyledText";
 import SafeCloseDialog from "./SafeCloseDialog";
+import { Link } from "./ui/Link";
 
 export default function NavBar() {
   const Theme = useTheme();
@@ -24,13 +24,18 @@ export default function NavBar() {
       )}
       <PageLinksWrapper>
         {currentUser && (
-          <NavLink isActive={router.pathname == "/"} href="/">
+          <Link variant="Nev" isLinkActive={router.pathname == "/"} href="/">
             Home
-          </NavLink>
+          </Link>
         )}
-        <NavLink isActive={router.pathname == "/about"} href="/about">
-          About
-        </NavLink>
+        <Link
+          variant="Nev"
+          isLinkActive={router.pathname == "/about"}
+          href="/about"
+          extraClasses="mx-2"
+        >
+          About1
+        </Link>
       </PageLinksWrapper>
 
       {currentUser ? (
