@@ -1,6 +1,6 @@
 import { H1, P3 } from "@/Components/Common/StyledText";
 import Button from "@/Components/ui/Button";
-import { Link } from "@/Components/ui/Link";
+import Link from "@/Components/ui/Link";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
@@ -132,10 +132,6 @@ const AboutPageWrapper = styled.section`
   position: relative;
   width: 70%;
   margin: auto;
-`;
-
-const DemoButtonWrapper = styled.div`
-  display: flex;
 `;
 
 const AboutHeader = styled(H1)``;
