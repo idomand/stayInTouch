@@ -5,7 +5,6 @@ import { useAuth } from "../lib/AuthContext";
 import { updateContact } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
 import { H5 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
 import {
   BasicForm,
   BasicInput,
@@ -14,6 +13,7 @@ import {
 } from "./Common/StyledFormElements";
 import DatePickerComponent from "./DatePickerComponent";
 import ErrorWarning from "./ErrorWarning";
+import Button from "./ui/Button";
 
 type UpdateContactFormState = ContactItemType & {
   isModalOpenProp: boolean;
@@ -147,7 +147,7 @@ export default function UpdateContactForm({
                 <H5>Editing Contact:</H5>
                 <ContactNameHeader>{name}</ContactNameHeader>
               </HeaderName>
-              <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
+              <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
             </EditHeader>
             <EditContactForm onSubmit={updateContactOnSubmit}>
               <NameLabel>
@@ -210,21 +210,6 @@ export default function UpdateContactForm({
 //* The styles of the Modal are in the global.css file
 //?========================
 
-const CloseModalButton = styled(BasicButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.black};
-  border: none;
-  font-size: ${({ theme }) => theme.typeScale.header3};
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.blue3};
-    border: none;
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-    /* margin: auto; */
-  }
-`;
 const ContactNameHeader = styled(H5)`
   color: ${({ theme }) => theme.blue2};
   font-weight: 600;

@@ -3,7 +3,7 @@ import { useAuth } from "../lib/AuthContext";
 import { deleteNote } from "../lib/Firebase";
 import { NoteType } from "../types/NoteType";
 import { H4 } from "./Common/StyledText";
-import { MinimalButton } from "./Common/StyledButton";
+import Button from "./ui/Button";
 
 export default function NoteItem({
   noteId,
@@ -20,17 +20,23 @@ export default function NoteItem({
 
   return (
     <NoteItemWrapper>
-      <NoteItemHeaderWrapper>
-        <NoteItemHeaderText>
-          <H4>Note Number: #{noteId}</H4>
-        </NoteItemHeaderText>
-        <NoteItemButtonWrapper>
-          <EditNoteButton onClick={() => switchToEditMood(data, noteId)}>
-            Edit
-          </EditNoteButton>
-          <DeleteNoteButton onClick={deleteNoteFunc}>Delete</DeleteNoteButton>
-        </NoteItemButtonWrapper>
-      </NoteItemHeaderWrapper>
+      <div className="flex justify-between">
+        <H4>Note Number: #{noteId}</H4>
+        <div className="flex mb-1">
+          <Button
+            buttonText="Edit"
+            onClick={() => switchToEditMood(data, noteId)}
+            variant="Secondary"
+            extraClasses="mr-1 hover:bg-blue3 hover:text-blue1"
+          />
+          <Button
+            buttonText="Delete"
+            onClick={deleteNoteFunc}
+            variant="Secondary"
+            extraClasses="hover:bg-red2 hover:text-red1"
+          />
+        </div>
+      </div>
 
       {data.startsWith("Talked on: ") ? (
         <TalkedOnWrapper>{data}</TalkedOnWrapper>
@@ -48,15 +54,6 @@ const NoteItemWrapper = styled.li`
   display: flex;
   flex-direction: column;
 `;
-
-const NoteItemHeaderWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const NoteItemHeaderText = styled.div``;
-
-const NoteItemButtonWrapper = styled.div``;
 
 const NoteDataWrapper = styled.div`
   border: solid 1px ${({ theme }) => theme.blue2};
@@ -80,28 +77,5 @@ const TalkedOnWrapper = styled.div`
   font-size: ${({ theme }) => theme.typeScale.p_normal};
   @media (${({ theme }) => theme.devices.break1}) {
     width: auto;
-  }
-`;
-
-const EditNoteButton = styled(MinimalButton)`
-  padding: 3px;
-  &:hover,
-  &:focus {
-    border-radius: 3px;
-
-    color: ${({ theme }) => theme.blue1};
-    background: ${({ theme }) => theme.blue3};
-  }
-`;
-
-const DeleteNoteButton = styled(MinimalButton)`
-  margin-left: 15px;
-  padding: 3px;
-  &:hover,
-  &:focus {
-    border-radius: 3px;
-
-    background: ${({ theme }) => theme.red2};
-    color: ${({ theme }) => theme.red1};
   }
 `;
