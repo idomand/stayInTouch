@@ -5,6 +5,7 @@ import { BasicButton } from "@/Components/Common/StyledButton";
 import { useAuth } from "@/lib/AuthContext";
 import Layout from "@/Components/Layout";
 import { H1, P2 } from "@/Components/Common/StyledText";
+import Button from "@/Components/ui/Button";
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth()!;
@@ -22,11 +23,14 @@ export default function Login() {
         <LoginSubSection>
           <P2>Welcome Back !!!!</P2>
           <H1>Login to your account</H1>
-
-          <SignInButton onClick={loginWithGoogle}>
+          <Button
+            extraClasses="bg-slate-600 hover:text-slate-600 font-bold text-xl
+"
+            buttonText="Sign in with Google"
+            onClick={loginWithGoogle}
+          >
             <GoogleLogo src="/Google-logo.png" />
-            Sign in with Google
-          </SignInButton>
+          </Button>
         </LoginSubSection>
         <AboutSubSection>
           <H1>About the App</H1>
@@ -84,29 +88,6 @@ const LoginPageText = styled(P2)`
   line-height: 20px;
   margin-top: 7px;
   text-transform: capitalize;
-`;
-
-const SignInButton = styled(BasicButton)`
-  margin: 20px auto 0;
-  transition: 0.3s all;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  background-color: #2d3748;
-  color: ${({ theme }) => theme.white};
-  border-radius: 5px;
-  font-weight: 700;
-  font-size: ${({ theme }) => theme.typeScale.p_large};
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.white};
-    color: #2d3748;
-    border: solid;
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    max-width: max-content;
-    margin: 10px auto 0;
-  }
 `;
 
 const GoogleLogo = styled.img`

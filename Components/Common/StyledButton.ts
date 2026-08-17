@@ -7,9 +7,9 @@ const ButtonPrototype = styled.button`
 `;
 
 export const MinimalButton = styled(ButtonPrototype)`
-  cursor: pointer;
+  /* cursor: pointer; */
   font-style: normal;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: 14px;
   border: none;
   background-color: transparent;
