@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useAuth } from "@/lib/AuthContext";
-import Layout from "@/Components/Layout";
+import Layout from "@/Components/ui/Layout";
 import { H1, P2 } from "@/Components/Common/StyledText";
 import Button from "@/Components/ui/Button";
 

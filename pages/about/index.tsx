@@ -1,5 +1,5 @@
 import { H1, P3 } from "@/Components/Common/StyledText";
-import Layout from "@/Components/Layout";
+import Layout from "@/Components/ui/Layout";
 import Button from "@/Components/ui/Button";
 import { Link } from "@/Components/ui/Link";
 import { useAuth } from "@/lib/AuthContext";
