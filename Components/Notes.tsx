@@ -5,9 +5,9 @@ import { useAuth } from "../lib/AuthContext";
 import { updateContact, updateNote } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
 import { H5 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
 import { BasicForm, InputSubmit } from "./Common/StyledFormElements";
 import NoteItem from "./NoteItem";
+import Button from "./ui/Button";
 
 export default function Notes(props: ContactItemType) {
   const { currentUser } = useAuth()!;
@@ -135,7 +135,7 @@ export default function Notes(props: ContactItemType) {
               <H5>Contact Notes: </H5>
               <ContactNameText>{props.name}</ContactNameText>
             </ContactNameWrapper>
-            <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
+            <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
           </NotesHeader>
           <AddNewNoteWrapper>
             <AddNewNoteForm onSubmit={onSubmitFunc}>
@@ -149,9 +149,7 @@ export default function Notes(props: ContactItemType) {
               />
               <NotesButtonsWrapper>
                 {isEditMood && (
-                  <ChancelEditButton onClick={cancelEdit}>
-                    cancel
-                  </ChancelEditButton>
+                  <Button onClick={cancelEdit} buttonText="Cancel" />
                 )}
                 <NewNoteSubmit
                   value={isEditMood ? "Update Note" : "Add Note"}
@@ -247,17 +245,6 @@ const ContactNameText = styled(H5)`
   font-weight: 600;
   margin-left: 5px;
 `;
-const CloseModalButton = styled(BasicButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.black};
-  border: none;
-  font-size: larger;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.blue3};
-    border: none;
-  }
-`;
 
 const AddNewNoteWrapper = styled.div`
   display: flex;
@@ -279,19 +266,6 @@ const NewNoteInput = styled.textarea`
 
   @media (${({ theme }) => theme.devices.break1}) {
     width: auto;
-  }
-`;
-
-const ChancelEditButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  /* margin: 5px auto; */
-  padding: 10px 15px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
   }
 `;
 

@@ -1,7 +1,7 @@
-import { BasicButton } from "@/Components/Common/StyledButton";
 import { BasicLink } from "@/Components/Common/StyledLinks";
 import { H1, P3 } from "@/Components/Common/StyledText";
 import Layout from "@/Components/Layout";
+import Button from "@/Components/ui/Button";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
@@ -54,7 +54,7 @@ export default function About() {
             to contact them, and Stay-in-Touch will take care of the rest.
           </P3>
           <DemoButtonWrapper>
-            <BasicButton onClick={addDemoData}>Demo</BasicButton>
+            <Button onClick={addDemoData} buttonText="Demo" />
           </DemoButtonWrapper>
         </HowToUseSection>
         <AboutTheSite id="AboutTheSite">

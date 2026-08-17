@@ -5,9 +5,9 @@ import { createGoogleCalendarEvent } from "../lib/CalenderFunctions";
 import { oneDay } from "../lib/ConstantsFile";
 import { ContactItemType } from "../types/ContactItemType";
 import { H5, P1 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
 import { BasicForm } from "./Common/StyledFormElements";
 import DatePickerComponent from "./DatePickerComponent";
+import Button from "./ui/Button";
 
 type AppointmentFormState = Omit<
   ContactItemType,
@@ -97,7 +97,7 @@ export default function AppointmentForm({
                 <H5>Make Appointment with</H5>
                 <ContactNameHeader>{name}</ContactNameHeader>
               </div>
-              <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
+              <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
             </EditHeader>
             <SpecificTimeWrapper>
               <CalenderText>
@@ -110,10 +110,17 @@ export default function AppointmentForm({
                 />
               </CalenderDatePickerWrapper>
             </SpecificTimeWrapper>
-            <SaveToGoogleCalender onClick={calenderFunction}>
-              <CalenderLogo src="/Google_Calendar.svg" alt="Google Calendar" />
-              Save to Calender
-            </SaveToGoogleCalender>
+            <Button
+              buttonText="Save to Calender"
+              onClick={calenderFunction}
+              extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
+            >
+              <img
+                src="/Google_Calendar.svg"
+                alt="Google Calendar"
+                className="mr-2"
+              />
+            </Button>
           </CalendarSubSection>
         </MoreOptionsWrapper>
       </ReactModal>
@@ -139,10 +146,6 @@ const CalenderDatePickerWrapper = styled.div`
     margin: auto;
   }
 `;
-
-const CalenderLogo = styled.img`
-  justify-self: flex-start;
-`;
 const CalenderText = styled(P1)`
   margin-bottom: 10px;
   @media (${({ theme }) => theme.devices.break1}) {
@@ -150,21 +153,7 @@ const CalenderText = styled(P1)`
     text-align: start;
   }
 `;
-const CloseModalButton = styled(BasicButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.black};
-  border: none;
-  font-size: ${({ theme }) => theme.typeScale.header3};
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.blue3};
-    border: none;
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-    /* margin: auto; */
-  }
-`;
+
 const ContactNameHeader = styled(H5)`
   color: ${({ theme }) => theme.blue2};
   font-weight: 600;
@@ -187,32 +176,6 @@ const MoreOptionsWrapper = styled.section`
   justify-content: center;
   @media (${({ theme }) => theme.devices.break1}) {
     flex-direction: column;
-  }
-`;
-
-const SaveToGoogleCalender = styled(BasicButton)`
-  width: 100%;
-  font-weight: 500;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: ${({ theme }) => theme.blue3};
-  border: 1.3px solid ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.blue1};
-  margin-top: 23px;
-  &:hover,
-  &:focus {
-    border: 1.3px solid ${({ theme }) => theme.green1};
-    color: ${({ theme }) => theme.green1};
-    background: ${({ theme }) => theme.green3};
-  }
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    margin: 10px 0;
-    max-width: fit-content;
-    width: auto;
-    align-self: center;
   }
 `;
 
