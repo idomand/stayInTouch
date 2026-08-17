@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useAuth } from "@/lib/AuthContext";
-import Layout from "@/Components/ui/Layout";
 import { H1, P2 } from "@/Components/Common/StyledText";
 import Button from "@/Components/ui/Button";
 
@@ -17,39 +16,37 @@ export default function Login() {
   }, [currentUser, router]);
 
   return (
-    <Layout>
-      <LoginPageWrapper>
-        <LoginSubSection>
-          <P2>Welcome Back !!!!</P2>
-          <H1>Login to your account</H1>
-          <Button
-            extraClasses="bg-slate-600 hover:text-slate-600 font-bold text-xl
+    <LoginPageWrapper>
+      <LoginSubSection>
+        <P2>Welcome Back !!!!</P2>
+        <H1>Login to your account</H1>
+        <Button
+          extraClasses="bg-slate-600 hover:text-slate-600 font-bold text-xl
 "
-            buttonText="Sign in with Google"
-            onClick={loginWithGoogle}
-          >
-            <GoogleLogo src="/Google-logo.png" />
-          </Button>
-        </LoginSubSection>
-        <AboutSubSection>
-          <H1>About the App</H1>
-          <LoginPageText>
-            Sign in to your Google Account to create a secure user that can
-            access Google Cloud database.
-          </LoginPageText>
-          <LoginPageText>
-            Inside, you will be able to create personal reminders for talking to
-            friends and family. The About section of the app contains detailed
-            information about using the app, as well as a live demonstration.
-          </LoginPageText>
-          <LoginPageText>
-            The app does not save or use any personal data, except to interact
-            with the private database. The app would never send you spam emails
-            or pass any information on to third parties.
-          </LoginPageText>
-        </AboutSubSection>
-      </LoginPageWrapper>
-    </Layout>
+          buttonText="Sign in with Google"
+          onClick={loginWithGoogle}
+        >
+          <GoogleLogo src="/Google-logo.png" />
+        </Button>
+      </LoginSubSection>
+      <AboutSubSection>
+        <H1>About the App</H1>
+        <LoginPageText>
+          Sign in to your Google Account to create a secure user that can access
+          Google Cloud database.
+        </LoginPageText>
+        <LoginPageText>
+          Inside, you will be able to create personal reminders for talking to
+          friends and family. The About section of the app contains detailed
+          information about using the app, as well as a live demonstration.
+        </LoginPageText>
+        <LoginPageText>
+          The app does not save or use any personal data, except to interact
+          with the private database. The app would never send you spam emails or
+          pass any information on to third parties.
+        </LoginPageText>
+      </AboutSubSection>
+    </LoginPageWrapper>
   );
 }
 
