@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import AuthProvider from "@/lib/AuthContext";
 import "@/styles/globals.css";
 import { defaultTheme } from "@/styles/Theme";
+import Layout from "@/Components/ui/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <AuthProvider>
         <ThemeProvider theme={defaultTheme}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeProvider>{" "}
       </AuthProvider>
     </>
