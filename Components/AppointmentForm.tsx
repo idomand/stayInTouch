@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createGoogleCalendarEvent } from "../lib/CalenderFunctions";
 import { oneDay } from "../lib/ConstantsFile";
 import { ContactItemType } from "../types/ContactItemType";
-import { H5, P1 } from "@/Components/ui/Text";
+import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
 import { twMerge } from "tailwind-merge";
 import DatePickerComponent from "./DatePickerComponent";
@@ -25,7 +25,6 @@ export default function AppointmentForm({
   isModalOpenProp,
   onClose,
 }: AppointmentFormState) {
-  const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
   const [error, setError] = useState<string | boolean>(false);
   const currantTime = new Date().getTime();
 
@@ -47,10 +46,6 @@ export default function AppointmentForm({
   );
 
   useEffect(() => {
-    setIsModalOpen(isModalOpenProp);
-  }, [isModalOpenProp]);
-
-  useEffect(() => {
     if (error) {
       setTimeout(() => {
         setError(false);
@@ -59,7 +54,6 @@ export default function AppointmentForm({
   }, [error]);
 
   function onCloseModal() {
-    setIsModalOpen(false);
     if (error) {
       setError(false);
     }
