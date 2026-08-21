@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import ReactModal from "react-modal";
-import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { updateContact, updateNote } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
-import { H5 } from "./Common/StyledText";
-import { BasicButton } from "./Common/StyledButton";
-import { BasicForm, InputSubmit } from "./Common/StyledFormElements";
+import {
+  basicFormClasses,
+  inputSubmitClasses,
+} from "@/Components/ui/formClasses";
+import { twMerge } from "tailwind-merge";
 import NoteItem from "./NoteItem";
+import Button from "./ui/Button";
+import Dialog from "./ui/Dialog";
 
 export default function Notes(props: ContactItemType) {
   const { currentUser } = useAuth()!;
@@ -15,10 +17,6 @@ export default function Notes(props: ContactItemType) {
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
   const [editNoteId, setEditNoteId] = useState<null | number>(null);
-
-  function onCloseModal() {
-    setIsModalOpen(false);
-  }
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
@@ -103,221 +101,73 @@ export default function Notes(props: ContactItemType) {
 
   return (
     <>
-      {props.notesArray && props.notesArray.length ? (
-        <>
-          <NotesButton onClick={onOpenModal}>
-            <NotsNumber>{props.notesArray.length}</NotsNumber>
-            <NotesLogo src="/notes.svg" />
-          </NotesButton>
-        </>
-      ) : (
-        <>
-          <NotesButton onClick={onOpenModal}>
-            <NotsNumber>0</NotsNumber>
-            <NotesLogo src="/notes.svg" />
-          </NotesButton>
-        </>
-      )}
-
-      <ReactModal
-        ariaHideApp={false}
-        isOpen={isModalOpen}
-        shouldFocusAfterRender={true}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
-        onRequestClose={onCloseModal}
-        className={"contact-edit-modal"}
-        overlayClassName={"contact-edit-modal-overlay"}
+      <button
+        type="button"
+        onClick={onOpenModal}
+        className="px-1 cursor-pointer h-10 bg-blue3 border-none rounded-[55px] text-center relative transition-all duration-300 hover:bg-grey2 focus:bg-grey2"
       >
-        <NotesWrapper>
-          <NotesHeader>
-            <ContactNameWrapper>
-              <H5>Contact Notes: </H5>
-              <ContactNameText>{props.name}</ContactNameText>
-            </ContactNameWrapper>
-            <CloseModalButton onClick={onCloseModal}>X</CloseModalButton>
-          </NotesHeader>
-          <AddNewNoteWrapper>
-            <AddNewNoteForm onSubmit={onSubmitFunc}>
-              <NewNoteInput
+        <div className=" leading-4 rounded-[38px] text-center font-semibold h-4.5 w-4.5 absolute bottom-6 left-7 bg-blue1 text-white transition-all duration-300 border border-solid border-transparent">
+          {props.notesArray.length}
+        </div>
+        <img src="/notes.svg" className="block ml-1" />
+      </button>
+
+      <Dialog
+        title="Notes"
+        close={() => {
+          setIsModalOpen(false);
+        }}
+        isOpen={isModalOpen}
+      >
+        <section>
+          <div className="flex flex-col items-center">
+            <form
+              onSubmit={onSubmitFunc}
+              className={twMerge(basicFormClasses, "flex flex-col")}
+            >
+              <textarea
                 required
                 placeholder="Enter Note..."
                 value={noteInputValue}
                 onChange={(e) => {
                   setNoteInputValue(e.target.value);
                 }}
+                className="bg-grey1 rounded-[10px] p-2.5 w-auto sm:w-103.5 h-18"
               />
-              <NotesButtonsWrapper>
+              <div className="flex justify-center">
                 {isEditMood && (
-                  <ChancelEditButton onClick={cancelEdit}>
-                    cancel
-                  </ChancelEditButton>
+                  <Button onClick={cancelEdit} buttonText="Cancel" />
                 )}
-                <NewNoteSubmit
-                  value={isEditMood ? "Update Note" : "Add Note"}
+                <input
                   type="submit"
+                  value={isEditMood ? "Update Note" : "Add Note"}
+                  className={twMerge(
+                    inputSubmitClasses,
+                    "bg-blue1 text-white px-3.5 py-2.5 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1",
+                  )}
                 />
-              </NotesButtonsWrapper>
-            </AddNewNoteForm>
-          </AddNewNoteWrapper>
-          <NotesListWrapper>
-            <NotesList>
-              {props.notesArray &&
-                props.notesArray.length &&
-                props.notesArray.map(
-                  (note: { data: string; noteId: number }) => {
-                    return (
-                      <NoteItem
-                        key={note.noteId}
-                        data={note.data}
-                        noteId={note.noteId}
-                        contactId={props.contactId!}
-                        switchToEditMood={switchToEditMood}
-                      />
-                    );
-                  },
-                )}
-            </NotesList>
-          </NotesListWrapper>
-        </NotesWrapper>
-      </ReactModal>
+              </div>
+            </form>
+          </div>
+          <div className="flex flex-col items-center">
+            <ul className="p-0 m-0">
+              {props.notesArray.map(
+                (note: { data: string; noteId: number }) => {
+                  return (
+                    <NoteItem
+                      key={note.noteId}
+                      data={note.data}
+                      noteId={note.noteId}
+                      contactId={props.contactId!}
+                      switchToEditMood={switchToEditMood}
+                    />
+                  );
+                },
+              )}
+            </ul>
+          </div>
+        </section>
+      </Dialog>
     </>
   );
 }
-
-//?========================
-//* The styles of the Modal are in the global.css file
-//?========================
-
-const NotesButton = styled.button`
-  cursor: pointer;
-  height: 40px;
-  background-color: ${({ theme }) => theme.blue3};
-  border: none;
-  border-radius: 55px;
-  text-align: center;
-  position: relative;
-  transition: all 0.3s;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.grey2};
-  }
-`;
-
-const NotsNumber = styled.div`
-  border-radius: 38px;
-  text-align: center;
-  font-weight: 600;
-  height: 18px;
-  width: 18px;
-  position: absolute;
-  bottom: 25px;
-  left: 30px;
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  transition: all 0.3s;
-  border: solid 1px transparent;
-  ${NotesButton}:hover &,
-  ${NotesButton}:focus & {
-    background-color: ${({ theme }) => theme.white};
-    border: solid 1px ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const NotesLogo = styled.img`
-  display: block;
-  margin-left: 5px;
-`;
-
-const NotesWrapper = styled.section``;
-
-const NotesHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 25px;
-`;
-const ContactNameWrapper = styled.div`
-  display: flex;
-  margin: auto;
-`;
-
-const ContactNameText = styled(H5)`
-  color: ${({ theme }) => theme.blue2};
-  font-weight: 600;
-  margin-left: 5px;
-`;
-const CloseModalButton = styled(BasicButton)`
-  background-color: transparent;
-  color: ${({ theme }) => theme.black};
-  border: none;
-  font-size: larger;
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.blue3};
-    border: none;
-  }
-`;
-
-const AddNewNoteWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const AddNewNoteForm = styled(BasicForm)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const NewNoteInput = styled.textarea`
-  background-color: ${({ theme }) => theme.grey1};
-  border-radius: 10px;
-  padding: 10px;
-  width: 415px;
-  height: 73px;
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;
-
-const ChancelEditButton = styled(BasicButton)`
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  /* margin: 5px auto; */
-  padding: 10px 15px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const NotesButtonsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const NewNoteSubmit = styled(InputSubmit)`
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  padding: 10px 15px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-const NotesListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const NotesList = styled.ul`
-  padding: 0;
-  margin: 0;
-`;

@@ -1,16 +1,16 @@
 import { signInWithPopup, signOut, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
-import { Result } from "@/Components/Common/StyledSpinner";
+import { Result } from "@/Components/ui/Spinner";
 
-interface AuthContextInterface {
+type AuthContextType = {
   currentUser?: User | null;
   logout: () => void;
   loginWithGoogle: () => Promise<void>;
   loading?: boolean;
-}
+};
 
-const AuthContext = React.createContext<AuthContextInterface | null>(null);
+const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export function useAuth() {
   return useContext(AuthContext);

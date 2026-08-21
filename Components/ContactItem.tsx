@@ -1,7 +1,6 @@
 // import { useMedia } from "react-use";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
-import styled, { useTheme } from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { oneDay } from "../lib/ConstantsFile";
 import { updateContact } from "../lib/Firebase";
@@ -17,15 +16,10 @@ export default function ContactItem({
   notesArray,
   friendEmail,
 }: ContactItemType) {
-  // const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
-
   const { currentUser } = useAuth()!;
   const currantTime = new Date().getTime();
-  const Theme = useTheme();
-  // const isMobile = useMedia(`(${Theme.devices.break1})`);
 
   let nextTalkResponse;
-
   let lastTalkedToResponse;
   let isTalkingStatusOK;
 
@@ -37,14 +31,20 @@ export default function ContactItem({
 
   if (currantTime - timeFromLastTalk < 86000000) {
     lastTalkedToResponse = (
-      <DateValue $statusColor={isTalkingStatusOK}>Talked today</DateValue>
+      <span
+        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
+      >
+        Talked today
+      </span>
     );
   } else {
     lastTalkedToResponse = (
-      <DateValue $statusColor={isTalkingStatusOK}>
+      <span
+        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
+      >
         Didn’t talk for {Math.floor((currantTime - timeFromLastTalk) / oneDay)}{" "}
         days
-      </DateValue>
+      </span>
     );
   }
 
@@ -53,13 +53,19 @@ export default function ContactItem({
 
   if (nextTalkInDays > 0) {
     nextTalkResponse = (
-      <DateValue $statusColor={isTalkingStatusOK}>
+      <span
+        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
+      >
         Talk in {nextTalkInDays} days
-      </DateValue>
+      </span>
     );
   } else {
     nextTalkResponse = (
-      <DateValue $statusColor={isTalkingStatusOK}>Talk Today!</DateValue>
+      <span
+        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
+      >
+        Talk Today!
+      </span>
     );
   }
 
@@ -92,17 +98,23 @@ export default function ContactItem({
   }
 
   return (
-    <ContactItemContainer>
-      <ContactItemWrapper>
-        <ContactDetailsWrapper>
-          <ContactDetailsSubDiv>
-            <NameContainer>{name}</NameContainer>
-          </ContactDetailsSubDiv>
-        </ContactDetailsWrapper>
-        <ContactDatesWrapper>
-          <DateWrapper>{lastTalkedToResponse}</DateWrapper>
-          <DateWrapper>{nextTalkResponse}</DateWrapper>
-        </ContactDatesWrapper>
+    <li className="flex items-center justify-between list-none mx-1 my-2.5 w-[85vw] sm:w-auto">
+      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
+        <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-50 sm:flex-row sm:items-stretch sm:justify-start">
+          <div className="flex flex-col justify-center">
+            <span className="font-medium text-xl leading-5.25 capitalize w-40 text-center sm:w-max sm:text-left">
+              {name}
+            </span>
+          </div>
+        </div>
+        <div className="[grid-area:contactDates] flex w-100 border-t border-black/10 pt-3.5 mt-3.5 mb-5 max-w-50 sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0 sm:max-w-none">
+          <div className="flex flex-col justify-center items-center mx-3.5">
+            {lastTalkedToResponse}
+          </div>
+          <div className="flex flex-col justify-center items-center mx-3.5">
+            {nextTalkResponse}
+          </div>
+        </div>
         {/* <MoreOptionsWrapper>
           <MoreOptions
             name={name}
@@ -112,7 +124,7 @@ export default function ContactItem({
             notesArray={notesArray}
           />
         </MoreOptionsWrapper> */}
-        <NotesButtonWrapper>
+        <div className="[grid-area:notes] flex justify-end items-center mr-0 sm:mr-5">
           <Notes
             friendEmail={friendEmail}
             name={name}
@@ -121,19 +133,19 @@ export default function ContactItem({
             contactId={contactId}
             notesArray={notesArray}
           />
-        </NotesButtonWrapper>
-        <ButtonsWrapper>
+        </div>
+        <div className="[grid-area:buttons] flex items-center justify-end">
           {isTalkingStatusOK ? (
-            <ClickableCheckbox
+            <IoCheckboxOutline
               onClick={resetFunction}
-              $baseColor={Theme.green1}
               size={50}
+              className="cursor-pointer text-green1 hover:text-blue1"
             />
           ) : (
-            <ClickableExclamation
+            <BsExclamationSquare
               onClick={resetFunction}
-              $baseColor={Theme.red1}
               size={50}
+              className="cursor-pointer text-red1 hover:text-blue1"
             />
           )}
 
@@ -147,145 +159,8 @@ export default function ContactItem({
           />
 
           {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
-        </ButtonsWrapper>
-      </ContactItemWrapper>
-    </ContactItemContainer>
+        </div>
+      </div>
+    </li>
   );
 }
-
-const ContactItemContainer = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* width: 75vw; */
-  list-style-type: none;
-  margin: 10px 5px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: 85vw;
-  }
-`;
-const ContactItemWrapper = styled.div`
-  display: grid;
-  flex-grow: 1;
-  justify-content: space-between;
-  background-color: ${({ theme }) => theme.white};
-  border-radius: 15px;
-  padding: 10px;
-  grid-template-areas: "contactDetails contactDates notes buttons";
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    grid-template-areas:
-      "contactDetails  notes "
-      "contactDates  buttons ";
-  }
-`;
-
-const NotesButtonWrapper = styled.div`
-  grid-area: notes;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  margin-right: 20px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    margin-right: 0;
-  }
-`;
-
-const ContactDetailsWrapper = styled.div`
-  grid-area: contactDetails;
-  display: flex;
-  width: 200px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-const ContactDetailsSubDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const NameContainer = styled.span`
-  font-weight: 500;
-  font-size: ${({ theme }) => theme.typeScale.header4};
-  line-height: 21px;
-  text-transform: capitalize;
-  width: max-content;
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: 160px;
-    text-align: center;
-    margin-bottom: 0px;
-  }
-`;
-
-const ContactDatesWrapper = styled.div`
-  grid-area: contactDates;
-  display: flex;
-  width: 400px;
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding-top: 15px;
-    margin-top: 15px;
-    margin-bottom: 20px;
-    max-width: 200px;
-  }
-`;
-const DateWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 15px;
-`;
-
-interface DateValueProps {
-  readonly $statusColor: boolean;
-}
-
-const DateValue = styled.span<DateValueProps>`
-  color: ${({ theme, $statusColor }) => {
-    if (!$statusColor) {
-      return theme.red1;
-    } else {
-      return theme.grey3;
-    }
-  }};
-
-  font-weight: 600;
-  font-size: ${({ theme }) => theme.typeScale.p_large};
-  line-height: 20px;
-  text-align: center;
-  margin: 0;
-`;
-
-const ButtonsWrapper = styled.div`
-  grid-area: buttons;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  &:hover,
-  &:focus {
-  }
-`;
-
-type IconProps = {
-  $baseColor: string;
-};
-
-const ClickableCheckbox = styled(IoCheckboxOutline)<IconProps>`
-  cursor: pointer;
-  color: ${({ $baseColor }) => $baseColor};
-  &:hover {
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const ClickableExclamation = styled(BsExclamationSquare)<IconProps>`
-  cursor: pointer;
-  color: ${({ $baseColor }) => $baseColor};
-  &:hover {
-    color: ${({ theme }) => theme.blue1};
-  }
-`;

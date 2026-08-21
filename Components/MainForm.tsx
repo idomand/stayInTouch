@@ -1,10 +1,9 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import AddNewContact from "./AddNewContact";
 import { showArt } from "./SecretGame";
-import { BasicButton } from "./Common/StyledButton";
-import { H1 } from "./Common/StyledText";
+import { H1 } from "@/Components/ui/Text";
+import Button from "./ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
@@ -18,46 +17,28 @@ export default function MainForm() {
 
   return (
     <>
-      <MainFormWrapper>
-        <HeaderWrapper>
-          <MainHeader>
-            {" "}
-            <GameStartText $gameStart={hiddenGameIndicator} onClick={startGame}>
+      <section className="flex items-center mt-1 mx-5 sm:block sm:ml-5 sm:mt-0 sm:mr-0">
+        <div className="flex justify-between w-full">
+          <H1 extraClasses="pt-2.5">
+            <span
+              onClick={startGame}
+              className={`cursor-pointer ${
+                hiddenGameIndicator ? "text-red1" : "text-black"
+              }`}
+            >
               Hi
-            </GameStartText>{" "}
+            </span>{" "}
             {currentUser?.displayName}
-          </MainHeader>
-        </HeaderWrapper>
-        <div>
-          <BasicButton onClick={() => setShowMainForm(!showMainForm)}>
-            Make a friend
-          </BasicButton>
+          </H1>
         </div>
-      </MainFormWrapper>
+        <div>
+          <Button
+            buttonText="Make a friend!"
+            onClick={() => setShowMainForm(!showMainForm)}
+          />
+        </div>
+      </section>
       {showMainForm && <AddNewContact />}
     </>
   );
 }
-
-const MainFormWrapper = styled.section`
-  margin-left: 20px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    display: flex;
-    align-items: center;
-    margin: 5px 20px 0;
-  }
-`;
-
-const MainHeader = styled(H1)`
-  padding-top: 10px;
-`;
-
-const HeaderWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-const GameStartText = styled.span<{ $gameStart: boolean }>`
-  color: ${({ $gameStart }) => ($gameStart ? "red" : "black")};
-  cursor: pointer;
-`;

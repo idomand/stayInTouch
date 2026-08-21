@@ -1,73 +1,55 @@
+import React from "react";
 import { addDays } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import styled from "styled-components";
+import { twMerge } from "tailwind-merge";
 
-interface DatePickerComponentProps {
-  setStartDate: any;
-  // startDate: Date | number;
-  startDate: any;
-}
+type DatePickerComponentProps = {
+  setStartDate:
+    | React.Dispatch<React.SetStateAction<Date>>
+    | React.Dispatch<React.SetStateAction<number | Date>>;
+  startDate: number | Date;
+  isInline?: boolean;
+};
 
 export default function DatePickerComponent({
   setStartDate,
   startDate,
+  isInline = false,
 }: DatePickerComponentProps) {
   return (
     <>
-      <StyledDatePicker
-        className="datePickerClass"
+      <DatePicker
+        wrapperClassName="datePickerClass"
         maxDate={addDays(new Date(), 90)}
-        CalendarContainer={Calendar}
+        calendarContainer={Calendar}
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
-        selected={startDate}
-        onChange={setStartDate}
-        popperPlacement="auto"
+        selected={startDate instanceof Date ? startDate : new Date(startDate)}
+        onChange={(date) => date && setStartDate(date)}
+        inline={isInline}
       />
     </>
   );
 }
 
-const Calendar = styled.div`
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(27, 37, 86, 0.16);
-  overflow: hidden;
-`;
-const Popper = styled.div`
-  position: absolute;
+const Calendar = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) => (
+  <div
+    className={twMerge(
+      "rounded-[10px] shadow-[0_6px_12px_rgba(27,37,86,0.16)] overflow-hidden",
+      className,
+    )}
+  >
+    {children}
+  </div>
+);
 
-  margin: auto;
-  top: 0;
-  left: 0;
-  z-index: 2;
-`;
-
-const StyledDatePicker = styled(({ className, ...props }) => (
-  <DatePicker {...props} wrapperClassName={className} />
-))`
-  /* width: 90px; */
-
-  & .react-datepicker__input-container {
-    /* width: 90px; */
-  }
-  & .react-datepicker__input-container input {
-    /* width: 90px; */
-    background-color: lightgrey;
-    border-radius: 10px;
-    height: 40px;
-    text-align: center;
-    border: none;
-    border: 1px solid ${({ theme }) => theme.grey1};
-
-    &:focus {
-      border: 1px solid ${({ theme }) => theme.blue1};
-    }
-  }
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    .react-datepicker__input-container input {
-      width: 100%;
-    }
-  }
-`;
+const Popper = ({ children }: { children?: React.ReactNode }) => (
+  <div className="absolute m-auto top-0 left-0 z-20000">{children}</div>
+);
