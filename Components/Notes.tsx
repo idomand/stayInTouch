@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import ReactModal from "react-modal";
 import { useAuth } from "../lib/AuthContext";
 import { updateContact, updateNote } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
-import { H5 } from "@/Components/ui/Text";
 import {
   basicFormClasses,
   inputSubmitClasses,
@@ -11,6 +9,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import NoteItem from "./NoteItem";
 import Button from "./ui/Button";
+import Dialog from "./ui/Dialog";
 
 export default function Notes(props: ContactItemType) {
   const { currentUser } = useAuth()!;
@@ -18,10 +17,6 @@ export default function Notes(props: ContactItemType) {
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
   const [editNoteId, setEditNoteId] = useState<null | number>(null);
-
-  function onCloseModal() {
-    setIsModalOpen(false);
-  }
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
@@ -107,33 +102,24 @@ export default function Notes(props: ContactItemType) {
   return (
     <>
       <button
+        type="button"
         onClick={onOpenModal}
         className="px-1 cursor-pointer h-10 bg-blue3 border-none rounded-[55px] text-center relative transition-all duration-300 hover:bg-grey2 focus:bg-grey2"
       >
-        <div className=" leading-4 rounded-[38px] text-center font-semibold h-4.5 w-4.5 absolute bottom-6 left-7 bg-blue1 text-white transition-all duration-300 border border-solid border-transparent group-hover:bg-white group-hover:border-blue1 group-hover:text-blue1 group-focus:bg-white group-focus:border-blue1 group-focus:text-blue1">
+        <div className=" leading-4 rounded-[38px] text-center font-semibold h-4.5 w-4.5 absolute bottom-6 left-7 bg-blue1 text-white transition-all duration-300 border border-solid border-transparent">
           {props.notesArray.length}
         </div>
         <img src="/notes.svg" className="block ml-1" />
       </button>
 
-      <ReactModal
-        ariaHideApp={false}
+      <Dialog
+        title="Notes"
+        close={() => {
+          setIsModalOpen(false);
+        }}
         isOpen={isModalOpen}
-        shouldFocusAfterRender={true}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
-        onRequestClose={onCloseModal}
-        className={"contact-edit-modal"}
-        overlayClassName={"contact-edit-modal-overlay"}
       >
         <section>
-          <div className="flex justify-between px-6 py-1">
-            <div className="flex m-auto">
-              <H5>Contact Notes: </H5>
-              <H5 extraClasses="text-blue2 font-semibold ml-1">{props.name}</H5>
-            </div>
-            <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
-          </div>
           <div className="flex flex-col items-center">
             <form
               onSubmit={onSubmitFunc}
@@ -165,25 +151,23 @@ export default function Notes(props: ContactItemType) {
           </div>
           <div className="flex flex-col items-center">
             <ul className="p-0 m-0">
-              {props.notesArray &&
-                props.notesArray.length &&
-                props.notesArray.map(
-                  (note: { data: string; noteId: number }) => {
-                    return (
-                      <NoteItem
-                        key={note.noteId}
-                        data={note.data}
-                        noteId={note.noteId}
-                        contactId={props.contactId!}
-                        switchToEditMood={switchToEditMood}
-                      />
-                    );
-                  },
-                )}
+              {props.notesArray.map(
+                (note: { data: string; noteId: number }) => {
+                  return (
+                    <NoteItem
+                      key={note.noteId}
+                      data={note.data}
+                      noteId={note.noteId}
+                      contactId={props.contactId!}
+                      switchToEditMood={switchToEditMood}
+                    />
+                  );
+                },
+              )}
             </ul>
           </div>
         </section>
-      </ReactModal>
+      </Dialog>
     </>
   );
 }

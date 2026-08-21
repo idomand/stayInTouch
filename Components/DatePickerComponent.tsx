@@ -5,8 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { twMerge } from "tailwind-merge";
 
 type DatePickerComponentProps = {
-  setStartDate: any;
-  startDate: any;
+  setStartDate:
+    | React.Dispatch<React.SetStateAction<Date>>
+    | React.Dispatch<React.SetStateAction<number | Date>>;
+  startDate: number | Date;
   isInline?: boolean;
 };
 
@@ -23,9 +25,8 @@ export default function DatePickerComponent({
         calendarContainer={Calendar}
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
-        selected={startDate}
-        onChange={setStartDate}
-        popperPlacement={"auto" as any}
+        selected={startDate instanceof Date ? startDate : new Date(startDate)}
+        onChange={(date) => date && setStartDate(date)}
         inline={isInline}
       />
     </>

@@ -33,7 +33,7 @@ export default function UpdateContactForm({
   const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
-  const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
+  const [lastTalk, setLastTalk] = useState<number | Date>(timeFromLastTalk);
 
   useEffect(() => {
     if (error) {
@@ -48,11 +48,8 @@ export default function UpdateContactForm({
     if (currentUser == null || currentUser.email == null || contactId == null)
       return;
 
-    let timeFromLastTalkVar = lastTalk;
-
-    if (lastTalk instanceof Date) {
-      timeFromLastTalkVar = lastTalk.getTime();
-    }
+    const timeFromLastTalkVar =
+      lastTalk instanceof Date ? lastTalk.getTime() : lastTalk;
 
     const oldContactData = {
       name,

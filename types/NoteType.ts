@@ -2,5 +2,5 @@ export type NoteType = {
   noteId: number;
   data: string;
   contactId: string;
-  switchToEditMood?: any;
+  switchToEditMood: (oldNoteData: string, OldNoteId: number) => void;
 };

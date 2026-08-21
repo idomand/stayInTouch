@@ -11,8 +11,13 @@ export default function NavBar() {
 
   const router = useRouter();
 
+  function onLogout() {
+    setIsLogoutModelOpen(false);
+    logout();
+  }
+
   return (
-    <nav className="flex justify-between items-center bg-white sticky z-[2] top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
+    <nav className="flex justify-between items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
       <img
         src="/friendsLogo.png"
         className="ml-5 my-1 h-10 sm:hidden"
@@ -46,7 +51,7 @@ export default function NavBar() {
               setIsLogoutModelOpen(false);
             }}
           >
-            <Button buttonText="Log out" onClick={logout} />
+            <Button buttonText="Log out" onClick={onLogout} />
           </Dialog>
           <button
             onClick={() => {
