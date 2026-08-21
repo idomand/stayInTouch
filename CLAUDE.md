@@ -15,11 +15,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev          # Next.js dev server
 npm run build        # production build
 npm run start        # serve the production build
-npm run lint         # ESLint (eslint-config-next)
 npm run type-check   # tsc --noEmit — the source of truth for correctness
 ```
 
-There is **no test framework** in this project. "Verify it works" means `npm run type-check` plus `npm run lint`, and running the app.
+There is **no test framework** and **no working lint** in this project (the `next lint` script was removed — Next 16 dropped `next lint` and ESLint 9 needs a flat config the repo doesn't have). "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
 
 A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error (wired up by the `postinstall` script setting `core.hooksPath`). Keep the build type-clean or pushes fail. Note `tsconfig.json` sets `noUnusedLocals` and `noUnusedParameters`, so unused variables — including a styled-component `const` you defined but didn't render — are hard errors, not warnings.
 

@@ -1,7 +1,7 @@
 import { signInWithPopup, signOut, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
-import { Result } from "@/Components/Common/StyledSpinner";
+import { Result } from "@/Components/ui/Spinner";
 
 interface AuthContextInterface {
   currentUser?: User | null;

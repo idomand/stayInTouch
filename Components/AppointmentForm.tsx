@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ReactModal from "react-modal";
 import { createGoogleCalendarEvent } from "../lib/CalenderFunctions";
 import { oneDay } from "../lib/ConstantsFile";
 import { ContactItemType } from "../types/ContactItemType";
-import { H5, P1 } from "./Common/StyledText";
-import { BasicForm } from "./Common/StyledFormElements";
+import { H5, P1 } from "@/Components/ui/Text";
+import { basicFormClasses } from "@/Components/ui/formClasses";
+import { twMerge } from "tailwind-merge";
 import DatePickerComponent from "./DatePickerComponent";
 import Button from "./ui/Button";
+import Dialog from "./ui/Dialog";
 
 type AppointmentFormState = Omit<
   ContactItemType,
@@ -79,114 +79,45 @@ export default function AppointmentForm({
   }
 
   return (
-    <>
-      <ReactModal
-        ariaHideApp={false}
-        isOpen={isModalOpen}
-        shouldFocusAfterRender={true}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
-        onRequestClose={onCloseModal}
-        className={"contact-edit-modal"}
-        overlayClassName={"contact-edit-modal-overlay"}
-      >
-        <MoreOptionsWrapper>
-          <CalendarSubSection>
-            <EditHeader>
-              <div>
-                <H5>Make Appointment with</H5>
-                <ContactNameHeader>{name}</ContactNameHeader>
-              </div>
-              <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
-            </EditHeader>
-            <SpecificTimeWrapper>
-              <CalenderText>
-                Add this reminder into Google Calender
-              </CalenderText>
-              <CalenderDatePickerWrapper>
-                <DatePickerComponent
-                  setStartDate={setSpecificReminder}
-                  startDate={specificReminder}
-                />
-              </CalenderDatePickerWrapper>
-            </SpecificTimeWrapper>
-            <Button
-              buttonText="Save to Calender"
-              onClick={calenderFunction}
-              extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
-            >
-              <img
-                src="/Google_Calendar.svg"
-                alt="Google Calendar"
-                className="mr-2"
+    <Dialog
+      title={`Make Appointment with: ${name}`}
+      close={() => {
+        onCloseModal();
+      }}
+      isOpen={isModalOpenProp}
+    >
+      <section className="flex flex-col justify-center sm:flex-row">
+        <div className="mr-0 flex flex-col sm:mr-5">
+          <form
+            className={twMerge(
+              basicFormClasses,
+              "mt-0 flex flex-col justify-center items-start sm:mt-5 sm:items-center",
+            )}
+          >
+            <P1 extraClasses="mb-2.5 ml-3.5 text-start sm:ml-0">
+              Add this reminder into Google Calender
+            </P1>
+            <div className="m-auto sm:m-0">
+              <DatePickerComponent
+                isInline={true}
+                setStartDate={setSpecificReminder}
+                startDate={specificReminder}
               />
-            </Button>
-          </CalendarSubSection>
-        </MoreOptionsWrapper>
-      </ReactModal>
-    </>
+            </div>
+          </form>
+          <Button
+            buttonText="Save to Calender"
+            onClick={calenderFunction}
+            extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
+          >
+            <img
+              src="/Google_Calendar.svg"
+              alt="Google Calendar"
+              className="mr-2"
+            />
+          </Button>
+        </div>
+      </section>
+    </Dialog>
   );
 }
-
-//?========================
-//* The styles of the Modal are in the global.css file
-//?========================
-
-const CalendarSubSection = styled.div`
-  margin-right: 20px;
-  display: flex;
-  flex-direction: column;
-  @media (${({ theme }) => theme.devices.break1}) {
-    margin-right: 0;
-  }
-`;
-
-const CalenderDatePickerWrapper = styled.div`
-  @media (${({ theme }) => theme.devices.break1}) {
-    margin: auto;
-  }
-`;
-const CalenderText = styled(P1)`
-  margin-bottom: 10px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    margin-left: 15px;
-    text-align: start;
-  }
-`;
-
-const ContactNameHeader = styled(H5)`
-  color: ${({ theme }) => theme.blue2};
-  font-weight: 600;
-  margin-left: 5px;
-`;
-const EditHeader = styled.div`
-  margin-left: 30px;
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  @media (${({ theme }) => theme.devices.break1}) {
-    justify-content: space-between;
-    /* margin-top: 10px; */
-    margin: 10px 15px;
-  }
-`;
-
-const MoreOptionsWrapper = styled.section`
-  display: flex;
-  justify-content: center;
-  @media (${({ theme }) => theme.devices.break1}) {
-    flex-direction: column;
-  }
-`;
-
-const SpecificTimeWrapper = styled(BasicForm)`
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  @media (${({ theme }) => theme.devices.break1}) {
-    align-items: flex-start;
-    margin-top: 0;
-  }
-`;
