@@ -1,5 +1,9 @@
 import { auth } from "./Firebase";
 
+type CalendarEventResult =
+  | { success: true; message: string }
+  | { success: false; error: string };
+
 /**
  * Formats a date to Google Calendar URL format (YYYYMMDDTHHmmssZ)
  */
@@ -26,7 +30,7 @@ export async function createGoogleCalendarEvent(
   eventDate: Date = new Date(),
   friendEmail?: string,
   description?: string,
-): Promise<any> {
+): Promise<CalendarEventResult> {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -65,27 +69,11 @@ export async function createGoogleCalendarEvent(
       success: true,
       message: "Google Calendar opened",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error opening calendar:", error);
     return {
       success: false,
-      error: error.message || "Failed to open calendar",
+      error: error instanceof Error ? error.message : "Failed to open calendar",
     };
   }
-}
-
-/**
- * Creates a reminder event for a contact
- * @param contactName - The name of the contact
- * @param reminderDate - The date to set the reminder
- * @returns Promise with the created event or error
- */
-export async function createContactReminderEvent(
-  contactName: string,
-  reminderDate: Date,
-): Promise<any> {
-  const eventName = `Call ${contactName}`;
-  const description = `Reminder to reach out to ${contactName}`;
-
-  return createGoogleCalendarEvent(eventName, reminderDate, description);
 }

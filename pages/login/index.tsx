@@ -1,10 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import styled from "styled-components";
-import { BasicButton } from "@/Components/Common/StyledButton";
 import { useAuth } from "@/lib/AuthContext";
-import Layout from "@/Components/Layout";
-import { H1, P2 } from "@/Components/Common/StyledText";
+import { H1, P2 } from "@/Components/ui/Text";
+import Button from "@/Components/ui/Button";
 
 export default function Login() {
   const { loginWithGoogle, currentUser } = useAuth()!;
@@ -17,99 +15,36 @@ export default function Login() {
   }, [currentUser, router]);
 
   return (
-    <Layout>
-      <LoginPageWrapper>
-        <LoginSubSection>
-          <P2>Welcome Back !!!!</P2>
-          <H1>Login to your account</H1>
-
-          <SignInButton onClick={loginWithGoogle}>
-            <GoogleLogo src="/Google-logo.png" />
-            Sign in with Google
-          </SignInButton>
-        </LoginSubSection>
-        <AboutSubSection>
-          <H1>About the App</H1>
-          <LoginPageText>
-            Sign in to your Google Account to create a secure user that can
-            access Google Cloud database.
-          </LoginPageText>
-          <LoginPageText>
-            Inside, you will be able to create personal reminders for talking to
-            friends and family. The About section of the app contains detailed
-            information about using the app, as well as a live demonstration.
-          </LoginPageText>
-          <LoginPageText>
-            The app does not save or use any personal data, except to interact
-            with the private database. The app would never send you spam emails
-            or pass any information on to third parties.
-          </LoginPageText>
-        </AboutSubSection>
-      </LoginPageWrapper>
-    </Layout>
+    <section className="flex flex-col justify-between m-5 sm:flex-row sm:m-10">
+      <div className="flex flex-col rounded-[10px] p-6 bg-white m-3.5 h-auto sm:m-6 sm:h-[60vh] w-auto sm:w-[60vw]">
+        <P2>Welcome Back !!!!</P2>
+        <H1>Login to your account</H1>
+        <Button
+          extraClasses="bg-slate-600 hover:text-slate-600 font-bold text-xl
+"
+          buttonText="Sign in with Google"
+          onClick={loginWithGoogle}
+        >
+          <img src="/Google-logo.png" className="h-4 m-2.5" />
+        </Button>
+      </div>
+      <div className="flex flex-col rounded-[10px] p-6 bg-white m-3.5 h-auto sm:m-6 sm:h-[60vh]">
+        <H1>About the App</H1>
+        <P2 extraClasses="leading-5 mt-1.5 capitalize">
+          Sign in to your Google Account to create a secure user that can access
+          Google Cloud database.
+        </P2>
+        <P2 extraClasses="leading-5 mt-1.5 capitalize">
+          Inside, you will be able to create personal reminders for talking to
+          friends and family. The About section of the app contains detailed
+          information about using the app, as well as a live demonstration.
+        </P2>
+        <P2 extraClasses="leading-5 mt-1.5 capitalize">
+          The app does not save or use any personal data, except to interact
+          with the private database. The app would never send you spam emails or
+          pass any information on to third parties.
+        </P2>
+      </div>
+    </section>
   );
 }
-
-const LoginPageWrapper = styled.section`
-  display: flex;
-  justify-content: space-between;
-  margin: 40px;
-  @media (${({ theme }) => theme.devices.break1}) {
-    flex-direction: column;
-    margin: 20px;
-  }
-`;
-const LoginPageSubSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  padding: 25px;
-  background-color: ${({ theme }) => theme.white};
-  margin: 25px;
-  height: 60vh;
-  @media (${({ theme }) => theme.devices.break1}) {
-    height: auto;
-    margin: 15px;
-  }
-`;
-const LoginSubSection = styled(LoginPageSubSection)`
-  width: 60vw;
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;
-const AboutSubSection = styled(LoginPageSubSection)``;
-
-const LoginPageText = styled(P2)`
-  line-height: 20px;
-  margin-top: 7px;
-  text-transform: capitalize;
-`;
-
-const SignInButton = styled(BasicButton)`
-  margin: 20px auto 0;
-  transition: 0.3s all;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  background-color: #2d3748;
-  color: ${({ theme }) => theme.white};
-  border-radius: 5px;
-  font-weight: 700;
-  font-size: ${({ theme }) => theme.typeScale.p_large};
-  &:hover,
-  &:focus {
-    background-color: ${({ theme }) => theme.white};
-    color: #2d3748;
-    border: solid;
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    max-width: max-content;
-    margin: 10px auto 0;
-  }
-`;
-
-const GoogleLogo = styled.img`
-  height: 17px;
-  margin: 10px;
-`;

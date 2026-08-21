@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import useSnapshotData from "../utils/hooks/useSnapshotData";
-import { H1 } from "./Common/StyledText";
+import { H1 } from "@/Components/ui/Text";
 import ContactItem from "./ContactItem";
 import { ContactItemType } from "@/types/ContactItemType";
 
@@ -23,7 +22,7 @@ export default function ContactDetails() {
 
   return (
     <>
-      <ContactList>
+      <ul className="p-0 flex flex-col items-center relative">
         {basicArray.length > 0 &&
           arrayOfContacts.map((element: ContactItemType) => {
             return (
@@ -39,25 +38,12 @@ export default function ContactDetails() {
               />
             );
           })}
-      </ContactList>
+      </ul>
       {basicArray.length === 0 && (
-        <NoContactsWrapper>
+        <div className="flex justify-center">
           <H1>no contacts</H1>
-        </NoContactsWrapper>
+        </div>
       )}
     </>
   );
 }
-
-const ContactList = styled.ul`
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-`;
-
-const NoContactsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;

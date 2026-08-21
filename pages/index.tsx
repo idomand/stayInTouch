@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import ContactDetails from "../Components/ContactDetails";
-import Layout from "../Components/Layout";
 import MainForm from "../Components/MainForm";
 import { useAuth } from "../lib/AuthContext";
 import { showArt } from "@/Components/SecretGame";
@@ -19,13 +18,13 @@ export default function Home() {
   }, [currentUser, router]);
 
   return (
-    <Layout>
+    <>
       {currentUser && (
         <>
           <MainForm />
           <ContactDetails />
         </>
       )}
-    </Layout>
+    </>
   );
 }

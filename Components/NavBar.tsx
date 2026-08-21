@@ -1,142 +1,76 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useMedia } from "react-use";
-import styled, { useTheme } from "styled-components";
 import { useAuth } from "../lib/AuthContext";
-import { NavLink } from "./Common/StyledLinks";
-import { H2 } from "./Common/StyledText";
-import SafeCloseDialog from "./SafeCloseDialog";
+import Link from "./ui/Link";
+import Dialog from "./ui/Dialog";
+import Button from "./ui/Button";
 
 export default function NavBar() {
-  const Theme = useTheme();
-  const isMobile = useMedia(`(${Theme.devices.break1})`);
   const { currentUser, logout } = useAuth()!;
-  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  const [isLogoutModelOpen, setIsLogoutModelOpen] = useState(false);
 
   const router = useRouter();
 
+  function onLogout() {
+    setIsLogoutModelOpen(false);
+    logout();
+  }
+
   return (
-    <NavBarWrapper>
-      {isMobile ? (
-        <LogoImg src="/friendsLogo.png" />
-      ) : (
-        <NavbarText>Stay-in-Touch!</NavbarText>
-      )}
-      <PageLinksWrapper>
+    <nav className="flex justify-between items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
+      <img
+        src="/friendsLogo.png"
+        className="ml-5 my-1 h-10 sm:hidden"
+        alt="Stay-in-Touch logo"
+      />
+      <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0">
+        Stay-in-Touch!
+      </h2>
+      <div className="text-xl">
         {currentUser && (
-          <NavLink isActive={router.pathname == "/"} href="/">
+          <Link variant="Nev" isLinkActive={router.pathname == "/"} href="/">
             Home
-          </NavLink>
+          </Link>
         )}
-        <NavLink isActive={router.pathname == "/about"} href="/about">
+        <Link
+          variant="Nev"
+          isLinkActive={router.pathname == "/about"}
+          href="/about"
+          extraClasses="mx-2"
+        >
           About
-        </NavLink>
-      </PageLinksWrapper>
+        </Link>
+      </div>
 
       {currentUser ? (
         <>
-          <SafeCloseDialog
-            dialogText={`Are you sure you want log out`}
-            customFunction={logout}
-            openDialog={showSafeCloseDialog}
-            closeDialog={() => setShowSafeCloseDialog(false)}
-          />{" "}
-          <LogoutButton
-            onClick={() => {
-              setShowSafeCloseDialog(true);
+          <Dialog
+            isOpen={isLogoutModelOpen}
+            title="are you sure?"
+            close={() => {
+              setIsLogoutModelOpen(false);
             }}
           >
+            <Button buttonText="Log out" onClick={onLogout} />
+          </Dialog>
+          <button
+            onClick={() => {
+              setIsLogoutModelOpen(true);
+            }}
+            className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 m-2.5 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3"
+          >
             Log Out
-            <LogoutLogo src="/log-out.svg" />
-          </LogoutButton>
+            <img src="/log-out.svg" alt="log out" className="ml-1" />
+          </button>
         </>
       ) : (
-        <LoginButton
-          as="a"
-          isActive={router.pathname == "/login"}
+        <a
           href="/login"
+          className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
         >
-          Login
-        </LoginButton>
+          Login page
+        </a>
       )}
-    </NavBarWrapper>
+    </nav>
   );
 }
-
-const LogoImg = styled.img`
-  margin: 5px 0 5px 20px;
-  height: 40px;
-`;
-
-const NavBarWrapper = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${({ theme }) => theme.white};
-  position: sticky;
-  z-index: 2;
-  top: 0;
-  width: 100%;
-  height: 60px;
-
-  box-shadow: 0px 1px 0px #e5e9f2;
-
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const NavbarText = styled(H2)`
-  margin-left: 40px;
-`;
-
-interface LoginButtonProps {
-  as: string;
-  isActive: boolean;
-  href: string;
-}
-
-const LoginButton = styled.button<LoginButtonProps>`
-  font-size: ${({ theme }) => theme.typeScale.p_small};
-  font-weight: 500;
-  background: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  padding: 8px 16px;
-  border-radius: ${({ theme }) => theme.sizes.borderRadius};
-  border: 1.3px solid ${({ theme }) => theme.white};
-  transition: 0.3s all;
-  margin: 10px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-`;
-
-const LogoutButton = styled.button`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: 0.3s all;
-  background-color: transparent;
-  border: none;
-  font-size: ${({ theme }) => theme.typeScale.p_small};
-  font-weight: 500;
-  color: ${({ theme }) => theme.blue1};
-  margin: 10px;
-  border-radius: 10px;
-  padding: 3px 5px;
-  &:hover,
-  &:focus {
-    color: ${({ theme }) => theme.black};
-    background: ${({ theme }) => theme.blue3};
-  }
-`;
-
-const LogoutLogo = styled.img`
-  margin-left: 5px;
-`;
-
-const PageLinksWrapper = styled.div`
-  font-size: 20px;
-`;
