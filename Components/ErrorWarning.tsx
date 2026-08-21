@@ -1,8 +1,8 @@
 import { H5 } from "@/Components/ui/Text";
 
-interface ErrorWarningProps {
+type ErrorWarningProps = {
   errorMessage: string | boolean;
-}
+};
 
 export default function ErrorWarning({ errorMessage }: ErrorWarningProps) {
   return (

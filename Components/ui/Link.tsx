@@ -1,9 +1,9 @@
-import NextLink from "next/link";
+import NextLink, { type LinkProps } from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-  href: any;
+  href: LinkProps["href"];
   children?: React.ReactNode;
   extraClasses?: string;
   variant?: "Primary" | "Nev" | "Text";

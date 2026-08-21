@@ -60,7 +60,7 @@ Migrating from **styled-components → Tailwind CSS v4**. Both exist in the tree
    convention before writing anything.
 2. Put presentational/reusable Tailwind components in `Components/ui/`; feature components in
    `Components/`.
-3. Type props with an explicit interface/type or `React.ComponentProps<"tag">`. Accept and
+3. Type props with an explicit type or `React.ComponentProps<"tag">`. Accept and
    `twMerge` a `className` prop for anything reusable.
 4. Default-export or named-export to match how sibling files in that folder do it.
 
