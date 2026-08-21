@@ -1,8 +1,7 @@
-import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { deleteNote } from "../lib/Firebase";
 import { NoteType } from "../types/NoteType";
-import { H4 } from "./Common/StyledText";
+import { H4 } from "@/Components/ui/Text";
 import Button from "./ui/Button";
 
 export default function NoteItem({
@@ -19,7 +18,7 @@ export default function NoteItem({
   }
 
   return (
-    <NoteItemWrapper>
+    <li className="list-none p-1 m-1 flex flex-col">
       <div className="flex justify-between">
         <H4>Note Number: #{noteId}</H4>
         <div className="flex mb-1">
@@ -39,43 +38,14 @@ export default function NoteItem({
       </div>
 
       {data.startsWith("Talked on: ") ? (
-        <TalkedOnWrapper>{data}</TalkedOnWrapper>
+        <div className="border border-solid border-green2 p-1 bg-grey1 overflow-auto w-auto sm:w-95 h-12.5 text-sm">
+          {data}
+        </div>
       ) : (
-        <NoteDataWrapper>{data}</NoteDataWrapper>
+        <div className="border border-solid border-blue2 p-1 bg-grey1 overflow-auto w-auto sm:w-95 h-12.5 text-sm">
+          {data}
+        </div>
       )}
-    </NoteItemWrapper>
+    </li>
   );
 }
-
-const NoteItemWrapper = styled.li`
-  list-style-type: none;
-  padding: 5px;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const NoteDataWrapper = styled.div`
-  border: solid 1px ${({ theme }) => theme.blue2};
-  padding: 5px;
-  background-color: ${({ theme }) => theme.grey1};
-  overflow: auto;
-  width: 380px;
-  height: 50px;
-  font-size: ${({ theme }) => theme.typeScale.p_normal};
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;
-const TalkedOnWrapper = styled.div`
-  border: solid 1px ${({ theme }) => theme.green2};
-  padding: 5px;
-  background-color: ${({ theme }) => theme.grey1};
-  overflow: auto;
-  width: 380px;
-  height: 50px;
-  font-size: ${({ theme }) => theme.typeScale.p_normal};
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;

@@ -1,10 +1,9 @@
-import { H1, P3 } from "@/Components/Common/StyledText";
+import { H1, P3 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 import Link from "@/Components/ui/Link";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 
 export default function About() {
   const { currentUser } = useAuth()!;
@@ -22,9 +21,9 @@ export default function About() {
   }
 
   return (
-    <AboutPageWrapper>
-      <IntroductionSection>
-        <AboutHeader>Welcome!</AboutHeader>
+    <section className="flex items-center flex-col justify-center relative w-[70%] mx-auto">
+      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full">
+        <H1>Welcome!</H1>
         <P3>
           This site was created as a way to help people (including myself) to
           stay in touch with the people they care about.
@@ -39,9 +38,12 @@ export default function About() {
           realizing we have not talked to that good friend from college in a
           couple of months. Thankfully, Stay-in-Touch is here to help!
         </P3>
-      </IntroductionSection>
-      <HowToUseSection id="HowToUseSection">
-        <AboutHeader>How to use the site</AboutHeader>
+      </div>
+      <div
+        id="HowToUseSection"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+      >
+        <H1>How to use the site</H1>
         <P3>To begin, simply log into the site using your Google account.</P3>
         <P3>
           Now just think about the people you want to stay in touch with, and
@@ -52,9 +54,12 @@ export default function About() {
           to contact them, and Stay-in-Touch will take care of the rest.
         </P3>
         <Button onClick={addDemoData} buttonText="Demo" variant="Primary" />
-      </HowToUseSection>
-      <AboutTheSite id="AboutTheSite">
-        <AboutHeader>About the site</AboutHeader>
+      </div>
+      <div
+        id="AboutTheSite"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+      >
+        <H1>About the site</H1>
         <P3>
           This site was built using the Next.js framework, which extends the
           capabilities of the React.js library. In other words, JavaScript, lots
@@ -66,10 +71,10 @@ export default function About() {
           safe and secure.
         </P3>
         <P3>
-          The design was created by me using the Styled-components CSS-in-JS
-          library. By using styled-components and Next.js, I was able to create
-          my own design systems with reusable components, responsiveness, and a
-          single source of truth for most of the themes on this website.
+          The design was created by me using Tailwind CSS. By using Tailwind and
+          Next.js, I was able to create my own design system with reusable
+          components, responsiveness, and a single source of truth for most of
+          the themes on this website.
         </P3>
         <P3>
           You can see the code itself in my GitHub repo,
@@ -82,9 +87,12 @@ export default function About() {
           </Link>
           .
         </P3>
-      </AboutTheSite>
-      <AboutTheCreator id="AboutTheCreator">
-        <AboutHeader>About me</AboutHeader>
+      </div>
+      <div
+        id="AboutTheCreator"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+      >
+        <H1>About me</H1>
         <P3>
           My name is Ido Mandelman and I am a passionate frontend developer.
         </P3>
@@ -119,36 +127,7 @@ export default function About() {
           </Link>
           .
         </P3>
-      </AboutTheCreator>
-    </AboutPageWrapper>
+      </div>
+    </section>
   );
 }
-
-const AboutPageWrapper = styled.section`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 70%;
-  margin: auto;
-`;
-
-const AboutHeader = styled(H1)``;
-
-const AboutSubSection = styled.div`
-  background-color: ${({ theme }) => theme.white};
-  margin: 7.5px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  text-align: justify;
-  width: 100%;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const IntroductionSection = styled(AboutSubSection)``;
-const HowToUseSection = styled(AboutSubSection)``;
-const AboutTheSite = styled(AboutSubSection)``;
-const AboutTheCreator = styled(AboutSubSection)``;

@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
-import ReactModal from "react-modal";
-import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { updateContact } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
-import { H5 } from "./Common/StyledText";
 import {
-  BasicForm,
-  BasicInput,
-  BasicLabel,
-  InputSubmit,
-} from "./Common/StyledFormElements";
+  basicFormClasses,
+  basicInputClasses,
+  basicLabelClasses,
+  inputSubmitClasses,
+} from "@/Components/ui/formClasses";
+import { twMerge } from "tailwind-merge";
 import DatePickerComponent from "./DatePickerComponent";
 import ErrorWarning from "./ErrorWarning";
-import Button from "./ui/Button";
+import Dialog from "./ui/Dialog";
 
 type UpdateContactFormState = ContactItemType & {
   isModalOpenProp: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 };
 
 export default function UpdateContactForm({
@@ -31,16 +29,11 @@ export default function UpdateContactForm({
   onClose,
 }: UpdateContactFormState) {
   const { currentUser } = useAuth()!;
-  const [isModalOpen, setIsModalOpen] = useState(isModalOpenProp);
   const [contactName, setContactName] = useState(name);
   const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
   const [contactTime, setContactTime] = useState(time);
   const [error, setError] = useState<string | boolean>(false);
   const [lastTalk, setLastTalk] = useState<any>(timeFromLastTalk);
-
-  useEffect(() => {
-    setIsModalOpen(isModalOpenProp);
-  }, [isModalOpenProp]);
 
   useEffect(() => {
     if (error) {
@@ -85,7 +78,7 @@ export default function UpdateContactForm({
       oldContactData.time == newContactData.time &&
       oldContactData.timeFromLastTalk == newContactData.timeFromLastTalk
     ) {
-      return setIsModalOpen(false);
+      onClose();
     } else {
       result = await updateContact(
         currentUser.uid,
@@ -100,7 +93,7 @@ export default function UpdateContactForm({
       setError("contact already in list");
       setContactName(name);
     } else {
-      setIsModalOpen(false);
+      onClose();
     }
   }
 
@@ -117,7 +110,7 @@ export default function UpdateContactForm({
   }
 
   function onCloseModal() {
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
     setContactName(name);
     setContactTime(time);
     if (error) {
@@ -129,198 +122,94 @@ export default function UpdateContactForm({
   }
 
   return (
-    <>
-      <ReactModal
-        ariaHideApp={false}
-        isOpen={isModalOpen}
-        shouldFocusAfterRender={true}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
-        onRequestClose={onCloseModal}
-        className={"contact-edit-modal"}
-        overlayClassName={"contact-edit-modal-overlay"}
-      >
-        <MoreOptionsWrapper>
-          <EditingSubSection>
-            <EditHeader>
-              <HeaderName>
-                <H5>Editing Contact:</H5>
-                <ContactNameHeader>{name}</ContactNameHeader>
-              </HeaderName>
-              <Button onClick={onCloseModal} buttonText="X" variant="Ghost" />
-            </EditHeader>
-            <EditContactForm onSubmit={updateContactOnSubmit}>
-              <NameLabel>
-                Change Name:
-                <NameInput
-                  type="text"
-                  placeholder="Enter Name"
-                  name="name"
-                  value={contactName}
-                  required
-                  onChange={nameChangeHandler}
-                />
-              </NameLabel>
-              <TimeLabel>
-                Change Talk Every X Days:
-                <TimeInput
-                  type="number"
-                  name="time"
-                  id="time"
-                  max={60}
-                  min={1}
-                  value={contactTime}
-                  onChange={timeChangeHandler}
-                />
-              </TimeLabel>
-              <LastTalkedLabel>
-                Change Last Time We Have Spoken
-                <DatePickerComponent
-                  setStartDate={setLastTalk}
-                  startDate={lastTalk}
-                />
-              </LastTalkedLabel>
-
-              <EmailInputLabel>
-                Change Friend Email:
-                <EmailInput
-                  type="email"
-                  value={newFriendEmail}
-                  onChange={(e) => {
-                    setNewFriendEmail(e.target.value);
-                  }}
-                />
-              </EmailInputLabel>
-
-              <EditSubmitInput
-                disabled={contactName === ""}
-                type="submit"
-                value="Update"
+    <Dialog
+      title={`Update contact: ${name}`}
+      isOpen={isModalOpenProp}
+      close={() => {
+        onCloseModal();
+      }}
+    >
+      <section className="flex flex-col justify-center sm:flex-row">
+        <div>
+          <form
+            onSubmit={updateContactOnSubmit}
+            className={twMerge(
+              basicFormClasses,
+              " rounded-none p-2.5 m-0 gap-1  sm:p-3.5 sm:m-2.5 sm:gap-7.5 ",
+            )}
+          >
+            <label className={twMerge(basicLabelClasses, "")}>
+              Change Name:
+              <input
+                type="text"
+                placeholder="Enter Name"
+                name="name"
+                value={contactName}
+                required
+                onChange={nameChangeHandler}
+                className={twMerge(
+                  basicInputClasses,
+                  "border border-solid border-grey2 p-1",
+                )}
               />
-              {error && <ErrorWarning errorMessage={error} />}
-            </EditContactForm>
-          </EditingSubSection>
-        </MoreOptionsWrapper>
-      </ReactModal>
-    </>
+            </label>
+            <label
+              className={twMerge(
+                basicLabelClasses,
+                " relative after:content-['Days'] after:font-bold after:absolute after:top-8 after:left-5 after:text-[10px] after:text-grey3",
+              )}
+            >
+              Change Talk Every X Days:
+              <input
+                type="number"
+                name="time"
+                id="time"
+                max={60}
+                min={1}
+                value={contactTime}
+                onChange={timeChangeHandler}
+                className={twMerge(
+                  basicInputClasses,
+                  "border border-solid border-grey2 rounded-lg",
+                )}
+              />
+            </label>
+            <div className="flex flex-col m-1 justify-between">
+              Change Last Time We Have Spoken
+              <DatePickerComponent
+                setStartDate={setLastTalk}
+                startDate={lastTalk}
+              />
+            </div>
+
+            <label className={twMerge(basicLabelClasses, "")}>
+              Change Friend Email:
+              <input
+                type="email"
+                value={newFriendEmail}
+                onChange={(e) => {
+                  setNewFriendEmail(e.target.value);
+                }}
+                className={twMerge(
+                  basicInputClasses,
+                  " border border-solid border-grey2",
+                )}
+              />
+            </label>
+
+            <input
+              type="submit"
+              value="Update"
+              disabled={contactName === ""}
+              className={twMerge(
+                inputSubmitClasses,
+                " bg-blue1 text-white w-auto h-11 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1 sm:w-103.5",
+              )}
+            />
+            {error && <ErrorWarning errorMessage={error} />}
+          </form>
+        </div>
+      </section>
+    </Dialog>
   );
 }
-
-//?========================
-//* The styles of the Modal are in the global.css file
-//?========================
-
-const ContactNameHeader = styled(H5)`
-  color: ${({ theme }) => theme.blue2};
-  font-weight: 600;
-  margin-left: 5px;
-`;
-const EditContactForm = styled(BasicForm)`
-  display: grid;
-  border-radius: 0;
-  padding: 15px;
-  margin: 10px;
-  gap: 30px;
-  grid-template-areas:
-    "name howMuchTime"
-    "lastTalked lastTalked"
-    "emailInput emailInput"
-    "submit submit"
-    "delete delete";
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    gap: 5px;
-    padding: 10px;
-    margin: 0;
-
-    grid-template-areas:
-      "name name"
-      "howMuchTime howMuchTime"
-      "lastTalked lastTalked"
-      "emailInput emailInput"
-      "submit submit"
-      "delete delete";
-  }
-`;
-const EditHeader = styled.div`
-  margin-left: 30px;
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  @media (${({ theme }) => theme.devices.break1}) {
-    /* margin-top: 10px; */
-    margin: 10px 15px;
-  }
-`;
-const EditingSubSection = styled.div``;
-const EditSubmitInput = styled(InputSubmit)`
-  grid-area: submit;
-  background-color: ${({ theme }) => theme.blue1};
-  color: ${({ theme }) => theme.white};
-  width: 415px;
-  height: 45px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.blue3};
-    border: 1.3px solid ${({ theme }) => theme.blue1};
-    color: ${({ theme }) => theme.blue1};
-  }
-  @media (${({ theme }) => theme.devices.break1}) {
-    width: auto;
-  }
-`;
-const EmailInputLabel = styled(BasicLabel)`
-  grid-area: emailInput;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-const EmailInput = styled(BasicInput)`
-  grid-area: emailInput;
-  border: 1px solid ${({ theme }) => theme.grey2};
-`;
-const HeaderName = styled.div`
-  display: flex;
-`;
-const LastTalkedLabel = styled.div`
-  grid-area: lastTalked;
-  display: flex;
-  flex-direction: column;
-  margin: 5px;
-  justify-content: space-between;
-`;
-
-const MoreOptionsWrapper = styled.section`
-  display: flex;
-  justify-content: center;
-  @media (${({ theme }) => theme.devices.break1}) {
-    flex-direction: column;
-  }
-`;
-
-const NameLabel = styled(BasicLabel)`
-  grid-area: name;
-`;
-const NameInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey2};
-  padding: 5px;
-`;
-
-const TimeLabel = styled(BasicLabel)`
-  grid-area: howMuchTime;
-  position: relative;
-  &::after {
-    content: "Days" attr(data-domain);
-    font-weight: bold;
-    position: absolute;
-    top: 33px;
-    left: 20px;
-    font-size: 10px;
-    color: ${({ theme }) => theme.grey3};
-  }
-`;
-
-const TimeInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey2};
-  border-radius: 8px;
-`;

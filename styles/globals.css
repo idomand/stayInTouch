@@ -1,20 +1,54 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-grey1: #D3D3D3;
+  --color-grey1: #d3d3d3;
   --color-grey2: rgba(201, 201, 201, 0.7);
   --color-grey3: rgba(0, 0, 0, 0.6);
-  --color-blue1: #053BBC;
-  --color-blue2: #2C61E0;
+  --color-blue1: #053bbc;
+  --color-blue2: #2c61e0;
   --color-blue3: rgba(44, 97, 224, 0.1);
-  --color-green1: #02CF60;
-  --color-green2: #00AE50;
+  --color-green1: #02cf60;
+  --color-green2: #00ae50;
   --color-green3: rgba(2, 207, 96, 0.1);
-  --color-red1: #FF0000;
-  --color-red2: #FFD8D8;
+  --color-red1: #ff0000;
+  --color-red2: #ffd8d8;
+
+  --animate-slide: slide 300ms forwards;
+  --animate-spin-slow: rotate 2s linear infinite;
+  --animate-dash: dash 1.5s ease-in-out infinite;
 }
 
+@keyframes slide {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(40px);
+    opacity: 1;
+  }
+}
 
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
 
 @layer base {
   html,
@@ -74,5 +108,24 @@
   }
   .contact-edit-modal-overlay {
     z-index: 10;
+  }
+}
+
+/* react-datepicker internal DOM overrides (migrated from DatePickerComponent styled-components) */
+.datePickerClass .react-datepicker__input-container input {
+  background-color: lightgrey;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid var(--color-grey1);
+}
+
+.datePickerClass .react-datepicker__input-container input:focus {
+  border: 1px solid var(--color-blue1);
+}
+
+@media only screen and (max-width: 639px) {
+  .datePickerClass .react-datepicker__input-container input {
+    width: 100%;
   }
 }

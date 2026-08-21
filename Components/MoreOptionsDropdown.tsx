@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { SlOptions } from "react-icons/sl";
-import styled from "styled-components";
 import { useAuth } from "../lib/AuthContext";
 import { deleteContact } from "../lib/Firebase";
 import { ContactItemType } from "../types/ContactItemType";
 import AppointmentForm from "./AppointmentForm";
-import SafeCloseDialog from "./SafeCloseDialog";
-import MoreOptions from "./UpdateContactForm";
+import UpdateContactForm from "./UpdateContactForm";
+import Dialog from "./ui/Dialog";
+import Button from "./ui/Button";
 
 export default function MoreOptionsDropdown({
   name,
@@ -22,7 +22,8 @@ export default function MoreOptionsDropdown({
     useState(false);
   const [isAppointmentFormModalOpen, setIsAppointmentFormModalOpen] =
     useState(false);
-  const [showSafeCloseDialog, setShowSafeCloseDialog] = useState(false);
+  const [isDeleteContactModelOpen, setIsDeleteContactModelOpen] =
+    useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +42,7 @@ export default function MoreOptionsDropdown({
   };
 
   const handleDeleteContact = () => {
-    setShowSafeCloseDialog(true);
+    setIsDeleteContactModelOpen(true);
     setIsOpen(false);
   };
 
@@ -71,23 +72,39 @@ export default function MoreOptionsDropdown({
 
   return (
     <>
-      <DropdownContainer ref={dropdownRef}>
-        <DropdownButton onClick={toggleDropdown}>
+      <div className="relative inline-block" ref={dropdownRef}>
+        <button
+          onClick={toggleDropdown}
+          className="bg-transparent px-5 py-2.5 text-base outline-0 border-0 cursor-pointer hover:bg-transparent focus:bg-transparent"
+        >
           <SlOptions />
-        </DropdownButton>
-        <DropdownMenu $isOpen={isOpen}>
-          <DropdownItem onClick={handleUpdateContact}>
+        </button>
+        <div
+          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-[1000] overflow-hidden ${
+            isOpen ? "block" : "hidden"
+          }`}
+        >
+          <div
+            onClick={handleUpdateContact}
+            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+          >
             Update Contact
-          </DropdownItem>
-          <DropdownItem onClick={handleMakeAppointment}>
+          </div>
+          <div
+            onClick={handleMakeAppointment}
+            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+          >
             Make Appointment
-          </DropdownItem>
-          <DropdownItem onClick={handleDeleteContact}>
+          </div>
+          <div
+            onClick={handleDeleteContact}
+            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+          >
             Delete Contact
-          </DropdownItem>
-        </DropdownMenu>
-      </DropdownContainer>
-      <MoreOptions
+          </div>
+        </div>
+      </div>
+      <UpdateContactForm
         friendEmail={friendEmail}
         name={name}
         time={time}
@@ -97,8 +114,6 @@ export default function MoreOptionsDropdown({
         isModalOpenProp={isUpdateContactModalOpen}
         onClose={() => setIsUpdateContactModalOpen(false)}
       />
-      {/* contactId={contactId}
-        notesArray={notesArray} */}
       <AppointmentForm
         friendEmail={friendEmail}
         name={name}
@@ -107,64 +122,23 @@ export default function MoreOptionsDropdown({
         isModalOpenProp={isAppointmentFormModalOpen}
         onClose={() => setIsAppointmentFormModalOpen(false)}
       />
-      <SafeCloseDialog
-        dialogText={`Are you sure you want to delete ${name}`}
-        customFunction={deleteContactFunc}
-        openDialog={showSafeCloseDialog}
-        closeDialog={() => setShowSafeCloseDialog(false)}
-      />
+      <Dialog
+        title={`Are you sure?`}
+        isOpen={isDeleteContactModelOpen}
+        close={() => {
+          setIsDeleteContactModelOpen(false);
+        }}
+      >
+        <div className="flex justify-between">
+          <Button buttonText={`Delete ${name}`} onClick={deleteContactFunc} />
+          <Button
+            buttonText={`Go back`}
+            onClick={() => {
+              setIsDeleteContactModelOpen(false);
+            }}
+          />
+        </div>
+      </Dialog>
     </>
   );
 }
-
-const DropdownContainer = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const DropdownButton = styled.button`
-  background-color: transparent;
-  padding: 10px 20px;
-  font-size: 16px;
-  outline: 0;
-  border: 0;
-  cursor: pointer;
-  &:hover,
-  &:focus {
-    background-color: transparent;
-  }
-`;
-
-const DropdownMenu = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
-  background-color: ${({ theme }) => theme.white};
-  min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  z-index: 1000;
-  overflow: hidden;
-`;
-
-const DropdownItem = styled.div`
-  padding: 12px 16px;
-  cursor: pointer;
-  color: ${({ theme }) => theme.black};
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.grey2};
-  }
-
-  &:active {
-    background-color: ${({ theme }) => theme.grey3};
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.grey2};
-  }
-`;

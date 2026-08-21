@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { addContactToFirestore } from "../lib/Firebase";
 import { useAuth } from "../lib/AuthContext";
 import ErrorWrapper from "./ErrorWarning";
 import DatePickerComponent from "./DatePickerComponent";
-import { BasicForm, BasicLabel } from "./Common/StyledFormElements";
-import { BasicInput, InputSubmit } from "./Common/StyledFormElements";
+import {
+  basicFormClasses,
+  basicInputClasses,
+  basicLabelClasses,
+  inputSubmitClasses,
+} from "@/Components/ui/formClasses";
+import { twMerge } from "tailwind-merge";
 
 export default function AddNewContact() {
   const [time, setTime] = useState(3);
@@ -64,21 +68,36 @@ export default function AddNewContact() {
 
   return (
     <>
-      <AddContactForm onSubmit={createNewContact}>
-        <NameLabel>
+      <form
+        onSubmit={createNewContact}
+        className={twMerge(
+          basicFormClasses,
+          "grid w-[85vw] max-w-full py-2.5 px-1 gap-0 [grid-template-areas:'name_howMuchTime''lastTalked_lastTalked''notes_notes''emailInput_emailInput''submit_submit'] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto sm:[grid-template-areas:'name_howMuchTime_howMuchTime''lastTalked_notes_notes''emailInput_emailInput_emailInput''submit_submit_submit']",
+        )}
+      >
+        <label className={twMerge(basicLabelClasses, "[grid-area:name]")}>
           I would like to talk to:
-          <NameInput
+          <input
             type="text"
             placeholder="Enter Name"
             name="name"
             value={name}
             required
             onChange={nameChangeHandler}
+            className={twMerge(
+              basicInputClasses,
+              "border border-solid border-grey2",
+            )}
           />
-        </NameLabel>
-        <TimeLabel>
+        </label>
+        <label
+          className={twMerge(
+            basicLabelClasses,
+            "[grid-area:howMuchTime] relative after:content-['Days'] after:absolute after:top-9 after:left-3.5 after:text-[10px] after:text-grey3 after:font-bold",
+          )}
+        >
           Every
-          <TimeInput
+          <input
             value={time}
             onChange={(e) => {
               setTime(+e.target.value);
@@ -88,154 +107,57 @@ export default function AddNewContact() {
             id="time"
             max={31}
             min={1}
+            className={twMerge(
+              basicInputClasses,
+              "border border-solid border-grey2 rounded-lg",
+            )}
           />
-        </TimeLabel>
+        </label>
 
-        <LastTalkedLabel>
+        <div className="flex flex-col m-1 justify-between [grid-area:lastTalked]">
           Last Time We Have Spoken
           <DatePickerComponent
             setStartDate={setStartDate}
             startDate={startDate}
           />
-        </LastTalkedLabel>
-        <NotesLabel>
+        </div>
+        <label className={twMerge(basicLabelClasses, "[grid-area:notes]")}>
           Add a Note (optional)
-          <NotesInput
+          <textarea
             placeholder="Enter Note..."
             value={note}
             onChange={(e) => {
               setNote(e.target.value);
             }}
+            className="h-10 border border-solid border-grey2 rounded-lg bg-grey1 focus:border focus:border-solid focus:border-blue1"
           />
-        </NotesLabel>
-        <EmailInputLabel>
+        </label>
+        <label className={twMerge(basicLabelClasses, "[grid-area:emailInput]")}>
           Friend's Email (optional)
-          <EmailInput
+          <input
             placeholder="new-friend@friendship.com"
             value={friendEmail}
             onChange={(e) => {
               setFriendEmail(e.target.value);
             }}
             type="email"
+            className={twMerge(
+              basicInputClasses,
+              "[grid-area:emailInput] border border-solid border-grey2",
+            )}
           />
-        </EmailInputLabel>
+        </label>
 
-        <AddSubmitInput type="submit" value="Add contact" />
-      </AddContactForm>
+        <input
+          type="submit"
+          value="Add contact"
+          className={twMerge(
+            inputSubmitClasses,
+            "[grid-area:submit] bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",
+          )}
+        />
+      </form>
       {error && <ErrorWrapper errorMessage={error} />}
     </>
   );
 }
-
-const AddContactForm = styled(BasicForm)`
-  max-width: 50%;
-  margin: auto;
-  display: grid;
-  padding: 15px;
-  gap: 5px;
-  width: auto;
-  grid-template-areas:
-    "name howMuchTime howMuchTime"
-    "lastTalked notes notes"
-    "emailInput emailInput emailInput"
-    "submit submit submit";
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    max-width: 100%;
-    padding: 10px 5px;
-    width: 85vw;
-    gap: 0;
-    grid-template-areas:
-      "name howMuchTime"
-      "lastTalked lastTalked"
-      "notes notes"
-      "emailInput emailInput "
-      "submit submit";
-  }
-`;
-
-const NameLabel = styled(BasicLabel)`
-  grid-area: name;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-const NameInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey2};
-`;
-
-const TimeLabel = styled(BasicLabel)`
-  grid-area: howMuchTime;
-  position: relative;
-  &:after {
-    content: "Days" attr(data-domain);
-    position: absolute;
-    top: 37px;
-    left: 15px;
-    font-size: 10px;
-    color: ${({ theme }) => theme.grey3};
-    font-weight: bold;
-  }
-
-  @media (${({ theme }) => theme.devices.break1}) {
-    &::after {
-      /* top: 50px; */
-    }
-  }
-`;
-
-const TimeInput = styled(BasicInput)`
-  border: 1px solid ${({ theme }) => theme.grey2};
-  border-radius: 8px;
-`;
-
-const LastTalkedLabel = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 5px;
-  justify-content: space-between;
-  grid-area: lastTalked;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const NotesLabel = styled(BasicLabel)`
-  grid-area: notes;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-
-const NotesInput = styled.textarea`
-  height: 40px;
-  border: 1px solid ${({ theme }) => theme.grey2};
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.grey1};
-  &:focus {
-    border: 1px solid ${({ theme }) => theme.blue1};
-  }
-`;
-
-const EmailInputLabel = styled(BasicLabel)`
-  grid-area: emailInput;
-  @media (${({ theme }) => theme.devices.break1}) {
-  }
-`;
-const EmailInput = styled(BasicInput)`
-  grid-area: emailInput;
-  border: 1px solid ${({ theme }) => theme.grey2};
-`;
-
-const AddSubmitInput = styled(InputSubmit)`
-  grid-area: submit;
-  background-color: ${({ theme }) => theme.green1};
-  color: ${({ theme }) => theme.white};
-  transition: all 0.5s;
-  height: 40px;
-  margin: 0px 5px;
-  &:hover,
-  &:focus {
-    background: ${({ theme }) => theme.green3};
-
-    border: 1.3px solid ${({ theme }) => theme.green1};
-    color: ${({ theme }) => theme.green1};
-  }
-`;
