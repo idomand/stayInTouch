@@ -1,6 +1,5 @@
 # Spec for site-footer
 
-branch: feature/site-footer
 figma_component (if used): none
 
 ## Summary
