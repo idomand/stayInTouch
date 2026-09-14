@@ -1,3 +1,5 @@
+"use client";
+
 import NextLink from "next/link";
 import { useState } from "react";
 import { useAuth } from "../lib/AuthContext";
@@ -21,7 +23,7 @@ export default function NavBar() {
           className="ml-5 my-1 h-10 sm:hidden"
           alt="Stay-in-Touch logo"
         />
-        <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0">
+        <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
           Stay-in-Touch!
         </h2>
       </NextLink>
