@@ -1,6 +1,7 @@
 import { H1, P3 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 import Link from "@/Components/ui/Link";
+import PageHeader from "@/Components/ui/PageHeader";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
 import { useRouter } from "next/router";
@@ -22,8 +23,8 @@ export default function About() {
 
   return (
     <section className="flex items-center flex-col justify-center relative w-[70%] mx-auto">
+      <PageHeader title="About" />
       <div className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full">
-        <H1>Welcome!</H1>
         <P3>
           This site was created as a way to help people (including myself) to
           stay in touch with the people they care about.
