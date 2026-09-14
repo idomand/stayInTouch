@@ -15,35 +15,22 @@ export default function Login() {
   }, [currentUser, router]);
 
   return (
-    <section className="flex flex-col justify-between m-5 sm:flex-row sm:m-10">
-      <div className="flex flex-col rounded-[10px] p-6 bg-white m-3.5 h-auto sm:m-6 sm:h-[60vh] w-auto sm:w-[60vw]">
-        <P2>Welcome Back !!!!</P2>
-        <H1>Login to your account</H1>
+    <section className="flex items-center justify-center min-h-[80vh] px-4">
+      <div className="flex flex-col items-center text-center gap-6 w-full max-w-sm rounded-2xl bg-white p-8 shadow-lg border border-black/5">
+        <div className="flex flex-col items-center gap-2">
+          <H1>Welcome back</H1>
+          <P2 extraClasses="text-grey3">
+            Sign in to manage your reminders and stay in touch with the people
+            you care about.
+          </P2>
+        </div>
         <Button
-          extraClasses="bg-slate-600 hover:text-slate-600 font-bold text-xl
-"
+          extraClasses="w-full gap-3 bg-white text-black border border-grey1 py-2.5 px-4 text-base font-semibold hover:bg-grey1 hover:text-black"
           buttonText="Sign in with Google"
           onClick={loginWithGoogle}
         >
-          <img src="/Google-logo.png" className="h-4 m-2.5" />
+          <img src="/Google-logo.png" alt="" className="h-5 w-5" />
         </Button>
-      </div>
-      <div className="flex flex-col rounded-[10px] p-6 bg-white m-3.5 h-auto sm:m-6 sm:h-[60vh]">
-        <H1>About the App</H1>
-        <P2 extraClasses="leading-5 mt-1.5 capitalize">
-          Sign in to your Google Account to create a secure user that can access
-          Google Cloud database.
-        </P2>
-        <P2 extraClasses="leading-5 mt-1.5 capitalize">
-          Inside, you will be able to create personal reminders for talking to
-          friends and family. The About section of the app contains detailed
-          information about using the app, as well as a live demonstration.
-        </P2>
-        <P2 extraClasses="leading-5 mt-1.5 capitalize">
-          The app does not save or use any personal data, except to interact
-          with the private database. The app would never send you spam emails or
-          pass any information on to third parties.
-        </P2>
       </div>
     </section>
   );
