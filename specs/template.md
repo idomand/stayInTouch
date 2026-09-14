@@ -1,7 +1,5 @@
 # Spec for <feature-name>
 
-branch: claude/feature/<feature-name>
-
 ## Summary
 
 ...
