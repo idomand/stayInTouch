@@ -17,40 +17,39 @@ guessing.
 
 ## Stack
 
-Next.js 16 **Pages Router** (not App Router) + React 19 + TypeScript. Firebase (Auth +
+Next.js 16 **App Router** (`app/`) + React 19 + TypeScript. Firebase (Auth +
 Firestore) on the client — there is no server code. Path alias `@/*` maps to the repo root.
+
+Any component using hooks, context, browser APIs, or event handlers needs a `"use client"`
+directive at the top of the file. Navigation hooks come from `next/navigation`
+(`useRouter`, `usePathname`), never `next/router`.
 
 ## Correctness gate — this is non-negotiable
 
 - There is **no test framework**. Correctness = the code type-checks and lints.
 - `tsconfig.json` sets `noUnusedLocals` and `noUnusedParameters`. An unused import, variable,
-  or a `styled`/component `const` you defined but didn't render is a **hard error**, not a
-  warning. Never leave one behind.
+  or `const` you defined but didn't reference is a **hard error**, not a warning. Never leave
+  one behind.
 - A `pre-push` hook runs `tsc --noEmit` and aborts the push on any type error. Keep it clean.
 - Prefer precise types over `any`. Match the types already used in the file.
 
-## Styling — the project is mid-migration
+## Styling — Tailwind CSS v4
 
-Migrating from **styled-components → Tailwind CSS v4**. Both exist in the tree.
+Styling is **Tailwind CSS v4**. There is no styled-components code left; don't reintroduce it.
 
-- **Prefer Tailwind** for anything you touch or create. Compose classes with `twMerge`
-  (`tailwind-merge`) and accept a `className` prop so callers can override.
-- Tailwind theme colors mirror the old names — `bg-blue1`, `hover:bg-blue3`, `text-grey3`,
-  etc. mean the same value as the styled-components theme. Color tokens are defined in
-  `styles/globals.css` under `@theme`.
-- Do not extend a component's styled-components block if you can convert it to Tailwind
-  instead. Do not reintroduce styled-components in new components.
-- The typography scale lives in `styles/typography.ts` (`typeScale`). Semantic text
-  primitives are in `Components/Common/StyledText.ts`.
+- Compose classes with `twMerge` (`tailwind-merge`) and accept a `className`/`extraClasses`
+  prop so callers can override.
+- Color tokens and custom animations are defined in `styles/globals.css` under `@theme`; use
+  the named colors like `bg-blue1`, `hover:bg-blue3`, `text-grey3`.
+- Semantic text primitives (`H1`–`H5`, `P`, `P1`–`P3`) live in `Components/ui/Text.tsx`.
 
 ## Component conventions
 
 - Components are **flat single-file** `Components/ComponentName.tsx` — no per-component
   folder, no `index.tsx` barrel.
-- New/refactored Tailwind components live in `Components/ui/` (see `Components/ui/Button.tsx`
-  with its `variant` prop for the pattern to follow).
-- `Components/Common/` holds shared, **exported** primitives imported by others.
-- Legacy files keep their `styled.*` `const`s inlined below the component (not exported).
+- Reusable presentational components live in `Components/ui/` (see `Components/ui/Button.tsx`
+  with its `variant` prop for the pattern to follow); feature components sit directly under
+  `Components/`.
 - Auth: consumers call `useAuth()!` (non-null assertion) from `lib/AuthContext.tsx` and read
   `currentUser`.
 

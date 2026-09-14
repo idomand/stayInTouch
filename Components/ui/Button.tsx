@@ -7,6 +7,7 @@ type Props = {
   extraClasses?: string;
   children?: ReactNode;
   variant?: "Primary" | "Secondary" | "Ghost";
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -15,6 +16,7 @@ export default function Button({
   extraClasses = "",
   children,
   variant = "Primary",
+  disabled = false,
 }: Props) {
   const baseClasses =
     "justify-center cursor-pointer flex items-center transition ease-in duration-200 text-sm rounded-md border-current font-medium";
@@ -27,6 +29,8 @@ export default function Button({
   const ghostButtonClass =
     " px-1 bg-transparent text-2xl text-black border-none  hover:bg-grey1 ";
 
+  const disabledClasses = "opacity-50 cursor-not-allowed pointer-events-none";
+
   const variantClasses = {
     Primary: primaryClasses,
     Secondary: secondaryButtonClasses,
@@ -35,8 +39,14 @@ export default function Button({
 
   return (
     <button
-      className={twMerge(baseClasses, variantClasses, extraClasses)}
+      className={twMerge(
+        baseClasses,
+        variantClasses,
+        disabled && disabledClasses,
+        extraClasses
+      )}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
       {buttonText}
