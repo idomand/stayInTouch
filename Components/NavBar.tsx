@@ -1,15 +1,12 @@
-import { useRouter } from "next/router";
+import NextLink from "next/link";
 import { useState } from "react";
 import { useAuth } from "../lib/AuthContext";
-import Link from "./ui/Link";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
 
 export default function NavBar() {
   const { currentUser, logout } = useAuth()!;
   const [isLogoutModelOpen, setIsLogoutModelOpen] = useState(false);
-
-  const router = useRouter();
 
   function onLogout() {
     setIsLogoutModelOpen(false);
@@ -18,29 +15,16 @@ export default function NavBar() {
 
   return (
     <nav className="flex justify-between items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
-      <img
-        src="/friendsLogo.png"
-        className="ml-5 my-1 h-10 sm:hidden"
-        alt="Stay-in-Touch logo"
-      />
-      <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0">
-        Stay-in-Touch!
-      </h2>
-      <div className="text-xl">
-        {currentUser && (
-          <Link variant="Nev" isLinkActive={router.pathname == "/"} href="/">
-            Home
-          </Link>
-        )}
-        <Link
-          variant="Nev"
-          isLinkActive={router.pathname == "/about"}
-          href="/about"
-          extraClasses="mx-2"
-        >
-          About
-        </Link>
-      </div>
+      <NextLink href="/" aria-label="Stay-in-Touch home">
+        <img
+          src="/friendsLogo.png"
+          className="ml-5 my-1 h-10 sm:hidden"
+          alt="Stay-in-Touch logo"
+        />
+        <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0">
+          Stay-in-Touch!
+        </h2>
+      </NextLink>
 
       {currentUser ? (
         <>
