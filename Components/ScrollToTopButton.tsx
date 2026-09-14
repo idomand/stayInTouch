@@ -30,7 +30,7 @@ export default function ScrollToTopButton() {
         <Button
           onClick={scrollToTop}
           buttonText="Top"
-          extraClasses="fixed md:right-15 md:bottom-10 bottom-5 right-5"
+          extraClasses="fixed md:right-15 md:bottom-20 bottom-25 right-2"
         />
       )}
     </>
