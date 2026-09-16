@@ -680,22 +680,42 @@ during testing, suspect this before suspecting the code.
 each take hours to a day, and they block all auth work. See Phase 0.1 in the
 execution plan.
 
-### C. The service worker can serve a signed-in page to a signed-out user
+### C. The service worker risk — resolved: there is no service worker
 
-The app is an installable PWA via `next-pwa` with `register: true` and
+> **Resolved 2026-09-16 by running a real build.** No service worker is
+> generated, so the risk described below does not exist. The reasoning is kept
+> as a record of what was checked and why.
+
+~~The app is an installable PWA via `next-pwa` with `register: true` and
 `skipWaiting: true`. A service worker that caches HTML will happily serve a
 cached, authenticated page after sign-out, and can cache auth API responses.
-
 Auth routes and `/api/auth/*` must be excluded from caching explicitly. This was
 never a risk before, because Firebase auth state lived in the client SDK and was
-re-evaluated on every mount.
+re-evaluated on every mount.~~
 
-**Separate, pre-existing concern:** `next-pwa` is pinned at `5.6.0`, which is a
+**What a build actually produces.** `next-pwa` is pinned at `5.6.0`, a
 **webpack** plugin last published for Next 12. `next.config.js` sets
-`turbopack: {}`, and Next 16 builds with Turbopack. The service worker may
-already not be generated at all. Confirm whether `public/sw.js` is produced by a
-real build before designing around it. Fixing `next-pwa` is out of scope for
-this migration — but knowing which of the two situations you are in is not.
+`turbopack: {}`, and Next 16 builds with Turbopack. `next-pwa` works by
+injecting a `webpack()` function into the Next config, and Turbopack never calls
+it. The plugin is inert, and it fails silently — the build prints no warning.
+
+A clean build — `rm -f public/sw.js`, `rm -rf .next`, `npm run build` — emitted
+no `public/sw.js`, no `workbox-*.js` and no registration script in
+`.next/static`. The single `serviceWorker` string in the client bundle belongs
+to Firebase Auth's own worker messaging code. The exact commands are in Phase 0
+of the execution plan.
+
+Two consequences:
+
+- **Phase 2B.4 is dropped.** There is no cache to exclude the auth routes from,
+  and no installed PWA to test sign-out in.
+- **The app is not an installable PWA today.** `app/layout.tsx` still links
+  `/manifest.json`, but Chrome requires a service worker with a fetch handler
+  before it offers the install prompt, and there is none. `next-pwa` is dead
+  weight in `package.json`, and `CLAUDE.md`'s description of the app as an
+  installable PWA via `next-pwa` is wrong. Fixing or removing the PWA setup
+  stays **out of scope** for this migration — but do not design around a service
+  worker that does not exist.
 
 ### D. The i18n spec collides with the new auth screens
 
@@ -821,8 +841,9 @@ stops at phase 6.
 2. **Apex or `www` as the canonical host?** Everything else — `BETTER_AUTH_URL`,
    the OAuth callbacks, the email links — must match whichever is chosen.
    Decide once, redirect the other.
-3. **Does a real build still produce `public/sw.js`?** Determines whether the
-   PWA caching work in Round 6C is a live risk or already moot.
+3. ~~**Does a real build still produce `public/sw.js`?**~~ **Answered: no.** A
+   clean Turbopack build emits no service worker, so the PWA caching work in
+   Round 6C is moot and Phase 2B.4 is dropped. See Round 6C.
 4. The three link-request questions in Round 3 are still suggestions, not
    decisions. They do not block anything before phase 7.
 

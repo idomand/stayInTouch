@@ -78,14 +78,40 @@ No code.
       production URL instead of `*.vercel.app`, and — see Phase 0.1 — also solves
       the Google OAuth preview-URL problem. Brevo is no longer needed.
 
-### Still open — these block Phase 2
+- [x] **No service worker is generated — verified 2026-09-16.** A clean
+      `npm run build` (Next 16.1.1, Turbopack) emits no `public/sw.js`, no
+      `workbox-*.js` and no registration script. `next-pwa@5.6.0` works by
+      injecting a `webpack()` function into the Next config, and Turbopack never
+      calls it, so the plugin is inert and fails silently — the build prints no
+      warning. Consequence: the service-worker work in Phase 2B.4 is **moot**.
 
-- [ ] **Check whether a real build still emits `public/sw.js`.** `next-pwa` is
-      pinned at `5.6.0`, a webpack plugin for Next 12, while `next.config.js`
-      enables Turbopack. Run a build and look. The answer decides whether the
-      service-worker work in Phase 2B is real or moot.
+### How the service-worker question was checked
 
-**Done when:** that is answered, and Phase 0.1 below is finished.
+`public/sw.js` is in `.gitignore`, so its absence in a checkout proves nothing,
+and a stale copy from an older build proves nothing either. Delete both it and
+`.next`, build, then look:
+
+```bash
+rm -f public/sw.js public/workbox-*.js public/worker-*.js
+rm -rf .next
+npm run build
+ls public/ | grep -iE 'sw|workbox|worker'        # printed nothing
+grep -rl "serviceWorker" .next/static .next/server
+```
+
+The one `serviceWorker` hit in `.next/static` is Firebase Auth's own worker
+messaging code, not a next-pwa registration script. Against a deployed build,
+`curl -I https://<host>/sw.js` returning 404 confirms the same on Vercel's build
+rather than a local one.
+
+Re-run this if `next-pwa`, `next`, or the Turbopack setting in `next.config.js`
+ever changes.
+
+### Still open
+
+Nothing. Phase 2 is unblocked.
+
+**Done when:** Phase 0.1 below is finished.
 
 ---
 
@@ -298,18 +324,19 @@ Found by audit. Three distinct problems, not one:
       together are left alone in this phase — they still talk to Firestore.
       Phase 4 removes their need for identity entirely.
 
-### 2B.4 Service worker and auth
+### 2B.4 Service worker and auth — dropped
 
-- [ ] Only if Phase 0 found that a service worker is actually generated:
-      exclude `/api/auth/*` and the auth routes from runtime caching. A cached
-      HTML page can otherwise be served to a signed-out user after sign-out, and
-      that risk did not exist before — Firebase re-evaluated auth state on every
-      mount from the client SDK.
-- [ ] Verify sign-out in an **installed** PWA, not only a browser tab.
+Phase 0 verified that no service worker is generated, so there is no cache that
+could serve a signed-in page after sign-out, and nothing to exclude from runtime
+caching. One line survives:
+
+- [ ] Re-run the Phase 0 check once at the end of this phase. If `next-pwa` has
+      somehow started working, exclude `/api/auth/*` and the auth routes from
+      runtime caching before shipping.
 
 **Files:** `lib/AuthContext.tsx`, `app/login/page.tsx` and the new auth route
 pages, `Components/NavBar.tsx`, `Components/MainForm.tsx`,
-`lib/CalenderFunctions.ts`, `next.config.js`
+`lib/CalenderFunctions.ts`
 
 **Watch out:** `useAuth()` has 12 consumers. Grep for it and check every call
 site, not just the ones that break the build. The Better Auth user id is a
@@ -323,7 +350,7 @@ screens to the i18n spec's surface list.
 
 **Done when:** you can sign up, verify by email, sign out, sign in again with
 both email and Google, reset a forgotten password, and the session survives a
-refresh and a PWA restart. The contact list still renders from Firestore
+refresh and a browser restart. The contact list still renders from Firestore
 throughout.
 
 ---
@@ -504,7 +531,7 @@ never cross the link, and each side keeps its own `cadence_days`.
 | Phase 2B is much bigger than the old Google-only plan                                | Six new screens replace one popup button. Budget for it; it is the cost of owning auth                                                           |
 | Better Auth's table names are singular and clash with the app's plural ones          | Decide once in Phase 2A.1, before any foreign key is written in Phase 3                                                                          |
 | The HTTP Neon driver is picked by habit, then Phase 7 needs transactions             | Use `drizzle-orm/neon-serverless` from Phase 1. Switching later rewrites the client and every import                                             |
-| The service worker serves a cached signed-in page after sign-out                     | Phase 2B.4. First confirm in Phase 0 whether a service worker is generated at all                                                                |
-| `next-pwa@5.6.0` is a webpack plugin for Next 12, and the repo builds with Turbopack | Pre-existing, **out of scope**. Confirm which situation you are in; do not fix it inside this migration                                          |
+| ~~The service worker serves a cached signed-in page after sign-out~~ — **closed**    | No service worker is generated; verified by a build in Phase 0. No cache, no risk, and Phase 2B.4 is dropped                                     |
+| `next-pwa@5.6.0` is a webpack plugin for Next 12, and the repo builds with Turbopack | Confirmed inert in Phase 0 — it produces nothing, so the app is not a working PWA today. Pre-existing and **out of scope**; do not fix it here  |
 | The i18n spec is stale — it says "Pages Router" and cites `pages/index.tsx`          | It was written after the App Router migration. Correct it before anyone builds from it. Not this migration's job, but do not build from it as-is |
 | Six new auth screens land after i18n and break "no English text remains"             | Agreed order is auth first, i18n after. Add the screens to the i18n spec's surface list                                                          |
