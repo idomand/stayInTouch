@@ -53,6 +53,13 @@ on the **Vercel Hobby** free plan. Three things to plan around:
 - **Neon free tier:** 0.5 GB storage and 100 CU-hrs/month per project, scale to
   zero. Far beyond what this app needs — it stores text rows. Cold starts after
   idle are the accepted trade.
+- **The function region and the database region must match.** Vercel defaults
+  new projects to `iad1` (Washington, D.C.) and Hobby allows a single region.
+  Every dynamic render makes several round trips to the database, so a mismatch
+  is paid per request, not once. **Set to `fra1` (Frankfurt) on 2026-09-17** to
+  match the Neon project in `eu-central-1` — see Phase 1. Note the asymmetry:
+  Vercel's region is a dropdown plus a redeploy, but **Neon's region is fixed at
+  project creation**, so the database is the side to decide first.
 
 The domain `stay-in-touch.vip` is already owned, so the only cost is its annual
 renewal. Everything else — Vercel Hobby, Neon free, Resend free — is $0.
@@ -63,7 +70,7 @@ renewal. Everything else — Vercel Hobby, Neon free, Resend free — is $0.
 | ----- | ------------------------------------------------ | ----------------------------------- |
 | 0     | Close open decisions — **done**                  | yes                                 |
 | 0.1   | Domain, DNS and email verified — **done**        | yes                                 |
-| 1     | Neon + Drizzle connected                         | yes                                 |
+| 1     | Neon + Drizzle connected — **done**              | yes                                 |
 | 2A    | Better Auth works as an API                      | yes, no UI change                   |
 | 2B    | Auth screens; Firebase Auth gone from the client | auth switched, data still Firestore |
 | 3     | Tables exist                                     | yes                                 |
@@ -277,32 +284,111 @@ the domain verified, and a test email reaches a real inbox. **All three met on
 
 Goal: the app can run one SQL query. Nothing else changes.
 
-Branch: `feat/postgres-setup`
+**Status: done — 2026-09-17.** The detailed breakdown lives in
+`specs/postgres-phase-1-plan.md`. See _Phase 1 findings_ below for four things
+the phase as written did not anticipate.
 
-- [ ] Create a Neon project. Copy the **pooled** connection string, not the
+Branch: `feat/postgres-setup-phase-1`
+
+- [x] Create a Neon project. Copy the **pooled** connection string, not the
       direct one — Vercel serverless functions will exhaust a normal pool.
-- [ ] Add `DATABASE_URL` to `.env.local` and to Vercel. `.env.local` is already
-      in `.gitignore` — confirmed.
-- [ ] `npm i drizzle-orm @neondatabase/serverless ws` and
-      `npm i -D drizzle-kit @types/ws`.
-- [ ] Create `lib/db/index.ts` — **one** shared client, exported once. Every
+      **Created in `eu-central-1` (Frankfurt), database `neondb`, pooled string
+      confirmed by the `-pooler` hostname.** The Neon–Vercel integrations
+      (Vercel-Managed and Neon-Managed) were **deliberately not used** — they
+      exist to give each preview deploy its own database branch, which protects
+      data this project does not have, and they inject a competing set of
+      environment variables. Revisit at Phase 6 if preview branching starts to
+      earn its keep.
+- [x] Add `DATABASE_URL` to `.env.local` and to Vercel. `.env.local` is already
+      in `.gitignore` — confirmed. Set in all three Vercel scopes.
+- [x] **Match the Vercel function region to the Neon region.** Not in the
+      original phase list; added because the default would have been wrong.
+      Vercel **Settings → Functions → Function Regions** set to **`fra1`**
+      (Frankfurt) to match Neon's `eu-central-1`, replacing the `iad1` default.
+      This repo has no `vercel.json`, so the dashboard value is authoritative.
+- [x] `npm i drizzle-orm @neondatabase/serverless ws` and
+      `npm i -D drizzle-kit @types/ws`. **Also `server-only`** — see findings.
+- [x] Create `lib/db/index.ts` — **one** shared client, exported once. Every
       query in the app goes through it. Do not create a client per module.
-- [ ] **Use the WebSocket driver, not the HTTP one.** Build the client from
+- [x] **Use the WebSocket driver, not the HTTP one.** Build the client from
       `Pool` + `drizzle-orm/neon-serverless`, not `drizzle-orm/neon-http`. The
       HTTP driver supports `db.batch()` but **not** interactive
       `db.transaction()`, and Phase 7 needs real transactions for link accept and
       talk-event propagation. Switching later means rewriting the client and
       every import. Verify the current capability matrix in Drizzle's docs first
-      — driver support changes.
-- [ ] Create `drizzle.config.ts` pointing at `lib/db/schema/`.
-- [ ] Fail fast on missing config: throw at module load if `DATABASE_URL` is
-      unset, with a message naming the variable.
+      — driver support changes. **Re-verified against Drizzle's Neon page on
+      2026-09-17; still true.**
+- [x] Create `drizzle.config.ts` pointing at `lib/db/schema/`.
+- [x] Fail fast on missing config: throw at module load if `DATABASE_URL` is
+      unset, with a message naming the variable. **Proven — see findings.**
 
 **Files:** `lib/db/index.ts`, `drizzle.config.ts`, `.env.local`, `package.json`
 
 **Done when:** a temporary Server Component or Route Handler runs
 `SELECT now()` and renders the result. Delete the temporary code before
 committing. `npm run type-check` and `npm run build` both pass.
+
+### Phase 1 findings — 2026-09-17
+
+Four things the phase as written did not anticipate. The first three are
+deviations already applied; the fourth is a constraint every later phase
+inherits.
+
+1. **`server-only` was added as a fourth dependency.** Every route page in this
+   repo is `"use client"`, so an accidental client import of `lib/db/index.ts`
+   would drag the Postgres driver into the browser bundle. `import "server-only"`
+   at the top of the client turns that into a build error with a clear message.
+
+2. **`drizzle-kit` cannot see `DATABASE_URL` without help.** It auto-loads `.env`
+   but **not** `.env.local`, and `.env.local` is the only env file this repo has.
+   `drizzle.config.ts` therefore calls `process.loadEnvFile(".env.local")`
+   itself — a Node built-in, so no `dotenv` dependency. Phase 3 is the first
+   phase that actually runs `drizzle-kit`; this is why it will work.
+
+3. **`ws` is optional on Node 22+**, which has a native `WebSocket` global that
+   `@neondatabase/serverless` picks up on its own. It is installed anyway, so the
+   client behaves identically whatever Node version Vercel runs. Do not "clean it
+   up" later without checking the Vercel Node setting first.
+
+4. **A module-load throw makes `DATABASE_URL` a _build-time_ requirement, not
+   just a runtime one.** `export const dynamic = "force-dynamic"` stops Next
+   prerendering the handler, but Next still imports the route module during
+   "Collecting page data", so the guard fires and the build fails:
+
+   ```
+   Error: DATABASE_URL is not set. Add it to .env.local and to the Vercel project settings.
+   > Build error occurred
+   Error: Failed to collect page data for /api/db-check
+   ```
+
+   This is the fail-fast working as specified, and it is harmless on Vercel,
+   where environment variables are available at build time — confirmed: with
+   `DATABASE_URL` set, the same build passes and the route is correctly listed
+   as `ƒ (Dynamic)`, not prerendered. Two consequences: **`DATABASE_URL` must be
+   set in Vercel before the first deploy that imports the client** (Phase 2A
+   onward, when the import becomes permanent), and any contributor without the
+   variable in `.env.local` cannot run `npm run build` at all. If that ever
+   becomes a problem, the fix is to make the client lazy — throw on first query
+   instead of at module load — which trades away the build-time safety net. Not
+   done now; the execution plan asked for the module-load throw deliberately.
+
+### Phase 1 verification result — 2026-09-17
+
+The temporary route handler ran `SELECT now()` against Neon and returned:
+
+```
+{"now":"2026-09-17 13:06:44.765366+00"}   HTTP 200   1.264s  (cold)
+{"now":"2026-09-17 13:06:56.804066+00"}   HTTP 200   0.123s  (warm)
+{"now":"2026-09-17 13:06:57.198827+00"}   HTTP 200   0.041s  (warm)
+```
+
+The first request pays Neon's scale-to-zero cold start; warm requests settle
+around 40–120 ms. That is the accepted trade recorded in the hosting
+constraints. The temporary route was deleted afterwards and is not committed.
+
+**Still unproven:** Neon has only been reached from a local machine, never from
+a Vercel function. Pooled-connection behaviour under serverless is exercised for
+the first time in Phase 2A.
 
 ---
 
@@ -638,7 +724,7 @@ never cross the link, and each side keeps its own `cadence_days`.
 | Risk                                                                                 | Handling                                                                                                                                         |
 | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | A query without an `owner_id` filter leaks another user's data                       | The Phase 4.1 guard, built before any feature; the Phase 6 grep as a second pass                                                                 |
-| Vercel serverless exhausts the connection pool                                       | Use Neon's **pooled** connection string from Phase 1                                                                                             |
+| Vercel serverless exhausts the connection pool                                       | **Half closed.** The pooled string is in place and verified by its `-pooler` hostname (Phase 1), but Neon has only been reached from a local machine. First real serverless test is Phase 2A |
 | Losing realtime updates is worse than expected                                       | Revisit only after the app runs. Polling is the cheap next step; Supabase Realtime is the expensive one                                          |
 | `useAuth()` consumers break in Phase 2B                                              | Keep the existing `useAuth()` contract; grep all 12 call sites before editing                                                                    |
 | Neon free tier changes or the project sleeps                                         | Confirmed in Phase 0; cold starts are acceptable for a portfolio app                                                                             |
