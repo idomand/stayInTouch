@@ -16,8 +16,27 @@ push` and dropping the database over writing careful migrations. Switch to
   framework and no working lint in this repo. A `pre-push` hook runs
   `tsc --noEmit` and aborts on any error. Note `noUnusedLocals` and
   `noUnusedParameters` are on, so an unused import is a hard error.
-- **One phase, one branch, one or more commits.** Each phase ends with a working
-  app. Do not start a phase before the previous one builds and runs.
+- **One phase, one branch, merged to `main` per phase.** The workflow for every
+  phase is the same:
+  1. `git switch main && git pull`, then cut the phase branch from it — branches
+     are **sequential, not stacked**. Do not branch a phase off the previous
+     phase's branch; each starts from a `main` that already has the last phase
+     merged. Nothing here runs in parallel, so stacking only buys rebasing.
+  2. Commit **per sub-task**, not once at the end. Where a phase is numbered
+     (2A.1–2A.4, 4.1–4.4) that numbering is the commit plan.
+  3. Push and verify the phase's **Done when** on the Vercel **preview URL**, not
+     only locally. The wildcard preview domain from Phase 0.1 exists so OAuth
+     works against previews — use it.
+  4. Open a PR, merge to `main`, let the **production** deploy run, and
+     smoke-check it. The next phase branches from the updated `main`.
+- **Merging to `main` deploys to production.** That is acceptable per phase only
+  because the database starts empty and there is no import — no user can be locked
+  out by a mid-migration state. Two consequences: the mixed state after Phase 2B
+  (Better Auth identity, Firestore data) is a real production deploy, so **all**
+  Better Auth _and_ Firebase env vars must be in Vercel before that merge; and
+  "each phase ends with a working app" means working, not necessarily
+  feature-complete.
+- Do not start a phase before the previous one builds, runs, and is merged.
 - **Secrets are never committed.** Add every new variable to `.env.local` and to
   the Vercel project settings, and document only the _name_ here.
 
@@ -119,6 +138,10 @@ Nothing. Phase 2 is unblocked.
 
 Do this first. DNS propagation and Resend's domain review can each take hours to
 a day, and both block Phase 2A.
+
+Branch: `chore/domain-config` — DNS, Vercel and Resend are dashboard work with no
+commit. The only code is the **Application config** items below (`metadataBase`,
+`BETTER_AUTH_URL` wiring); they are what this branch carries.
 
 ### Decide where DNS lives
 
@@ -479,6 +502,8 @@ Branch: `chore/remove-firebase`
 
 The app is now real. Stop dropping the database.
 
+Branch: `chore/db-hardening`
+
 - [ ] Switch from `drizzle-kit push` to `drizzle-kit generate` + `migrate`.
       Commit the generated SQL files.
 - [ ] Add a `db:generate` and `db:migrate` script to `package.json`.
@@ -495,6 +520,8 @@ The app is now real. Stop dropping the database.
 ## Phase 7 — Linked users
 
 Only start this once Phases 1–6 are done and deployed.
+
+Branch: `feat/linked-users`
 
 - [ ] `link_requests` table, with the `link_request_status` enum, the
       `no_self_link` check and the partial unique index on the sorted pair.
