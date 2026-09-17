@@ -4,6 +4,7 @@ import Layout from "@/Components/ui/Layout";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://stay-in-touch.vip"),
   title: "Stay-in-Touch",
   manifest: "/manifest.json",
 };
