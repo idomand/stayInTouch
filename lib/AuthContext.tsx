@@ -1,3 +1,5 @@
+"use client";
+
 import { signInWithPopup, signOut, User } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
@@ -41,6 +43,7 @@ export default function AuthProvider({
       // The onAuthStateChanged listener will update the currentUser state
     } catch (error) {
       console.error("Error during Google sign-in:", error);
+      throw error;
     }
   }
 

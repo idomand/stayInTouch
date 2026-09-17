@@ -1,9 +1,10 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import ContactDetails from "../Components/ContactDetails";
-import MainForm from "../Components/MainForm";
-import { useAuth } from "../lib/AuthContext";
-import { showArt } from "@/Components/SecretGame";
+import ContactDetails from "@/Components/ContactDetails";
+import MainForm from "@/Components/MainForm";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Home() {
   const router = useRouter();
@@ -13,7 +14,6 @@ export default function Home() {
   useEffect(() => {
     if (!currentUser) {
       router.push("/login");
-      showArt();
     }
   }, [currentUser, router]);
 
