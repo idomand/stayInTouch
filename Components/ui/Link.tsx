@@ -21,10 +21,10 @@ export default function Link({
 }: Props) {
   const baseClasses = "hover:text-blue1 hover:border-b-2 font-bold";
   const primaryClasses = "";
-  const navClasses = "text-sm";
+  const navClasses = "text-sm border-b-2 border-blue1/40 hover:border-blue1";
   const textClasses = "border-b text-blue1 ml-1";
 
-  const isActiveClasses = isLinkActive ? "border-b-2" : "";
+  const isActiveClasses = isLinkActive ? "border-b-2 border-blue1" : "";
 
   const variantClasses = {
     Primary: primaryClasses,

@@ -1,9 +1,12 @@
+"use client";
+
 import { H1, P3 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 import Link from "@/Components/ui/Link";
+import PageHeader from "@/Components/ui/PageHeader";
 import { useAuth } from "@/lib/AuthContext";
 import { addDummyData } from "@/lib/Firebase";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function About() {
   const { currentUser } = useAuth()!;
@@ -22,8 +25,8 @@ export default function About() {
 
   return (
     <section className="flex items-center flex-col justify-center relative w-[70%] mx-auto">
+      <PageHeader title="About" />
       <div className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full">
-        <H1>Welcome!</H1>
         <P3>
           This site was created as a way to help people (including myself) to
           stay in touch with the people they care about.
@@ -53,7 +56,12 @@ export default function About() {
           All you need to do is enter their names and how often you would like
           to contact them, and Stay-in-Touch will take care of the rest.
         </P3>
-        <Button onClick={addDemoData} buttonText="Demo" variant="Primary" />
+        <Button
+          onClick={addDemoData}
+          buttonText="Demo"
+          variant="Primary"
+          disabled={!currentUser}
+        />
       </div>
       <div
         id="AboutTheSite"

@@ -6,7 +6,7 @@ Live app: **https://stay-in-touch.vercel.app/**
 ![](https://img.shields.io/badge/Library-React%2019-informational?style=flat&logo=react&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Language-TypeScript-informational?style=flat&logo=typescript&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Backend-Firebase-informational?style=flat&logo=firebase&logoColor=white&color=2bbc8a)
-![](https://img.shields.io/badge/Styling-styled--components-informational?style=flat&logo=styledcomponents&logoColor=white&color=2bbc8a)
+![](https://img.shields.io/badge/Styling-Tailwind%20CSS%20v4-informational?style=flat&logo=tailwindcss&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/PWA-installable%20%26%20offline-informational?style=flat&logo=pwa&logoColor=white&color=2bbc8a)
 
 ## Description
@@ -42,21 +42,21 @@ offline on Android, PC, or Mac.
 
 | Area      | Technology                                                                          |
 | --------- | ----------------------------------------------------------------------------------- |
-| Framework | [Next.js 16](https://nextjs.org/) (Pages Router)                                    |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router)                                       |
 | UI        | [React 19](https://react.dev/)                                                      |
 | Language  | [TypeScript](https://www.typescriptlang.org/)                                       |
 | Backend   | [Firebase](https://firebase.google.com/) — Auth + Firestore                         |
-| Styling   | [styled-components](https://styled-components.com/) (CSS-in-JS design system)       |
+| Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                          |
 | PWA       | [next-pwa](https://github.com/shadowwalker/next-pwa)                                |
 | Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
 
 ## Project Structure
 
 ```
-Components/    Reusable UI + feature components (styled-components inlined)
+Components/    Reusable UI + feature components (Tailwind utility classes)
 lib/           Firebase setup, auth context, Firestore & Calendar helpers
-pages/         Next.js routes (/, /login, /about)
-styles/        Theme, typography, and global styles
+app/           Next.js App Router routes (/, /login, /about, /privacy)
+styles/        Global styles (Tailwind theme tokens and animations)
 types/         Shared TypeScript types
 utils/hooks/   Custom hooks (e.g. Firestore snapshot subscription)
 public/        Static assets, icons, and PWA manifest

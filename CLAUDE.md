@@ -20,11 +20,13 @@ npm run type-check   # tsc --noEmit — the source of truth for correctness
 
 There is **no test framework** and **no working lint** in this project (the `next lint` script was removed — Next 16 dropped `next lint` and ESLint 9 needs a flat config the repo doesn't have). "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
 
-A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error (wired up by the `postinstall` script setting `core.hooksPath`). Keep the build type-clean or pushes fail. Note `tsconfig.json` sets `noUnusedLocals` and `noUnusedParameters`, so unused variables — including a styled-component `const` you defined but didn't render — are hard errors, not warnings.
+A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error (wired up by the `postinstall` script setting `core.hooksPath`). Keep the build type-clean or pushes fail. Note `tsconfig.json` sets `noUnusedLocals` and `noUnusedParameters`, so unused variables — an import or `const` you defined but never referenced — are hard errors, not warnings.
 
 ## Architecture
 
-Next.js 16 **Pages Router** (not App Router) + React 19, TypeScript, Firebase (Auth + Firestore), deployed as an installable PWA via `next-pwa`. Path alias `@/*` maps to the repo root.
+Next.js 16 **App Router** (`app/`) + React 19, TypeScript, Firebase (Auth + Firestore), deployed as an installable PWA via `next-pwa`. Path alias `@/*` maps to the repo root.
+
+Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout (the old `_app.tsx` + `_document.tsx`). Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive; the four route pages, `AuthContext`, `NavBar`, `Footer`, and `ScrollToTopButton` all carry it. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
 
 ### Data model — the key thing to understand
 
@@ -34,21 +36,18 @@ Two derived fields are computed on the client and are **not stored** in Firestor
 
 ### Auth
 
-`lib/AuthContext.tsx` wraps the app in `_app.tsx` and exposes `useAuth()` (Google popup sign-in via Firebase). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves, so `currentUser` is settled by the time children mount.
+`lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()` (Google popup sign-in via Firebase). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves, so `currentUser` is settled by the time children mount.
 
 ### Google Calendar
 
 `lib/CalenderFunctions.ts` does **not** use the Calendar API or an OAuth token. It builds a `calendar.google.com/render?action=TEMPLATE` URL with prefilled fields and opens it in a new window. Any leftover `googleAccessToken` in localStorage is cleared on load — don't reintroduce a token-based flow without a deliberate reason.
 
-### Styling — mid-migration, two systems coexist
+### Styling — Tailwind CSS v4
 
-The project is migrating from **styled-components to Tailwind CSS v4** (this is the active branch's purpose). Expect both in the tree:
+Styling is **Tailwind CSS v4**, utility classes composed with `twMerge` (`tailwind-merge`) so callers can override via a `className`/`extraClasses` prop. Reusable presentational components live in `Components/ui/` (e.g. `Button.tsx` with a `variant` prop, `Text.tsx` for typography primitives). Color tokens and custom animations are defined in `styles/globals.css` (`@theme`); use the named colors like `bg-blue1`, `hover:bg-blue3`, `text-grey3`.
 
-- **Legacy:** styled-components with a `defaultTheme` (`styles/Theme.ts`) provided via `ThemeProvider` in `_app.tsx`. Components define `styled.*` blocks inlined at the bottom of the same file and read theme values like `theme.blue1`, `theme.grey3`, `theme.typeScale.*`, `theme.devices.break1`. `ContactItem.tsx` is a representative legacy component.
-- **New:** Tailwind utility classes composed with `twMerge` (`tailwind-merge`). New/refactored components live in `Components/ui/` (e.g. `Button.tsx` with a `variant` prop). The Tailwind theme mirrors the old color names (`bg-blue1`, `hover:bg-blue3`, etc.).
-
-When touching a component, prefer moving it to Tailwind rather than extending its styled-components. The theme color names are intentionally shared across both systems, so a value like `blue1` means the same thing in either.
+The project previously used styled-components; that migration is complete and there is no styled-components code, `ThemeProvider`, or `styles/Theme.ts` left. Don't reintroduce styled-components.
 
 ### Component file convention
 
-Components are flat single-file `Components/ComponentName.tsx` — no per-component folder, no `index.tsx` barrel. Legacy files keep their styled-component `const`s inlined below the component (not exported). `Components/Common/` is the exception: it holds shared, exported styled primitives imported by others.
+Components are flat single-file `Components/ComponentName.tsx` — no per-component folder, no `index.tsx` barrel. Reusable presentational components go in `Components/ui/`; feature components sit directly under `Components/`.
