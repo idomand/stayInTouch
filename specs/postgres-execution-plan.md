@@ -61,8 +61,8 @@ renewal. Everything else — Vercel Hobby, Neon free, Resend free — is $0.
 
 | Phase | Goal                                             | App still works on Firebase?        |
 | ----- | ------------------------------------------------ | ----------------------------------- |
-| 0     | Close open decisions                             | yes                                 |
-| 0.1   | Domain, DNS and email verified                   | yes                                 |
+| 0     | Close open decisions — **done**                  | yes                                 |
+| 0.1   | Domain, DNS and email verified — **done**        | yes                                 |
 | 1     | Neon + Drizzle connected                         | yes                                 |
 | 2A    | Better Auth works as an API                      | yes, no UI change                   |
 | 2B    | Auth screens; Firebase Auth gone from the client | auth switched, data still Firestore |
@@ -136,6 +136,9 @@ Nothing. Phase 2 is unblocked.
 
 ## Phase 0.1 — Wire up `stay-in-touch.vip`
 
+**Status: done — 2026-09-17.** Two items were pushed to later phases; see
+_Deferred_ below.
+
 Do this first. DNS propagation and Resend's domain review can each take hours to
 a day, and both block Phase 2A.
 
@@ -143,62 +146,130 @@ Branch: `chore/domain-config` — DNS, Vercel and Resend are dashboard work with
 commit. The only code is the **Application config** items below (`metadataBase`,
 `BETTER_AUTH_URL` wiring); they are what this branch carries.
 
-### Decide where DNS lives
+### Where DNS lives — decided
 
-Everything below is DNS records on one domain. Pick one home for them:
+**Registrar nameservers (Namecheap BasicDNS).** Every record — Vercel's site
+records and Resend's email records — is entered in Namecheap's **Advanced DNS**
+tab. Vercel does not manage DNS for this domain.
 
-- **Vercel nameservers** — Vercel manages DNS, and Resend's records get added in
-  Vercel's DNS panel. Fewest places to look.
-- **Registrar nameservers** — you add both Vercel's site records and Resend's
-  email records at the registrar.
+The alternative was pointing the registrar at Vercel's nameservers and managing
+everything in Vercel's DNS panel. Either works; they coexist because Vercel's
+records point the _website_ and Resend's point _email_. The cost of the choice
+made: when Vercel or Resend changes a required value, nothing updates
+automatically — you retype it in Namecheap.
 
-Either works. They coexist: Vercel's records point the _website_, Resend's point
-_email_. They do not conflict.
+**Do not split them.** Only one nameserver set is authoritative. Records added in
+the panel that is _not_ authoritative are never served, and nothing reports an
+error — verification simply stays pending forever.
+
+**Namecheap specifics that cost time:**
+
+- The **Host** field is relative. Namecheap appends `.stay-in-touch.vip` itself,
+  so a record for `resend._domainkey.send.stay-in-touch.vip` is entered with Host
+  `resend._domainkey.send`. Pasting the FQDN silently creates a doubled name.
+- Namecheap's default parking records (`CNAME @ → parkingpage.cash` and a `www`
+  URL Redirect Record) must be deleted first. The `@` CNAME blocks Vercel's apex
+  `A` record — a host cannot hold both.
+- Lower TTL to `1 min` while iterating; Automatic is 30 minutes, which makes
+  every typo cost half an hour. Restore Automatic once verified.
+- Paste `TXT` values raw. Namecheap adds the quoting; manual quotes break DKIM.
 
 ### Vercel
 
-- [ ] Add `stay-in-touch.vip` as a domain on the Vercel project and follow the
+- [x] Add `stay-in-touch.vip` as a domain on the Vercel project and follow the
       records Vercel shows. Do not copy an IP from any document — use what the
       dashboard gives you.
-- [ ] Decide apex vs `www` and redirect one to the other. Pick one canonical
+- [x] Decide apex vs `www` and redirect one to the other. Pick one canonical
       host; `BETTER_AUTH_URL` and the OAuth callbacks must match it exactly.
+      **Decided: the apex, `https://stay-in-touch.vip`.** `www` redirects to it.
 - [ ] **Add a wildcard preview domain** — e.g. `*.preview.stay-in-touch.vip` —
       and assign it to preview deployments. This is what makes preview sign-in
       possible: Google can then have one stable registered callback instead of a
-      new unregistered URL per deployment.
+      new unregistered URL per deployment. **Deferred to Phase 2A.3** — it is
+      only needed once there is an OAuth callback to register.
 
 ### Resend
 
-- [ ] Create the Resend account and add the domain.
-- [ ] **Send from a subdomain, not the apex** — e.g. `send.stay-in-touch.vip`.
-      This keeps the sending reputation separate from the website's domain, so a
-      bad email run cannot hurt the site. Resend recommends it.
-- [ ] Add the DKIM `TXT` and return-path `MX` records Resend generates.
-- [ ] Add an `SPF` record, and a `DMARC` record at `_dmarc.stay-in-touch.vip`
-      (start at `p=none` to observe before enforcing).
-- [ ] Send a test email to a Gmail address **and** an Outlook address. Check the
-      spam folder in both, not just the inbox.
+- [x] Create the Resend account and add the domain.
+- [x] **Send from a subdomain, not the apex** — `send.stay-in-touch.vip`, region
+      **EU (`eu-west-1`)**. This keeps the sending reputation separate from the
+      website's domain, so a bad email run cannot hurt the site. The region is
+      fixed per domain at creation and cannot be changed afterwards.
+- [x] Add the records Resend generates. **Note the record set is not the Amazon
+      SES one older guides describe.** Current Resend issues three records, all
+      verified here:
+
+  | Type    | Host (Namecheap)          | Points at                    |
+  | ------- | ------------------------- | ---------------------------- |
+  | `TXT`   | `resend._domainkey.send`  | the DKIM public key          |
+  | `CNAME` | `rsend.send`              | `rsend-euw1.forge.rmta.net`  |
+  | `CNAME` | `send.send`               | `send.forge.rmta.net`        |
+
+  There is **no** standalone SPF `TXT` and **no** `feedback-smtp…` return-path
+  `MX` to add — the two `CNAME`s cover SPF and the return path. Adding them by
+  hand is wasted work. Take the record list from the Resend dashboard, not from
+  a guide.
+
+- [x] Add a `DMARC` record at `_dmarc.stay-in-touch.vip`, starting at `p=none`
+      to observe before enforcing. Published as `v=DMARC1; p=none;`.
+
+  **No `rua` report address, deliberately.** DMARC requires the domain receiving
+  the reports to publish an authorization record, and `gmail.com` does not, so
+  spec-compliant senders would refuse to deliver reports to a Gmail address. The
+  working route, if reports are ever wanted, is a service such as Postmark's
+  free DMARC digests, which publishes that authorization itself. Until then
+  `p=none` is a declaration that collects nothing — acceptable for this app.
+
+- [x] Send a test email to a Gmail address. **Result 2026-09-17:** delivered to
+      the **inbox**, not spam; Gmail's _Show original_ reports `SPF: PASS`,
+      `DKIM: PASS with domain send.stay-in-touch.vip`, `DMARC: PASS`.
+- [ ] Send the same test to an **Outlook** address and check the Junk folder.
+      **Deferred to Phase 2A.2** — must pass before Phase 2A is called done.
+      Outlook filters newer TLDs harder than Gmail does, so a Gmail pass is not
+      evidence for Outlook.
+- [x] Create the API key (**Sending access only**, restricted to
+      `send.stay-in-touch.vip`) and add `RESEND_API_KEY` to `.env.local` and to
+      Vercel. Listed under Phase 2A.2 in this plan; done early to run the
+      deliverability test.
 
 **Deliverability note, honestly:** `.vip` is a newer, cheap TLD, and some spam
 filters weight those more suspiciously than a `.com`. Correct SPF, DKIM and
 DMARC matter more here than they would on an old domain. This is not a blocker
 and it is not a reason to buy a second domain — but if verification emails land
 in spam during testing, this is the first thing to suspect, not a bug in the
-code.
+code. Gmail inboxing the first send with all three checks passing is a good
+early signal; it is not yet evidence about Outlook.
 
 ### Application config
 
 - [ ] `BETTER_AUTH_URL` per environment — `http://localhost:3000` locally,
       `https://stay-in-touch.vip` in production. One hardcoded value breaks one
-      of the two.
-- [ ] Add `metadataBase: new URL("https://stay-in-touch.vip")` to the `metadata`
+      of the two. **Deferred to Phase 2A.1.** It is an environment variable with
+      no consumer until `lib/auth.ts` exists; setting it a whole phase early
+      only creates a value nothing reads and nobody re-checks.
+- [x] Add `metadataBase: new URL("https://stay-in-touch.vip")` to the `metadata`
       export in `app/layout.tsx`. It has none today, which is harmless while the
       app has no absolute URLs but starts to matter once emails link back in.
-- [ ] `public/manifest.json` needs no change — its `start_url`, `scope` and
+
+  Hardcoded to production, per this plan. Consequence: preview deploys generate
+  absolute URLs pointing at production. Harmless while there are no OG images
+  and no absolute links; the fix, if it ever matters, is a `VERCEL_URL`
+  fallback.
+
+- [x] `public/manifest.json` needs no change — its `start_url`, `scope` and
       icon paths are all relative. Verified.
 
+### Deferred out of this phase
+
+| Item                         | Moved to    | Why                                                  |
+| ---------------------------- | ----------- | ---------------------------------------------------- |
+| Wildcard preview domain      | Phase 2A.3  | Only needed once a Google OAuth callback exists       |
+| Outlook deliverability test  | Phase 2A.2  | Gates "Phase 2A done", not "Phase 0.1 done"           |
+| `BETTER_AUTH_URL`            | Phase 2A.1  | No consumer until `lib/auth.ts` exists                |
+
 **Done when:** the site loads over HTTPS on `stay-in-touch.vip`, Resend shows
-the domain verified, and a test email reaches a real inbox.
+the domain verified, and a test email reaches a real inbox. **All three met on
+2026-09-17.**
 
 ---
 
@@ -259,29 +330,48 @@ Branch: `feat/better-auth`
       point of self-hosting is that these are yours.
 - [ ] Add `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` to `.env.local` and Vercel.
       `BETTER_AUTH_URL` **must differ per environment** — one hardcoded value
-      breaks either local development or production.
+      breaks either local development or production. **Carried over from Phase
+      0.1**, which deliberately left it unset: the canonical host is decided
+      (`https://stay-in-touch.vip`, apex), and `http://localhost:3000` locally.
+      Leave the Vercel **Preview** scope unset until the wildcard preview domain
+      lands in 2A.3.
 
 ### 2A.2 Email
 
-- [ ] `npm i resend`. Add `RESEND_API_KEY` to `.env.local` and Vercel.
-- [ ] Set the from-address to the verified subdomain, e.g.
+- [ ] `npm i resend`. ~~Add `RESEND_API_KEY` to `.env.local` and Vercel~~ —
+      **done in Phase 0.1**, key scoped to Sending access on
+      `send.stay-in-touch.vip`.
+- [ ] Set the from-address to the verified subdomain:
       `Stay in Touch <noreply@send.stay-in-touch.vip>`. Sending from an
-      unverified address fails silently at the provider, not in your code.
+      unverified address fails silently at the provider, not in your code. This
+      exact address is already proven to deliver — see Phase 0.1.
 - [ ] Wire `sendVerificationEmail` and `sendResetPassword` in the Better Auth
       config. Without these, sign-up appears to work and then strands the user
       with no way in.
 - [ ] Test both end to end against a real inbox — including the spam folder —
       before moving on.
+- [ ] **Carried over from Phase 0.1: the Outlook deliverability test.** Phase
+      0.1 verified Gmail only (inbox, SPF/DKIM/DMARC all PASS). Send to an
+      Outlook/Hotmail address, check the **Junk** folder, and confirm
+      `spf=pass dkim=pass dmarc=pass` in the `Authentication-Results` header.
+      Outlook weights newer TLDs like `.vip` more harshly than Gmail, so this is
+      a distinct check, not a repeat. **Phase 2A is not done until this passes.**
 
 ### 2A.3 Google provider
 
+- [ ] **Carried over from Phase 0.1: add the wildcard preview domain.** In
+      Vercel, add `*.preview.stay-in-touch.vip` and assign it to preview
+      deployments; in Namecheap add the `CNAME` Vercel shows, with Host
+      `*.preview`. Skip it and preview deployments get a fresh URL per deploy
+      that Google rejects — **sign-in will not work on any preview**. Then set
+      `BETTER_AUTH_URL` for the Vercel Preview scope, which 2A.1 left unset.
 - [ ] Create a Google OAuth client in Google Cloud Console.
 - [ ] Register the callback URLs. With the domain in place these are stable:
       `http://localhost:3000/api/auth/callback/google` and
-      `https://stay-in-touch.vip/api/auth/callback/google`, plus the preview
-      wildcard host from Phase 0.1 if preview sign-in is wanted. Confirm the
-      exact callback path against Better Auth's docs — it is set by the library,
-      not chosen by you.
+      `https://stay-in-touch.vip/api/auth/callback/google` — the apex is the
+      canonical host, decided in Phase 0.1 — plus the preview wildcard host
+      above. Confirm the exact callback path against Better Auth's docs — it is
+      set by the library, not chosen by you.
 - [ ] Add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
 - [ ] Add `stay-in-touch.vip` to the OAuth consent screen's authorized domains.
 
@@ -552,9 +642,9 @@ never cross the link, and each side keeps its own `cadence_days`.
 | Losing realtime updates is worse than expected                                       | Revisit only after the app runs. Polling is the cheap next step; Supabase Realtime is the expensive one                                          |
 | `useAuth()` consumers break in Phase 2B                                              | Keep the existing `useAuth()` contract; grep all 12 call sites before editing                                                                    |
 | Neon free tier changes or the project sleeps                                         | Confirmed in Phase 0; cold starts are acceptable for a portfolio app                                                                             |
-| Verification and reset emails land in spam or never send                             | Phase 0.1: verify `send.stay-in-touch.vip` early, set SPF/DKIM/DMARC, and test against Gmail **and** Outlook before Phase 2A is called done      |
-| `.vip` is a newer TLD and gets weighted more suspiciously by spam filters            | Correct SPF, DKIM and DMARC. If test emails land in spam, suspect this before suspecting the code                                                |
-| `BETTER_AUTH_URL` or the OAuth callback does not match the canonical host            | Pick apex **or** `www` once in Phase 0.1 and redirect the other. A mismatch breaks sign-in with an opaque provider error                         |
+| Verification and reset emails land in spam or never send                             | **Half closed.** Domain verified and Gmail passes from the inbox on 2026-09-17. Outlook still untested — it gates Phase 2A, not Phase 0.1        |
+| `.vip` is a newer TLD and gets weighted more suspiciously by spam filters            | Still open until Outlook is tested. Gmail inboxed the first send with SPF/DKIM/DMARC all PASS. If a test lands in spam, suspect this, not the code |
+| ~~`BETTER_AUTH_URL` or the OAuth callback does not match the canonical host~~         | **Closed.** Canonical host decided in Phase 0.1: the apex `https://stay-in-touch.vip`, with `www` redirecting to it. Every callback uses that    |
 | Phase 2B is much bigger than the old Google-only plan                                | Six new screens replace one popup button. Budget for it; it is the cost of owning auth                                                           |
 | Better Auth's table names are singular and clash with the app's plural ones          | Decide once in Phase 2A.1, before any foreign key is written in Phase 3                                                                          |
 | The HTTP Neon driver is picked by habit, then Phase 7 needs transactions             | Use `drizzle-orm/neon-serverless` from Phase 1. Switching later rewrites the client and every import                                             |
