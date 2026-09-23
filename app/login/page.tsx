@@ -11,18 +11,22 @@ export default function Login() {
   const router = useRouter();
   const [isSigningIn, setIsSigningIn] = useState(false);
 
+  // Handles an already-signed-in user landing on /login. During a fresh sign-in
+  // isSigningIn is true, so this does not fire before the cookie is set — that
+  // navigation is done explicitly in handleSignIn after loginWithGoogle awaits it.
   useEffect(() => {
-    if (currentUser) {
-      router.push("/");
+    if (currentUser && !isSigningIn) {
+      router.replace("/");
     }
-  }, [currentUser, router]);
+  }, [currentUser, isSigningIn, router]);
 
   async function handleSignIn() {
     setIsSigningIn(true);
     try {
+      // loginWithGoogle awaits the session cookie, so "/" passes the middleware.
       await loginWithGoogle();
-      // On success the auth listener sets currentUser and the effect above
-      // redirects, so keep the indicator showing until the page changes.
+      router.replace("/");
+      router.refresh();
     } catch {
       // Failed or cancelled popup: re-enable the button.
       setIsSigningIn(false);
