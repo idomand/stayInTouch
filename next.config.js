@@ -21,4 +21,10 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: true,
   turbopack: {},
+  // firebase-admin pulls in ESM-only `jose` via `jwks-rsa`. When Turbopack
+  // bundles it into the serverless function, its require() shim throws
+  // ERR_REQUIRE_ESM at runtime (dev works, the built function does not). Keeping
+  // firebase-admin external makes Node load it natively, where require(esm) is
+  // supported.
+  serverExternalPackages: ["firebase-admin"],
 });
