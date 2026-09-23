@@ -1,6 +1,6 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import { addContactToFirestore } from "../lib/Firebase";
-import { useAuth } from "../lib/AuthContext";
+import { addContact } from "@/lib/actions/contacts";
 import ErrorWrapper from "./ErrorWarning";
 import DatePickerComponent from "./DatePickerComponent";
 import {
@@ -13,7 +13,6 @@ import { twMerge } from "tailwind-merge";
 
 export default function AddNewContact() {
   const [time, setTime] = useState(3);
-  const { currentUser } = useAuth()!;
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [error, setError] = useState<string | boolean>(false);
@@ -36,27 +35,17 @@ export default function AddNewContact() {
 
   async function createNewContact(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (currentUser == null || currentUser.email == null) return;
-    let notesArray = [];
 
-    if (note) {
-      notesArray[0] = { noteId: 1, data: note };
-    }
-    let newContact = {
-      name: name,
-      time: time,
-      timeFromLastTalk: startDate.getTime(),
-      notesArray: notesArray,
-      friendEmail: friendEmail,
-    };
+    const result = await addContact({
+      name,
+      cadenceDays: time,
+      friendEmail,
+      note,
+      talkedAtMs: startDate.getTime(),
+    });
 
-    const result = await addContactToFirestore(
-      currentUser.uid,
-      currentUser.email,
-      newContact,
-    );
-    if (result === "bad") {
-      setError("contact already in list");
+    if (!result.ok) {
+      setError(result.error);
       setName("");
     } else {
       setNote("");

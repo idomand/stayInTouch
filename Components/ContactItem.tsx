@@ -1,100 +1,45 @@
-// import { useMedia } from "react-use";
+"use client";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
-import { useAuth } from "../lib/AuthContext";
-import { oneDay } from "../lib/ConstantsFile";
-import { updateContact } from "../lib/Firebase";
-import { ContactItemType } from "../types/ContactItemType";
+import { markAsTalked } from "@/lib/actions/contacts";
+import { oneDay } from "@/lib/ConstantsFile";
+import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import Notes from "./Notes";
+import TalkEvents from "./TalkEvents";
 
-export default function ContactItem({
-  name,
-  time,
-  timeFromLastTalk,
-  contactId,
-  notesArray,
-  friendEmail,
-}: ContactItemType) {
-  const { currentUser } = useAuth()!;
-  const currantTime = new Date().getTime();
+export default function ContactItem({ contact }: { contact: ContactListItem }) {
+  const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
+  const now = Date.now();
 
-  let nextTalkResponse;
-  let lastTalkedToResponse;
-  let isTalkingStatusOK;
+  // On time when there are days left before the next talk; never-talked
+  // (null) and overdue (<= 0) both read as "needs attention".
+  const isTalkingStatusOK = daysUntilNextTalk != null && daysUntilNextTalk > 0;
+  const statusClasses = `text-base font-semibold leading-5 text-center m-0 ${
+    isTalkingStatusOK ? "text-grey3" : "text-red1"
+  }`;
 
-  if (currantTime - timeFromLastTalk < time * oneDay) {
-    isTalkingStatusOK = true;
+  let lastTalkedLabel: string;
+  if (lastTalkedAt == null) {
+    lastTalkedLabel = "Never talked";
   } else {
-    isTalkingStatusOK = false;
+    const elapsed = now - new Date(lastTalkedAt).getTime();
+    lastTalkedLabel =
+      elapsed < oneDay
+        ? "Talked today"
+        : `Didn’t talk for ${Math.floor(elapsed / oneDay)} days`;
   }
 
-  if (currantTime - timeFromLastTalk < 86000000) {
-    lastTalkedToResponse = (
-      <span
-        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
-      >
-        Talked today
-      </span>
-    );
-  } else {
-    lastTalkedToResponse = (
-      <span
-        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
-      >
-        Didn’t talk for {Math.floor((currantTime - timeFromLastTalk) / oneDay)}{" "}
-        days
-      </span>
-    );
-  }
+  const nextTalkLabel =
+    daysUntilNextTalk != null && daysUntilNextTalk > 0
+      ? `Talk in ${Math.ceil(daysUntilNextTalk)} days`
+      : "Talk Today!";
 
-  let nextTalkInDays =
-    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
-
-  if (nextTalkInDays > 0) {
-    nextTalkResponse = (
-      <span
-        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
-      >
-        Talk in {nextTalkInDays} days
-      </span>
-    );
-  } else {
-    nextTalkResponse = (
-      <span
-        className={`text-base font-semibold leading-5 text-center m-0 ${isTalkingStatusOK ? "text-grey3" : "text-red1"}`}
-      >
-        Talk Today!
-      </span>
-    );
-  }
-
-  function resetFunction() {
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
-
-    const oldContactData = {
-      name: name,
-      time: time,
-      timeFromLastTalk: timeFromLastTalk,
-      notesArray: notesArray,
-      friendEmail: friendEmail,
-    };
-    const newContactData = {
-      name: name,
-      time: time,
-      timeFromLastTalk: currantTime,
-      notesArray: notesArray,
-      friendEmail: friendEmail,
-    };
-    updateContact(
-      currentUser.uid,
-      currentUser.email,
-      contactId,
-      oldContactData,
-      newContactData,
-      "reset",
-    );
+  async function resetFunction() {
+    const result = await markAsTalked(id);
+    if (!result.ok) {
+      console.error(result.error);
+    }
   }
 
   return (
@@ -109,30 +54,15 @@ export default function ContactItem({
         </div>
         <div className="[grid-area:contactDates] flex w-100 border-t border-black/10 pt-3.5 mt-3.5 mb-5 max-w-50 sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0 sm:max-w-none">
           <div className="flex flex-col justify-center items-center mx-3.5">
-            {lastTalkedToResponse}
+            <span className={statusClasses}>{lastTalkedLabel}</span>
           </div>
           <div className="flex flex-col justify-center items-center mx-3.5">
-            {nextTalkResponse}
+            <span className={statusClasses}>{nextTalkLabel}</span>
           </div>
         </div>
-        {/* <MoreOptionsWrapper>
-          <MoreOptions
-            name={name}
-            time={time}
-            timeFromLastTalk={timeFromLastTalk}
-            contactId={contactId}
-            notesArray={notesArray}
-          />
-        </MoreOptionsWrapper> */}
-        <div className="[grid-area:notes] flex justify-end items-center mr-0 sm:mr-5">
-          <Notes
-            friendEmail={friendEmail}
-            name={name}
-            time={time}
-            timeFromLastTalk={timeFromLastTalk}
-            contactId={contactId}
-            notesArray={notesArray}
-          />
+        <div className="[grid-area:notes] flex justify-end items-center gap-2 mr-0 sm:mr-5">
+          <TalkEvents contact={contact} />
+          <Notes contact={contact} />
         </div>
         <div className="[grid-area:buttons] flex items-center justify-end">
           {isTalkingStatusOK ? (
@@ -149,16 +79,7 @@ export default function ContactItem({
             />
           )}
 
-          <MoreOptionsDropdown
-            friendEmail={friendEmail}
-            name={name}
-            time={time}
-            timeFromLastTalk={timeFromLastTalk}
-            contactId={contactId}
-            notesArray={notesArray}
-          />
-
-          {/* <AddToGoogle onClick={addToGoogle}>Book</AddToGoogle> */}
+          <MoreOptionsDropdown contact={contact} />
         </div>
       </div>
     </li>
