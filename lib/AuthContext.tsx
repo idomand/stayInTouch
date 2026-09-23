@@ -26,15 +26,15 @@ export default function AuthProvider({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  function logout() {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        setCurrentUser(null);
-      })
-      .catch((error) => {
-        console.error("Error signing out:", error);
-      });
+  async function logout() {
+    try {
+      // Clear the server session cookie first, then the client SDK session.
+      await fetch("/api/auth/session", { method: "DELETE" });
+      await signOut(auth);
+      setCurrentUser(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   }
 
   async function loginWithGoogle() {
@@ -51,9 +51,26 @@ export default function AuthProvider({
     // Clean up the calendar access token left over from earlier sessions
     localStorage.removeItem("googleAccessToken");
 
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
       setLoading(false);
+
+      // Mint (or refresh) the server session cookie so Server Components and
+      // Server Actions know the uid. Force-refresh the token: createSessionCookie
+      // needs one issued within the last five minutes, which a cached token on a
+      // page reload may not be. Fire-and-forget — it must not block rendering.
+      if (user) {
+        try {
+          const idToken = await user.getIdToken(true);
+          await fetch("/api/auth/session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken }),
+          });
+        } catch (error) {
+          console.error("Error establishing server session:", error);
+        }
+      }
     });
     return unsubscribe;
   }, []);
