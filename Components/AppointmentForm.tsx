@@ -1,43 +1,37 @@
+"use client";
 import { useEffect, useState } from "react";
-import { createGoogleCalendarEvent } from "../lib/CalenderFunctions";
-import { oneDay } from "../lib/ConstantsFile";
-import { ContactItemType } from "../types/ContactItemType";
+import { twMerge } from "tailwind-merge";
+import { createGoogleCalendarEvent } from "@/lib/CalenderFunctions";
 import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
-import { twMerge } from "tailwind-merge";
+import type { ContactListItem } from "@/lib/db/queries/contacts";
 import DatePickerComponent from "./DatePickerComponent";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
 
-type AppointmentFormState = Omit<
-  ContactItemType,
-  "contactId" | "notesArray"
-> & {
+type AppointmentFormProps = {
+  contact: ContactListItem;
   isModalOpenProp: boolean;
   onClose?: () => void;
 };
 
 export default function AppointmentForm({
-  name,
-  time,
-  timeFromLastTalk,
-  friendEmail,
+  contact,
   isModalOpenProp,
   onClose,
-}: AppointmentFormState) {
+}: AppointmentFormProps) {
   const [error, setError] = useState<string | boolean>(false);
-  const currantTime = new Date().getTime();
 
-  let nextTalkInDays =
-    time - Math.floor((currantTime - timeFromLastTalk) / oneDay);
+  const { name, daysUntilNextTalk, friendEmail } = contact;
 
-  // Calculate the specific reminder date based on nextTalkInDays
+  // Suggest the next-talk date: today if overdue or never talked, otherwise
+  // that many days out.
   const calculateReminderDate = () => {
-    if (nextTalkInDays <= 0) {
-      return new Date(); // If overdue, use today
+    if (daysUntilNextTalk == null || daysUntilNextTalk <= 0) {
+      return new Date();
     }
     const reminderDate = new Date();
-    reminderDate.setDate(reminderDate.getDate() + nextTalkInDays);
+    reminderDate.setDate(reminderDate.getDate() + Math.ceil(daysUntilNextTalk));
     return reminderDate;
   };
 
@@ -63,13 +57,12 @@ export default function AppointmentForm({
   }
 
   function calenderFunction() {
-    // Open Google Calendar dialog directly
     const eventDate =
       specificReminder instanceof Date
         ? specificReminder
         : new Date(specificReminder);
 
-    createGoogleCalendarEvent(name, eventDate, friendEmail);
+    createGoogleCalendarEvent(name, eventDate, friendEmail ?? undefined);
   }
 
   return (

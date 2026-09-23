@@ -1,6 +1,7 @@
 "use client";
 
 import { signInWithPopup, signOut, User } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
 import { Result } from "@/Components/ui/Spinner";
@@ -18,6 +19,21 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+/**
+ * Mint (or refresh) the httpOnly server session cookie from a fresh ID token.
+ * Force-refresh because createSessionCookie requires a token issued within the
+ * last five minutes. Callers that navigate afterwards must await this — the
+ * middleware gate on "/" rejects a request whose cookie is not yet set.
+ */
+async function postSessionCookie(user: User) {
+  const idToken = await user.getIdToken(true);
+  await fetch("/api/auth/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ idToken }),
+  });
+}
+
 export default function AuthProvider({
   children,
 }: {
@@ -25,6 +41,7 @@ export default function AuthProvider({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   async function logout() {
     try {
@@ -32,6 +49,10 @@ export default function AuthProvider({
       await fetch("/api/auth/session", { method: "DELETE" });
       await signOut(auth);
       setCurrentUser(null);
+      // The home page is server-rendered now, so clearing state does not move
+      // the user off it — navigate, and refresh so no cached authed view remains.
+      router.replace("/login");
+      router.refresh();
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -39,8 +60,10 @@ export default function AuthProvider({
 
   async function loginWithGoogle() {
     try {
-      await signInWithPopup(auth, provider);
-      // The onAuthStateChanged listener will update the currentUser state
+      const credential = await signInWithPopup(auth, provider);
+      // Await the cookie here so callers can navigate straight to a middleware-
+      // gated route without racing the fire-and-forget listener below.
+      await postSessionCookie(credential.user);
     } catch (error) {
       console.error("Error during Google sign-in:", error);
       throw error;
@@ -55,18 +78,12 @@ export default function AuthProvider({
       setCurrentUser(user);
       setLoading(false);
 
-      // Mint (or refresh) the server session cookie so Server Components and
-      // Server Actions know the uid. Force-refresh the token: createSessionCookie
-      // needs one issued within the last five minutes, which a cached token on a
-      // page reload may not be. Fire-and-forget — it must not block rendering.
+      // Refresh the server session cookie on page load/restore so it survives a
+      // reload. Fire-and-forget — it must not block rendering. The login flow
+      // does not rely on this; loginWithGoogle awaits its own cookie.
       if (user) {
         try {
-          const idToken = await user.getIdToken(true);
-          await fetch("/api/auth/session", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idToken }),
-          });
+          await postSessionCookie(user);
         } catch (error) {
           console.error("Error establishing server session:", error);
         }
