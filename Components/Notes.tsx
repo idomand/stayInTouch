@@ -1,22 +1,21 @@
+"use client";
 import React, { useState } from "react";
-import { useAuth } from "../lib/AuthContext";
-import { updateContact, updateNote } from "../lib/Firebase";
-import { ContactItemType } from "../types/ContactItemType";
+import { twMerge } from "tailwind-merge";
+import { addNote, updateNote } from "@/lib/actions/contacts";
 import {
   basicFormClasses,
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
-import { twMerge } from "tailwind-merge";
+import type { ContactListItem } from "@/lib/db/queries/contacts";
 import NoteItem from "./NoteItem";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
 
-export default function Notes(props: ContactItemType) {
-  const { currentUser } = useAuth()!;
+export default function Notes({ contact }: { contact: ContactListItem }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
-  const [editNoteId, setEditNoteId] = useState<null | number>(null);
+  const [editNoteId, setEditNoteId] = useState<string | null>(null);
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
@@ -24,77 +23,40 @@ export default function Notes(props: ContactItemType) {
   }
 
   function onSubmitFunc(e: React.FormEvent<HTMLFormElement>) {
-    isEditMood ? updatedNoteFunc(e) : addNewNoteToArray(e);
+    isEditMood ? updatedNoteFunc(e) : addNewNoteFunc(e);
   }
 
-  function switchToEditMood(oldNoteData: string, OldNoteId: number) {
+  function switchToEditMood(oldNoteData: string, oldNoteId: string) {
     setIsEditMood(true);
     setNoteInputValue(oldNoteData);
-    setEditNoteId(OldNoteId);
+    setEditNoteId(oldNoteId);
   }
 
   function cancelEdit() {
     setIsEditMood(false);
     setNoteInputValue("");
   }
+
   async function updatedNoteFunc(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    if (
-      currentUser == null ||
-      currentUser.email == null ||
-      editNoteId == null ||
-      props.contactId == null
-    )
+    if (editNoteId == null) {
       return;
-
-    await updateNote(
-      currentUser.uid,
-      currentUser.email,
-      props.contactId,
-      editNoteId,
-      noteInputValue,
-    );
+    }
+    const result = await updateNote(contact.id, editNoteId, noteInputValue);
+    if (!result.ok) {
+      console.error(result.error);
+    }
     setIsEditMood(false);
     setNoteInputValue("");
     (e.target as HTMLFormElement).blur();
   }
 
-  async function addNewNoteToArray(e: React.FormEvent<HTMLFormElement>) {
+  async function addNewNoteFunc(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    if (
-      currentUser == null ||
-      currentUser.email == null ||
-      props.contactId == null ||
-      props.notesArray == null
-    )
-      return;
-
-    let biggestId;
-    if (props.notesArray.length === 0) {
-      biggestId = 0;
-    } else {
-      biggestId = props.notesArray[props.notesArray.length - 1].noteId;
+    const result = await addNote(contact.id, noteInputValue);
+    if (!result.ok) {
+      console.error(result.error);
     }
-    const newNotesArray = [
-      ...props.notesArray,
-      { noteId: biggestId + 1, data: noteInputValue },
-    ];
-
-    const oldContactData = { ...props };
-    const newContactData = {
-      ...props,
-      notesArray: newNotesArray,
-    };
-    await updateContact(
-      currentUser.uid,
-      currentUser.email,
-      props.contactId,
-      oldContactData,
-      newContactData,
-      "addNote",
-    );
     setNoteInputValue("");
     (e.target as HTMLFormElement).blur();
   }
@@ -107,7 +69,7 @@ export default function Notes(props: ContactItemType) {
         className="px-1 cursor-pointer h-10 bg-blue3 border-none rounded-[55px] text-center relative transition-all duration-300 hover:bg-grey2 focus:bg-grey2"
       >
         <div className=" leading-4 rounded-[38px] text-center font-semibold h-4.5 w-4.5 absolute bottom-6 left-7 bg-blue1 text-white transition-all duration-300 border border-solid border-transparent">
-          {props.notesArray.length}
+          {contact.notes.length}
         </div>
         <img src="/notes.svg" className="block ml-1" />
       </button>
@@ -151,19 +113,17 @@ export default function Notes(props: ContactItemType) {
           </div>
           <div className="flex flex-col items-center">
             <ul className="p-0 m-0">
-              {props.notesArray.map(
-                (note: { data: string; noteId: number }) => {
-                  return (
-                    <NoteItem
-                      key={note.noteId}
-                      data={note.data}
-                      noteId={note.noteId}
-                      contactId={props.contactId!}
-                      switchToEditMood={switchToEditMood}
-                    />
-                  );
-                },
-              )}
+              {contact.notes.map((note) => {
+                return (
+                  <NoteItem
+                    key={note.id}
+                    noteId={note.id}
+                    body={note.body}
+                    contactId={contact.id}
+                    switchToEditMood={switchToEditMood}
+                  />
+                );
+              })}
             </ul>
           </div>
         </section>

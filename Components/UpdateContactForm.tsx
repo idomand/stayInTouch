@@ -1,39 +1,41 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../lib/AuthContext";
-import { updateContact } from "../lib/Firebase";
-import { ContactItemType } from "../types/ContactItemType";
+import { twMerge } from "tailwind-merge";
+import { updateContact } from "@/lib/actions/contacts";
 import {
   basicFormClasses,
   basicInputClasses,
   basicLabelClasses,
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
-import { twMerge } from "tailwind-merge";
+import type { ContactListItem } from "@/lib/db/queries/contacts";
 import DatePickerComponent from "./DatePickerComponent";
 import ErrorWarning from "./ErrorWarning";
 import Dialog from "./ui/Dialog";
 
-type UpdateContactFormState = ContactItemType & {
+type UpdateContactFormProps = {
+  contact: ContactListItem;
   isModalOpenProp: boolean;
   onClose: () => void;
 };
 
 export default function UpdateContactForm({
-  name,
-  time,
-  timeFromLastTalk,
-  contactId,
-  notesArray,
-  friendEmail,
+  contact,
   isModalOpenProp,
   onClose,
-}: UpdateContactFormState) {
-  const { currentUser } = useAuth()!;
-  const [contactName, setContactName] = useState(name);
-  const [newFriendEmail, setNewFriendEmail] = useState(friendEmail);
-  const [contactTime, setContactTime] = useState(time);
+}: UpdateContactFormProps) {
+  const [contactName, setContactName] = useState(contact.name);
+  const [newFriendEmail, setNewFriendEmail] = useState(
+    contact.friendEmail ?? "",
+  );
+  const [contactTime, setContactTime] = useState(contact.cadenceDays);
   const [error, setError] = useState<string | boolean>(false);
-  const [lastTalk, setLastTalk] = useState<number | Date>(timeFromLastTalk);
+  const [lastTalk, setLastTalk] = useState<number | Date>(
+    contact.lastTalkedAt ?? new Date(),
+  );
+  // A new talk event is inserted only when the user actually touches the date —
+  // otherwise editing the name would silently reset "last talked".
+  const [dateTouched, setDateTouched] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -43,52 +45,39 @@ export default function UpdateContactForm({
     }
   }, [error]);
 
-  async function updateContactOnSubmit(e: React.FocusEvent<HTMLFormElement>) {
+  function onDateChange(value: React.SetStateAction<number | Date>) {
+    setDateTouched(true);
+    setLastTalk(value);
+  }
+
+  async function updateContactOnSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
 
-    const timeFromLastTalkVar =
-      lastTalk instanceof Date ? lastTalk.getTime() : lastTalk;
+    const nameChanged = contactName !== contact.name;
+    const cadenceChanged = +contactTime !== contact.cadenceDays;
+    const emailChanged = newFriendEmail !== (contact.friendEmail ?? "");
 
-    const oldContactData = {
-      name,
-      time,
-      timeFromLastTalk,
-      contactId,
-      notesArray,
-      friendEmail,
-    };
-    const newContactData = {
-      name: contactName,
-      time: +contactTime,
-      timeFromLastTalk: timeFromLastTalkVar,
-      notesArray: notesArray,
-      friendEmail: newFriendEmail,
-    };
-
-    let result;
-
-    /* //* if nothing was change ==> just return */
-    if (
-      oldContactData.name == newContactData.name &&
-      oldContactData.time == newContactData.time &&
-      oldContactData.timeFromLastTalk == newContactData.timeFromLastTalk
-    ) {
+    if (!nameChanged && !cadenceChanged && !emailChanged && !dateTouched) {
       onClose();
-    } else {
-      result = await updateContact(
-        currentUser.uid,
-        currentUser.email,
-        contactId,
-        oldContactData,
-        newContactData,
-        "edit",
-      );
+      return;
     }
-    if (result === "bad") {
-      setError("contact already in list");
-      setContactName(name);
+
+    const talkedAtMs = dateTouched
+      ? lastTalk instanceof Date
+        ? lastTalk.getTime()
+        : lastTalk
+      : undefined;
+
+    const result = await updateContact(contact.id, {
+      name: contactName,
+      cadenceDays: +contactTime,
+      friendEmail: newFriendEmail,
+      talkedAtMs,
+    });
+
+    if (!result.ok) {
+      setError(result.error);
+      setContactName(contact.name);
     } else {
       onClose();
     }
@@ -100,27 +89,23 @@ export default function UpdateContactForm({
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setContactName(e.target.value);
-
     if (error) {
       setError(false);
     }
   }
 
   function onCloseModal() {
-    // setIsModalOpen(false);
-    setContactName(name);
-    setContactTime(time);
+    setContactName(contact.name);
+    setContactTime(contact.cadenceDays);
     if (error) {
       setError(false);
     }
-    if (onClose) {
-      onClose();
-    }
+    onClose();
   }
 
   return (
     <Dialog
-      title={`Update contact: ${name}`}
+      title={`Update contact: ${contact.name}`}
       isOpen={isModalOpenProp}
       close={() => {
         onCloseModal();
@@ -174,7 +159,7 @@ export default function UpdateContactForm({
             <div className="flex flex-col m-1 justify-between">
               Change Last Time We Have Spoken
               <DatePickerComponent
-                setStartDate={setLastTalk}
+                setStartDate={onDateChange}
                 startDate={lastTalk}
               />
             </div>

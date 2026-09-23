@@ -1,30 +1,23 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import ContactDetails from "@/Components/ContactDetails";
+import { redirect } from "next/navigation";
+import ContactList from "@/Components/ContactList";
 import MainForm from "@/Components/MainForm";
-import { useAuth } from "@/lib/AuthContext";
+import { getServerUser } from "@/lib/auth/getServerUser";
+import { getContactsForCurrentUser } from "@/lib/db/queries/contacts";
 
-export default function Home() {
-  const router = useRouter();
+export default async function Home() {
+  // Server-side gate: redirect before render instead of the old client
+  // useEffect -> router.push that flashed an empty page first.
+  const user = await getServerUser();
+  if (!user) {
+    redirect("/login");
+  }
 
-  const { currentUser } = useAuth()!;
-
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/login");
-    }
-  }, [currentUser, router]);
+  const contacts = await getContactsForCurrentUser();
 
   return (
     <>
-      {currentUser && (
-        <>
-          <MainForm />
-          <ContactDetails />
-        </>
-      )}
+      <MainForm />
+      <ContactList contacts={contacts} />
     </>
   );
 }

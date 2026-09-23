@@ -1,22 +1,18 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { SlOptions } from "react-icons/sl";
-import { useAuth } from "../lib/AuthContext";
-import { deleteContact } from "../lib/Firebase";
-import { ContactItemType } from "../types/ContactItemType";
+import { deleteContact } from "@/lib/actions/contacts";
+import type { ContactListItem } from "@/lib/db/queries/contacts";
 import AppointmentForm from "./AppointmentForm";
 import UpdateContactForm from "./UpdateContactForm";
-import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
+import Dialog from "./ui/Dialog";
 
 export default function MoreOptionsDropdown({
-  name,
-  time,
-  timeFromLastTalk,
-  contactId,
-  notesArray,
-  friendEmail,
-}: ContactItemType) {
-  const { currentUser } = useAuth()!;
+  contact,
+}: {
+  contact: ContactListItem;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateContactModalOpen, setIsUpdateContactModalOpen] =
     useState(false);
@@ -63,11 +59,11 @@ export default function MoreOptionsDropdown({
     };
   }, []);
 
-  function deleteContactFunc() {
-    if (currentUser == null || currentUser.email == null || contactId == null)
-      return;
-
-    deleteContact(currentUser.uid, currentUser.email, contactId);
+  async function deleteContactFunc() {
+    const result = await deleteContact(contact.id);
+    if (!result.ok) {
+      console.error(result.error);
+    }
   }
 
   return (
@@ -105,20 +101,12 @@ export default function MoreOptionsDropdown({
         </div>
       </div>
       <UpdateContactForm
-        friendEmail={friendEmail}
-        name={name}
-        time={time}
-        timeFromLastTalk={timeFromLastTalk}
-        contactId={contactId}
-        notesArray={notesArray}
+        contact={contact}
         isModalOpenProp={isUpdateContactModalOpen}
         onClose={() => setIsUpdateContactModalOpen(false)}
       />
       <AppointmentForm
-        friendEmail={friendEmail}
-        name={name}
-        time={time}
-        timeFromLastTalk={timeFromLastTalk}
+        contact={contact}
         isModalOpenProp={isAppointmentFormModalOpen}
         onClose={() => setIsAppointmentFormModalOpen(false)}
       />
@@ -130,7 +118,10 @@ export default function MoreOptionsDropdown({
         }}
       >
         <div className="flex justify-between">
-          <Button buttonText={`Delete ${name}`} onClick={deleteContactFunc} />
+          <Button
+            buttonText={`Delete ${contact.name}`}
+            onClick={deleteContactFunc}
+          />
           <Button
             buttonText={`Go back`}
             onClick={() => {
