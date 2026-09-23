@@ -2,6 +2,9 @@
   "name": "my-app",
   "private": true,
   "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "postinstall": "git config core.hooksPath scripts/git-hooks",
     "dev": "next dev",
