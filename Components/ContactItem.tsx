@@ -6,6 +6,7 @@ import { oneDay } from "@/lib/ConstantsFile";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import Notes from "./Notes";
+import TalkEvents from "./TalkEvents";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
@@ -59,7 +60,8 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             <span className={statusClasses}>{nextTalkLabel}</span>
           </div>
         </div>
-        <div className="[grid-area:notes] flex justify-end items-center mr-0 sm:mr-5">
+        <div className="[grid-area:notes] flex justify-end items-center gap-2 mr-0 sm:mr-5">
+          <TalkEvents contact={contact} />
           <Notes contact={contact} />
         </div>
         <div className="[grid-area:buttons] flex items-center justify-end">

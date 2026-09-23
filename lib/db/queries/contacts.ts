@@ -9,6 +9,12 @@ export type ContactNote = {
   createdAt: string;
 };
 
+export type ContactTalkEvent = {
+  id: string;
+  talkedAt: string;
+  createdBy: string;
+};
+
 /**
  * The read shape for the contact list — not a raw table row. It carries the two
  * derived values the whole UI is built around (last talk and days until the next
@@ -24,6 +30,8 @@ export type ContactListItem = {
   /** cadence minus days elapsed; null (never talked) sorts first. */
   daysUntilNextTalk: number | null;
   notes: ContactNote[];
+  /** Full talk history, newest first. */
+  talkEvents: ContactTalkEvent[];
 };
 
 /**
@@ -50,7 +58,8 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
       -- would hand back as a string. double precision comes back as a JS number.
       (c.cadence_days - EXTRACT(EPOCH FROM (now() - t.talked_at)) / 86400)::double precision
                      AS "daysUntilNextTalk",
-      COALESCE(n.notes, '[]'::json) AS notes
+      COALESCE(n.notes, '[]'::json) AS notes,
+      COALESCE(te.events, '[]'::json) AS "talkEvents"
     FROM contacts c
     LEFT JOIN LATERAL (
       SELECT talked_at
@@ -67,6 +76,14 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
       FROM notes nn
       WHERE nn.contact_id = c.id
     ) n ON true
+    LEFT JOIN LATERAL (
+      SELECT json_agg(
+               json_build_object('id', ee.id, 'talkedAt', ee.talked_at, 'createdBy', ee.created_by)
+               ORDER BY ee.talked_at DESC
+             ) AS events
+      FROM talk_events ee
+      WHERE ee.contact_id = c.id
+    ) te ON true
     WHERE c.owner_id = ${user.uid}
     ORDER BY "daysUntilNextTalk" ASC NULLS FIRST
   `);
