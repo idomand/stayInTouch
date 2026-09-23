@@ -12,7 +12,11 @@ import { contacts, type Contact } from "@/lib/db/schema";
  * getOwnedContact(), never a bare id from the client.
  */
 
-/** The signed-in uid, or throw. Use when there is no contact id to check yet. */
+/**
+ * The signed-in uid, or throw. Verifies the session once; pass the returned uid
+ * to getOwnedContact so a single write does not re-verify the cookie (and re-hit
+ * the network for revocation) per ownership check.
+ */
 export async function requireUser(): Promise<string> {
   const user = await getServerUser();
   if (!user) {
@@ -22,20 +26,18 @@ export async function requireUser(): Promise<string> {
 }
 
 /**
- * The contact if it exists AND belongs to the caller, else null. A null result
- * is a 404/no-op for the caller — never trust the id alone to grant access.
+ * The contact if it exists AND belongs to `uid`, else null. Pure DB check — the
+ * caller supplies the uid from requireUser(). A null result is a 404/no-op for
+ * the caller; never trust the id alone to grant access.
  */
 export async function getOwnedContact(
+  uid: string,
   contactId: string,
 ): Promise<Contact | null> {
-  const user = await getServerUser();
-  if (!user) {
-    return null;
-  }
   const [contact] = await db
     .select()
     .from(contacts)
-    .where(and(eq(contacts.id, contactId), eq(contacts.ownerId, user.uid)))
+    .where(and(eq(contacts.id, contactId), eq(contacts.ownerId, uid)))
     .limit(1);
   return contact ?? null;
 }
