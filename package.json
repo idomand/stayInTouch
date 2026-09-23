@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
-    "typecheck:watch": "tsc -w"
+    "typecheck:watch": "tsc -w",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
