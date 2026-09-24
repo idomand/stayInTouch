@@ -1,6 +1,7 @@
 {
   "enabledPlugins": {
     "github@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "neon@claude-plugins-official": true
   }
 }
