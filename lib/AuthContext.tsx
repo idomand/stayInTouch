@@ -27,11 +27,20 @@ export function useAuth() {
  */
 async function postSessionCookie(user: User) {
   const idToken = await user.getIdToken(true);
-  await fetch("/api/auth/session", {
+  const response = await fetch("/api/auth/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken }),
   });
+  // Without a cookie the middleware bounces "/" back to /login, so a failure
+  // here must surface to the caller instead of navigating silently.
+  if (!response.ok) {
+    throw new Error(
+      response.status === 403
+        ? "Please verify your email before signing in."
+        : "Could not start your session. Please try again.",
+    );
+  }
 }
 
 export default function AuthProvider({
@@ -80,8 +89,9 @@ export default function AuthProvider({
 
       // Refresh the server session cookie on page load/restore so it survives a
       // reload. Fire-and-forget — it must not block rendering. The login flow
-      // does not rely on this; loginWithGoogle awaits its own cookie.
-      if (user) {
+      // does not rely on this; loginWithGoogle awaits its own cookie. An
+      // unverified user would only get a 403, so skip them.
+      if (user?.emailVerified) {
         try {
           await postSessionCookie(user);
         } catch (error) {
