@@ -34,8 +34,8 @@ Verified against the code on 2026-09-25, not against the old docs.
 | 2 | Postgres schema — `contacts`, `notes`, `talk_events` | ✅ done |
 | 3 | Firebase server identity — `firebase-admin` + session cookies | ✅ done |
 | 4 | Postgres data layer — guard → reads → writes → server-gated home | ✅ done |
-| 5 | Remove dead Firestore data access (keep Firebase Auth) | ⬜ next |
-| 6 | Email+password login (Firebase provider + screens) | ⬜ not started |
+| 5 | Remove dead Firestore data access (keep Firebase Auth) | ✅ done |
+| 6 | Email+password login (Firebase provider + screens) | ⬜ next |
 | 7 | Real migrations + hardening | ⬜ not started |
 | 8 | Linked users | ⬜ not started |
 
@@ -270,7 +270,7 @@ Ground rules for every phase below:
 - **Secrets are never committed.** Add each new variable to `.env.local` and to
   Vercel; document only the name here.
 
-### Phase 5 — Remove dead Firestore data access (next)
+### Phase 5 — Remove dead Firestore data access (done 2026-09-29)
 
 Branch: `chore/remove-firestore-data`
 
@@ -278,16 +278,19 @@ The data layer already runs on Postgres, so the Firestore CRUD in `lib/Firebase.
 is **orphaned** — the only importer is `lib/AuthContext.tsx`, which uses just
 `auth` and `provider`. This phase deletes dead code; it does not rewire anything.
 
-- [ ] In `lib/Firebase.ts` keep the app init, `auth` and `provider`. Delete the
+- [x] In `lib/Firebase.ts` keep the app init, `auth` and `provider`. Delete the
       `getFirestore()` `db` export, every Firestore helper (`addContactToFirestore`,
       `updateContact`, `deleteContact`, `deleteNote`, `updateNote`,
       `checkIfContactExists`, `addLastTalkNote`), `addDummyData`, the `Dummy_Data`
       array, and the now-unused `ContactItemType` / `NoteType` imports.
-- [ ] Delete `types/ContactItemType.ts` and `types/NoteType.ts` if nothing else
+- [x] Delete `types/ContactItemType.ts` and `types/NoteType.ts` if nothing else
       references them (grep first — after the edit above the only referrer is
       `Firebase.ts` itself).
-- [ ] Keep Firebase Auth. Do **not** uninstall `firebase` or remove
+- [x] Keep Firebase Auth. Do **not** uninstall `firebase` or remove
       `NEXT_PUBLIC_FIREBASE_*` — auth still uses them.
+- [x] Rewrite the stale Firestore architecture in `CLAUDE.md`, `README.md` and
+      `.claude/agents/component-builder.md` (they still described the
+      `${email}${uid}` collections and the deleted `useSnapshotData` hook).
 
 **Done when:** `grep -ri "firestore"` across the repo returns nothing outside
 comments, `useAuth()` and Google sign-in still work, and `type-check` + `build`

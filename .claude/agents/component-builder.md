@@ -17,8 +17,9 @@ guessing.
 
 ## Stack
 
-Next.js 16 **App Router** (`app/`) + React 19 + TypeScript. Firebase (Auth +
-Firestore) on the client — there is no server code. Path alias `@/*` maps to the repo root.
+Next.js 16 **App Router** (`app/`) + React 19 + TypeScript. Firebase Auth for identity;
+contact data in Postgres, read in Server Components and written through Server Actions
+(`lib/actions/contacts.ts`). Path alias `@/*` maps to the repo root.
 
 Any component using hooks, context, browser APIs, or event handlers needs a `"use client"`
 directive at the top of the file. Navigation hooks come from `next/navigation`
@@ -66,7 +67,7 @@ Styling is **Tailwind CSS v4**. There is no styled-components code left; don't r
 ## Scope discipline
 
 - Edit only the component(s) named in the task. Do not touch data-model code
-  (`lib/Firebase.ts`, `utils/hooks/useSnapshotData.ts`), auth, or unrelated files.
+  (`lib/db/`, `lib/actions/`), auth (`lib/Firebase.ts`, `lib/auth/`), or unrelated files.
 - Do not run git commands, install packages, or change config unless explicitly told to.
 - When finished, report exactly which files you created or changed and what each change was,
   in a few lines. Flag anything you had to assume.
