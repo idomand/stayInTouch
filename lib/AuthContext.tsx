@@ -1,6 +1,16 @@
 "use client";
 
-import { signInWithPopup, signOut, User } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  User,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
@@ -10,6 +20,11 @@ type AuthContextType = {
   currentUser?: User | null;
   logout: () => void;
   loginWithGoogle: () => Promise<void>;
+  signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  resendVerification: () => Promise<void>;
+  checkVerified: () => Promise<boolean>;
+  sendPasswordReset: (email: string) => Promise<void>;
   loading?: boolean;
 };
 
@@ -17,6 +32,43 @@ const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export function useAuth() {
   return useContext(AuthContext);
+}
+
+const NOT_VERIFIED_MESSAGE = "Please verify your email before signing in.";
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  "auth/email-already-in-use": "An account with this email already exists.",
+  // Firebase's email-enumeration protection reports both a wrong password and
+  // an unknown email as invalid-credential, so all three share one message.
+  "auth/invalid-credential": "Wrong email or password.",
+  "auth/wrong-password": "Wrong email or password.",
+  "auth/user-not-found": "Wrong email or password.",
+  "auth/weak-password": "Password must be at least 6 characters.",
+  "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+  "auth/invalid-email": "Please enter a valid email.",
+};
+
+/**
+ * Turn an error from any auth function into a message for the user. Returns
+ * null when the user cancelled on purpose (closed the Google popup), so the UI
+ * shows nothing.
+ */
+export function authErrorMessage(error: unknown): string | null {
+  if (error instanceof FirebaseError) {
+    if (
+      error.code === "auth/popup-closed-by-user" ||
+      error.code === "auth/cancelled-popup-request"
+    ) {
+      return null;
+    }
+    return AUTH_ERROR_MESSAGES[error.code] ?? "Something went wrong. Please try again.";
+  }
+  // Errors this file throws itself (e.g. postSessionCookie) already carry a
+  // user-facing message.
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Something went wrong. Please try again.";
 }
 
 /**
@@ -37,8 +89,8 @@ async function postSessionCookie(user: User) {
   if (!response.ok) {
     throw new Error(
       response.status === 403
-        ? "Please verify your email before signing in."
-        : "Could not start your session. Please try again.",
+        ? NOT_VERIFIED_MESSAGE
+        :"Could not start your session. Please try again.",
     );
   }
 }
@@ -79,6 +131,56 @@ export default function AuthProvider({
     }
   }
 
+  /**
+   * Create the account and send the verification email. No session cookie:
+   * the user stays signed in on the client only, unverified, until they click
+   * the link and call checkVerified.
+   */
+  async function signUpWithEmail(name: string, email: string, password: string) {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(credential.user, { displayName: name });
+    await sendEmailVerification(credential.user);
+  }
+
+  /**
+   * An unverified user stays signed in on the client (so the verify screen can
+   * resend the email or re-check) but gets no session cookie.
+   */
+  async function signInWithEmail(email: string, password: string) {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    if (!credential.user.emailVerified) {
+      throw new Error(NOT_VERIFIED_MESSAGE);
+    }
+    await postSessionCookie(credential.user);
+  }
+
+  async function resendVerification() {
+    if (!auth.currentUser) {
+      throw new Error("Please sign in again.");
+    }
+    await sendEmailVerification(auth.currentUser);
+  }
+
+  /**
+   * Re-read the user after they clicked the email link. postSessionCookie
+   * force-refreshes the ID token, so the server sees the new email_verified.
+   */
+  async function checkVerified() {
+    if (!auth.currentUser) {
+      throw new Error("Please sign in again.");
+    }
+    await auth.currentUser.reload();
+    if (!auth.currentUser.emailVerified) {
+      return false;
+    }
+    await postSessionCookie(auth.currentUser);
+    return true;
+  }
+
+  async function sendPasswordReset(email: string) {
+    await sendPasswordResetEmail(auth, email);
+  }
+
   useEffect(() => {
     // Clean up the calendar access token left over from earlier sessions
     localStorage.removeItem("googleAccessToken");
@@ -102,7 +204,16 @@ export default function AuthProvider({
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, logout, loginWithGoogle };
+  const value = {
+    currentUser,
+    logout,
+    loginWithGoogle,
+    signUpWithEmail,
+    signInWithEmail,
+    resendVerification,
+    checkVerified,
+    sendPasswordReset,
+  };
   return (
     <AuthContext.Provider value={value}>
       {loading && <Result />}
