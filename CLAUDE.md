@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Do not agree by default. If the user proposes something and a better approach exists, say so and explain why — briefly and directly.
 - Push back on suboptimal suggestions instead of implementing them silently. State the tradeoff, recommend the better option, and let the user decide. Agreeing to a worse approach to be accommodating is not helpful here.
 - Being wrong is fine; being agreeable at the cost of correctness is not. When you disagree, lead with the disagreement, not with hedging.
+- Do not commit. The user makes all commits. When a step is done and checked (`type-check` + `build`), say it is ready and suggest a commit message. Other git actions (branch, push) still need explicit confirmation first.
 
 ## Commands
 
@@ -45,9 +46,13 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 
 ### Auth
 
-`lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()` (Google popup sign-in). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves.
+`lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
 
 Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`). `middleware.ts` gates `/` on cookie presence only; real verification happens on the server.
+
+**Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
+- Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
+- Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → middleware → `/login` in a loop. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
 
 ### Google Calendar
 
