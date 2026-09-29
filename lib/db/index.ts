@@ -13,9 +13,20 @@ if (!connectionString) {
 }
 
 // Reuse the pool across dev hot reloads; a new Pool per reload leaks connections.
-const globalForDb = globalThis as unknown as { pool?: Pool };
+// The URL is cached with it: after DATABASE_URL changes, a reused pool would
+// keep writing to the old database (e.g. production instead of the dev branch).
+const globalForDb = globalThis as unknown as { pool?: Pool; poolUrl?: string };
+if (globalForDb.pool && globalForDb.poolUrl !== connectionString) {
+  globalForDb.pool.end().catch((error) => {
+    console.error("Failed to close the stale database pool:", error);
+  });
+  globalForDb.pool = undefined;
+}
 const pool = globalForDb.pool ?? new Pool({ connectionString });
-if (process.env.NODE_ENV !== "production") globalForDb.pool = pool;
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.pool = pool;
+  globalForDb.poolUrl = connectionString;
+}
 
 /**
  * The single Neon Postgres client for the whole app. Import this; never build
