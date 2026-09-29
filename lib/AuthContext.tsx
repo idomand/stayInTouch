@@ -18,6 +18,12 @@ import { Result } from "@/Components/ui/Spinner";
 
 type AuthContextType = {
   currentUser?: User | null;
+  /**
+   * True once this tab knows the server session cookie is set. Redirect to a
+   * middleware-gated route on this, not on currentUser: the Firebase client can
+   * be signed in while the cookie is missing (expired, or still being minted).
+   */
+  hasSession: boolean;
   logout: () => void;
   loginWithGoogle: () => Promise<void>;
   signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
@@ -102,12 +108,20 @@ export default function AuthProvider({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasSession, setHasSession] = useState(false);
   const router = useRouter();
+
+  /** Every cookie mint goes through here so hasSession stays in step. */
+  async function establishSession(user: User) {
+    await postSessionCookie(user);
+    setHasSession(true);
+  }
 
   async function logout() {
     try {
       // Clear the server session cookie first, then the client SDK session.
       await fetch("/api/auth/session", { method: "DELETE" });
+      setHasSession(false);
       await signOut(auth);
       setCurrentUser(null);
       // The home page is server-rendered now, so clearing state does not move
@@ -124,7 +138,7 @@ export default function AuthProvider({
       const credential = await signInWithPopup(auth, provider);
       // Await the cookie here so callers can navigate straight to a middleware-
       // gated route without racing the fire-and-forget listener below.
-      await postSessionCookie(credential.user);
+      await establishSession(credential.user);
     } catch (error) {
       console.error("Error during Google sign-in:", error);
       throw error;
@@ -151,7 +165,7 @@ export default function AuthProvider({
     if (!credential.user.emailVerified) {
       throw new Error(NOT_VERIFIED_MESSAGE);
     }
-    await postSessionCookie(credential.user);
+    await establishSession(credential.user);
   }
 
   async function resendVerification() {
@@ -173,7 +187,7 @@ export default function AuthProvider({
     if (!auth.currentUser.emailVerified) {
       return false;
     }
-    await postSessionCookie(auth.currentUser);
+    await establishSession(auth.currentUser);
     return true;
   }
 
@@ -188,6 +202,9 @@ export default function AuthProvider({
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
       setLoading(false);
+      if (!user) {
+        setHasSession(false);
+      }
 
       // Refresh the server session cookie on page load/restore so it survives a
       // reload. Fire-and-forget — it must not block rendering. The login flow
@@ -195,7 +212,7 @@ export default function AuthProvider({
       // unverified user would only get a 403, so skip them.
       if (user?.emailVerified) {
         try {
-          await postSessionCookie(user);
+          await establishSession(user);
         } catch (error) {
           console.error("Error establishing server session:", error);
         }
@@ -206,6 +223,7 @@ export default function AuthProvider({
 
   const value = {
     currentUser,
+    hasSession,
     logout,
     loginWithGoogle,
     signUpWithEmail,

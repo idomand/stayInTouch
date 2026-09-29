@@ -35,8 +35,8 @@ Verified against the code on 2026-09-25, not against the old docs.
 | 3 | Firebase server identity — `firebase-admin` + session cookies | ✅ done |
 | 4 | Postgres data layer — guard → reads → writes → server-gated home | ✅ done |
 | 5 | Remove dead Firestore data access (keep Firebase Auth) | ✅ done |
-| 6 | Email+password login (Firebase provider + screens) | ⬜ next |
-| 7 | Real migrations + hardening | ⬜ not started |
+| 6 | Email+password login (Firebase provider + screens) | ✅ done |
+| 7 | Real migrations + hardening | ⬜ next |
 | 8 | Linked users | ⬜ not started |
 
 **App still works throughout.** The data layer already runs on Postgres; Firebase
@@ -88,7 +88,7 @@ Postgres is reachable only from the server (`lib/db/index.ts` imports
 `owner_id`. Firebase auth state is client-side, so a server identity layer bridges
 the two, built on Firebase **session cookies**:
 
-1. On login (Google today; email+password in Phase 6) the client gets a fresh
+1. On login (Google, or email+password with a verified email) the client gets a fresh
    Firebase ID token and POSTs it to `app/api/auth/session/route.ts`.
 2. The handler calls `adminAuth.createSessionCookie()` and sets an httpOnly
    `session` cookie. (`lib/firebaseAdmin.ts`, `lib/auth/session.ts`.)
@@ -297,26 +297,40 @@ is **orphaned** — the only importer is `lib/AuthContext.tsx`, which uses just
 comments, `useAuth()` and Google sign-in still work, and `type-check` + `build`
 pass.
 
-### Phase 6 — Email+password login
+### Phase 6 — Email+password login (done 2026-09-29)
 
 Branch: `feat/email-password-login`
 
 Firebase Auth already supports this natively — no new backend, no email provider.
-The work is client screens plus wiring the existing session-cookie POST.
+The work is client screens plus wiring the existing session-cookie POST. The
+Email/Password provider is enabled in the Firebase console; Email link
+(passwordless) is not.
 
-- [ ] Extend `AuthContext`: `signUpWithEmail`, `signInWithEmail`,
-      `sendPasswordReset`, `sendVerification`. Each awaits `postSessionCookie`
-      before navigation, same as `loginWithGoogle`.
-- [ ] Screens, built with `Components/ui/` primitives and the Tailwind theme
+- [x] Extend `AuthContext`: `signUpWithEmail` (also sets `displayName` from a
+      Name field), `signInWithEmail`, `sendPasswordReset`, `resendVerification`,
+      `checkVerified`. Sign-in paths await the session cookie before navigation,
+      same as `loginWithGoogle`. `authErrorMessage()` maps Firebase error codes
+      to user-facing text.
+- [x] Screens, built with `Components/ui/` primitives and the Tailwind theme
       colors (`blue1`, `blue3`, `grey3`) — no form library (none exists today):
-  - [ ] Sign up (email, password, confirm) + "verify your email" pending state.
-  - [ ] Sign in — email form beside the kept "Sign in with Google" button.
-  - [ ] Forgot password → request reset.
-  - [ ] Clear errors for "email already in use", "wrong password", "unverified
+  - [x] Sign up (name, email, password, confirm) + "verify your email" pending
+        state (`Components/VerifyEmailNotice.tsx`).
+  - [x] Sign in — email form (`Components/EmailAuthForm.tsx`) beside the kept
+        "Sign in with Google" button, all on `/login`.
+  - [x] Forgot password → request reset.
+  - [x] Clear errors for "email already in use", "wrong password", "unverified
         email".
-- [ ] Decide whether to **require** email verification before access, or allow in
-      with a nudge. (Open — see below.)
-- [ ] Firebase's default email templates are fine; branded templates are a later
+- [x] Email verification is **required**, enforced on the server:
+      `POST /api/auth/session` runs `verifyIdToken` and returns 403 when
+      `email_verified` is not true, so an unverified user never gets a cookie.
+      Google accounts arrive verified.
+- [x] `postSessionCookie` checks `response.ok` and throws a readable error; a
+      failed mint used to be silent and bounce the user off `/`.
+- [x] `/login` redirects on `hasSession` (cookie known to be set in this tab),
+      not on `currentUser`. A client-signed-in user without a cookie —
+      unverified, expired cookie, or cookie still being minted — used to loop
+      `/login` → `/` → middleware → `/login`.
+- [x] Firebase's default email templates are fine; branded templates are a later
       nicety.
 
 **Done when:** you can sign up, receive the verification email, sign in with both
@@ -381,6 +395,7 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 | Region         | Vercel `fra1` to match Neon `eu-central-1` |
 | Domain         | `stay-in-touch.vip` (kept; email-sending domain no longer needed) |
 | Email          | Firebase's built-in verification/reset emails. No Resend. |
+| Email verification | Required; the session route refuses to mint a cookie for an unverified email |
 | Realtime       | None — Server Component read + `revalidatePath` after mutation |
 | Existing data  | None. No migration script, no identity bridge, no dual-write. |
 | Primary keys   | `uuid` / `gen_random_uuid()`, not `serial` |
@@ -392,8 +407,9 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 
 ## Open questions
 
-1. **Email verification gate (Phase 6):** require verification before access, or
-   allow in with a nudge to verify?
+1. ~~**Email verification gate (Phase 6)**~~ — resolved: required, enforced in
+   the session route. Linking (Phase 8) matches users by email, so an
+   unconfirmed email must not be usable.
 2. **`linked_user_id` vs a `contact_links` table (Phase 8):** the known half-link
    soft spot above. Decide at Phase 8.
 3. **The three Phase 8 link-request questions** (re-send after reject, what the
@@ -406,8 +422,8 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 which never calls it, so it is inert and **no service worker is generated**
 (verified by a clean build 2026-09-16). Consequences: there is no cache that could
 serve a signed-in page after sign-out, and the app is not actually an installable
-PWA today despite the `manifest.json` link. `CLAUDE.md` still calls it an
-installable PWA — that is wrong. Fixing or removing the PWA setup is **out of scope
+PWA today despite the `manifest.json` link. (`CLAUDE.md` was corrected in
+Phase 5; `README.md` still claims it.) Fixing or removing the PWA setup is **out of scope
 for this migration**; just do not design around a service worker that does not
 exist.
 
@@ -415,7 +431,10 @@ exist.
 
 `specs/i18n-german-translations.md` is unbuilt and its acceptance criterion is "no
 user-facing English remains when German is selected". The Phase 6 auth screens are
-new user-facing text — add them to that spec's surface list when it is picked up.
-That spec is also stale (it says "Pages Router" and cites `pages/index.tsx`, both
+new user-facing text — add them to that spec's surface list when it is picked up:
+`app/login/page.tsx`, `Components/EmailAuthForm.tsx`,
+`Components/VerifyEmailNotice.tsx`, and the error strings in `lib/AuthContext.tsx`
+(`AUTH_ERROR_MESSAGES`, `NOT_VERIFIED_MESSAGE`, `postSessionCookie`). The spec is
+not on `main` (it lives on the i18n branch). It is also stale (it says "Pages Router" and cites `pages/index.tsx`, both
 untrue after the App Router migration) and needs a correction pass before anyone
 builds from it.

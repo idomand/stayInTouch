@@ -9,20 +9,22 @@ import EmailAuthForm from "@/Components/EmailAuthForm";
 import VerifyEmailNotice from "@/Components/VerifyEmailNotice";
 
 export default function Login() {
-  const { loginWithGoogle, signInWithEmail, currentUser } = useAuth()!;
+  const { loginWithGoogle, signInWithEmail, currentUser, hasSession } =
+    useAuth()!;
   const router = useRouter();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
 
-  // Handles an already-signed-in user landing on /login. During a fresh sign-in
-  // isSigningIn is true, so this does not fire before the cookie is set — that
-  // navigation is done explicitly in signInAndGo. Unverified users have no
-  // cookie, so sending them to "/" would only bounce back here in a loop.
+  // Handles an already-signed-in user landing on /login. Gate on hasSession,
+  // not currentUser: the middleware checks the cookie, and a client-signed-in
+  // user without one (unverified, expired cookie, cookie still being minted)
+  // would be bounced straight back here in a loop. During a fresh sign-in
+  // signInAndGo navigates itself.
   useEffect(() => {
-    if (currentUser?.emailVerified && !isSigningIn) {
+    if (hasSession && !isSigningIn) {
       router.replace("/");
     }
-  }, [currentUser, isSigningIn, router]);
+  }, [hasSession, isSigningIn, router]);
 
   /** Shared by Google and email sign-in: sign in, wait for the cookie, go home. */
   async function signInAndGo(signIn: () => Promise<void>) {
