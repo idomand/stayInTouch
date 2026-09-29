@@ -340,6 +340,11 @@ and a browser restart.
 ### Phase 7 — Real migrations + hardening
 
 Branch: `chore/db-hardening`. The app is real now — stop dropping the database.
+Full brief: `specs/phase-7-db-hardening.md`.
+
+- [x] Separate dev and prod databases (2026-09-29): `.env.local` uses the Neon
+      `dev` branch, Vercel keeps the production branch. Production schema
+      changes run only through a manual `db:migrate`, before merge.
 
 - [ ] Switch from `drizzle-kit push` to `drizzle-kit generate` + `migrate`; commit
       the generated SQL. Add `db:generate` / `db:migrate` scripts.
