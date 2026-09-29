@@ -263,8 +263,9 @@ Ground rules for every phase below:
   `tsc --noEmit` and aborts on any error. `noUnusedLocals`/`noUnusedParameters`
   are on — an unused import is a hard error.
 - **One phase, one branch, merged to `main` per phase.** Branch from an updated
-  `main` (sequential, not stacked). Commit per sub-task. Every git action needs
-  explicit confirmation first.
+  `main` (sequential, not stacked). The user commits per sub-task; Claude does
+  not commit and reports when each sub-task is ready. Every other git action
+  needs explicit confirmation first.
 - **Merging to `main` deploys to production.** Acceptable per phase because the DB
   is empty and no user can be locked out mid-migration.
 - **Secrets are never committed.** Add each new variable to `.env.local` and to
