@@ -24,6 +24,14 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Email verification is required, and this is the only place a session is
+    // created — so an unverified user can never reach Postgres. Google accounts
+    // arrive already verified.
+    const decoded = await adminAuth.verifyIdToken(idToken);
+    if (decoded.email_verified !== true) {
+      return NextResponse.json({ error: "Email not verified." }, { status: 403 });
+    }
+
     const sessionCookie = await adminAuth.createSessionCookie(idToken, {
       expiresIn: SESSION_EXPIRES_IN_MS,
     });
