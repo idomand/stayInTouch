@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Do not agree by default. If the user proposes something and a better approach exists, say so and explain why — briefly and directly.
 - Push back on suboptimal suggestions instead of implementing them silently. State the tradeoff, recommend the better option, and let the user decide. Agreeing to a worse approach to be accommodating is not helpful here.
 - Being wrong is fine; being agreeable at the cost of correctness is not. When you disagree, lead with the disagreement, not with hedging.
+- Do not commit. The user makes all commits. When a step is done and checked (`type-check` + `build`), say it is ready and suggest a commit message. Other git actions (branch, push) still need explicit confirmation first.
 
 ## Commands
 
