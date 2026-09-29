@@ -30,13 +30,12 @@ offline on Android, PC, or Mac.
 - 👥 **Contacts with cadence** — add a contact, choose how often you want to
   talk to them, and the list automatically sorts by who you're most overdue
   to reach out to.
-- 📝 **Per-contact notes** — jot down and edit notes for each person; a
-  "Talked on: …" note is added automatically when you reset a contact's timer.
+- 📝 **Per-contact notes** — jot down and edit notes for each person.
+- 🗓️ **Talk history** — each time you mark that you talked, it is saved, and the
+  timer restarts from that date.
 - 📅 **Google Calendar reminders** — create a pre-filled calendar event to
   remind yourself to call a contact, optionally inviting their email.
 - 📲 **Installable & offline** — full PWA support via `next-pwa`.
-- 🧪 **Demo data** — load a few sample contacts from the About page to try the
-  app instantly.
 
 ## Tech Stack
 
@@ -45,7 +44,8 @@ offline on Android, PC, or Mac.
 | Framework | [Next.js 16](https://nextjs.org/) (App Router)                                       |
 | UI        | [React 19](https://react.dev/)                                                      |
 | Language  | [TypeScript](https://www.typescriptlang.org/)                                       |
-| Backend   | [Firebase](https://firebase.google.com/) — Auth + Firestore                         |
+| Auth      | [Firebase Auth](https://firebase.google.com/) — client SDK + Admin session cookies  |
+| Database  | [Neon Postgres](https://neon.tech/) via [Drizzle ORM](https://orm.drizzle.team/)    |
 | Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                          |
 | PWA       | [next-pwa](https://github.com/shadowwalker/next-pwa)                                |
 | Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
@@ -54,11 +54,13 @@ offline on Android, PC, or Mac.
 
 ```
 Components/    Reusable UI + feature components (Tailwind utility classes)
-lib/           Firebase setup, auth context, Firestore & Calendar helpers
-app/           Next.js App Router routes (/, /login, /about, /privacy)
+lib/           Firebase setup, auth context, Calendar helpers
+lib/auth/      Server identity (Firebase session cookies)
+lib/db/        Drizzle client, schema and queries (server only)
+lib/actions/   Server Actions for contact writes
+app/           Next.js App Router routes (/, /login, /about, /privacy, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
-types/         Shared TypeScript types
-utils/hooks/   Custom hooks (e.g. Firestore snapshot subscription)
+types/         Global type declarations
 public/        Static assets, icons, and PWA manifest
 ```
 

@@ -24,19 +24,30 @@ A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error 
 
 ## Architecture
 
-Next.js 16 **App Router** (`app/`) + React 19, TypeScript, Firebase (Auth + Firestore), deployed as an installable PWA via `next-pwa`. Path alias `@/*` maps to the repo root.
+Next.js 16 **App Router** (`app/`) + React 19, TypeScript. Firebase Auth for identity; contact data in Neon Postgres through Drizzle. Deployed on Vercel. Path alias `@/*` maps to the repo root.
 
-Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout (the old `_app.tsx` + `_document.tsx`). Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive; the four route pages, `AuthContext`, `NavBar`, `Footer`, and `ScrollToTopButton` all carry it. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
+`next-pwa` is installed but inert: it is a webpack plugin and the build uses Turbopack, so no service worker is generated. The app is not an installable PWA today — don't design around a service worker.
+
+Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout. Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. `app/page.tsx` (home) is a Server Component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
+
+The migration plan and its status live in `specs/postgres-migration.md`.
 
 ### Data model — the key thing to understand
 
-There is no server code. The client talks to Firestore directly, and **each user's contacts live in their own collection named by concatenating email + uid**: `` `${userEmail}${userId}` ``. This string is rebuilt at every call site (see `lib/Firebase.ts`, `utils/hooks/useSnapshotData.ts`) rather than centralized — match that pattern or refactor all sites together. A contact is a `ContactItemType` (`types/ContactItemType.ts`); notes are an embedded `notesArray` on the contact document, not a subcollection.
+Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-only`). Schema is in `lib/db/schema/`: `contacts`, `notes`, `talk_events`. Types are inferred from the schema — no hand-written row types. `owner_id` is the Firebase uid (bare `text`, no FK).
 
-Two derived fields are computed on the client and are **not stored** in Firestore: `contactId` (the Firestore doc id, attached after read) and `timeUntilNextTalk` (days until the next check-in, `time - (now - timeFromLastTalk)/oneDay`). The overdue-first ordering the whole app is built around comes from this computation in `utils/hooks/useSnapshotData.ts`, which subscribes via `onSnapshot` for realtime updates.
+- Reads: `lib/db/queries/contacts.ts` → `getContactsForCurrentUser()`, called from the `app/page.tsx` Server Component. `lastTalkedAt` and `daysUntilNextTalk` are computed in SQL, not stored; the overdue-first ordering comes from there.
+- Writes: Server Actions in `lib/actions/contacts.ts`. Each one calls `revalidatePath("/")`. There is no realtime listener.
+
+**Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`). Never trust an id from the client, and never take `owner_id` from a request body or URL.
+
+`DATABASE_URL` and `FIREBASE_SERVICE_ACCOUNT_B64` are checked at module load, so both are needed for `npm run build`, not just at runtime.
 
 ### Auth
 
-`lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()` (Google popup sign-in via Firebase). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves, so `currentUser` is settled by the time children mount.
+`lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()` (Google popup sign-in). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves.
+
+Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`). `middleware.ts` gates `/` on cookie presence only; real verification happens on the server.
 
 ### Google Calendar
 
