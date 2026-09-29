@@ -44,6 +44,8 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 
 `DATABASE_URL` and `FIREBASE_SERVICE_ACCOUNT_B64` are checked at module load, so both are needed for `npm run build`, not just at runtime.
 
+**Dev and prod are separate databases.** `.env.local` points at the Neon `dev` branch; Vercel points at the production (default) branch. Local work, including every drizzle-kit command, runs against `dev`. Production schema changes happen only through a manual `db:migrate` run with the production `DATABASE_URL`, before the schema change is merged — never from the Vercel build.
+
 ### Auth
 
 `lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
