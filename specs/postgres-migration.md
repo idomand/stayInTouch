@@ -37,7 +37,7 @@ Verified against the code on 2026-09-30, not against the old docs.
 | 5 | Remove dead Firestore data access (keep Firebase Auth) | ✅ done |
 | 6 | Email+password login (Firebase provider + screens) | ✅ done |
 | 7 | Real migrations + hardening | ✅ done |
-| 8 | Linked users | ⬜ next |
+| 8 | Linked users | ✅ done |
 
 **App still works throughout.** The data layer already runs on Postgres; Firebase
 still owns identity. Phase 5 is dead-code removal, not a rewrite.
@@ -105,10 +105,10 @@ architecture — the login provider is irrelevant below it.
 
 ### The data model
 
-`lib/db/schema/` — three tables, inferred types exported (no hand-written row
-types). Foreign keys point at `contacts`, not at a users table: **identity stays
-in Firebase, so `owner_id` / `created_by` are bare `text` Firebase uids with no
-FK.**
+`lib/db/schema/` — five tables (the last two since Phase 8), inferred types
+exported (no hand-written row types). Foreign keys point at `contacts`, not at a
+users table: **identity stays in Firebase, so `owner_id` / `created_by` /
+`from_user_id` are bare `text` Firebase uids with no FK.**
 
 ```
 contacts     id uuid PK · owner_id text · name text · cadence_days int (>0, default 7)
@@ -122,6 +122,17 @@ notes        id uuid PK · contact_id uuid → contacts ON DELETE CASCADE
 talk_events  id uuid PK · contact_id uuid → contacts ON DELETE CASCADE
              · talked_at timestamptz · created_by text · created_at timestamptz
              INDEX (contact_id, talked_at DESC)
+
+link_requests id uuid PK · from_user_id text · from_contact_id uuid → contacts
+             ON DELETE CASCADE · from_name · from_email (snapshot) · to_email text
+             · status link_request_status (pending/accepted/rejected)
+             · created_at · responded_at NULL
+             CHECK (to_email <> from_email)
+             UNIQUE (from_contact_id) WHERE pending · INDEX (to_email) WHERE pending
+
+contact_links id uuid PK · contact_a_id / contact_b_id uuid → contacts
+             ON DELETE CASCADE · created_at
+             CHECK (contact_a_id < contact_b_id) · UNIQUE (a, b) · INDEX (b)
 ```
 
 Two derived values are computed in SQL, never stored: `lastTalkedAt` (newest
@@ -391,9 +402,9 @@ Follow-ups, done 2026-09-30 on branch `chore/small-fixes`:
 - [x] README no longer claims an installable/offline PWA; it says PWA is planned.
 - Note errors in the UI → moved to _Future upgrades_.
 
-### Phase 8 — Linked users
+### Phase 8 — Linked users (done 2026-09-30)
 
-Branch: `feat/linked-users`. Only after 1–7 are done and deployed.
+Branch: `feat/linked-users`. Migration `0001` applied to `dev` and production.
 
 Bob has a contact for Alice; Alice is also a user. When Bob marks that he talked to
 Alice, **Alice's timer resets too**. A link shares **only the talk event** — notes
@@ -404,38 +415,52 @@ stay private, and each side keeps its own `cadence_days`.
 | Question | Answer |
 | --- | --- |
 | How is a link stored? | A **`contact_links` table**, one row per link, both contact ids as FKs `ON DELETE CASCADE`. Not a `linked_user_id` column: that allows half-links (one side deleted, the other still "linked") and puts cleanup in code. The table makes that impossible; the cost is one join. |
-| Can a rejected request be sent again? | **Yes.** Only one *pending* request per pair at a time (partial unique index); rejected rows stay as history. |
+| Can a rejected request be sent again? | **Yes.** Only one *pending* request per contact at a time (partial unique index); rejected rows stay as history. |
+| How many links between two people? | **One.** Enforced in the accept transaction (advisory lock on the uid pair + a join on both contacts' owners); no constraint can express it because the link row holds contact ids. |
 | What does the addressee see? | The requester's **display name and email only** — never notes, cadence or talk history. |
 | Accepting when the addressee has no contact for the requester? | **Choose in the accept dialog:** link to an existing contact, or create a new one prefilled with the requester's name and the default cadence (7). No silent auto-create — name matching is unreliable. |
 | Where do requests live in the UI? | A new protected route **`/account`**, "Friend requests" section only in this phase, plus a pending-count badge in `NavBar`. The rest of `/account` is in _Future upgrades_. |
 
-Planned shape — the full step-by-step brief is **`specs/phase-8-linked-users.md`**:
+What shipped:
 
-- [ ] **Schema (migration `0001`):**
-      - `link_requests` addressed to a normalized **email** (`to_email`), not a
-        uid, with a `from_name` / `from_email` snapshot, a `pending`/`accepted`/
-        `rejected` status, and at most one pending request per contact.
-      - `contact_links`: `contact_a_id` / `contact_b_id uuid → contacts ON DELETE
-        CASCADE`, `CHECK (contact_a_id < contact_b_id)`, unique pair. "A contact
-        is in at most one link" is enforced in the accept transaction with row
-        locks.
-- [ ] **Finding the other user:** there is no users table, so a request targets
-      an email (default: the contact's `friend_email`). It is stored as an email,
-      not resolved to a uid: resolving would make the sender's outgoing list show
-      only emails that have an account, revealing who uses the app. The
-      addressee sees requests sent to their verified session email.
-- [ ] **Server Actions** (new file, same guards and validation as
-      `lib/actions/contacts.ts`): `sendLinkRequest`, `acceptLinkRequest` (a
-      **transaction**: set status, optionally create the contact, insert the
-      link), `rejectLinkRequest`, `unlink`. Every one checks that the caller owns
-      the contact / is the addressee.
-- [ ] **`markAsTalked` propagation:** in the same transaction, insert a
-      `talk_events` row on the linked contact with `created_by` = the clicker.
-      Zero rows when there is no link, so no `if`.
-- [ ] **UI:** `/account` page with incoming (accept dialog / reject) and outgoing
-      (pending) requests; a "Link" action on a contact; a linked marker on
-      linked contacts; request count in `NavBar`. Add `/account` to the
-      `proxy.ts` matcher.
+- [x] **Schema (migration `0001`, additive):** `link_requests` and
+      `contact_links` (see _The data model_). Tested on `dev` inside a rolled-back
+      transaction: every constraint refuses what it should, and deleting either
+      contact removes its link and requests.
+- [x] **Requests are addressed to an email, never resolved to a uid.** Resolving
+      would make the sender's outgoing list show only emails that have an
+      account — revealing who uses the app. The addressee sees requests sent to
+      their verified session email (`getServerUser()` now returns `{ uid, email }`;
+      `requireUserWithEmail()` in `guards.ts`). The email only finds the person;
+      after accept, the link is two contact ids and emails play no part.
+- [x] **Server Actions** in `lib/actions/links.ts`: `sendLinkRequest`,
+      `acceptLinkRequest`, `rejectLinkRequest`, `cancelLinkRequest`,
+      `unlinkContact`, `getMyPendingRequestCount`. Accept is one transaction
+      with every check before the first write: pending + addressed to the
+      caller's email; one link per pair of users (advisory lock); both contacts
+      locked in id order and not already linked; then the optional new contact,
+      the link, and `accepted`. Shared validation moved to
+      `lib/actions/validation.ts`.
+- [x] **`markAsTalked` propagation:** one transaction; an `INSERT … SELECT`
+      through `contact_links` writes the same talk (same time, `created_by` = the
+      clicker) on the linked contact. Only the "talked" button propagates — dates
+      typed in the add/edit forms stay on your own contact.
+- [x] **Reads:** `isLinked` / `hasPendingRequest` on each contact;
+      `lib/db/queries/links.ts` for the incoming/outgoing lists, the badge count
+      and the contacts that can still be linked.
+- [x] **UI:** protected `/account` (in the `proxy.ts` matcher) with the "Friend
+      requests" section (`FriendRequests`, `AcceptLinkDialog`); "Link with
+      friend" / "Unlink" in the contact menu (`LinkContactDialog`); a link icon on
+      linked contacts; "logged by your friend" in the talk history; an Account
+      link with a badge in `NavBar`.
+- [x] **Tested** with two real accounts on `dev`: send, accept (both paths), talk
+      from each side, unlink, reject + re-send, request to an email with no
+      account, delete a linked contact, second link between the same pair.
+
+Known limitations: after accepting or rejecting on `/account`, the NavBar badge
+updates on the next navigation. A sender may re-send after every reject (no
+cooldown). A pending request is lost if the addressee changes their email.
+Request history is deleted with the sender's contact (cascade).
 
 ---
 
