@@ -7,7 +7,6 @@ Live app: **https://stay-in-touch.vercel.app/**
 ![](https://img.shields.io/badge/Language-TypeScript-informational?style=flat&logo=typescript&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Backend-Firebase-informational?style=flat&logo=firebase&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Styling-Tailwind%20CSS%20v4-informational?style=flat&logo=tailwindcss&logoColor=white&color=2bbc8a)
-![](https://img.shields.io/badge/PWA-installable%20%26%20offline-informational?style=flat&logo=pwa&logoColor=white&color=2bbc8a)
 
 ## Description
 
@@ -19,8 +18,8 @@ keep up with and set how often you'd like to reach out — then it keeps your
 contact list sorted by who you're most overdue to talk to, so you always know
 who's next.
 
-The project is a **PWA (Progressive Web App)**: it can be installed and used
-offline on Android, PC, or Mac.
+Today it is a regular web app: it cannot be installed and does not work offline.
+Making it an installable **PWA (Progressive Web App)** is planned.
 
 ![](public/Stay_In_Touch.PNG)
 
@@ -35,7 +34,6 @@ offline on Android, PC, or Mac.
   timer restarts from that date.
 - 📅 **Google Calendar reminders** — create a pre-filled calendar event to
   remind yourself to call a contact, optionally inviting their email.
-- 📲 **Installable & offline** — full PWA support via `next-pwa`.
 
 ## Tech Stack
 
@@ -47,7 +45,6 @@ offline on Android, PC, or Mac.
 | Auth      | [Firebase Auth](https://firebase.google.com/) — client SDK + Admin session cookies  |
 | Database  | [Neon Postgres](https://neon.tech/) via [Drizzle ORM](https://orm.drizzle.team/)    |
 | Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                          |
-| PWA       | [next-pwa](https://github.com/shadowwalker/next-pwa)                                |
 | Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
 
 ## Project Structure
@@ -61,7 +58,7 @@ lib/actions/   Server Actions for contact writes
 app/           Next.js App Router routes (/, /login, /about, /privacy, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations
-public/        Static assets, icons, and PWA manifest
+public/        Static assets, icons, and a web app manifest (PWA support is planned)
 ```
 
 ## License

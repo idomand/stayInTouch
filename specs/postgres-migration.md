@@ -97,7 +97,7 @@ the two, built on Firebase **session cookies**:
    `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid }` or
    `null`. `checkRevoked = true` rejects a signed-out or disabled user.
 4. Logout `DELETE`s the cookie, then signs out the client SDK.
-5. `middleware.ts` gates `/` on cookie **presence** (full verification needs the
+5. `proxy.ts` (formerly `middleware.ts`) gates `/` on cookie **presence** (full verification needs the
    Admin SDK, which cannot run on Edge) and redirects to `/login` before render.
 
 `owner_id` = Firebase uid (stable; not the mutable email). This layer is permanent
@@ -381,17 +381,15 @@ Findings worth keeping:
   in a chat. Vercel's `DATABASE_URL` is marked Sensitive, so read connection
   strings from Neon → Connect.
 
-Follow-ups left open (not part of this phase):
+Follow-ups, done 2026-09-30 on branch `chore/small-fixes`:
 
-- The "last talked" date picker allows 90 days in the future (the shared
-  `DatePickerComponent` has `maxDate` +90 for the appointment form). The server
-  rejects > 1 day ahead with a visible error; limit the picker for that field.
-- UI cadence limits disagree: max 31 in `AddNewContact`, 60 in
-  `UpdateContactForm`. The server allows 1–365.
-- Note errors from `Notes.tsx` / `NoteItem.tsx` only go to `console.error`, so a
-  rejected note (e.g. > 5000 characters) fails silently for the user.
-- Rename `middleware.ts` → `proxy.ts` (Next 16 warning); remove the README's
-  installable/offline PWA claims.
+- [x] The "last talked" pickers stop at today: `DatePickerComponent` takes an
+      optional `maxDate` (default +90 days, still used by the appointment form).
+- [x] One cadence limit, `maxCadenceDays = 60` in `lib/ConstantsFile.ts`, used by
+      both forms and the server check (was 31 / 60 / 365).
+- [x] `middleware.ts` → `proxy.ts` (Next 16 name; function `proxy`).
+- [x] README no longer claims an installable/offline PWA; it says PWA is planned.
+- Note errors in the UI → moved to _Future upgrades_.
 
 ### Phase 8 — Linked users
 
@@ -401,28 +399,47 @@ Bob has a contact for Alice; Alice is also a user. When Bob marks that he talked
 Alice, **Alice's timer resets too**. A link shares **only the talk event** — notes
 stay private, and each side keeps its own `cadence_days`.
 
-- [ ] `link_requests` table: `link_request_status` enum (`pending`/`accepted`/
-      `rejected`), `no_self_link` check, and a partial unique index on the sorted
-      pair (`LEAST`/`GREATEST`, `WHERE status = 'pending'`) so crossed requests
-      collapse and rejected/accepted rows survive as history.
-- [ ] Add `linked_user_id text` to `contacts` (FK to nothing — a uid, like
-      `owner_id`; `ON DELETE SET NULL` semantics enforced in code).
-- [ ] Server Actions `sendLinkRequest`, `acceptLinkRequest`, `rejectLinkRequest`,
-      `unlink`. Accept runs in a **transaction**: set status, link both rows, and
-      create the other side's contact if missing.
-- [ ] Extend `markAsTalked` to propagate in a transaction via the mutual-link join
-      — it inserts zero rows when there is no link, one when there is, so no `if`
-      is needed.
-- [ ] UI for incoming and outgoing requests.
+**Decisions (2026-09-30):**
 
-**Answer before building:** can a rejected request be re-sent (suggest: yes, but
-rate-limited or only after the other side clears it)? what does the addressee see
-(suggest: only name and email, never notes)? does accepting create a missing
-contact (suggest: yes, with a default cadence)?
+| Question | Answer |
+| --- | --- |
+| How is a link stored? | A **`contact_links` table**, one row per link, both contact ids as FKs `ON DELETE CASCADE`. Not a `linked_user_id` column: that allows half-links (one side deleted, the other still "linked") and puts cleanup in code. The table makes that impossible; the cost is one join. |
+| Can a rejected request be sent again? | **Yes.** Only one *pending* request per pair at a time (partial unique index); rejected rows stay as history. |
+| What does the addressee see? | The requester's **display name and email only** — never notes, cadence or talk history. |
+| Accepting when the addressee has no contact for the requester? | **Choose in the accept dialog:** link to an existing contact, or create a new one prefilled with the requester's name and the default cadence (7). No silent auto-create — name matching is unreliable. |
+| Where do requests live in the UI? | A new protected route **`/account`**, "Friend requests" section only in this phase, plus a pending-count badge in `NavBar`. The rest of `/account` is in _Future upgrades_. |
 
-**Known soft spot:** a per-contact `linked_user_id` allows a half-link where only
-one side points. A separate `contact_links` table holding the pair would make that
-impossible, at the cost of one more table and join. Start simple; revisit here.
+Planned shape (the full step-by-step brief is written at the start of the branch):
+
+- [ ] **Schema (migration `0001`):**
+      - `link_requests`: `id` · `from_user_id text` · `from_contact_id uuid → contacts
+        ON DELETE CASCADE` · `to_user_id text` · `from_name` / `from_email`
+        (snapshot shown to the addressee) · `status` enum `pending`/`accepted`/
+        `rejected` · `created_at` · `responded_at`. `CHECK (from_user_id <>
+        to_user_id)`; partial `UNIQUE (LEAST(from,to), GREATEST(from,to)) WHERE
+        status = 'pending'`.
+      - `contact_links`: `id` · `contact_a_id` / `contact_b_id uuid → contacts ON
+        DELETE CASCADE` · `created_at`. `CHECK (contact_a_id < contact_b_id)`,
+        `UNIQUE (contact_a_id, contact_b_id)`. "A contact is in at most one link"
+        spans both columns — enforce in the accept transaction; decide the exact
+        constraint in the brief.
+- [ ] **Finding the other user:** there is no users table, so a request targets
+      an email (default: the contact's `friend_email`). The server resolves it
+      with `adminAuth.getUserByEmail()`. The reply is **the same whether or not
+      the email has an account**, so the form cannot be used to discover who
+      uses the app. The addressee's email must be verified.
+- [ ] **Server Actions** (new file, same guards and validation as
+      `lib/actions/contacts.ts`): `sendLinkRequest`, `acceptLinkRequest` (a
+      **transaction**: set status, optionally create the contact, insert the
+      link), `rejectLinkRequest`, `unlink`. Every one checks that the caller owns
+      the contact / is the addressee.
+- [ ] **`markAsTalked` propagation:** in the same transaction, insert a
+      `talk_events` row on the linked contact with `created_by` = the clicker.
+      Zero rows when there is no link, so no `if`.
+- [ ] **UI:** `/account` page with incoming (accept dialog / reject) and outgoing
+      (pending) requests; a "Link" action on a contact; a linked marker on
+      linked contacts; request count in `NavBar`. Add `/account` to the
+      `proxy.ts` matcher.
 
 ---
 
@@ -447,7 +464,7 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 | Timestamps     | `timestamptz`, never epoch ms |
 | Talk events    | Own append-only `talk_events` table; no `last_talked` column, no "Talked on:" note |
 | Notes          | Own table, private, never shared across a link |
-| Linked users   | Shares the talk event only; needs a pending/accepted/rejected request flow (Phase 8) |
+| Linked users   | Shares the talk event only; pending/accepted/rejected requests; links in a `contact_links` table (Phase 8) |
 | Access control | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts` |
 
 ## Open questions
@@ -455,11 +472,11 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 1. ~~**Email verification gate (Phase 6)**~~ — resolved: required, enforced in
    the session route. Linking (Phase 8) matches users by email, so an
    unconfirmed email must not be usable.
-2. **`linked_user_id` vs a `contact_links` table (Phase 8):** the known half-link
-   soft spot above. Decide at Phase 8.
-3. **The three Phase 8 link-request questions** (re-send after reject, what the
-   addressee sees, whether accept creates a missing contact) — suggestions above,
-   not yet decided. They block nothing before Phase 8.
+2. ~~**`linked_user_id` vs a `contact_links` table (Phase 8)**~~ — resolved
+   2026-09-30: `contact_links` table.
+3. ~~**The three Phase 8 link-request questions**~~ — resolved 2026-09-30: re-send
+   after reject is allowed; the addressee sees name and email only; accepting
+   opens a dialog to pick or create the contact. See Phase 8.
 
 ## Notes on the PWA (out of scope)
 
@@ -468,9 +485,34 @@ which never calls it, so it is inert and **no service worker is generated**
 (verified by a clean build 2026-09-16). Consequences: there is no cache that could
 serve a signed-in page after sign-out, and the app is not actually an installable
 PWA today despite the `manifest.json` link. (`CLAUDE.md` was corrected in
-Phase 5; `README.md` still claims it.) Fixing or removing the PWA setup is **out of scope
-for this migration**; just do not design around a service worker that does not
-exist.
+Phase 5, `README.md` on 2026-09-30.) Fixing the PWA setup is **out of scope for
+this migration** — it is listed under _Future upgrades_; until then, do not design
+around a service worker that does not exist.
+
+## Future upgrades
+
+Planned, not scheduled. Each needs its own brief before building.
+
+1. **`/account` — the rest of it.** Phase 8 creates the route with the friend
+   requests section only. Later sections:
+   - **Notifications and social:** a notifications list (e.g. "Bob accepted your
+     request", "you and Alice talked"), and other social features built on
+     links.
+   - **Change password:** only for email+password accounts — hide it for Google
+     sign-in (check `providerData` for `password`). Firebase requires a recent
+     sign-in, so re-authenticate (`reauthenticateWithCredential`) before
+     `updatePassword`; show errors through `authErrorMessage()`.
+   - **Change language:** depends on the i18n work (see _i18n interaction_
+     below). Store the choice per user (a cookie or a `user_settings` row).
+2. **Show note errors in the UI.** `Notes.tsx` and `NoteItem.tsx` send action
+   errors only to `console.error`, so a rejected note (e.g. > 5000 characters,
+   "Note not found.") fails silently. Show them like `AddNewContact` does
+   (`ErrorWarning`).
+3. **A real PWA setup.** `next-pwa` is inert under Turbopack (see above).
+   Replace it with a Turbopack-compatible approach (e.g. Serwist, or a
+   hand-written service worker), check `public/manifest.json` and the icons,
+   and decide what may be cached: never serve a signed-in page after sign-out.
+   Then put the "installable" claim back in the README.
 
 ## i18n interaction (out of scope here, flagged)
 
