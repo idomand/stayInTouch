@@ -72,11 +72,11 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 `lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
 
-Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`). `middleware.ts` gates `/` on cookie presence only; real verification happens on the server.
+Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`). `proxy.ts` (Next 16's name for middleware) gates `/` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
 
 **Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
-- Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → middleware → `/login` in a loop. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
+- Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
 
 ### Google Calendar
 
