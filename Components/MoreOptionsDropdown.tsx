@@ -2,11 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import { SlOptions } from "react-icons/sl";
 import { deleteContact } from "@/lib/actions/contacts";
+import { unlinkContact } from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import AppointmentForm from "./AppointmentForm";
 import UpdateContactForm from "./UpdateContactForm";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
+import LinkContactDialog from "./LinkContactDialog";
+import ErrorWarning from "./ErrorWarning";
+import { P2 } from "./ui/Text";
+import NextLink from "next/link";
 
 export default function MoreOptionsDropdown({
   contact,
@@ -20,6 +25,10 @@ export default function MoreOptionsDropdown({
     useState(false);
   const [isDeleteContactModelOpen, setIsDeleteContactModelOpen] =
     useState(false);
+  const [isLinkContactDialogOpen, setIsLinkContactDialogOpen] =
+    useState(false);
+  const [isUnlinkConfirmOpen, setIsUnlinkConfirmOpen] = useState(false);
+  const [unlinkError, setUnlinkError] = useState<string | false>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +48,16 @@ export default function MoreOptionsDropdown({
 
   const handleDeleteContact = () => {
     setIsDeleteContactModelOpen(true);
+    setIsOpen(false);
+  };
+
+  const handleLinkContact = () => {
+    setIsLinkContactDialogOpen(true);
+    setIsOpen(false);
+  };
+
+  const handleUnlinkContact = () => {
+    setIsUnlinkConfirmOpen(true);
     setIsOpen(false);
   };
 
@@ -63,6 +82,15 @@ export default function MoreOptionsDropdown({
     const result = await deleteContact(contact.id);
     if (!result.ok) {
       console.error(result.error);
+    }
+  }
+
+  async function unlinkContactFunc() {
+    const result = await unlinkContact(contact.id);
+    if (!result.ok) {
+      setUnlinkError(result.error);
+    } else {
+      setIsUnlinkConfirmOpen(false);
     }
   }
 
@@ -92,6 +120,27 @@ export default function MoreOptionsDropdown({
           >
             Make Appointment
           </div>
+          {!contact.isLinked && !contact.hasPendingRequest ? (
+            <div
+              onClick={handleLinkContact}
+              className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+            >
+              Link with friend
+            </div>
+          ) : contact.hasPendingRequest ? (
+            <NextLink href="/account">
+              <div className="px-4 py-3 text-grey3 text-sm not-last:border-b not-last:border-grey2">
+                <P2 extraClasses="text-grey3">Link request pending</P2>
+              </div>
+            </NextLink>
+          ) : contact.isLinked ? (
+            <div
+              onClick={handleUnlinkContact}
+              className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+            >
+              Unlink
+            </div>
+          ) : null}
           <div
             onClick={handleDeleteContact}
             className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
@@ -128,6 +177,41 @@ export default function MoreOptionsDropdown({
               setIsDeleteContactModelOpen(false);
             }}
           />
+        </div>
+      </Dialog>
+      <LinkContactDialog
+        contact={contact}
+        isOpen={isLinkContactDialogOpen}
+        close={() => setIsLinkContactDialogOpen(false)}
+      />
+      <Dialog
+        title={`Stop sharing talks?`}
+        isOpen={isUnlinkConfirmOpen}
+        close={() => {
+          setIsUnlinkConfirmOpen(false);
+          setUnlinkError(false);
+        }}
+      >
+        <div className="flex flex-col gap-4">
+          <P2 extraClasses="text-grey3">
+            Stop sharing talks with this friend? Both contacts and past talks
+            stay.
+          </P2>
+          <div className="flex justify-between gap-2">
+            <Button
+              buttonText="Unlink"
+              onClick={unlinkContactFunc}
+              variant="Secondary"
+            />
+            <Button
+              buttonText="Cancel"
+              onClick={() => {
+                setIsUnlinkConfirmOpen(false);
+                setUnlinkError(false);
+              }}
+            />
+          </div>
+          {unlinkError && <ErrorWarning errorMessage={unlinkError} />}
         </div>
       </Dialog>
     </>

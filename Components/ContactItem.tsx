@@ -1,6 +1,7 @@
 "use client";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
+import { FaLink } from "react-icons/fa";
 import { markAsTalked } from "@/lib/actions/contacts";
 import { oneDay } from "@/lib/ConstantsFile";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
@@ -47,9 +48,19 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
         <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-50 sm:flex-row sm:items-stretch sm:justify-start">
           <div className="flex flex-col justify-center">
-            <span className="font-medium text-xl leading-5.25 capitalize w-40 text-center sm:w-max sm:text-left">
-              {name}
-            </span>
+            <div className="flex items-center gap-2 justify-center sm:justify-start">
+              <span className="font-medium text-xl leading-5.25 capitalize w-40 text-center sm:w-max sm:text-left">
+                {name}
+              </span>
+              {contact.isLinked && (
+                <FaLink
+                  size={14}
+                  className="text-blue1 flex-shrink-0"
+                  title="Linked — talks are shared"
+                  aria-label={`${name} is linked - talks are shared`}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className="[grid-area:contactDates] flex w-100 border-t border-black/10 pt-3.5 mt-3.5 mb-5 max-w-50 sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0 sm:max-w-none">
