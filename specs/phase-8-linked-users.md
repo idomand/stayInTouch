@@ -13,7 +13,7 @@ Branch: `feat/linked-users` (created from `main` on 2026-09-30).
 | Step | Status |
 | --- | --- |
 | 1. Schema + migration `0001` (dev) | ✅ applied on `dev` (production: in Step 5) |
-| 2. Server identity email + request/link actions | ⬜ |
+| 2. Server identity email + request/link actions | ✅ `lib/actions/links.ts`; DB rules tested on `dev`; end-to-end test in Step 4 |
 | 3. `markAsTalked` propagation + read queries | ⬜ |
 | 4. UI: link action, `/account`, NavBar badge | ⬜ |
 | 5. Production migration + docs | ⬜ |
@@ -88,6 +88,14 @@ in two links spans both columns, which a plain unique index cannot express.
 accepts on the same contact serialize on the lock, so the check cannot race.
 `sendLinkRequest` also refuses a contact that is already linked, for a clear early
 error.
+
+**Also: one link per pair of users** (added 2026-09-30). Per-contact rules alone
+would let Bob link two of his contacts ("Alice", "Alice (work)") to two of
+Alice's. The link row holds contact ids, not user ids, so no constraint can
+express it. The accept transaction checks it by joining `contact_links` to both
+contacts' `owner_id`, under `pg_advisory_xact_lock` on the sorted uid pair so two
+accepts for the same pair cannot race. `sendLinkRequest` refuses a second
+pending request to the same email.
 
 ### 4. Propagation is one statement
 
