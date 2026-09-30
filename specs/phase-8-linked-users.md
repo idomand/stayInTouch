@@ -12,7 +12,7 @@ Branch: `feat/linked-users` (created from `main` on 2026-09-30).
 
 | Step | Status |
 | --- | --- |
-| 1. Schema + migration `0001` (dev) | ⬜ |
+| 1. Schema + migration `0001` (dev) | ✅ applied on `dev` (production: in Step 5) |
 | 2. Server identity email + request/link actions | ⬜ |
 | 3. `markAsTalked` propagation + read queries | ⬜ |
 | 4. UI: link action, `/account`, NavBar badge | ⬜ |
