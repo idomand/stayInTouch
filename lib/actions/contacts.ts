@@ -8,14 +8,15 @@ import {
   requireUser,
 } from "@/lib/db/queries/guards";
 import { contacts, notes, talkEvents } from "@/lib/db/schema";
+import { maxCadenceDays } from "@/lib/ConstantsFile";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
 // A Server Action is a public POST endpoint: the TypeScript types below are not
-// enforced at runtime, so every argument is checked here. Limits sit above the
-// UI's own limits so the server never rejects what the UI allows.
+// enforced at runtime, so every argument is checked here. Limits never sit below
+// the UI's own limits, so the server never rejects what the UI allows; the
+// cadence limit is shared with the forms (maxCadenceDays).
 const MAX_NAME_LENGTH = 100;
-const MAX_CADENCE_DAYS = 365;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_NOTE_LENGTH = 5000;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -61,9 +62,9 @@ function validateFields(input: UpdateContactInput): string | null {
   if (
     !Number.isInteger(cadenceDays) ||
     cadenceDays < 1 ||
-    cadenceDays > MAX_CADENCE_DAYS
+    cadenceDays > maxCadenceDays
   ) {
-    return `Cadence must be a whole number of days from 1 to ${MAX_CADENCE_DAYS}.`;
+    return `Cadence must be a whole number of days from 1 to ${maxCadenceDays}.`;
   }
   if (friendEmail != null) {
     const email = typeof friendEmail === "string" ? friendEmail.trim() : null;
