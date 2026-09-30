@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { BsClockHistory } from "react-icons/bs";
 import { P2 } from "@/Components/ui/Text";
+import { useAuth } from "@/lib/AuthContext";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import Dialog from "./ui/Dialog";
 
@@ -22,6 +23,7 @@ function formatTalkedAt(iso: string): string {
  */
 export default function TalkEvents({ contact }: { contact: ContactListItem }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { currentUser } = useAuth()!;
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
@@ -59,7 +61,14 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
                   key={event.id}
                   className="list-none p-2 m-1 border border-solid border-green2 bg-grey1 rounded text-sm"
                 >
-                  {formatTalkedAt(event.talkedAt)}
+                  <div className="flex items-center justify-between">
+                    <span>{formatTalkedAt(event.talkedAt)}</span>
+                    {currentUser && event.createdBy !== currentUser.uid && (
+                      <P2 extraClasses="text-grey3 text-xs">
+                        · logged by your friend
+                      </P2>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

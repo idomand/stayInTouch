@@ -8,6 +8,7 @@ import {
   requireUser,
   requireUserWithEmail,
 } from "@/lib/db/queries/guards";
+import { getPendingRequestCount } from "@/lib/db/queries/links";
 import { contactLinks, contacts, linkRequests } from "@/lib/db/schema";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import {
@@ -334,6 +335,15 @@ export async function cancelLinkRequest(
   }
   revalidateLinkPages();
   return { ok: true };
+}
+
+/**
+ * The NavBar badge. NavBar is a client component shown on public pages too, so
+ * it asks through this action instead of the root layout loading it (which
+ * would make every page dynamic). Returns 0 when signed out.
+ */
+export async function getMyPendingRequestCount(): Promise<number> {
+  return getPendingRequestCount();
 }
 
 /** Either side ends a link from their own contact. Both contacts stay. */
