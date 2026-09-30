@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { updateContact } from "@/lib/actions/contacts";
+import { maxCadenceDays } from "@/lib/ConstantsFile";
 import {
   basicFormClasses,
   basicInputClasses,
@@ -146,7 +147,7 @@ export default function UpdateContactForm({
                 type="number"
                 name="time"
                 id="time"
-                max={60}
+                max={maxCadenceDays}
                 min={1}
                 value={contactTime}
                 onChange={timeChangeHandler}

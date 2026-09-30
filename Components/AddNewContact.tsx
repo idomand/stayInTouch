@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { addContact } from "@/lib/actions/contacts";
+import { maxCadenceDays } from "@/lib/ConstantsFile";
 import ErrorWrapper from "./ErrorWarning";
 import DatePickerComponent from "./DatePickerComponent";
 import {
@@ -94,7 +95,7 @@ export default function AddNewContact() {
             type="number"
             name="time"
             id="time"
-            max={31}
+            max={maxCadenceDays}
             min={1}
             className={twMerge(
               basicInputClasses,
