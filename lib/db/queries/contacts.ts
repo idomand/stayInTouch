@@ -32,6 +32,10 @@ export type ContactListItem = {
   notes: ContactNote[];
   /** Full talk history, newest first. */
   talkEvents: ContactTalkEvent[];
+  /** In a contact_links row: talks are shared with the other user's contact. */
+  isLinked: boolean;
+  /** A link request sent from this contact is waiting for an answer. */
+  hasPendingRequest: boolean;
 };
 
 /**
@@ -59,7 +63,15 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
       (c.cadence_days - EXTRACT(EPOCH FROM (now() - t.talked_at)) / 86400)::double precision
                      AS "daysUntilNextTalk",
       COALESCE(n.notes, '[]'::json) AS notes,
-      COALESCE(te.events, '[]'::json) AS "talkEvents"
+      COALESCE(te.events, '[]'::json) AS "talkEvents",
+      EXISTS (
+        SELECT 1 FROM contact_links l
+        WHERE l.contact_a_id = c.id OR l.contact_b_id = c.id
+      ) AS "isLinked",
+      EXISTS (
+        SELECT 1 FROM link_requests r
+        WHERE r.from_contact_id = c.id AND r.status = 'pending'
+      ) AS "hasPendingRequest"
     FROM contacts c
     LEFT JOIN LATERAL (
       SELECT talked_at

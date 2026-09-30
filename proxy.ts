@@ -17,7 +17,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Only the home page holds protected data today; /login, /about and /privacy
-  // are public. Add every new protected route here.
-  matcher: ["/"],
+  // Protected routes; /login, /about and /privacy are public. Add every new
+  // protected route here.
+  matcher: ["/", "/account"],
 };

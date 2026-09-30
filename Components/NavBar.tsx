@@ -1,14 +1,44 @@
 "use client";
 
 import NextLink from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useAuth } from "../lib/AuthContext";
+import { getMyPendingRequestCount } from "@/lib/actions/links";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
 
 export default function NavBar() {
   const { currentUser, logout } = useAuth()!;
+  const pathname = usePathname();
   const [isLogoutModelOpen, setIsLogoutModelOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setPendingCount(0);
+      return;
+    }
+
+    let isMounted = true;
+
+    async function loadPendingCount() {
+      try {
+        const count = await getMyPendingRequestCount();
+        if (isMounted) {
+          setPendingCount(count);
+        }
+      } catch (error) {
+        console.error("Failed to fetch pending request count:", error);
+      }
+    }
+
+    loadPendingCount();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentUser?.uid, pathname]);
 
   function onLogout() {
     setIsLogoutModelOpen(false);
@@ -39,6 +69,18 @@ export default function NavBar() {
           >
             <Button buttonText="Log out" onClick={onLogout} />
           </Dialog>
+          <div className="flex items-center gap-1 mr-2.5">
+            <NextLink href="/account">
+              <div className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3 relative">
+                Account
+                {pendingCount > 0 && (
+                  <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
+                    {pendingCount}
+                  </span>
+                )}
+              </div>
+            </NextLink>
+          </div>
           <button
             onClick={() => {
               setIsLogoutModelOpen(true);
