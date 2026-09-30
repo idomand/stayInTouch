@@ -16,7 +16,7 @@ export default function Login() {
   const [googleError, setGoogleError] = useState<string | null>(null);
 
   // Handles an already-signed-in user landing on /login. Gate on hasSession,
-  // not currentUser: the middleware checks the cookie, and a client-signed-in
+  // not currentUser: the proxy checks the cookie, and a client-signed-in
   // user without one (unverified, expired cookie, cookie still being minted)
   // would be bounced straight back here in a loop. During a fresh sign-in
   // signInAndGo navigates itself.

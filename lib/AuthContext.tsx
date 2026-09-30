@@ -20,7 +20,7 @@ type AuthContextType = {
   currentUser?: User | null;
   /**
    * True once this tab knows the server session cookie is set. Redirect to a
-   * middleware-gated route on this, not on currentUser: the Firebase client can
+   * proxy-gated route on this, not on currentUser: the Firebase client can
    * be signed in while the cookie is missing (expired, or still being minted).
    */
   hasSession: boolean;
@@ -81,7 +81,7 @@ export function authErrorMessage(error: unknown): string | null {
  * Mint (or refresh) the httpOnly server session cookie from a fresh ID token.
  * Force-refresh because createSessionCookie requires a token issued within the
  * last five minutes. Callers that navigate afterwards must await this — the
- * middleware gate on "/" rejects a request whose cookie is not yet set.
+ * proxy gate on "/" rejects a request whose cookie is not yet set.
  */
 async function postSessionCookie(user: User) {
   const idToken = await user.getIdToken(true);
@@ -90,7 +90,7 @@ async function postSessionCookie(user: User) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken }),
   });
-  // Without a cookie the middleware bounces "/" back to /login, so a failure
+  // Without a cookie the proxy bounces "/" back to /login, so a failure
   // here must surface to the caller instead of navigating silently.
   if (!response.ok) {
     throw new Error(
@@ -136,7 +136,7 @@ export default function AuthProvider({
   async function loginWithGoogle() {
     try {
       const credential = await signInWithPopup(auth, provider);
-      // Await the cookie here so callers can navigate straight to a middleware-
+      // Await the cookie here so callers can navigate straight to a proxy-
       // gated route without racing the fire-and-forget listener below.
       await establishSession(credential.user);
     } catch (error) {

@@ -10,18 +10,21 @@ type DatePickerComponentProps = {
     | React.Dispatch<React.SetStateAction<number | Date>>;
   startDate: number | Date;
   isInline?: boolean;
+  /** Latest selectable day. Defaults to 90 days ahead (appointments). */
+  maxDate?: Date;
 };
 
 export default function DatePickerComponent({
   setStartDate,
   startDate,
   isInline = false,
+  maxDate = addDays(new Date(), 90),
 }: DatePickerComponentProps) {
   return (
     <>
       <DatePicker
         wrapperClassName="datePickerClass"
-        maxDate={addDays(new Date(), 90)}
+        maxDate={maxDate}
         calendarContainer={Calendar}
         popperContainer={Popper}
         dateFormat="dd/MM/yyyy"
