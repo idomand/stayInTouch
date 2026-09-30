@@ -25,15 +25,30 @@ export async function requireUser(): Promise<string> {
   return user.uid;
 }
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * True when `value` is a UUID string. Ids come from the client untyped; Postgres
+ * throws on a malformed uuid, which would surface as a 500 instead of "not found".
+ */
+export function isUuid(value: unknown): value is string {
+  return typeof value === "string" && UUID_PATTERN.test(value);
+}
+
 /**
  * The contact if it exists AND belongs to `uid`, else null. Pure DB check — the
  * caller supplies the uid from requireUser(). A null result is a 404/no-op for
- * the caller; never trust the id alone to grant access.
+ * the caller; never trust the id alone to grant access. A malformed id is null
+ * too, without a query.
  */
 export async function getOwnedContact(
   uid: string,
   contactId: string,
 ): Promise<Contact | null> {
+  if (!isUuid(contactId)) {
+    return null;
+  }
   const [contact] = await db
     .select()
     .from(contacts)
