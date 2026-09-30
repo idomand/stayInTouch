@@ -17,7 +17,12 @@ npm run dev          # Next.js dev server
 npm run build        # production build
 npm run start        # serve the production build
 npm run type-check   # tsc --noEmit — the source of truth for correctness
+npm run db:generate  # write a new migration SQL file from lib/db/schema/ (no DB access)
+npm run db:migrate   # apply unapplied migrations to the DATABASE_URL database
+npm run db:studio    # browse the database (dev, via .env.local)
 ```
+
+There is no `db:push` on purpose — see "Changing the schema" below.
 
 There is **no test framework** and **no working lint** in this project (the `next lint` script was removed — Next 16 dropped `next lint` and ESLint 9 needs a flat config the repo doesn't have). "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
 
@@ -43,6 +48,25 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 **Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`). Never trust an id from the client, and never take `owner_id` from a request body or URL.
 
 `DATABASE_URL` and `FIREBASE_SERVICE_ACCOUNT_B64` are checked at module load, so both are needed for `npm run build`, not just at runtime.
+
+**Dev and prod are separate databases.** `.env.local` points at the Neon `dev` branch; Vercel points at the production (default) branch. Local work, including every drizzle-kit command, runs against `dev`. Production schema changes happen only through a manual `db:migrate` run with the production `DATABASE_URL`, before the schema change is merged — never from the Vercel build.
+
+**Changing the schema.** The SQL files in `lib/db/migrations/` (plus `meta/`) are the source of truth for the database shape. Never change a database's shape any other way — no `drizzle-kit push`, no hand-run `ALTER` — or the files and the database drift and the next `generate` writes wrong SQL. The workflow:
+
+1. Edit `lib/db/schema/`.
+2. `npm run db:generate` → read the new `NNNN_*.sql`. Watch for data loss: renames, type changes, a `NOT NULL` column without a default.
+3. `npm run db:migrate` → applies it to `dev`. Check the app.
+4. Commit the schema change, the SQL file and `meta/` together.
+5. Before merging: migrate production from the laptop. Copy the **direct** (non-pooled) production URL from Neon → Connect, then in PowerShell:
+   ```powershell
+   $env:DATABASE_URL = (Get-Clipboard).Trim()
+   $dbHost = ([uri]$env:DATABASE_URL).Host; "Target: $dbHost"
+   if ($dbHost -like "ep-raspy-wildflower-*") { npm run db:migrate } else { "Wrong host - not migrating" }
+   Remove-Item Env:DATABASE_URL
+   ```
+   A shell `DATABASE_URL` wins over `.env.local`, so this reaches production — and a leftover one would silently send later local commands there too, hence `Remove-Item`. drizzle-kit can exit without a message on failure; only `[✓] migrations applied successfully!` means success. Confirm in the Neon SQL Editor with `SELECT * FROM drizzle.__drizzle_migrations`.
+
+Drizzle has no down migrations: undo a change with a new forward migration. Never paste a connection string into chat, docs or a command line; it contains the password.
 
 ### Auth
 

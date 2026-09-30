@@ -26,7 +26,7 @@ database starts empty — no migration script, no dual-write, no identity bridge
 
 ## Status at a glance
 
-Verified against the code on 2026-09-25, not against the old docs.
+Verified against the code on 2026-09-30, not against the old docs.
 
 | Phase | What | Status |
 | ----- | ---- | ------ |
@@ -36,8 +36,8 @@ Verified against the code on 2026-09-25, not against the old docs.
 | 4 | Postgres data layer — guard → reads → writes → server-gated home | ✅ done |
 | 5 | Remove dead Firestore data access (keep Firebase Auth) | ✅ done |
 | 6 | Email+password login (Firebase provider + screens) | ✅ done |
-| 7 | Real migrations + hardening | ⬜ next |
-| 8 | Linked users | ⬜ not started |
+| 7 | Real migrations + hardening | ✅ done |
+| 8 | Linked users | ⬜ next |
 
 **App still works throughout.** The data layer already runs on Postgres; Firebase
 still owns identity. Phase 5 is dead-code removal, not a rewrite.
@@ -256,8 +256,11 @@ CommonJS `jose@5.10.0` (commits `59e4cf9`, `037592f`). Re-check this if
 
 Ground rules for every phase below:
 
-- **No live data.** DB starts empty; breaking changes are free until Phase 7.
-  Prefer `db:push` and dropping the database over careful migrations until then.
+- **The database is real (since Phase 7).** Schema changes only through generated
+  migrations: edit `lib/db/schema/` → `db:generate` → review the SQL →
+  `db:migrate` on `dev` → commit → `db:migrate` on production before merge. No
+  `db:push`, no dropping tables. The exact steps are in `CLAUDE.md` ("Changing
+  the schema").
 - **The gate is `npm run type-check` + `npm run build`** and running the app.
   There is no test framework and no working lint. A `pre-push` hook runs
   `tsc --noEmit` and aborts on any error. `noUnusedLocals`/`noUnusedParameters`
@@ -266,8 +269,9 @@ Ground rules for every phase below:
   `main` (sequential, not stacked). The user commits per sub-task; Claude does
   not commit and reports when each sub-task is ready. Every other git action
   needs explicit confirmation first.
-- **Merging to `main` deploys to production.** Acceptable per phase because the DB
-  is empty and no user can be locked out mid-migration.
+- **Merging to `main` deploys to production.** A schema change must already be
+  migrated on production when its code merges, so write migrations that the
+  currently deployed code also survives (e.g. add a nullable column first).
 - **Secrets are never committed.** Add each new variable to `.env.local` and to
   Vercel; document only the name here.
 
@@ -337,18 +341,57 @@ Email/Password provider is enabled in the Firebase console; Email link
 email and Google, reset a forgotten password, and the session survives a refresh
 and a browser restart.
 
-### Phase 7 — Real migrations + hardening
+### Phase 7 — Real migrations + hardening (done 2026-09-30)
 
 Branch: `chore/db-hardening`. The app is real now — stop dropping the database.
 
-- [ ] Switch from `drizzle-kit push` to `drizzle-kit generate` + `migrate`; commit
-      the generated SQL. Add `db:generate` / `db:migrate` scripts.
-- [ ] Re-grep every `db.select` / `db.update` / `db.delete` and confirm each is
-      scoped by `owner_id` or goes through the guard.
-- [ ] Confirm Server Action input validation at the boundary (a Server Action is a
-      public HTTP endpoint; its arguments are untrusted).
-- [ ] Confirm connection counts and query times on the Neon dashboard under normal
-      use — the first real serverless load on the pooled connection.
+- [x] **Separate dev and prod databases.** Neon branch `dev` (from `production`,
+      no expiry); `.env.local` points at it, Vercel at `production`.
+- [x] **Versioned migrations.** `db:generate` / `db:migrate` added, `db:push`
+      removed. `lib/db/migrations/0000_fuzzy_leader.sql` + `meta/` committed.
+      Both branches had their `push`-made tables dropped and rebuilt from `0000`;
+      each has one row in `drizzle.__drizzle_migrations` (hash checked on prod).
+- [x] **Ownership re-audit.** Only three files import `db`
+      (`queries/contacts.ts`, `queries/guards.ts`, `actions/contacts.ts`); every
+      read and write is scoped by the session uid or goes through
+      `getOwnedContact()`.
+- [x] **Server Action input validation.** `getOwnedContact()` returns `null` for
+      a non-UUID id (fixes all 6 callers); `isUuid()` guards note ids;
+      `validateFields()` / `validateNoteBody()` limit name (1–100), cadence
+      (1–365), email (≤ 254, `x@y` — as loose as the browser's check), note body
+      (1–5000) and the "last talked" date (valid, ≤ 1 day ahead);
+      `updateNote` / `deleteNote` return "Note not found." when no row matched.
+      No validation library.
+- [ ] **Neon Monitoring under normal use** (connections, query times on
+      `production`). Carried over — needs real use over time, not a code change.
+
+Findings worth keeping:
+
+- `process.loadEnvFile(".env.local")` does not override a variable already set
+  in the shell. That is what lets a production `db:migrate` run from the laptop —
+  and why a leftover shell `DATABASE_URL` is dangerous.
+- `lib/db/index.ts` cached the dev pool on `globalThis` without its URL, so a
+  `npm run dev` started before `.env.local` changed kept writing to the old
+  database (production). The cache now stores the URL and replaces the pool on a
+  change.
+- drizzle-kit `migrate` can exit with no message when it fails. Only
+  `[✓] migrations applied successfully!` means success; check the migrations
+  table.
+- The production database password was reset on 2026-09-30 after being pasted
+  in a chat. Vercel's `DATABASE_URL` is marked Sensitive, so read connection
+  strings from Neon → Connect.
+
+Follow-ups left open (not part of this phase):
+
+- The "last talked" date picker allows 90 days in the future (the shared
+  `DatePickerComponent` has `maxDate` +90 for the appointment form). The server
+  rejects > 1 day ahead with a visible error; limit the picker for that field.
+- UI cadence limits disagree: max 31 in `AddNewContact`, 60 in
+  `UpdateContactForm`. The server allows 1–365.
+- Note errors from `Notes.tsx` / `NoteItem.tsx` only go to `console.error`, so a
+  rejected note (e.g. > 5000 characters) fails silently for the user.
+- Rename `middleware.ts` → `proxy.ts` (Next 16 warning); remove the README's
+  installable/offline PWA claims.
 
 ### Phase 8 — Linked users
 
@@ -397,7 +440,9 @@ impossible, at the cost of one more table and join. Start simple; revisit here.
 | Email          | Firebase's built-in verification/reset emails. No Resend. |
 | Email verification | Required; the session route refuses to mint a cookie for an unverified email |
 | Realtime       | None — Server Component read + `revalidatePath` after mutation |
-| Existing data  | None. No migration script, no identity bridge, no dual-write. |
+| Existing data  | None at cutover (no migration script, no identity bridge, no dual-write). Real from Phase 7 on. |
+| Schema changes | Generated migrations only (`db:generate` → `db:migrate`); production migrated manually before merge, not in the Vercel build |
+| Environments   | Neon branch `dev` for local work, `production` for Vercel |
 | Primary keys   | `uuid` / `gen_random_uuid()`, not `serial` |
 | Timestamps     | `timestamptz`, never epoch ms |
 | Talk events    | Own append-only `talk_events` table; no `last_talked` column, no "Talked on:" note |
