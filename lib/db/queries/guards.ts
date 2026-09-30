@@ -25,6 +25,24 @@ export async function requireUser(): Promise<string> {
   return user.uid;
 }
 
+/**
+ * The signed-in uid and verified email, or throw. For actions that match on the
+ * caller's email (link requests are addressed to an email, not a uid).
+ */
+export async function requireUserWithEmail(): Promise<{
+  uid: string;
+  email: string;
+}> {
+  const user = await getServerUser();
+  if (!user) {
+    throw new Error("Not authenticated.");
+  }
+  if (!user.email) {
+    throw new Error("This account has no email address.");
+  }
+  return { uid: user.uid, email: user.email };
+}
+
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
