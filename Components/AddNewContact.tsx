@@ -109,6 +109,7 @@ export default function AddNewContact() {
           <DatePickerComponent
             setStartDate={setStartDate}
             startDate={startDate}
+            maxDate={new Date()}
           />
         </div>
         <label className={twMerge(basicLabelClasses, "[grid-area:notes]")}>

@@ -162,6 +162,7 @@ export default function UpdateContactForm({
               <DatePickerComponent
                 setStartDate={onDateChange}
                 startDate={lastTalk}
+                maxDate={new Date()}
               />
             </div>
 
