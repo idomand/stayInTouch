@@ -1,5 +1,5 @@
 "use server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import {
@@ -149,7 +149,21 @@ export async function markAsTalked(contactId: string): Promise<ActionResult> {
   if (!existing) {
     return NOT_FOUND;
   }
-  await db.insert(talkEvents).values({ contactId, createdBy: uid });
+  const talkedAt = new Date();
+  await db.transaction(async (tx) => {
+    await tx.insert(talkEvents).values({ contactId, createdBy: uid, talkedAt });
+    // The same talk on the linked contact, owned by the other user. The link
+    // row is the only permission for this cross-user write. Zero rows when the
+    // contact is not linked, so no `if`.
+    await tx.execute(sql`
+      INSERT INTO talk_events (contact_id, created_by, talked_at)
+      SELECT CASE WHEN l.contact_a_id = ${contactId}
+                  THEN l.contact_b_id ELSE l.contact_a_id END,
+             ${uid}, ${talkedAt}
+      FROM contact_links l
+      WHERE l.contact_a_id = ${contactId} OR l.contact_b_id = ${contactId}
+    `);
+  });
   revalidatePath("/");
   return { ok: true };
 }

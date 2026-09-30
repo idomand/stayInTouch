@@ -14,7 +14,7 @@ Branch: `feat/linked-users` (created from `main` on 2026-09-30).
 | --- | --- |
 | 1. Schema + migration `0001` (dev) | ✅ applied on `dev` (production: in Step 5) |
 | 2. Server identity email + request/link actions | ✅ `lib/actions/links.ts`; DB rules tested on `dev`; end-to-end test in Step 4 |
-| 3. `markAsTalked` propagation + read queries | ⬜ |
+| 3. `markAsTalked` propagation + read queries | ✅ SQL tested on `dev`; `lib/db/queries/links.ts` |
 | 4. UI: link action, `/account`, NavBar badge | ⬜ |
 | 5. Production migration + docs | ⬜ |
 
