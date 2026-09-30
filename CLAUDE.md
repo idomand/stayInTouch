@@ -40,10 +40,15 @@ The migration plan and its status live in `specs/postgres-migration.md`.
 
 ### Data model — the key thing to understand
 
-Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-only`). Schema is in `lib/db/schema/`: `contacts`, `notes`, `talk_events`. Types are inferred from the schema — no hand-written row types. `owner_id` is the Firebase uid (bare `text`, no FK).
+Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-only`). Schema is in `lib/db/schema/`: `contacts`, `notes`, `talk_events`, `link_requests`, `contact_links`. Types are inferred from the schema — no hand-written row types. `owner_id` is the Firebase uid (bare `text`, no FK).
 
 - Reads: `lib/db/queries/contacts.ts` → `getContactsForCurrentUser()`, called from the `app/page.tsx` Server Component. `lastTalkedAt` and `daysUntilNextTalk` are computed in SQL, not stored; the overdue-first ordering comes from there.
-- Writes: Server Actions in `lib/actions/contacts.ts`. Each one calls `revalidatePath("/")`. There is no realtime listener.
+- Writes: Server Actions in `lib/actions/contacts.ts` and `lib/actions/links.ts`. Each one calls `revalidatePath` for the pages it affects. There is no realtime listener. Shared input checks (`validateFields`, `isValidEmail`, `ActionResult`, …) live in `lib/actions/validation.ts` — a plain module, because a `"use server"` file may only export async functions.
+
+**Linked users.** Two users can link one contact each; a talk marked on either contact is then recorded on both (`markAsTalked` inserts the second row through `contact_links` in the same transaction — the link row is the only permission for that cross-user write). Only talk events are shared; notes, names and cadence stay private.
+- A request (`link_requests`) is addressed to an **email** and never resolved to a uid, so nothing reveals whether an email has an account. The addressee sees requests sent to their verified session email. After accept, the link (`contact_links`) is two contact ids; emails play no part.
+- Invariants the database cannot express are enforced in `acceptLinkRequest`'s transaction: a contact is in at most one link (row locks), and two users have at most one link (advisory lock on the uid pair).
+- Reads for `/account` are in `lib/db/queries/links.ts`.
 
 **Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`). Never trust an id from the client, and never take `owner_id` from a request body or URL.
 
@@ -72,7 +77,7 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 `lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
 
-Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`). `proxy.ts` (Next 16's name for middleware) gates `/` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
+Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/account` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
 
 **Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
