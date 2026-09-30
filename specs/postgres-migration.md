@@ -409,25 +409,21 @@ stay private, and each side keeps its own `cadence_days`.
 | Accepting when the addressee has no contact for the requester? | **Choose in the accept dialog:** link to an existing contact, or create a new one prefilled with the requester's name and the default cadence (7). No silent auto-create — name matching is unreliable. |
 | Where do requests live in the UI? | A new protected route **`/account`**, "Friend requests" section only in this phase, plus a pending-count badge in `NavBar`. The rest of `/account` is in _Future upgrades_. |
 
-Planned shape (the full step-by-step brief is written at the start of the branch):
+Planned shape — the full step-by-step brief is **`specs/phase-8-linked-users.md`**:
 
 - [ ] **Schema (migration `0001`):**
-      - `link_requests`: `id` · `from_user_id text` · `from_contact_id uuid → contacts
-        ON DELETE CASCADE` · `to_user_id text` · `from_name` / `from_email`
-        (snapshot shown to the addressee) · `status` enum `pending`/`accepted`/
-        `rejected` · `created_at` · `responded_at`. `CHECK (from_user_id <>
-        to_user_id)`; partial `UNIQUE (LEAST(from,to), GREATEST(from,to)) WHERE
-        status = 'pending'`.
-      - `contact_links`: `id` · `contact_a_id` / `contact_b_id uuid → contacts ON
-        DELETE CASCADE` · `created_at`. `CHECK (contact_a_id < contact_b_id)`,
-        `UNIQUE (contact_a_id, contact_b_id)`. "A contact is in at most one link"
-        spans both columns — enforce in the accept transaction; decide the exact
-        constraint in the brief.
+      - `link_requests` addressed to a normalized **email** (`to_email`), not a
+        uid, with a `from_name` / `from_email` snapshot, a `pending`/`accepted`/
+        `rejected` status, and at most one pending request per contact.
+      - `contact_links`: `contact_a_id` / `contact_b_id uuid → contacts ON DELETE
+        CASCADE`, `CHECK (contact_a_id < contact_b_id)`, unique pair. "A contact
+        is in at most one link" is enforced in the accept transaction with row
+        locks.
 - [ ] **Finding the other user:** there is no users table, so a request targets
-      an email (default: the contact's `friend_email`). The server resolves it
-      with `adminAuth.getUserByEmail()`. The reply is **the same whether or not
-      the email has an account**, so the form cannot be used to discover who
-      uses the app. The addressee's email must be verified.
+      an email (default: the contact's `friend_email`). It is stored as an email,
+      not resolved to a uid: resolving would make the sender's outgoing list show
+      only emails that have an account, revealing who uses the app. The
+      addressee sees requests sent to their verified session email.
 - [ ] **Server Actions** (new file, same guards and validation as
       `lib/actions/contacts.ts`): `sendLinkRequest`, `acceptLinkRequest` (a
       **transaction**: set status, optionally create the contact, insert the
