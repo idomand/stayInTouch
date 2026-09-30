@@ -97,7 +97,7 @@ the two, built on Firebase **session cookies**:
    `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid }` or
    `null`. `checkRevoked = true` rejects a signed-out or disabled user.
 4. Logout `DELETE`s the cookie, then signs out the client SDK.
-5. `middleware.ts` gates `/` on cookie **presence** (full verification needs the
+5. `proxy.ts` (formerly `middleware.ts`) gates `/` on cookie **presence** (full verification needs the
    Admin SDK, which cannot run on Edge) and redirects to `/login` before render.
 
 `owner_id` = Firebase uid (stable; not the mutable email). This layer is permanent
