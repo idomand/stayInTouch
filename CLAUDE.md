@@ -79,6 +79,8 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/account` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
 
+`getServerUser()` is wrapped in React `cache()` (one verification per request), so call it freely. Logout (`DELETE /api/auth/session`) revokes the user's refresh tokens, which signs them out on every device. `requireUser()` / `requireUserWithEmail()` call `redirect("/login")` when there is no session, so don't wrap them in a `try/catch` — it would swallow the redirect.
+
 **Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
 - Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.

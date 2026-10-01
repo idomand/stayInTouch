@@ -94,11 +94,16 @@ the two, built on Firebase **session cookies**:
    `session` cookie. (`lib/firebaseAdmin.ts`, `lib/auth/session.ts`.)
 3. Server Components and Server Actions read the cookie and call
    `verifySessionCookie(cookie, true)` through **one shared helper**,
-   `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid }` or
-   `null`. `checkRevoked = true` rejects a signed-out or disabled user.
-4. Logout `DELETE`s the cookie, then signs out the client SDK.
-5. `proxy.ts` (formerly `middleware.ts`) gates `/` on cookie **presence** (full verification needs the
-   Admin SDK, which cannot run on Edge) and redirects to `/login` before render.
+   `getServerUser()` (`lib/auth/getServerUser.ts`), which returns
+   `{ uid, email }` or `null`. `checkRevoked = true` rejects a signed-out or
+   disabled user. It is wrapped in React `cache()`, so one request verifies
+   the cookie once.
+4. Logout `DELETE`s the session: the route revokes the user's refresh tokens
+   (signing them out on every device), clears the cookie, then the client SDK
+   signs out.
+5. `proxy.ts` (formerly `middleware.ts`) gates `/` and `/account` on cookie
+   **presence** (full verification needs the Admin SDK, which cannot run on
+   Edge) and redirects to `/login` before render.
 
 `owner_id` = Firebase uid (stable; not the mutable email). This layer is permanent
 architecture — the login provider is irrelevant below it.
@@ -365,7 +370,9 @@ Branch: `chore/db-hardening`. The app is real now — stop dropping the database
 - [x] **Ownership re-audit.** Only three files import `db`
       (`queries/contacts.ts`, `queries/guards.ts`, `actions/contacts.ts`); every
       read and write is scoped by the session uid or goes through
-      `getOwnedContact()`.
+      `getOwnedContact()`. Phase 8 added two more (`actions/links.ts`,
+      `queries/links.ts`); those are scoped by the session uid or, for
+      incoming requests, by the verified session email.
 - [x] **Server Action input validation.** `getOwnedContact()` returns `null` for
       a non-UUID id (fixes all 6 callers); `isUuid()` guards note ids;
       `validateFields()` / `validateNoteBody()` limit name (1–100), cadence
@@ -462,6 +469,23 @@ updates on the next navigation. A sender may re-send after every reject (no
 cooldown). A pending request is lost if the addressee changes their email.
 Request history is deleted with the sender's contact (cascade).
 
+Follow-ups, done 2026-10-01 on branch `chore/small-fixes-2` (from a review of
+the code against this spec):
+
+- [x] `getServerUser()` wrapped in React `cache()` — `/account` verified the
+      cookie four times per render, each a network call (`checkRevoked`).
+- [x] Logout revokes refresh tokens. Clearing the cookie alone left a copied
+      cookie valid for its full 5 days.
+- [x] `requireUser()` / `requireUserWithEmail()` redirect to `/login` instead
+      of throwing, so an expired session in any Server Action lands on the
+      login page instead of an unhandled error.
+- [x] The talk history sends `createdByMe` (computed in SQL), not
+      `created_by` — that column held the linked friend's uid.
+- [x] Action errors are shown in the UI (`ErrorWarning`) for talk, delete
+      contact, and add/edit/delete note. A rejected note keeps its text.
+- [x] The privacy page describes the shared database, email+password sign-in,
+      linking and the service providers.
+
 ---
 
 ## Decisions
@@ -525,15 +549,24 @@ Planned, not scheduled. Each needs its own brief before building.
      `updatePassword`; show errors through `authErrorMessage()`.
    - **Change language:** depends on the i18n work (see _i18n interaction_
      below). Store the choice per user (a cookie or a `user_settings` row).
-2. **Show note errors in the UI.** `Notes.tsx` and `NoteItem.tsx` send action
-   errors only to `console.error`, so a rejected note (e.g. > 5000 characters,
-   "Note not found.") fails silently. Show them like `AddNewContact` does
-   (`ErrorWarning`).
+2. ~~**Show note errors in the UI.**~~ Done 2026-10-01 (see the Phase 8
+   follow-ups).
 3. **A real PWA setup.** `next-pwa` is inert under Turbopack (see above).
    Replace it with a Turbopack-compatible approach (e.g. Serwist, or a
    hand-written service worker), check `public/manifest.json` and the icons,
    and decide what may be cached: never serve a signed-in page after sign-out.
    Then put the "installable" claim back in the README.
+4. **Account deletion.** Today there is no way to delete an account, and
+   deleting the Firebase user would leave its rows behind (`owner_id` has no
+   FK). A "Delete account" section on `/account`: re-authenticate, delete the
+   user's `contacts` by `owner_id` (cascades to notes, talks, links and
+   requests sent from them), cancel pending requests addressed to their email,
+   then Firebase `deleteUser`, then revoke the session. Update the privacy page
+   once it exists.
+5. **Database pool on Vercel Fluid compute.** `lib/db/index.ts` keeps one
+   module-level `Pool`. If Fluid compute is on (not checked), Vercel
+   recommends `attachDatabasePool(pool)` from `@vercel/functions` so idle
+   WebSocket connections close before an instance suspends.
 
 ## i18n interaction (out of scope here, flagged)
 
