@@ -5,13 +5,12 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../lib/AuthContext";
 import { getMyPendingRequestCount } from "@/lib/actions/links";
-import Dialog from "./ui/Dialog";
-import Button from "./ui/Button";
+import Link from "./ui/Link";
+import LogoutButton from "./LogoutButton";
 
 export default function NavBar() {
-  const { currentUser, logout } = useAuth()!;
+  const { currentUser } = useAuth()!;
   const pathname = usePathname();
-  const [isLogoutModelOpen, setIsLogoutModelOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
@@ -40,14 +39,14 @@ export default function NavBar() {
     };
   }, [currentUser?.uid, pathname]);
 
-  function onLogout() {
-    setIsLogoutModelOpen(false);
-    logout();
-  }
-
   return (
-    <nav className="flex justify-between items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
-      <NextLink href="/" aria-label="Stay-in-Touch home">
+    // Equal side columns keep the links centred whether or not Log Out shows.
+    <nav className="grid grid-cols-[1fr_auto_1fr] items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
+      <NextLink
+        href="/"
+        aria-label="Stay-in-Touch home"
+        className="justify-self-start"
+      >
         <img
           src="/friendsLogo.png"
           className="ml-5 my-1 h-10 sm:hidden"
@@ -59,46 +58,44 @@ export default function NavBar() {
       </NextLink>
 
       {currentUser ? (
-        <>
-          <Dialog
-            isOpen={isLogoutModelOpen}
-            title="are you sure?"
-            close={() => {
-              setIsLogoutModelOpen(false);
-            }}
+        <div className="flex items-center gap-4">
+          <Link variant="Nev" isLinkActive={pathname === "/"} href="/">
+            Home
+          </Link>
+          <Link
+            variant="Nev"
+            isLinkActive={pathname === "/settings"}
+            href="/settings"
+            extraClasses="flex items-center"
           >
-            <Button buttonText="Log out" onClick={onLogout} />
-          </Dialog>
-          <div className="flex items-center gap-1 mr-2.5">
-            <NextLink href="/account">
-              <div className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3 relative">
-                Account
-                {pendingCount > 0 && (
-                  <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
-                    {pendingCount}
-                  </span>
-                )}
-              </div>
-            </NextLink>
-          </div>
-          <button
-            onClick={() => {
-              setIsLogoutModelOpen(true);
-            }}
-            className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 m-2.5 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3"
-          >
-            Log Out
-            <img src="/log-out.svg" alt="log out" className="ml-1" />
-          </button>
-        </>
+            Settings
+            {pendingCount > 0 && (
+              <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
+                {pendingCount}
+              </span>
+            )}
+          </Link>
+        </div>
       ) : (
-        <a
-          href="/login"
-          className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
-        >
-          Login page
-        </a>
+        <div />
       )}
+
+      <div className="justify-self-end">
+        {currentUser ? (
+          pathname === "/settings" && (
+            <div className="mr-5">
+              <LogoutButton />
+            </div>
+          )
+        ) : (
+          <a
+            href="/login"
+            className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
+          >
+            Login page
+          </a>
+        )}
+      </div>
     </nav>
   );
 }

@@ -18,9 +18,9 @@ export default function MainForm() {
 
   return (
     <>
-      <section className="flex items-center mt-1 mx-5 sm:block sm:ml-5 sm:mt-0 sm:mr-0">
+      <section className="flex items-center flex-wrap gap-2 mt-1 mx-5 sm:block sm:ml-5 sm:mt-0 sm:mr-0">
         <div className="flex justify-between w-full">
-          <H1 extraClasses="pt-2.5">
+          <H1 extraClasses="pt-2.5 min-w-0 break-words">
             <span
               onClick={startGame}
               className={`cursor-pointer ${

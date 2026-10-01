@@ -3,9 +3,9 @@ import PageHeader from "@/Components/ui/PageHeader";
 
 export default function Privacy() {
   return (
-    <section className="flex items-center flex-col justify-center relative w-[70%] mx-auto">
+    <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
       <PageHeader title="Privacy Policy" />
-      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full flex flex-col gap-3">
+      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full flex flex-col gap-3">
         <P3 extraClasses="normal-case">
           This Privacy Policy explains what information Stay-in-Touch handles,
           how it is used, and the choices you have. By using the app, you agree

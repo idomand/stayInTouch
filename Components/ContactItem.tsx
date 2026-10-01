@@ -56,12 +56,12 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
 
   return (
     <li className="flex items-center justify-between list-none mx-1 my-2.5 w-[85vw] sm:w-auto">
-      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons'] relative">
+      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons'] grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-none relative">
         {error && <ErrorWarning errorMessage={error} />}
-        <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-50 sm:flex-row sm:items-stretch sm:justify-start">
-          <div className="flex flex-col justify-center">
+        <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-full min-w-0 sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
+          <div className="flex flex-col justify-center min-w-0">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
-              <span className="font-medium text-xl leading-5.25 capitalize w-40 text-center sm:w-max sm:text-left">
+              <span className="font-medium text-xl leading-5.25 capitalize w-full min-w-0 break-words text-center sm:w-max sm:text-left">
                 {name}
               </span>
               {contact.isLinked && (
@@ -75,7 +75,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             </div>
           </div>
         </div>
-        <div className="[grid-area:contactDates] flex w-100 border-t border-black/10 pt-3.5 mt-3.5 mb-5 max-w-50 sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0 sm:max-w-none">
+        <div className="[grid-area:contactDates] flex w-full min-w-0 border-t border-black/10 pt-3.5 mt-3.5 mb-5 sm:w-100 sm:max-w-none sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0">
           <div className="flex flex-col justify-center items-center mx-3.5">
             <span className={statusClasses}>{lastTalkedLabel}</span>
           </div>
@@ -87,7 +87,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
           <TalkEvents contact={contact} />
           <Notes contact={contact} />
         </div>
-        <div className="[grid-area:buttons] flex items-center justify-end">
+        <div className="[grid-area:buttons] flex items-center justify-end shrink-0">
           {isTalkingStatusOK ? (
             <IoCheckboxOutline
               onClick={resetFunction}

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { P2 } from "@/Components/ui/Text";
+import PasswordInput from "@/Components/ui/PasswordInput";
 import {
   basicInputClasses,
   basicLabelClasses,
@@ -74,7 +75,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       } else {
         await sendPasswordReset(email);
         // Firebase does not reveal whether the email exists, so neither do we.
-        setInfo("If an account exists for this email, we sent a reset link.");
+        setInfo("If an account exists for this email, we sent a reset link. Not there? Check your spam folder.");
       }
     } catch (caughtError) {
       setError(authErrorMessage(caughtError));
@@ -116,8 +117,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       {mode !== "reset" && (
         <label className={basicLabelClasses}>
           Password
-          <input
-            type="password"
+          <PasswordInput
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete={mode === "signUp" ? "new-password" : "current-password"}
@@ -131,8 +131,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
           Confirm password
-          <input
-            type="password"
+          <PasswordInput
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             autoComplete="new-password"
