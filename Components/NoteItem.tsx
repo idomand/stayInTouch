@@ -1,7 +1,9 @@
 "use client";
+import { useState, useEffect } from "react";
 import { deleteNote } from "@/lib/actions/contacts";
 import { H4 } from "@/Components/ui/Text";
 import Button from "./ui/Button";
+import ErrorWarning from "./ErrorWarning";
 
 type NoteItemProps = {
   noteId: string;
@@ -16,15 +18,25 @@ export default function NoteItem({
   contactId,
   switchToEditMood,
 }: NoteItemProps) {
+  const [error, setError] = useState<string | boolean>(false);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
+
   async function deleteNoteFunc() {
     const result = await deleteNote(contactId, noteId);
     if (!result.ok) {
-      console.error(result.error);
+      setError(result.error);
     }
   }
 
   return (
-    <li className="list-none p-1 m-1 flex flex-col">
+    <li className="list-none p-1 m-1 flex flex-col relative">
       <div className="flex justify-between">
         <H4>Note</H4>
         <div className="flex mb-1">
@@ -46,6 +58,7 @@ export default function NoteItem({
       <div className="border border-solid border-blue2 p-1 bg-grey1 overflow-auto w-auto sm:w-95 h-12.5 text-sm">
         {body}
       </div>
+      {error && <ErrorWarning errorMessage={error} />}
     </li>
   );
 }

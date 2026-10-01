@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
@@ -8,10 +9,20 @@ import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import Notes from "./Notes";
 import TalkEvents from "./TalkEvents";
+import ErrorWarning from "./ErrorWarning";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
   const now = Date.now();
+  const [error, setError] = useState<string | boolean>(false);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
 
   // On time when there are days left before the next talk; never-talked
   // (null) and overdue (<= 0) both read as "needs attention".
@@ -39,13 +50,14 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   async function resetFunction() {
     const result = await markAsTalked(id);
     if (!result.ok) {
-      console.error(result.error);
+      setError(result.error);
     }
   }
 
   return (
     <li className="flex items-center justify-between list-none mx-1 my-2.5 w-[85vw] sm:w-auto">
-      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
+      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons'] relative">
+        {error && <ErrorWarning errorMessage={error} />}
         <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-50 sm:flex-row sm:items-stretch sm:justify-start">
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-2 justify-center sm:justify-start">

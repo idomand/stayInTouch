@@ -29,6 +29,7 @@ export default function MoreOptionsDropdown({
     useState(false);
   const [isUnlinkConfirmOpen, setIsUnlinkConfirmOpen] = useState(false);
   const [unlinkError, setUnlinkError] = useState<string | false>(false);
+  const [deleteError, setDeleteError] = useState<string | false>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +82,7 @@ export default function MoreOptionsDropdown({
   async function deleteContactFunc() {
     const result = await deleteContact(contact.id);
     if (!result.ok) {
-      console.error(result.error);
+      setDeleteError(result.error);
     }
   }
 
@@ -164,19 +165,24 @@ export default function MoreOptionsDropdown({
         isOpen={isDeleteContactModelOpen}
         close={() => {
           setIsDeleteContactModelOpen(false);
+          setDeleteError(false);
         }}
       >
-        <div className="flex justify-between">
-          <Button
-            buttonText={`Delete ${contact.name}`}
-            onClick={deleteContactFunc}
-          />
-          <Button
-            buttonText={`Go back`}
-            onClick={() => {
-              setIsDeleteContactModelOpen(false);
-            }}
-          />
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between">
+            <Button
+              buttonText={`Delete ${contact.name}`}
+              onClick={deleteContactFunc}
+            />
+            <Button
+              buttonText={`Go back`}
+              onClick={() => {
+                setIsDeleteContactModelOpen(false);
+                setDeleteError(false);
+              }}
+            />
+          </div>
+          {deleteError && <ErrorWarning errorMessage={deleteError} />}
         </div>
       </Dialog>
       <LinkContactDialog
