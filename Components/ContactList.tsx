@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { H1, P3 } from "@/Components/ui/Text";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import ContactItem from "./ContactItem";
@@ -13,11 +14,13 @@ export default function ContactList({
 }: {
   contacts: ContactListItem[];
 }) {
+  const t = useTranslations("ContactList");
+
   if (contacts.length === 0) {
     return (
       <div className="flex flex-col items-center mt-10 text-center gap-2">
-        <H1>No contacts yet</H1>
-        <P3>Add your first friend with “Make a friend!” above.</P3>
+        <H1>{t("empty")}</H1>
+        <P3>{t("emptyHint")}</P3>
       </div>
     );
   }

@@ -75,7 +75,7 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 ### Auth
 
-`lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
+`lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error, t)` (same file), not raw Firebase codes.
 
 Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/settings` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
 
@@ -87,7 +87,17 @@ Server identity uses Firebase **session cookies**. On login the client POSTs its
 
 ### Google Calendar
 
-`lib/CalenderFunctions.ts` does **not** use the Calendar API or an OAuth token. It builds a `calendar.google.com/render?action=TEMPLATE` URL with prefilled fields and opens it in a new window. Any leftover `googleAccessToken` in localStorage is cleared on load — don't reintroduce a token-based flow without a deliberate reason.
+`lib/CalendarFunctions.ts` does **not** use the Calendar API or an OAuth token. It builds a `calendar.google.com/render?action=TEMPLATE` URL with prefilled fields and opens it in a new window. Any leftover `googleAccessToken` in localStorage is cleared on load — don't reintroduce a token-based flow without a deliberate reason.
+
+### i18n — next-intl (English, German)
+
+Every user-facing string goes through `t()` from `next-intl`: `useTranslations("Namespace")` in components (client or server), `await getTranslations("Namespace")` in async Server Components and actions. Text lives in `i18n/en.json` and `i18n/de.json`, one namespace per component or page. Developer-only text (console, thrown internal errors, DB values) stays English.
+
+- **No locale in the URL.** `i18n/request.ts` picks the locale per request: the `NEXT_LOCALE` cookie (set by `setLocale` in `lib/actions/locale.ts` from `/settings`), else the `Accept-Language` header, else English. Supported locales are in `i18n/config.ts`. Because it reads cookies and headers, every page renders dynamically.
+- **Type-check guards the keys.** `global.d.ts` types `t()` keys against `en.json`, and `i18n/request.ts` types `de.json` as `en.json`, so a wrong key or a key missing from German fails `npm run type-check`. Add every new key to both files.
+- **Values go in whole templates** (`"Delete {name}"`), never concatenated parts; German word order differs. Inline markup uses `t.rich`.
+- **Server Action errors** are translated on the server: validation returns an `ErrorMessage` key and actions return `actionError(...)` (`lib/actions/actionError.ts`), so clients show `result.error` unchanged.
+- **Auth errors** are keys too: `AuthContext` throws `AuthMessageError`, and callers pass `useTranslations("authErrors")` to `authErrorMessage(error, t)`.
 
 ### Styling — Tailwind CSS v4
 

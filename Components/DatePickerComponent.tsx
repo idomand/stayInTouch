@@ -1,8 +1,13 @@
 import React from "react";
 import { addDays } from "date-fns";
-import DatePicker from "react-datepicker";
+import { de } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { twMerge } from "tailwind-merge";
+
+// English needs no registration: it is react-datepicker's built-in default.
+registerLocale("de", de);
 
 type DatePickerComponentProps = {
   setStartDate:
@@ -20,6 +25,9 @@ export default function DatePickerComponent({
   isInline = false,
   maxDate = addDays(new Date(), 90),
 }: DatePickerComponentProps) {
+  const t = useTranslations("DatePicker");
+  const locale = useLocale();
+
   return (
     <>
       <DatePicker
@@ -27,7 +35,8 @@ export default function DatePickerComponent({
         maxDate={maxDate}
         calendarContainer={Calendar}
         popperContainer={Popper}
-        dateFormat="dd/MM/yyyy"
+        dateFormat={t("dateFormat")}
+        locale={locale === "en" ? undefined : locale}
         selected={startDate instanceof Date ? startDate : new Date(startDate)}
         onChange={(date) => date && setStartDate(date)}
         inline={isInline}

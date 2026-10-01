@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Button from "./ui/Button";
 
 export default function ScrollToTopButton() {
+  const t = useTranslations("ScrollToTopButton");
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -31,7 +33,7 @@ export default function ScrollToTopButton() {
       {isVisible && (
         <Button
           onClick={scrollToTop}
-          buttonText="Top"
+          buttonText={t("top")}
           extraClasses="fixed md:right-15 md:bottom-20 bottom-25 right-2"
         />
       )}

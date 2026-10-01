@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { H1, P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
@@ -13,6 +14,8 @@ import Button from "@/Components/ui/Button";
 export default function VerifyEmailNotice() {
   const { currentUser, checkVerified, resendVerification, logout } = useAuth()!;
   const router = useRouter();
+  const t = useTranslations("VerifyEmailNotice");
+  const tAuthErrors = useTranslations("authErrors");
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
@@ -24,7 +27,7 @@ export default function VerifyEmailNotice() {
     try {
       await action();
     } catch (caughtError) {
-      setError(authErrorMessage(caughtError));
+      setError(authErrorMessage(caughtError, tAuthErrors));
     } finally {
       setIsBusy(false);
     }
@@ -38,7 +41,7 @@ export default function VerifyEmailNotice() {
         router.replace("/");
         router.refresh();
       } else {
-        setInfo("Not verified yet. Click the link in the email, then try again.");
+        setInfo(t("notVerifiedYet"));
       }
     });
   }
@@ -46,36 +49,38 @@ export default function VerifyEmailNotice() {
   function handleResend() {
     return run(async () => {
       await resendVerification();
-      setInfo("We sent a new verification email. Not there? Check your spam folder.");
+      setInfo(t("resent"));
     });
   }
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      <H1>Check your inbox</H1>
+      <H1>{t("title")}</H1>
       <P2 extraClasses="text-grey3">
-        We sent a verification link to <strong>{currentUser?.email}</strong>.
-        Click it, then come back here. Not there? Check your spam folder.
+        {t.rich("sentTo", {
+          email: currentUser?.email ?? "",
+          strong: (chunks) => <strong>{chunks}</strong>,
+        })}
       </P2>
 
       {error && <P2 extraClasses="text-red1">{error}</P2>}
       {info && <P2 extraClasses="text-green2">{info}</P2>}
 
       <Button
-        buttonText="I've verified"
+        buttonText={t("verified")}
         onClick={handleCheckVerified}
         disabled={isBusy}
         extraClasses="w-full py-2.5 text-base font-semibold"
       />
       <Button
-        buttonText="Resend email"
+        buttonText={t("resend")}
         onClick={handleResend}
         disabled={isBusy}
         variant="Secondary"
         extraClasses="w-full"
       />
       <Button
-        buttonText="Use another account"
+        buttonText={t("useAnotherAccount")}
         onClick={logout}
         disabled={isBusy}
         variant="Secondary"

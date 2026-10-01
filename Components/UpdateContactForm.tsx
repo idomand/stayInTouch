@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { updateContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
@@ -25,6 +26,8 @@ export default function UpdateContactForm({
   isModalOpenProp,
   onClose,
 }: UpdateContactFormProps) {
+  const t = useTranslations("UpdateContactForm");
+  const tCommon = useTranslations("common");
   const [contactName, setContactName] = useState(contact.name);
   const [newFriendEmail, setNewFriendEmail] = useState(
     contact.friendEmail ?? "",
@@ -106,7 +109,7 @@ export default function UpdateContactForm({
 
   return (
     <Dialog
-      title={`Update contact: ${contact.name}`}
+      title={t("title", { name: contact.name })}
       isOpen={isModalOpenProp}
       close={() => {
         onCloseModal();
@@ -122,10 +125,10 @@ export default function UpdateContactForm({
             )}
           >
             <label className={twMerge(basicLabelClasses, "")}>
-              Change Name:
+              {t("changeName")}
               <input
                 type="text"
-                placeholder="Enter Name"
+                placeholder={tCommon("enterName")}
                 name="name"
                 value={contactName}
                 required
@@ -139,10 +142,15 @@ export default function UpdateContactForm({
             <label
               className={twMerge(
                 basicLabelClasses,
-                " relative after:content-['Days'] after:font-bold after:absolute after:top-8 after:left-5 after:text-[10px] after:text-grey3",
+                " relative after:content-(--days-label) after:font-bold after:absolute after:top-8 after:left-5 after:text-[10px] after:text-grey3",
               )}
+              // CSS content needs a quoted string; the variable carries the
+              // translated "Days" into the ::after label.
+              style={
+                { "--days-label": JSON.stringify(tCommon("days")) } as React.CSSProperties
+              }
             >
-              Change Talk Every X Days:
+              {t("changeCadence")}
               <input
                 type="number"
                 name="time"
@@ -158,7 +166,7 @@ export default function UpdateContactForm({
               />
             </label>
             <div className="flex flex-col m-1 justify-between">
-              Change Last Time We Have Spoken
+              {t("changeLastSpoken")}
               <DatePickerComponent
                 setStartDate={onDateChange}
                 startDate={lastTalk}
@@ -167,7 +175,7 @@ export default function UpdateContactForm({
             </div>
 
             <label className={twMerge(basicLabelClasses, "")}>
-              Change Friend Email:
+              {t("changeEmail")}
               <input
                 type="email"
                 value={newFriendEmail}
@@ -183,7 +191,7 @@ export default function UpdateContactForm({
 
             <input
               type="submit"
-              value="Update"
+              value={t("update")}
               disabled={contactName === ""}
               className={twMerge(
                 inputSubmitClasses,

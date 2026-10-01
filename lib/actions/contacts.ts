@@ -8,20 +8,19 @@ import {
   requireUser,
 } from "@/lib/db/queries/guards";
 import { contacts, notes, talkEvents } from "@/lib/db/schema";
+import { actionError } from "@/lib/actions/actionError";
 import {
   type ActionResult,
+  type ErrorMessage,
   isUniqueViolation,
   normalizeEmail,
   validateFields,
   validateNoteBody,
 } from "@/lib/actions/validation";
 
-const NOT_FOUND: ActionResult = { ok: false, error: "Contact not found." };
-const NOTE_NOT_FOUND: ActionResult = { ok: false, error: "Note not found." };
-const NAME_TAKEN: ActionResult = {
-  ok: false,
-  error: "A contact with this name already exists.",
-};
+const NOT_FOUND: ErrorMessage = { key: "contactNotFound" };
+const NOTE_NOT_FOUND: ErrorMessage = { key: "noteNotFound" };
+const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
 
 export type AddContactInput = {
   name: string;
@@ -47,7 +46,7 @@ export async function addContact(input: AddContactInput): Promise<ActionResult> 
     validateFields(input) ??
     validateNoteBody(input.note, { optional: true });
   if (invalid) {
-    return { ok: false, error: invalid };
+    return actionError(invalid);
   }
 
   try {
@@ -76,7 +75,7 @@ export async function addContact(input: AddContactInput): Promise<ActionResult> 
     });
   } catch (error) {
     if (isUniqueViolation(error)) {
-      return NAME_TAKEN;
+      return actionError(NAME_TAKEN);
     }
     throw error;
   }
@@ -92,11 +91,11 @@ export async function updateContact(
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   const invalid = validateFields(input);
   if (invalid) {
-    return { ok: false, error: invalid };
+    return actionError(invalid);
   }
 
   try {
@@ -120,7 +119,7 @@ export async function updateContact(
     });
   } catch (error) {
     if (isUniqueViolation(error)) {
-      return NAME_TAKEN;
+      return actionError(NAME_TAKEN);
     }
     throw error;
   }
@@ -133,7 +132,7 @@ export async function deleteContact(contactId: string): Promise<ActionResult> {
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   await db
     .delete(contacts)
@@ -147,7 +146,7 @@ export async function markAsTalked(contactId: string): Promise<ActionResult> {
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   const talkedAt = new Date();
   await db.transaction(async (tx) => {
@@ -175,11 +174,11 @@ export async function addNote(
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   const invalid = validateNoteBody(body);
   if (invalid) {
-    return { ok: false, error: invalid };
+    return actionError(invalid);
   }
   await db.insert(notes).values({ contactId, body: body.trim() });
   revalidatePath("/");
@@ -194,14 +193,14 @@ export async function updateNote(
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   if (!isUuid(noteId)) {
-    return NOTE_NOT_FOUND;
+    return actionError(NOTE_NOT_FOUND);
   }
   const invalid = validateNoteBody(body);
   if (invalid) {
-    return { ok: false, error: invalid };
+    return actionError(invalid);
   }
   const updated = await db
     .update(notes)
@@ -209,7 +208,7 @@ export async function updateNote(
     .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
     .returning({ id: notes.id });
   if (updated.length === 0) {
-    return NOTE_NOT_FOUND;
+    return actionError(NOTE_NOT_FOUND);
   }
   revalidatePath("/");
   return { ok: true };
@@ -222,17 +221,17 @@ export async function deleteNote(
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
-    return NOT_FOUND;
+    return actionError(NOT_FOUND);
   }
   if (!isUuid(noteId)) {
-    return NOTE_NOT_FOUND;
+    return actionError(NOTE_NOT_FOUND);
   }
   const deleted = await db
     .delete(notes)
     .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
     .returning({ id: notes.id });
   if (deleted.length === 0) {
-    return NOTE_NOT_FOUND;
+    return actionError(NOTE_NOT_FOUND);
   }
   revalidatePath("/");
   return { ok: true };
