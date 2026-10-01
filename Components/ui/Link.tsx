@@ -24,7 +24,9 @@ export default function Link({
   const navClasses = "text-sm border-b-2 border-blue1/40 hover:border-blue1";
   const textClasses = "border-b text-blue1 ml-1";
 
-  const isActiveClasses = isLinkActive ? "border-b-2 border-blue1" : "";
+  const isActiveClasses = isLinkActive
+    ? "border-b-2 border-blue1 text-blue1"
+    : "";
 
   const variantClasses = {
     Primary: primaryClasses,
@@ -36,6 +38,7 @@ export default function Link({
     <NextLink
       target={target}
       href={href}
+      aria-current={isLinkActive ? "page" : undefined}
       className={twMerge(
         baseClasses,
         variantClasses,

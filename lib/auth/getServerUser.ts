@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session";
 
@@ -22,7 +23,12 @@ export type ServerUser = {
   email: string | null;
 };
 
-export async function getServerUser(): Promise<ServerUser | null> {
+/**
+ * Wrapped in React cache() so one request verifies the cookie once:
+ * checkRevoked makes each verification a network call to Firebase, and a page
+ * plus its queries would otherwise repeat it (four times on /settings).
+ */
+export const getServerUser = cache(async (): Promise<ServerUser | null> => {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
   if (!sessionCookie) {
@@ -36,4 +42,4 @@ export async function getServerUser(): Promise<ServerUser | null> {
   } catch {
     return null;
   }
-}
+});

@@ -52,6 +52,7 @@ export default function AddNewContact() {
       setNote("");
       setStartDate(new Date());
       setName("");
+      setFriendEmail("");
       setTime(3);
     }
   }
@@ -83,25 +84,28 @@ export default function AddNewContact() {
         <label
           className={twMerge(
             basicLabelClasses,
-            "[grid-area:howMuchTime] relative after:content-['Days'] after:absolute after:top-9 after:left-3.5 after:text-[10px] after:text-grey3 after:font-bold",
+            "[grid-area:howMuchTime]",
           )}
         >
           Every
-          <input
-            value={time}
-            onChange={(e) => {
-              setTime(+e.target.value);
-            }}
-            type="number"
-            name="time"
-            id="time"
-            max={maxCadenceDays}
-            min={1}
-            className={twMerge(
-              basicInputClasses,
-              "border border-solid border-grey2 rounded-lg",
-            )}
-          />
+          <div className="flex items-center gap-1">
+            <input
+              value={time}
+              onChange={(e) => {
+                setTime(+e.target.value);
+              }}
+              type="number"
+              name="time"
+              id="time"
+              max={maxCadenceDays}
+              min={1}
+              className={twMerge(
+                basicInputClasses,
+                "border border-solid border-grey2 rounded-lg flex-1",
+              )}
+            />
+            <span className="text-[10px] text-grey3 font-bold whitespace-nowrap">Days</span>
+          </div>
         </label>
 
         <div className="flex flex-col m-1 justify-between [grid-area:lastTalked]">

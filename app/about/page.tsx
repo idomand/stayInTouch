@@ -4,9 +4,9 @@ import PageHeader from "@/Components/ui/PageHeader";
 
 export default function About() {
   return (
-    <section className="flex items-center flex-col justify-center relative w-[70%] mx-auto">
+    <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
       <PageHeader title="About" />
-      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full">
+      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full">
         <P3>
           This site was created as a way to help people (including myself) to
           stay in touch with the people they care about.
@@ -24,7 +24,7 @@ export default function About() {
       </div>
       <div
         id="HowToUseSection"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
       >
         <H1>How to use the site</H1>
         <P3>To begin, simply log into the site using your Google account.</P3>
@@ -39,7 +39,7 @@ export default function About() {
       </div>
       <div
         id="AboutTheSite"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
       >
         <H1>About the site</H1>
         <P3>
@@ -72,7 +72,7 @@ export default function About() {
       </div>
       <div
         id="AboutTheCreator"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-6 text-justify w-full"
+        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
       >
         <H1>About me</H1>
         <P3>
