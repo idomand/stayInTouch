@@ -36,7 +36,7 @@ Next.js 16 **App Router** (`app/`) + React 19, TypeScript. Firebase Auth for ide
 
 Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout. Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. `app/page.tsx` (home) is a Server Component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
 
-The migration plan and its status live in `specs/postgres-migration.md`.
+The reasoning behind the design (schema, auth, security, lessons learned) is in `docs/architecture.md`. Planned work is in `specs/future-upgrades.md`.
 
 ### Data model — the key thing to understand
 
@@ -48,7 +48,7 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 **Linked users.** Two users can link one contact each; a talk marked on either contact is then recorded on both (`markAsTalked` inserts the second row through `contact_links` in the same transaction — the link row is the only permission for that cross-user write). Only talk events are shared; notes, names and cadence stay private.
 - A request (`link_requests`) is addressed to an **email** and never resolved to a uid, so nothing reveals whether an email has an account. The addressee sees requests sent to their verified session email. After accept, the link (`contact_links`) is two contact ids; emails play no part.
 - Invariants the database cannot express are enforced in `acceptLinkRequest`'s transaction: a contact is in at most one link (row locks), and two users have at most one link (advisory lock on the uid pair).
-- Reads for `/account` are in `lib/db/queries/links.ts`.
+- Reads for `/settings` are in `lib/db/queries/links.ts`.
 
 **Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`). Never trust an id from the client, and never take `owner_id` from a request body or URL.
 
@@ -77,7 +77,7 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 `lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error)` (same file), not raw Firebase codes.
 
-Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/account` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
+Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/settings` on cookie presence only; real verification happens on the server. Every new protected route must be added to its `matcher`.
 
 `getServerUser()` is wrapped in React `cache()` (one verification per request), so call it freely. Logout (`DELETE /api/auth/session`) revokes the user's refresh tokens, which signs them out on every device. `requireUser()` / `requireUserWithEmail()` call `redirect("/login")` when there is no session, so don't wrap them in a `try/catch` — it would swallow the redirect.
 

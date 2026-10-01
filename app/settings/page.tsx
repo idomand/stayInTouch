@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import FriendRequests from "@/Components/FriendRequests";
+import LanguageSelector from "@/Components/LanguageSelector";
 import PageHeader from "@/Components/ui/PageHeader";
+import { H4 } from "@/Components/ui/Text";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import {
   getIncomingRequests,
@@ -10,15 +12,15 @@ import {
 } from "@/lib/db/queries/links";
 
 export const metadata: Metadata = {
-  title: "Account | Stay-in-Touch",
+  title: "Settings | Stay-in-Touch",
 };
 
 /**
- * The account page. Phase 8 builds only the "Friend requests" section; the
- * notifications, password and language sections are planned (see "Future
- * upgrades" in specs/postgres-migration.md).
+ * The settings page: app language (UI only, not wired yet), the notifications
+ * center (friend requests for now). The NavBar shows logout only on this page.
+ * The password section is still planned (see specs/future-upgrades.md).
  */
-export default async function AccountPage() {
+export default async function SettingsPage() {
   const user = await getServerUser();
   if (!user) {
     redirect("/login");
@@ -31,8 +33,10 @@ export default async function AccountPage() {
   ]);
 
   return (
-    <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
-      <PageHeader title="Account" />
+    <section className="flex items-center flex-col justify-center gap-4 relative w-[90%] sm:w-[70%] mx-auto mb-8">
+      <PageHeader title="Settings" />
+      <LanguageSelector />
+      <H4 extraClasses="self-start mt-2">Notifications</H4>
       <FriendRequests
         incoming={incoming}
         outgoing={outgoing}

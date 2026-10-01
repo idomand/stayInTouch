@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { contacts, linkRequests } from "@/lib/db/schema";
 
 /**
- * Reads for the /account "Friend requests" section. Incoming requests are found
+ * Reads for the /settings "Friend requests" section. Incoming requests are found
  * by the caller's verified session email (requests are addressed to an email);
  * outgoing ones by the caller's uid. The addressee only ever gets the sender's
  * name and email snapshot — never notes, cadence or talk history.

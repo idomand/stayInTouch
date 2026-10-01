@@ -26,7 +26,7 @@ export type ServerUser = {
 /**
  * Wrapped in React cache() so one request verifies the cookie once:
  * checkRevoked makes each verification a network call to Firebase, and a page
- * plus its queries would otherwise repeat it (four times on /account).
+ * plus its queries would otherwise repeat it (four times on /settings).
  */
 export const getServerUser = cache(async (): Promise<ServerUser | null> => {
   const cookieStore = await cookies();

@@ -46,7 +46,7 @@ export default function VerifyEmailNotice() {
   function handleResend() {
     return run(async () => {
       await resendVerification();
-      setInfo("We sent a new verification email.");
+      setInfo("We sent a new verification email. Not there? Check your spam folder.");
     });
   }
 
@@ -55,7 +55,7 @@ export default function VerifyEmailNotice() {
       <H1>Check your inbox</H1>
       <P2 extraClasses="text-grey3">
         We sent a verification link to <strong>{currentUser?.email}</strong>.
-        Click it, then come back here.
+        Click it, then come back here. Not there? Check your spam folder.
       </P2>
 
       {error && <P2 extraClasses="text-red1">{error}</P2>}

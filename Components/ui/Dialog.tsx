@@ -41,7 +41,7 @@ export default function Dialog({
   }, [close]);
 
   const dialogClasses = twMerge(
-    "fixed inset-0 m-auto w-[90vw] max-w-xl  rounded-lg p-6 shadow-lg backdrop:bg-black/40",
+    "fixed inset-0 m-auto w-[90vw] max-w-xl rounded-lg p-6 shadow-lg backdrop:bg-black/40 max-h-[90vh] overflow-y-auto",
     extraClasses,
   );
 

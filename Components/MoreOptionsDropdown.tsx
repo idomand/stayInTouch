@@ -129,7 +129,7 @@ export default function MoreOptionsDropdown({
               Link with friend
             </div>
           ) : contact.hasPendingRequest ? (
-            <NextLink href="/account">
+            <NextLink href="/settings">
               <div className="px-4 py-3 text-grey3 text-sm not-last:border-b not-last:border-grey2">
                 <P2 extraClasses="text-grey3">Link request pending</P2>
               </div>
@@ -169,7 +169,7 @@ export default function MoreOptionsDropdown({
         }}
       >
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between">
+          <div className="flex justify-between flex-wrap gap-2">
             <Button
               buttonText={`Delete ${contact.name}`}
               onClick={deleteContactFunc}

@@ -60,7 +60,7 @@ lib/           Firebase setup, auth context, Calendar helpers
 lib/auth/      Server identity (Firebase session cookies)
 lib/db/        Drizzle client, schema, migrations and queries (server only)
 lib/actions/   Server Actions for contact, note and link writes
-app/           Next.js App Router routes (/, /account, /login, /about, /privacy, /api/auth/session)
+app/           Next.js App Router routes (/, /settings, /login, /about, /privacy, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations
 public/        Static assets, icons, and a web app manifest (PWA support is planned)
