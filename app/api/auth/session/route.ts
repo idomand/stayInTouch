@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
+import { getServerUser } from "@/lib/auth/getServerUser";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import { SESSION_COOKIE_NAME, SESSION_EXPIRES_IN_MS } from "@/lib/auth/session";
 
@@ -50,8 +51,22 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/** Clear the session cookie on logout. */
+/**
+ * Log out: revoke the user's refresh tokens, then clear the cookie. Clearing
+ * alone would leave a copied cookie valid until it expires; after revocation,
+ * verifySessionCookie(…, true) rejects it. This signs the user out on every
+ * device, the cost of a real server-side logout.
+ */
 export async function DELETE() {
+  const user = await getServerUser();
+  if (user) {
+    try {
+      await adminAuth.revokeRefreshTokens(user.uid);
+    } catch (error) {
+      // Still clear the cookie below; a failed revoke must not block logout.
+      console.error("Could not revoke refresh tokens on logout:", error);
+    }
+  }
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE_NAME);
   return NextResponse.json({ status: "ok" });
