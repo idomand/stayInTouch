@@ -1,5 +1,6 @@
 import "server-only";
 import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import { db } from "@/lib/db";
 import { contacts, type Contact } from "@/lib/db/schema";
@@ -13,21 +14,24 @@ import { contacts, type Contact } from "@/lib/db/schema";
  */
 
 /**
- * The signed-in uid, or throw. Verifies the session once; pass the returned uid
- * to getOwnedContact so a single write does not re-verify the cookie (and re-hit
- * the network for revocation) per ownership check.
+ * The signed-in uid, or redirect to /login. A session can expire or be revoked
+ * while the page is open; redirecting here, not throwing, means every Server
+ * Action sends the user to sign in instead of failing with an unhandled error.
+ * Pass the returned uid to getOwnedContact so a single write does not
+ * re-verify the cookie per ownership check.
  */
 export async function requireUser(): Promise<string> {
   const user = await getServerUser();
   if (!user) {
-    throw new Error("Not authenticated.");
+    redirect("/login");
   }
   return user.uid;
 }
 
 /**
- * The signed-in uid and verified email, or throw. For actions that match on the
- * caller's email (link requests are addressed to an email, not a uid).
+ * The signed-in uid and verified email, or redirect to /login (see
+ * requireUser). For actions that match on the caller's email (link requests
+ * are addressed to an email, not a uid).
  */
 export async function requireUserWithEmail(): Promise<{
   uid: string;
@@ -35,7 +39,7 @@ export async function requireUserWithEmail(): Promise<{
 }> {
   const user = await getServerUser();
   if (!user) {
-    throw new Error("Not authenticated.");
+    redirect("/login");
   }
   if (!user.email) {
     throw new Error("This account has no email address.");
