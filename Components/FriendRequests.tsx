@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { rejectLinkRequest, cancelLinkRequest } from "@/lib/actions/links";
 import type {
   IncomingLinkRequest,
@@ -20,6 +21,8 @@ export default function FriendRequests({
   outgoing: OutgoingLinkRequest[];
   linkableContacts: LinkableContact[];
 }) {
+  const t = useTranslations("FriendRequests");
+  const tCommon = useTranslations("common");
   const [selectedRequest, setSelectedRequest] = useState<
     IncomingLinkRequest | null
   >(null);
@@ -62,18 +65,17 @@ export default function FriendRequests({
   return (
     <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
       <div className="mb-6">
-        <P extraClasses="text-lg font-semibold mb-2">Friend requests</P>
+        <P extraClasses="text-lg font-semibold mb-2">{t("title")}</P>
         <P2 extraClasses="text-grey3">
-          Linked contacts share talks: when either of you marks that you talked,
-          both timers reset. Notes and settings stay private.
+          {t("intro")}
         </P2>
       </div>
 
       {/* Incoming requests */}
       <div className="mb-8">
-        <P extraClasses="font-medium text-base mb-3">Incoming</P>
+        <P extraClasses="font-medium text-base mb-3">{t("incoming")}</P>
         {incoming.length === 0 ? (
-          <P2 extraClasses="text-grey3">No incoming requests.</P2>
+          <P2 extraClasses="text-grey3">{t("noIncoming")}</P2>
         ) : (
           <div className="space-y-3">
             {incoming.map((request) => (
@@ -85,17 +87,17 @@ export default function FriendRequests({
                   <P extraClasses="font-medium break-words">{request.fromName}</P>
                   <P2 extraClasses="text-grey3 break-all">{request.fromEmail}</P2>
                   <P2 extraClasses="text-grey3 text-xs mt-1">
-                    wants to link with you
+                    {t("wantsToLink")}
                   </P2>
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    buttonText="Accept"
+                    buttonText={tCommon("accept")}
                     onClick={() => openAcceptDialog(request)}
                     disabled={processingId === request.id}
                   />
                   <Button
-                    buttonText="Reject"
+                    buttonText={t("reject")}
                     onClick={() => handleRejectRequest(request.id)}
                     variant="Secondary"
                     disabled={processingId === request.id}
@@ -109,9 +111,9 @@ export default function FriendRequests({
 
       {/* Outgoing requests */}
       <div>
-        <P extraClasses="font-medium text-base mb-3">Outgoing</P>
+        <P extraClasses="font-medium text-base mb-3">{t("outgoing")}</P>
         {outgoing.length === 0 ? (
-          <P2 extraClasses="text-grey3">No pending requests sent.</P2>
+          <P2 extraClasses="text-grey3">{t("noOutgoing")}</P2>
         ) : (
           <div className="space-y-3">
             {outgoing.map((request) => (
@@ -121,14 +123,14 @@ export default function FriendRequests({
               >
                 <div className="flex-1 min-w-0">
                   <P extraClasses="text-sm break-words">
-                    <span className="font-medium">Your contact</span>
+                    <span className="font-medium">{t("yourContact")}</span>
                     {` "${request.contactName}"`}
                     {` → ${request.toEmail}`}
-                    <span className="text-grey3"> · waiting</span>
+                    <span className="text-grey3">{t("waiting")}</span>
                   </P>
                 </div>
                 <Button
-                  buttonText="Cancel"
+                  buttonText={tCommon("cancel")}
                   onClick={() => handleCancelRequest(request.id)}
                   variant="Secondary"
                   disabled={processingId === request.id}

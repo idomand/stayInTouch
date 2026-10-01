@@ -6,7 +6,7 @@ type Props = {
   href: LinkProps["href"];
   children?: React.ReactNode;
   extraClasses?: string;
-  variant?: "Primary" | "Nev" | "Text";
+  variant?: "Primary" | "Nav" | "Text";
   isLinkActive?: boolean;
   target?: React.HTMLAttributeAnchorTarget;
 };
@@ -30,7 +30,7 @@ export default function Link({
 
   const variantClasses = {
     Primary: primaryClasses,
-    Nev: navClasses,
+    Nav: navClasses,
     Text: textClasses,
   }[variant];
 

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
-import { createGoogleCalendarEvent } from "@/lib/CalenderFunctions";
+import { createGoogleCalendarEvent } from "@/lib/CalendarFunctions";
 import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
@@ -20,6 +21,7 @@ export default function AppointmentForm({
   isModalOpenProp,
   onClose,
 }: AppointmentFormProps) {
+  const t = useTranslations("AppointmentForm");
   const [error, setError] = useState<string | boolean>(false);
 
   const { name, daysUntilNextTalk, friendEmail } = contact;
@@ -56,7 +58,7 @@ export default function AppointmentForm({
     }
   }
 
-  function calenderFunction() {
+  function calendarFunction() {
     const eventDate =
       specificReminder instanceof Date
         ? specificReminder
@@ -67,7 +69,7 @@ export default function AppointmentForm({
 
   return (
     <Dialog
-      title={`Make Appointment with: ${name}`}
+      title={t("title", { name })}
       close={() => {
         onCloseModal();
       }}
@@ -82,7 +84,7 @@ export default function AppointmentForm({
             )}
           >
             <P1 extraClasses="mb-2.5 ml-3.5 text-start sm:ml-0">
-              Add this reminder into Google Calender
+              {t("intro")}
             </P1>
             <div className="m-auto sm:m-0">
               <DatePickerComponent
@@ -93,13 +95,13 @@ export default function AppointmentForm({
             </div>
           </form>
           <Button
-            buttonText="Save to Calender"
-            onClick={calenderFunction}
+            buttonText={t("save")}
+            onClick={calendarFunction}
             extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
           >
             <img
               src="/Google_Calendar.svg"
-              alt="Google Calendar"
+              alt={t("calendarAlt")}
               className="mr-2"
             />
           </Button>

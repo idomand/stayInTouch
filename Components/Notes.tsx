@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { addNote, updateNote } from "@/lib/actions/contacts";
 import {
@@ -13,9 +14,11 @@ import Dialog from "./ui/Dialog";
 import ErrorWarning from "./ErrorWarning";
 
 export default function Notes({ contact }: { contact: ContactListItem }) {
+  const t = useTranslations("Notes");
+  const tCommon = useTranslations("common");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
-  const [isEditMood, setIsEditMood] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [editNoteId, setEditNoteId] = useState<string | null>(null);
   const [error, setError] = useState<string | boolean>(false);
 
@@ -33,17 +36,17 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
   }
 
   function onSubmitFunc(e: React.FormEvent<HTMLFormElement>) {
-    isEditMood ? updatedNoteFunc(e) : addNewNoteFunc(e);
+    isEditMode ? updatedNoteFunc(e) : addNewNoteFunc(e);
   }
 
-  function switchToEditMood(oldNoteData: string, oldNoteId: string) {
-    setIsEditMood(true);
+  function switchToEditMode(oldNoteData: string, oldNoteId: string) {
+    setIsEditMode(true);
     setNoteInputValue(oldNoteData);
     setEditNoteId(oldNoteId);
   }
 
   function cancelEdit() {
-    setIsEditMood(false);
+    setIsEditMode(false);
     setNoteInputValue("");
   }
 
@@ -56,7 +59,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
     if (!result.ok) {
       setError(result.error);
     } else {
-      setIsEditMood(false);
+      setIsEditMode(false);
       setNoteInputValue("");
       (e.target as HTMLFormElement).blur();
     }
@@ -87,7 +90,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
       </button>
 
       <Dialog
-        title="Notes"
+        title={t("title")}
         close={() => {
           setIsModalOpen(false);
         }}
@@ -101,7 +104,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
             >
               <textarea
                 required
-                placeholder="Enter Note..."
+                placeholder={tCommon("enterNote")}
                 value={noteInputValue}
                 onChange={(e) => {
                   setNoteInputValue(e.target.value);
@@ -109,12 +112,12 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
                 className="bg-grey1 rounded-[10px] p-2.5 w-auto sm:w-103.5 h-18"
               />
               <div className="flex justify-center">
-                {isEditMood && (
-                  <Button onClick={cancelEdit} buttonText="Cancel" />
+                {isEditMode && (
+                  <Button onClick={cancelEdit} buttonText={tCommon("cancel")} />
                 )}
                 <input
                   type="submit"
-                  value={isEditMood ? "Update Note" : "Add Note"}
+                  value={isEditMode ? t("updateNote") : t("addNote")}
                   className={twMerge(
                     inputSubmitClasses,
                     "bg-blue1 text-white px-3.5 py-2.5 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1",
@@ -133,7 +136,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
                     noteId={note.id}
                     body={note.body}
                     contactId={contact.id}
-                    switchToEditMood={switchToEditMood}
+                    switchToEditMode={switchToEditMode}
                   />
                 );
               })}

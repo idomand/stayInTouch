@@ -1,0 +1,248 @@
+{
+  "common": {
+    "cancel": "Abbrechen",
+    "accept": "Annehmen",
+    "unlink": "Verknüpfung lösen",
+    "days": "Tage",
+    "enterName": "Name eingeben",
+    "enterNote": "Notiz eingeben...",
+    "areYouSure": "Bist du sicher?"
+  },
+  "NavBar": {
+    "homeLabel": "Stay-in-Touch Startseite",
+    "logoAlt": "Stay-in-Touch Logo",
+    "home": "Start",
+    "settings": "Einstellungen",
+    "loginPage": "Anmelden"
+  },
+  "Footer": {
+    "about": "Über",
+    "privacy": "Datenschutz"
+  },
+  "PageHeader": {
+    "backToHome": "Zurück zur Startseite"
+  },
+  "ScrollToTopButton": {
+    "top": "Nach oben"
+  },
+  "LogoutButton": {
+    "confirmTitle": "Bist du sicher?",
+    "logOut": "Abmelden",
+    "logOutButton": "Abmelden"
+  },
+  "PasswordInput": {
+    "show": "Zeigen",
+    "hide": "Verbergen",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen"
+  },
+  "Login": {
+    "welcome": "Willkommen",
+    "intro": "Melde dich an, um deine Erinnerungen zu verwalten und mit den Menschen in Kontakt zu bleiben, die dir wichtig sind.",
+    "signingIn": "Anmeldung läuft…",
+    "signInWithGoogle": "Mit Google anmelden",
+    "or": "oder"
+  },
+  "EmailAuthForm": {
+    "signIn": "Anmelden",
+    "signUp": "Konto erstellen",
+    "reset": "Link zum Zurücksetzen senden",
+    "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein.",
+    "resetSent": "Falls es ein Konto mit dieser E-Mail gibt, haben wir einen Link zum Zurücksetzen gesendet. Nicht angekommen? Schau in deinem Spam-Ordner nach.",
+    "name": "Name",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "pleaseWait": "Bitte warten…",
+    "createAccount": "Konto erstellen",
+    "forgotPassword": "Passwort vergessen?",
+    "backToSignIn": "Zurück zur Anmeldung"
+  },
+  "VerifyEmailNotice": {
+    "title": "Schau in dein Postfach",
+    "sentTo": "Wir haben einen Bestätigungslink an <strong>{email}</strong> gesendet. Klicke darauf und komm dann hierher zurück. Nicht angekommen? Schau in deinem Spam-Ordner nach.",
+    "notVerifiedYet": "Noch nicht bestätigt. Klicke auf den Link in der E-Mail und versuche es dann erneut.",
+    "resent": "Wir haben eine neue Bestätigungs-E-Mail gesendet. Nicht angekommen? Schau in deinem Spam-Ordner nach.",
+    "verified": "Ich habe bestätigt",
+    "resend": "E-Mail erneut senden",
+    "useAnotherAccount": "Anderes Konto verwenden"
+  },
+  "authErrors": {
+    "emailInUse": "Es gibt bereits ein Konto mit dieser E-Mail.",
+    "wrongCredentials": "Falsche E-Mail oder falsches Passwort.",
+    "weakPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "tooManyRequests": "Zu viele Versuche. Bitte warte kurz und versuche es erneut.",
+    "invalidEmail": "Bitte gib eine gültige E-Mail ein.",
+    "notVerified": "Bitte bestätige deine E-Mail, bevor du dich anmeldest.",
+    "signInAgain": "Bitte melde dich erneut an.",
+    "sessionFailed": "Deine Sitzung konnte nicht gestartet werden. Bitte versuche es erneut.",
+    "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "errors": {
+    "invalidInput": "Ungültige Eingabe.",
+    "nameRequired": "Ein Name ist erforderlich.",
+    "nameTooLong": "Der Name darf höchstens {max} Zeichen lang sein.",
+    "cadenceOutOfRange": "Der Abstand muss eine ganze Zahl von 1 bis {max} Tagen sein.",
+    "emailInvalid": "Die E-Mail ist ungültig.",
+    "talkDateInvalid": "Das Datum des letzten Gesprächs ist ungültig.",
+    "talkDateInFuture": "Das Datum des letzten Gesprächs darf nicht in der Zukunft liegen.",
+    "noteInvalid": "Die Notiz ist ungültig.",
+    "noteEmpty": "Die Notiz ist leer.",
+    "noteTooLong": "Die Notiz darf höchstens {max} Zeichen lang sein.",
+    "contactNotFound": "Kontakt nicht gefunden.",
+    "noteNotFound": "Notiz nicht gefunden.",
+    "requestNotFound": "Anfrage nicht gefunden.",
+    "nameTaken": "Es gibt bereits einen Kontakt mit diesem Namen.",
+    "linkToSelf": "Du kannst dir selbst keine Verknüpfungsanfrage senden.",
+    "contactAlreadyLinked": "Dieser Kontakt ist bereits verknüpft.",
+    "requestAlreadyPending": "Du hast bereits eine offene Anfrage an diese E-Mail.",
+    "requestCrossed": "{name} hat dir bereits eine Anfrage gesendet. Nimm sie auf deiner Einstellungsseite an.",
+    "contactHasPendingRequest": "Für diesen Kontakt gibt es bereits eine offene Anfrage.",
+    "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
+    "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
+    "contactNotLinked": "Dieser Kontakt ist nicht verknüpft."
+  },
+  "MainForm": {
+    "hi": "Hallo",
+    "makeAFriend": "Freund hinzufügen!"
+  },
+  "ContactList": {
+    "empty": "Noch keine Kontakte",
+    "emptyHint": "Füge oben mit „Freund hinzufügen!“ deinen ersten Freund hinzu."
+  },
+  "AddNewContact": {
+    "talkTo": "Ich möchte sprechen mit:",
+    "every": "Alle",
+    "lastSpoken": "Wann wir zuletzt gesprochen haben",
+    "addNote": "Notiz hinzufügen (optional)",
+    "friendEmail": "E-Mail des Freundes (optional)",
+    "submit": "Kontakt hinzufügen"
+  },
+  "ContactItem": {
+    "linkedTitle": "Verknüpft — Gespräche werden geteilt",
+    "linkedLabel": "{name} ist verknüpft - Gespräche werden geteilt",
+    "neverTalked": "Noch nie gesprochen",
+    "talkedToday": "Heute gesprochen",
+    "daysSinceTalk": "Seit {days} Tagen nicht gesprochen",
+    "talkInDays": "Sprechen in {days} Tagen",
+    "talkToday": "Heute sprechen!"
+  },
+  "MoreOptionsDropdown": {
+    "updateContact": "Kontakt bearbeiten",
+    "makeAppointment": "Termin vereinbaren",
+    "linkWithFriend": "Mit Freund verknüpfen",
+    "linkPending": "Verknüpfungsanfrage offen",
+    "deleteContact": "Kontakt löschen",
+    "deleteName": "{name} löschen",
+    "goBack": "Zurück",
+    "unlinkTitle": "Gespräche nicht mehr teilen?",
+    "unlinkText": "Gespräche mit diesem Freund nicht mehr teilen? Beide Kontakte und vergangene Gespräche bleiben erhalten."
+  },
+  "UpdateContactForm": {
+    "title": "Kontakt bearbeiten: {name}",
+    "changeName": "Name ändern:",
+    "changeCadence": "Alle X Tage sprechen:",
+    "changeLastSpoken": "Wann wir zuletzt gesprochen haben ändern",
+    "changeEmail": "E-Mail des Freundes ändern:",
+    "update": "Speichern"
+  },
+  "Notes": {
+    "title": "Notizen",
+    "updateNote": "Notiz speichern",
+    "addNote": "Notiz hinzufügen"
+  },
+  "NoteItem": {
+    "note": "Notiz",
+    "edit": "Bearbeiten",
+    "delete": "Löschen"
+  },
+  "TalkEvents": {
+    "title": "Gesprächsverlauf",
+    "empty": "Noch keine Gespräche erfasst.",
+    "loggedByFriend": "· von deinem Freund erfasst"
+  },
+  "DatePicker": {
+    "dateFormat": "dd.MM.yyyy"
+  },
+  "AppointmentForm": {
+    "title": "Termin vereinbaren mit: {name}",
+    "intro": "Diese Erinnerung in Google Kalender eintragen",
+    "save": "In Kalender speichern",
+    "calendarAlt": "Google Kalender"
+  },
+  "LinkContactDialog": {
+    "title": "Mit einem Freund verknüpfen",
+    "intro": "Sende eine Anfrage an die Stay-in-Touch-E-Mail deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
+    "friendEmail": "E-Mail des Freundes",
+    "emailRequired": "Bitte gib eine E-Mail-Adresse ein.",
+    "send": "Anfrage senden"
+  },
+  "AcceptLinkDialog": {
+    "title": "Mit {name} verknüpfen",
+    "question": "Welcher deiner Kontakte ist {name}?",
+    "existingContact": "Ein bestehender Kontakt",
+    "noUnlinkedContacts": "Du hast keine unverknüpften Kontakte.",
+    "selectExisting": "Bestehenden Kontakt auswählen",
+    "newContact": "Neuen Kontakt erstellen",
+    "contactName": "Name des Kontakts",
+    "everyXDays": "Alle X Tage",
+    "cadenceLabel": "Gesprächsabstand in Tagen",
+    "selectContactError": "Bitte wähle einen Kontakt aus.",
+    "nameRequiredError": "Bitte gib einen Namen für den Kontakt ein."
+  },
+  "FriendRequests": {
+    "title": "Freundschaftsanfragen",
+    "intro": "Verknüpfte Kontakte teilen Gespräche: Wenn einer von euch ein Gespräch markiert, werden beide Timer zurückgesetzt. Notizen und Einstellungen bleiben privat.",
+    "incoming": "Eingehend",
+    "noIncoming": "Keine eingehenden Anfragen.",
+    "wantsToLink": "möchte sich mit dir verknüpfen",
+    "reject": "Ablehnen",
+    "outgoing": "Ausgehend",
+    "noOutgoing": "Keine offenen gesendeten Anfragen.",
+    "yourContact": "Dein Kontakt",
+    "waiting": " · wartet"
+  },
+  "Settings": {
+    "metaTitle": "Einstellungen | Stay-in-Touch",
+    "title": "Einstellungen",
+    "notifications": "Benachrichtigungen"
+  },
+  "LanguageSelector": {
+    "title": "App-Sprache",
+    "browserDefault": "Browsersprache"
+  },
+  "About": {
+    "title": "Über",
+    "aboutApp": "Über die App",
+    "intro1": "Diese App ist entstanden, um Menschen (mich eingeschlossen) dabei zu helfen, mit den Menschen in Kontakt zu bleiben, die ihnen wichtig sind.",
+    "intro2": "Jeder kennt das: Eines Tages wacht man auf und merkt, dass man seit ein paar Monaten nicht mehr mit diesem guten Freund aus der Uni gesprochen hat. Zum Glück hilft Stay-in-Touch!",
+    "howToUse": "So funktioniert es",
+    "howTo1": "Melde dich zuerst mit einer E-Mail oder deinem Google-Konto in der App an.",
+    "howTo2": "Füge dann „Freundeskarten“ für die Menschen in deinem Leben hinzu, mit denen du in Kontakt bleiben möchtest.",
+    "howTo3": "Du gibst nur ihre Namen ein und wie oft du dich bei ihnen melden möchtest, Stay-in-Touch kümmert sich um den Rest.",
+    "howTo4": "Wenn du ihre E-Mail hinzufügst, kannst du dich direkt mit ihnen verknüpfen, ihnen Kalendereinladungen senden und eure Zähler synchronisieren.",
+    "aboutMe": "Über mich",
+    "me1": "Ich heiße Ido Mandelman und bin leidenschaftlicher Fullstack-Entwickler.",
+    "me2": "Ursprünglich komme ich aus Israel und bin mit meiner Frau nach Berlin gezogen, um in dieser schönen Stadt ein neues Leben zu beginnen.",
+    "me3": "In meiner Freizeit lese ich gern Bücher über Programmierung, Geschichte und Science-Fiction, koche und lerne Deutsch.",
+    "github": "Diese App ist komplett Open Source, den ganzen Code findest du auf meinem GitHub,<link>hier</link>.",
+    "website": "Mehr von meinen Projekten findest du auf meiner<link>Website</link>.",
+    "linkedin": "Und schreib mir auf<link>LinkedIn</link>."
+  },
+  "Privacy": {
+    "title": "Datenschutzerklärung",
+    "intro": "Diese Datenschutzerklärung erklärt, welche Informationen Stay-in-Touch verarbeitet, wie sie verwendet werden und welche Wahlmöglichkeiten du hast. Mit der Nutzung der App stimmst du den unten beschriebenen Praktiken zu.",
+    "noTrackingTitle": "Kein Tracking",
+    "noTracking": "Stay-in-Touch verfolgt dich nicht. Die App verwendet keine Analysetools, keine Werbe-Cookies und kein Tracking durch Dritte. Deine Aktivität in der App wird zu keinem Zweck überwacht, ausgewertet oder gemessen.",
+    "dataTitle": "Welche Daten wir speichern",
+    "data": "Die App speichert nur, was du selbst eingibst: deine Kontakte, wie oft du mit jedem sprechen möchtest, deine Notizen, die Daten eurer Gespräche und optional eine E-Mail pro Kontakt. Alle Konten teilen sich eine Datenbank, und jeder Eintrag ist an dein Konto gebunden, sodass andere Nutzer deine Daten nicht sehen können.",
+    "authTitle": "Anmeldung",
+    "auth": "Du kannst dich mit Google oder mit E-Mail und Passwort anmelden. Die Anmeldung läuft über Firebase Authentication. Wir verwenden deinen Namen und deine E-Mail nur, um dein Konto zu identifizieren und sie Personen zu zeigen, denen du eine Verknüpfungsanfrage sendest. Wir greifen nicht auf deine Google-Kontakte, E-Mails oder andere Google-Daten zu.",
+    "linkingTitle": "Verknüpfen mit Freunden",
+    "linking": "Wenn du eine Verknüpfungsanfrage sendest, sieht die Empfängerin oder der Empfänger deinen Namen und deine E-Mail. Nach der Annahme wird ein Gespräch, das auf einer Seite markiert wird, auch auf der anderen erfasst. Dein Freund sieht nur die Daten dieser Gespräche. Deine Notizen, Kontaktnamen und Gesprächsabstände werden nie geteilt.",
+    "providersTitle": "Dienstleister",
+    "providers": "Deine Daten werden von Firebase (Google), Neon und Vercel gespeichert und verarbeitet, nur um die App zu betreiben. Sie werden nie verkauft oder vermietet, und die App sendet dir nie Werbung oder Spam.",
+    "controlTitle": "Deine Kontrolle",
+    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen."
+  }
+}

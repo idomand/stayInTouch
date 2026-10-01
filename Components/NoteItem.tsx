@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { deleteNote } from "@/lib/actions/contacts";
 import { H4 } from "@/Components/ui/Text";
 import Button from "./ui/Button";
@@ -9,15 +10,16 @@ type NoteItemProps = {
   noteId: string;
   body: string;
   contactId: string;
-  switchToEditMood: (oldNoteData: string, oldNoteId: string) => void;
+  switchToEditMode: (oldNoteData: string, oldNoteId: string) => void;
 };
 
 export default function NoteItem({
   noteId,
   body,
   contactId,
-  switchToEditMood,
+  switchToEditMode,
 }: NoteItemProps) {
+  const t = useTranslations("NoteItem");
   const [error, setError] = useState<string | boolean>(false);
 
   useEffect(() => {
@@ -38,16 +40,16 @@ export default function NoteItem({
   return (
     <li className="list-none p-1 m-1 flex flex-col relative">
       <div className="flex justify-between">
-        <H4>Note</H4>
+        <H4>{t("note")}</H4>
         <div className="flex mb-1">
           <Button
-            buttonText="Edit"
-            onClick={() => switchToEditMood(body, noteId)}
+            buttonText={t("edit")}
+            onClick={() => switchToEditMode(body, noteId)}
             variant="Secondary"
             extraClasses="mr-1 hover:bg-blue3 hover:text-blue1"
           />
           <Button
-            buttonText="Delete"
+            buttonText={t("delete")}
             onClick={deleteNoteFunc}
             variant="Secondary"
             extraClasses="hover:bg-red2 hover:text-red1"
