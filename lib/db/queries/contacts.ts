@@ -12,7 +12,12 @@ export type ContactNote = {
 export type ContactTalkEvent = {
   id: string;
   talkedAt: string;
-  createdBy: string;
+  /**
+   * True when the caller logged this talk. A boolean, not created_by: on a
+   * linked contact that column holds the friend's uid, which the client has
+   * no need to see.
+   */
+  createdByMe: boolean;
 };
 
 /**
@@ -90,7 +95,7 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
     ) n ON true
     LEFT JOIN LATERAL (
       SELECT json_agg(
-               json_build_object('id', ee.id, 'talkedAt', ee.talked_at, 'createdBy', ee.created_by)
+               json_build_object('id', ee.id, 'talkedAt', ee.talked_at, 'createdByMe', ee.created_by = ${user.uid})
                ORDER BY ee.talked_at DESC
              ) AS events
       FROM talk_events ee
