@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { acceptLinkRequest } from "@/lib/actions/links";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
 import type {
@@ -27,6 +28,8 @@ export default function AcceptLinkDialog({
   isOpen: boolean;
   close: () => void;
 }) {
+  const t = useTranslations("AcceptLinkDialog");
+  const tCommon = useTranslations("common");
   const [choice, setChoice] = useState<"existing" | "new">(
     linkableContacts.length > 0 ? "existing" : "new"
   );
@@ -40,11 +43,11 @@ export default function AcceptLinkDialog({
 
   async function handleSubmit() {
     if (choice === "existing" && !selectedContactId) {
-      setError("Please select a contact.");
+      setError(t("selectContactError"));
       return;
     }
     if (choice === "new" && !newContactName.trim()) {
-      setError("Please enter a contact name.");
+      setError(t("nameRequiredError"));
       return;
     }
 
@@ -84,13 +87,13 @@ export default function AcceptLinkDialog({
 
   return (
     <Dialog
-      title={`Link with ${request.fromName}`}
+      title={t("title", { name: request.fromName })}
       isOpen={isOpen}
       close={handleDialogClose}
     >
       <div className="flex flex-col gap-4">
         <P2 extraClasses="text-grey3">
-          Which of your contacts is {request.fromName}?
+          {t("question", { name: request.fromName })}
         </P2>
 
         {/* Radio: Existing contact */}
@@ -104,16 +107,16 @@ export default function AcceptLinkDialog({
               onChange={() => setChoice("existing")}
               className="mt-1"
             />
-            <P2 extraClasses="font-medium">An existing contact</P2>
+            <P2 extraClasses="font-medium">{t("existingContact")}</P2>
           </label>
           <div className="flex-1">
             {linkableContacts.length === 0 ? (
               <P2 extraClasses="text-grey3 text-xs mt-1">
-                You have no unlinked contacts.
+                {t("noUnlinkedContacts")}
               </P2>
             ) : (
               <select
-                aria-label="Select an existing contact"
+                aria-label={t("selectExisting")}
                 value={selectedContactId}
                 onChange={(e) => setSelectedContactId(e.target.value)}
                 disabled={choice !== "existing"}
@@ -143,14 +146,14 @@ export default function AcceptLinkDialog({
               onChange={() => setChoice("new")}
               className="mt-1"
             />
-            <P2 extraClasses="font-medium">Create a new contact</P2>
+            <P2 extraClasses="font-medium">{t("newContact")}</P2>
           </label>
           <div className="flex-1">
             <div className="mt-2 space-y-2">
               <input
-                aria-label="Contact name"
+                aria-label={t("contactName")}
                 type="text"
-                placeholder="Contact name"
+                placeholder={t("contactName")}
                 value={newContactName}
                 onChange={(e) => setNewContactName(e.target.value)}
                 disabled={choice !== "new"}
@@ -160,9 +163,9 @@ export default function AcceptLinkDialog({
                 )}
               />
               <div className={twMerge(basicLabelClasses, "")}>
-                <span className="text-xs text-grey3">Every X days</span>
+                <span className="text-xs text-grey3">{t("everyXDays")}</span>
                 <input
-                  aria-label="Talk frequency in days"
+                  aria-label={t("cadenceLabel")}
                   type="number"
                   min={1}
                   max={maxCadenceDays}
@@ -183,13 +186,13 @@ export default function AcceptLinkDialog({
 
         <div className="flex gap-2 justify-end mt-4">
           <Button
-            buttonText="Cancel"
+            buttonText={tCommon("cancel")}
             onClick={handleDialogClose}
             variant="Secondary"
             disabled={isSubmitting}
           />
           <Button
-            buttonText="Accept"
+            buttonText={tCommon("accept")}
             onClick={handleSubmit}
             disabled={isSubmitting}
           />

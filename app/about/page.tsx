@@ -1,113 +1,65 @@
+import type { ReactNode } from "react";
+import { getTranslations } from "next-intl/server";
 import { H1, P3 } from "@/Components/ui/Text";
 import Link from "@/Components/ui/Link";
 import PageHeader from "@/Components/ui/PageHeader";
 
-export default function About() {
+/** A rich-text tag that renders its chunk as an external link. */
+function externalLink(href: string) {
+  return function ExternalLink(chunks: ReactNode) {
+    return (
+      <Link href={href} variant="Text" target="_blank">
+        {chunks}
+      </Link>
+    );
+  };
+}
+
+export default async function About() {
+  const t = await getTranslations("About");
+
   return (
     <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
-      <PageHeader title="About" />
+      <PageHeader title={t("title")} />
       <div className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full">
+        <H1>{t("aboutApp")}</H1>
         <P3>
-          This site was created as a way to help people (including myself) to
-          stay in touch with the people they care about.
-        </P3>
-        <P3>
-          As working adults in 2026, we face so many distractions and
-          responsibilities that maintaining a stable connection with even our
-          closest friends can be difficult.
-        </P3>
-        <P3>
-          Every one of us has had the experience of waking up one day and
-          realizing we have not talked to that good friend from college in a
-          couple of months. Thankfully, Stay-in-Touch is here to help!
+          {t("intro1")}
+          <br />
+          {t("intro2")}
         </P3>
       </div>
       <div
         id="HowToUseSection"
         className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
       >
-        <H1>How to use the site</H1>
-        <P3>To begin, simply log into the site using your Google account.</P3>
-        <P3>
-          Now just think about the people you want to stay in touch with, and
-          when you last spoke to them.
-        </P3>
-        <P3>
-          All you need to do is enter their names and how often you would like
-          to contact them, and Stay-in-Touch will take care of the rest.
-        </P3>
+        <H1>{t("howToUse")}</H1>
+        <P3>{t("howTo1")}</P3>
+        <P3>{t("howTo2")}</P3>
+        <P3>{t("howTo3")}</P3>
+        <P3>{t("howTo4")}</P3>
       </div>
-      <div
-        id="AboutTheSite"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
-      >
-        <H1>About the site</H1>
-        <P3>
-          This site was built using the Next.js framework, which extends the
-          capabilities of the React.js library. In other words, JavaScript, lots
-          of JavaScript.
-        </P3>
-        <P3>
-          To handle the database and authentication, I have used the Google
-          Firebase BaaS. This ensured that all user information would remain
-          safe and secure.
-        </P3>
-        <P3>
-          The design was created by me using Tailwind CSS. By using Tailwind and
-          Next.js, I was able to create my own design system with reusable
-          components, responsiveness, and a single source of truth for most of
-          the themes on this website.
-        </P3>
-        <P3>
-          You can see the code itself in my GitHub repo,
-          <Link
-            href={"https://github.com/idomand/stayInTouch"}
-            variant="Text"
-            target="_blank"
-          >
-            Here
-          </Link>
-          .
-        </P3>
-      </div>
+
       <div
         id="AboutTheCreator"
         className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
       >
-        <H1>About me</H1>
+        <H1>{t("aboutMe")}</H1>
+        <P3>{t("me1")}</P3>
+        <P3>{t("me2")}</P3>
+        <P3>{t("me3")}</P3>
         <P3>
-          My name is Ido Mandelman and I am a passionate frontend developer.
+          {t.rich("github", {
+            link: externalLink("https://github.com/idomand/stayInTouch"),
+          })}
         </P3>
         <P3>
-          Originally from Israel, I have moved to Berlin with my wife to start a
-          new life in this beautiful city. I cannot wait to join the Berlin
-          startup community.
+          {t.rich("website", { link: externalLink("https://www.hire-ido.com") })}
         </P3>
         <P3>
-          In my free time I love reading programming, history, and
-          science-fiction books, cooking and learning German.
-        </P3>
-        <P3>
-          You can see more of my projects on my
-          <Link
-            href={"https://www.hire-ido.com"}
-            variant="Text"
-            target="_blank"
-          >
-            website
-          </Link>
-          .
-        </P3>
-        <P3>
-          And talk to me on
-          <Link
-            href={"https://www.linkedin.com/in/ido-mandelman"}
-            variant="Text"
-            target="_blank"
-          >
-            LinkedIn
-          </Link>
-          .
+          {t.rich("linkedin", {
+            link: externalLink("https://www.linkedin.com/in/ido-mandelman"),
+          })}
         </P3>
       </div>
     </section>

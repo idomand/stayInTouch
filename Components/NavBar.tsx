@@ -3,6 +3,7 @@
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAuth } from "../lib/AuthContext";
 import { getMyPendingRequestCount } from "@/lib/actions/links";
 import Link from "./ui/Link";
@@ -11,6 +12,7 @@ import LogoutButton from "./LogoutButton";
 export default function NavBar() {
   const { currentUser } = useAuth()!;
   const pathname = usePathname();
+  const t = useTranslations("NavBar");
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
@@ -44,13 +46,13 @@ export default function NavBar() {
     <nav className="grid grid-cols-[1fr_auto_1fr] items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
       <NextLink
         href="/"
-        aria-label="Stay-in-Touch home"
+        aria-label={t("homeLabel")}
         className="justify-self-start"
       >
         <img
           src="/friendsLogo.png"
           className="ml-5 my-1 h-10 sm:hidden"
-          alt="Stay-in-Touch logo"
+          alt={t("logoAlt")}
         />
         <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
           Stay-in-Touch!
@@ -59,16 +61,16 @@ export default function NavBar() {
 
       {currentUser ? (
         <div className="flex items-center gap-4">
-          <Link variant="Nev" isLinkActive={pathname === "/"} href="/">
-            Home
+          <Link variant="Nav" isLinkActive={pathname === "/"} href="/">
+            {t("home")}
           </Link>
           <Link
-            variant="Nev"
+            variant="Nav"
             isLinkActive={pathname === "/settings"}
             href="/settings"
             extraClasses="flex items-center"
           >
-            Settings
+            {t("settings")}
             {pendingCount > 0 && (
               <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
                 {pendingCount}
@@ -92,7 +94,7 @@ export default function NavBar() {
             href="/login"
             className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
           >
-            Login page
+            {t("loginPage")}
           </a>
         )}
       </div>

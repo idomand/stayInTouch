@@ -1,3 +1,4 @@
+import type { Messages } from "next-intl";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
 
 /**
@@ -10,6 +11,15 @@ import { maxCadenceDays } from "@/lib/ConstantsFile";
  */
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * A user-facing error as a message key (plus values), not text. Actions turn it
+ * into a translated ActionResult with actionError().
+ */
+export type ErrorMessage = {
+  key: keyof Messages["errors"];
+  values?: Record<string, string | number>;
+};
 
 const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
@@ -30,28 +40,28 @@ export function isValidEmail(email: string): boolean {
   return email.length <= MAX_EMAIL_LENGTH && EMAIL_PATTERN.test(email);
 }
 
-export function validateFields(input: ContactFieldsInput): string | null {
+export function validateFields(input: ContactFieldsInput): ErrorMessage | null {
   if (typeof input !== "object" || input === null) {
-    return "Invalid input.";
+    return { key: "invalidInput" };
   }
   const { name, cadenceDays, friendEmail, talkedAtMs } = input;
   if (typeof name !== "string" || !name.trim()) {
-    return "Name is required.";
+    return { key: "nameRequired" };
   }
   if (name.trim().length > MAX_NAME_LENGTH) {
-    return `Name must be at most ${MAX_NAME_LENGTH} characters.`;
+    return { key: "nameTooLong", values: { max: MAX_NAME_LENGTH } };
   }
   if (
     !Number.isInteger(cadenceDays) ||
     cadenceDays < 1 ||
     cadenceDays > maxCadenceDays
   ) {
-    return `Cadence must be a whole number of days from 1 to ${maxCadenceDays}.`;
+    return { key: "cadenceOutOfRange", values: { max: maxCadenceDays } };
   }
   if (friendEmail != null) {
     const email = typeof friendEmail === "string" ? friendEmail.trim() : null;
     if (email === null || (email && !isValidEmail(email))) {
-      return "Email is invalid.";
+      return { key: "emailInvalid" };
     }
   }
   if (talkedAtMs != null) {
@@ -61,12 +71,12 @@ export function validateFields(input: ContactFieldsInput): string | null {
       typeof talkedAtMs !== "number" ||
       Number.isNaN(new Date(talkedAtMs).getTime())
     ) {
-      return "Last talk date is invalid.";
+      return { key: "talkDateInvalid" };
     }
     // A future talk would make "days since last talk" negative. One day of
     // slack covers client clock and time-zone skew.
     if (talkedAtMs > Date.now() + ONE_DAY_MS) {
-      return "Last talk date cannot be in the future.";
+      return { key: "talkDateInFuture" };
     }
   }
   return null;
@@ -76,19 +86,19 @@ export function validateFields(input: ContactFieldsInput): string | null {
 export function validateNoteBody(
   body: unknown,
   { optional = false }: { optional?: boolean } = {},
-): string | null {
+): ErrorMessage | null {
   if (optional && body == null) {
     return null;
   }
   if (typeof body !== "string") {
-    return "Note is invalid.";
+    return { key: "noteInvalid" };
   }
   const length = body.trim().length;
   if (!length) {
-    return optional ? null : "Note is empty.";
+    return optional ? null : { key: "noteEmpty" };
   }
   if (length > MAX_NOTE_LENGTH) {
-    return `Note must be at most ${MAX_NOTE_LENGTH} characters.`;
+    return { key: "noteTooLong", values: { max: MAX_NOTE_LENGTH } };
   }
   return null;
 }

@@ -76,7 +76,7 @@ export function P3({ children, extraClasses = "" }: Props) {
   return (
     <p
       className={twMerge(
-        "m-0 p-0 text-sm font-medium capitalize leading-[22px] text-black",
+        "m-0 p-0 text-sm font-medium capitalize leading-8 text-black",
         extraClasses,
       )}
     >

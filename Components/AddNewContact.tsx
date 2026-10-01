@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
 import ErrorWrapper from "./ErrorWarning";
@@ -13,6 +14,8 @@ import {
 import { twMerge } from "tailwind-merge";
 
 export default function AddNewContact() {
+  const t = useTranslations("AddNewContact");
+  const tCommon = useTranslations("common");
   const [time, setTime] = useState(3);
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -67,10 +70,10 @@ export default function AddNewContact() {
         )}
       >
         <label className={twMerge(basicLabelClasses, "[grid-area:name]")}>
-          I would like to talk to:
+          {t("talkTo")}
           <input
             type="text"
-            placeholder="Enter Name"
+            placeholder={tCommon("enterName")}
             name="name"
             value={name}
             required
@@ -87,7 +90,7 @@ export default function AddNewContact() {
             "[grid-area:howMuchTime]",
           )}
         >
-          Every
+          {t("every")}
           <div className="flex items-center gap-1">
             <input
               value={time}
@@ -104,12 +107,12 @@ export default function AddNewContact() {
                 "border border-solid border-grey2 rounded-lg flex-1",
               )}
             />
-            <span className="text-[10px] text-grey3 font-bold whitespace-nowrap">Days</span>
+            <span className="text-[10px] text-grey3 font-bold whitespace-nowrap">{tCommon("days")}</span>
           </div>
         </label>
 
         <div className="flex flex-col m-1 justify-between [grid-area:lastTalked]">
-          Last Time We Have Spoken
+          {t("lastSpoken")}
           <DatePickerComponent
             setStartDate={setStartDate}
             startDate={startDate}
@@ -117,9 +120,9 @@ export default function AddNewContact() {
           />
         </div>
         <label className={twMerge(basicLabelClasses, "[grid-area:notes]")}>
-          Add a Note (optional)
+          {t("addNote")}
           <textarea
-            placeholder="Enter Note..."
+            placeholder={tCommon("enterNote")}
             value={note}
             onChange={(e) => {
               setNote(e.target.value);
@@ -128,7 +131,7 @@ export default function AddNewContact() {
           />
         </label>
         <label className={twMerge(basicLabelClasses, "[grid-area:emailInput]")}>
-          Friend's Email (optional)
+          {t("friendEmail")}
           <input
             placeholder="new-friend@friendship.com"
             value={friendEmail}
@@ -145,7 +148,7 @@ export default function AddNewContact() {
 
         <input
           type="submit"
-          value="Add contact"
+          value={t("submit")}
           className={twMerge(
             inputSubmitClasses,
             "[grid-area:submit] bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",

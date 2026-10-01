@@ -4,7 +4,7 @@ Planned, not scheduled. Each needs its own spec (see `specs/template.md`) before
 building. Background and constraints are in `docs/architecture.md`.
 
 1. **`/settings` — the rest of it.** The page (formerly `/account`; the old URL
-   redirects in `next.config.js`) holds a language selector (UI only), a
+   redirects in `next.config.js`) holds the language selector, a
    "Notifications" section with the friend requests, and the NavBar shows Log Out
    only there. Still to build:
    - **Notifications and social:** a notifications list (e.g. "Bob accepted your
@@ -13,9 +13,6 @@ building. Background and constraints are in `docs/architecture.md`.
      sign-in (check `providerData` for `password`). Firebase requires a recent
      sign-in, so re-authenticate (`reauthenticateWithCredential`) before
      `updatePassword`; show errors through `authErrorMessage()`.
-   - **Change language:** the selector exists (`Components/LanguageSelector.tsx`,
-     local state only). Wiring it depends on the i18n work below. Store the choice
-     per user (a cookie or a `user_settings` row).
 2. **Account deletion.** There is no way to delete an account today, and deleting
    the Firebase user would leave its rows behind (`owner_id` has no FK). A
    "Delete account" section on `/settings`: re-authenticate, delete the user's
@@ -32,11 +29,8 @@ building. Background and constraints are in `docs/architecture.md`.
    module-level `Pool`. If Fluid compute is on (not checked), Vercel recommends
    `attachDatabasePool(pool)` from `@vercel/functions` so idle WebSocket
    connections close before an instance suspends.
-5. **i18n (German).** `specs/i18n-german-translations.md` lives on the
-   `70-add-i18n-and-german-translations` branch, not on `main`. It is stale (it
-   says "Pages Router" and cites `pages/index.tsx`) and needs a correction pass
-   first. Its acceptance criterion is "no user-facing English remains when German
-   is selected", so add the auth screens to its surface list: `app/login/page.tsx`,
-   `Components/EmailAuthForm.tsx`, `Components/VerifyEmailNotice.tsx`, and the
-   error strings in `lib/AuthContext.tsx` (`AUTH_ERROR_MESSAGES`,
-   `NOT_VERIFIED_MESSAGE`, `postSessionCookie`).
+5. **Language per account.** The language is a cookie today, so it is per
+   browser and a new device starts from its browser language. Moving it to a
+   `user_settings` row would make it follow the user. (The old
+   `specs/i18n-german-translations.md` on the `70-add-i18n-and-german-translations`
+   branch is superseded by the shipped i18n work.)
