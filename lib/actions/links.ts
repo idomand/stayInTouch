@@ -11,8 +11,10 @@ import {
 import { getPendingRequestCount } from "@/lib/db/queries/links";
 import { contactLinks, contacts, linkRequests } from "@/lib/db/schema";
 import { adminAuth } from "@/lib/firebaseAdmin";
+import { actionError } from "@/lib/actions/actionError";
 import {
   type ActionResult,
+  type ErrorMessage,
   isUniqueViolation,
   isValidEmail,
   validateFields,
@@ -25,13 +27,11 @@ import {
  * accepted link joins two contact ids — emails play no part after that.
  */
 
-const CONTACT_NOT_FOUND: ActionResult = { ok: false, error: "Contact not found." };
-const REQUEST_NOT_FOUND: ActionResult = { ok: false, error: "Request not found." };
-const INVALID_EMAIL: ActionResult = { ok: false, error: "Email is invalid." };
-const NAME_TAKEN: ActionResult = {
-  ok: false,
-  error: "A contact with this name already exists.",
-};
+const CONTACT_NOT_FOUND: ErrorMessage = { key: "contactNotFound" };
+const REQUEST_NOT_FOUND: ErrorMessage = { key: "requestNotFound" };
+const INVALID_EMAIL: ErrorMessage = { key: "emailInvalid" };
+const INVALID_INPUT: ErrorMessage = { key: "invalidInput" };
+const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
 
 /** Accept by linking an existing contact, or by creating a new one. */
 export type AcceptLinkTarget =
@@ -58,17 +58,17 @@ export async function sendLinkRequest(
   const { uid, email: myEmail } = await requireUserWithEmail();
   const contact = await getOwnedContact(uid, contactId);
   if (!contact) {
-    return CONTACT_NOT_FOUND;
+    return actionError(CONTACT_NOT_FOUND);
   }
   if (typeof email !== "string") {
-    return INVALID_EMAIL;
+    return actionError(INVALID_EMAIL);
   }
   const toEmail = email.trim().toLowerCase();
   if (!isValidEmail(toEmail)) {
-    return INVALID_EMAIL;
+    return actionError(INVALID_EMAIL);
   }
   if (toEmail === myEmail) {
-    return { ok: false, error: "You cannot send a link request to yourself." };
+    return actionError({ key: "linkToSelf" });
   }
 
   const [existingLink] = await db
@@ -77,7 +77,7 @@ export async function sendLinkRequest(
     .where(linksTouching([contact.id]))
     .limit(1);
   if (existingLink) {
-    return { ok: false, error: "This contact is already linked." };
+    return actionError({ key: "contactAlreadyLinked" });
   }
 
   // Both checks only reveal the caller's own requests, or ones already in the
@@ -94,10 +94,7 @@ export async function sendLinkRequest(
     )
     .limit(1);
   if (pendingToSameEmail) {
-    return {
-      ok: false,
-      error: "You already have a pending request to this email.",
-    };
+    return actionError({ key: "requestAlreadyPending" });
   }
   const [crossed] = await db
     .select({ fromName: linkRequests.fromName })
@@ -111,10 +108,10 @@ export async function sendLinkRequest(
     )
     .limit(1);
   if (crossed) {
-    return {
-      ok: false,
-      error: `${crossed.fromName} already sent you a request. Accept it on your Settings page.`,
-    };
+    return actionError({
+      key: "requestCrossed",
+      values: { name: crossed.fromName },
+    });
   }
 
   // The addressee sees only this name and email — a snapshot taken now.
@@ -137,10 +134,7 @@ export async function sendLinkRequest(
   } catch (error) {
     // link_requests_one_pending_per_contact
     if (isUniqueViolation(error)) {
-      return {
-        ok: false,
-        error: "This contact already has a pending request.",
-      };
+      return actionError({ key: "contactHasPendingRequest" });
     }
     throw error;
   }
@@ -155,30 +149,30 @@ export async function acceptLinkRequest(
 ): Promise<ActionResult> {
   const { uid, email } = await requireUserWithEmail();
   if (!isUuid(requestId)) {
-    return REQUEST_NOT_FOUND;
+    return actionError(REQUEST_NOT_FOUND);
   }
   if (typeof target !== "object" || target === null) {
-    return { ok: false, error: "Invalid input." };
+    return actionError(INVALID_INPUT);
   }
 
   let chosenContactId: string | null = null;
   let newContact: { name: string; cadenceDays: number } | null = null;
   if ("contactId" in target) {
     if (!isUuid(target.contactId)) {
-      return CONTACT_NOT_FOUND;
+      return actionError(CONTACT_NOT_FOUND);
     }
     chosenContactId = target.contactId;
   } else if ("newContact" in target) {
     const invalid = validateFields(target.newContact);
     if (invalid) {
-      return { ok: false, error: invalid };
+      return actionError(invalid);
     }
     newContact = {
       name: target.newContact.name.trim(),
       cadenceDays: target.newContact.cadenceDays,
     };
   } else {
-    return { ok: false, error: "Invalid input." };
+    return actionError(INVALID_INPUT);
   }
 
   let result: ActionResult;
@@ -198,7 +192,7 @@ export async function acceptLinkRequest(
         )
         .for("update");
       if (!request || request.fromUserId === uid) {
-        return REQUEST_NOT_FOUND;
+        return actionError(REQUEST_NOT_FOUND);
       }
 
       // One link per pair of users. The link row holds contact ids, not user
@@ -216,10 +210,10 @@ export async function acceptLinkRequest(
         LIMIT 1
       `);
       if (pairLinks.rows.length > 0) {
-        return {
-          ok: false,
-          error: `You are already linked with ${request.fromName}.`,
-        };
+        return actionError({
+          key: "alreadyLinkedWith",
+          values: { name: request.fromName },
+        });
       }
 
       // "A contact is in at most one link": lock both contacts (in id order, so
@@ -234,13 +228,13 @@ export async function acceptLinkRequest(
         .orderBy(contacts.id)
         .for("update");
       if (!locked.some((row) => row.id === request.fromContactId)) {
-        return REQUEST_NOT_FOUND;
+        return actionError(REQUEST_NOT_FOUND);
       }
       if (
         chosenContactId &&
         !locked.some((row) => row.id === chosenContactId && row.ownerId === uid)
       ) {
-        return CONTACT_NOT_FOUND;
+        return actionError(CONTACT_NOT_FOUND);
       }
       const [alreadyLinked] = await tx
         .select({ id: contactLinks.id })
@@ -248,7 +242,7 @@ export async function acceptLinkRequest(
         .where(linksTouching(lockIds))
         .limit(1);
       if (alreadyLinked) {
-        return { ok: false, error: "One of these contacts is already linked." };
+        return actionError({ key: "contactsAlreadyLinked" });
       }
 
       let myContactId = chosenContactId;
@@ -260,7 +254,7 @@ export async function acceptLinkRequest(
         myContactId = created.id;
       }
       if (!myContactId) {
-        return { ok: false, error: "Invalid input." };
+        return actionError(INVALID_INPUT);
       }
 
       // Lower-case uuid strings sort like Postgres uuids, matching the
@@ -276,7 +270,7 @@ export async function acceptLinkRequest(
   } catch (error) {
     // contacts_owner_name_unique, when creating the new contact.
     if (isUniqueViolation(error)) {
-      return NAME_TAKEN;
+      return actionError(NAME_TAKEN);
     }
     throw error;
   }
@@ -292,7 +286,7 @@ export async function rejectLinkRequest(
 ): Promise<ActionResult> {
   const { email } = await requireUserWithEmail();
   if (!isUuid(requestId)) {
-    return REQUEST_NOT_FOUND;
+    return actionError(REQUEST_NOT_FOUND);
   }
   const updated = await db
     .update(linkRequests)
@@ -306,7 +300,7 @@ export async function rejectLinkRequest(
     )
     .returning({ id: linkRequests.id });
   if (updated.length === 0) {
-    return REQUEST_NOT_FOUND;
+    return actionError(REQUEST_NOT_FOUND);
   }
   revalidateLinkPages();
   return { ok: true };
@@ -318,7 +312,7 @@ export async function cancelLinkRequest(
 ): Promise<ActionResult> {
   const uid = await requireUser();
   if (!isUuid(requestId)) {
-    return REQUEST_NOT_FOUND;
+    return actionError(REQUEST_NOT_FOUND);
   }
   const deleted = await db
     .delete(linkRequests)
@@ -331,7 +325,7 @@ export async function cancelLinkRequest(
     )
     .returning({ id: linkRequests.id });
   if (deleted.length === 0) {
-    return REQUEST_NOT_FOUND;
+    return actionError(REQUEST_NOT_FOUND);
   }
   revalidateLinkPages();
   return { ok: true };
@@ -351,14 +345,14 @@ export async function unlinkContact(contactId: string): Promise<ActionResult> {
   const uid = await requireUser();
   const contact = await getOwnedContact(uid, contactId);
   if (!contact) {
-    return CONTACT_NOT_FOUND;
+    return actionError(CONTACT_NOT_FOUND);
   }
   const deleted = await db
     .delete(contactLinks)
     .where(linksTouching([contact.id]))
     .returning({ id: contactLinks.id });
   if (deleted.length === 0) {
-    return { ok: false, error: "This contact is not linked." };
+    return actionError({ key: "contactNotLinked" });
   }
   revalidateLinkPages();
   return { ok: true };

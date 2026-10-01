@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { P2 } from "@/Components/ui/Text";
@@ -23,12 +24,6 @@ type Props = {
   disabled?: boolean;
 };
 
-const SUBMIT_TEXT: Record<Mode, string> = {
-  signIn: "Sign in",
-  signUp: "Create account",
-  reset: "Send reset link",
-};
-
 const inputClasses = twMerge(
   basicInputClasses,
   "cursor-text px-3 border border-solid border-grey2",
@@ -38,6 +33,8 @@ const linkButtonClasses =
 
 export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
   const { signUpWithEmail, sendPasswordReset } = useAuth()!;
+  const t = useTranslations("EmailAuthForm");
+  const tAuthErrors = useTranslations("authErrors");
   const [mode, setMode] = useState<Mode>("signIn");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,7 +58,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
     setInfo(null);
 
     if (mode === "signUp" && password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("passwordsDoNotMatch"));
       return;
     }
 
@@ -75,10 +72,10 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       } else {
         await sendPasswordReset(email);
         // Firebase does not reveal whether the email exists, so neither do we.
-        setInfo("If an account exists for this email, we sent a reset link. Not there? Check your spam folder.");
+        setInfo(t("resetSent"));
       }
     } catch (caughtError) {
-      setError(authErrorMessage(caughtError));
+      setError(authErrorMessage(caughtError, tAuthErrors));
     } finally {
       setIsBusy(false);
     }
@@ -90,7 +87,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col w-full gap-2 text-left">
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
-          Name
+          {t("name")}
           <input
             type="text"
             value={name}
@@ -103,7 +100,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       )}
 
       <label className={basicLabelClasses}>
-        Email
+        {t("email")}
         <input
           type="email"
           value={email}
@@ -116,7 +113,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
 
       {mode !== "reset" && (
         <label className={basicLabelClasses}>
-          Password
+          {t("password")}
           <PasswordInput
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -130,7 +127,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
 
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
-          Confirm password
+          {t("confirmPassword")}
           <PasswordInput
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
@@ -153,22 +150,22 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
           "h-10 mx-1 mt-1 bg-blue1 font-semibold text-base hover:bg-blue3 hover:border-blue1 hover:text-blue1",
         )}
       >
-        {isBusy ? "Please wait…" : SUBMIT_TEXT[mode]}
+        {isBusy ? t("pleaseWait") : t(mode)}
       </button>
 
       <div className="flex justify-between mx-1 mt-1">
         {mode === "signIn" ? (
           <>
             <button type="button" onClick={() => switchMode("signUp")} className={linkButtonClasses}>
-              Create an account
+              {t("createAccount")}
             </button>
             <button type="button" onClick={() => switchMode("reset")} className={linkButtonClasses}>
-              Forgot password?
+              {t("forgotPassword")}
             </button>
           </>
         ) : (
           <button type="button" onClick={() => switchMode("signIn")} className={linkButtonClasses}>
-            Back to sign in
+            {t("backToSignIn")}
           </button>
         )}
       </div>

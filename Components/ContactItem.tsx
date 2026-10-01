@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
@@ -13,6 +14,7 @@ import ErrorWarning from "./ErrorWarning";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
+  const t = useTranslations("ContactItem");
   const now = Date.now();
   const [error, setError] = useState<string | boolean>(false);
 
@@ -33,19 +35,19 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
 
   let lastTalkedLabel: string;
   if (lastTalkedAt == null) {
-    lastTalkedLabel = "Never talked";
+    lastTalkedLabel = t("neverTalked");
   } else {
     const elapsed = now - new Date(lastTalkedAt).getTime();
     lastTalkedLabel =
       elapsed < oneDay
-        ? "Talked today"
-        : `Didn’t talk for ${Math.floor(elapsed / oneDay)} days`;
+        ? t("talkedToday")
+        : t("daysSinceTalk", { days: Math.floor(elapsed / oneDay) });
   }
 
   const nextTalkLabel =
     daysUntilNextTalk != null && daysUntilNextTalk > 0
-      ? `Talk in ${Math.ceil(daysUntilNextTalk)} days`
-      : "Talk Today!";
+      ? t("talkInDays", { days: Math.ceil(daysUntilNextTalk) })
+      : t("talkToday");
 
   async function resetFunction() {
     const result = await markAsTalked(id);
@@ -68,8 +70,8 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
                 <FaLink
                   size={14}
                   className="text-blue1 flex-shrink-0"
-                  title="Linked — talks are shared"
-                  aria-label={`${name} is linked - talks are shared`}
+                  title={t("linkedTitle")}
+                  aria-label={t("linkedLabel", { name })}
                 />
               )}
             </div>

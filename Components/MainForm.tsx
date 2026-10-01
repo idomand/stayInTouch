@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "../lib/AuthContext";
 import AddNewContact from "./AddNewContact";
 import { showArt } from "./SecretGame";
@@ -8,6 +9,7 @@ import Button from "./ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
+  const t = useTranslations("MainForm");
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);
   const [showMainForm, setShowMainForm] = useState(false);
 
@@ -27,14 +29,14 @@ export default function MainForm() {
                 hiddenGameIndicator ? "text-red1" : "text-black"
               }`}
             >
-              Hi
+              {t("hi")}
             </span>{" "}
             {currentUser?.displayName}
           </H1>
         </div>
         <div>
           <Button
-            buttonText="Make a friend!"
+            buttonText={t("makeAFriend")}
             onClick={() => setShowMainForm(!showMainForm)}
           />
         </div>

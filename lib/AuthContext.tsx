@@ -12,6 +12,7 @@ import {
   User,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import type { Messages, useTranslations } from "next-intl";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
 import { Result } from "@/Components/ui/Spinner";
@@ -42,18 +43,33 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-const NOT_VERIFIED_MESSAGE = "Please verify your email before signing in.";
+type AuthErrorKey = keyof Messages["authErrors"];
 
-const AUTH_ERROR_MESSAGES: Record<string, string> = {
-  "auth/email-already-in-use": "An account with this email already exists.",
+/** The translator for the "authErrors" messages: useTranslations("authErrors"). */
+export type AuthErrorTranslator = ReturnType<
+  typeof useTranslations<"authErrors">
+>;
+
+/**
+ * A user-facing error this file throws. It carries a message key, not text,
+ * because translation happens in the component that shows it.
+ */
+class AuthMessageError extends Error {
+  constructor(readonly key: AuthErrorKey) {
+    super(key);
+  }
+}
+
+const AUTH_ERROR_KEYS: Record<string, AuthErrorKey> = {
+  "auth/email-already-in-use": "emailInUse",
   // Firebase's email-enumeration protection reports both a wrong password and
   // an unknown email as invalid-credential, so all three share one message.
-  "auth/invalid-credential": "Wrong email or password.",
-  "auth/wrong-password": "Wrong email or password.",
-  "auth/user-not-found": "Wrong email or password.",
-  "auth/weak-password": "Password must be at least 6 characters.",
-  "auth/too-many-requests": "Too many attempts. Please wait and try again.",
-  "auth/invalid-email": "Please enter a valid email.",
+  "auth/invalid-credential": "wrongCredentials",
+  "auth/wrong-password": "wrongCredentials",
+  "auth/user-not-found": "wrongCredentials",
+  "auth/weak-password": "weakPassword",
+  "auth/too-many-requests": "tooManyRequests",
+  "auth/invalid-email": "invalidEmail",
 };
 
 /**
@@ -61,7 +77,10 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
  * null when the user cancelled on purpose (closed the Google popup), so the UI
  * shows nothing.
  */
-export function authErrorMessage(error: unknown): string | null {
+export function authErrorMessage(
+  error: unknown,
+  t: AuthErrorTranslator,
+): string | null {
   if (error instanceof FirebaseError) {
     if (
       error.code === "auth/popup-closed-by-user" ||
@@ -69,14 +88,12 @@ export function authErrorMessage(error: unknown): string | null {
     ) {
       return null;
     }
-    return AUTH_ERROR_MESSAGES[error.code] ?? "Something went wrong. Please try again.";
+    return t(AUTH_ERROR_KEYS[error.code] ?? "generic");
   }
-  // Errors this file throws itself (e.g. postSessionCookie) already carry a
-  // user-facing message.
-  if (error instanceof Error) {
-    return error.message;
+  if (error instanceof AuthMessageError) {
+    return t(error.key);
   }
-  return "Something went wrong. Please try again.";
+  return t("generic");
 }
 
 /**
@@ -95,10 +112,8 @@ async function postSessionCookie(user: User) {
   // Without a cookie the proxy bounces "/" back to /login, so a failure
   // here must surface to the caller instead of navigating silently.
   if (!response.ok) {
-    throw new Error(
-      response.status === 403
-        ? NOT_VERIFIED_MESSAGE
-        :"Could not start your session. Please try again.",
+    throw new AuthMessageError(
+      response.status === 403 ? "notVerified" : "sessionFailed",
     );
   }
 }
@@ -186,14 +201,14 @@ export default function AuthProvider({
   async function signInWithEmail(email: string, password: string) {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     if (!credential.user.emailVerified) {
-      throw new Error(NOT_VERIFIED_MESSAGE);
+      throw new AuthMessageError("notVerified");
     }
     await establishSession(credential.user);
   }
 
   async function resendVerification() {
     if (!auth.currentUser) {
-      throw new Error("Please sign in again.");
+      throw new AuthMessageError("signInAgain");
     }
     await sendEmailVerification(auth.currentUser);
   }
@@ -204,7 +219,7 @@ export default function AuthProvider({
    */
   async function checkVerified() {
     if (!auth.currentUser) {
-      throw new Error("Please sign in again.");
+      throw new AuthMessageError("signInAgain");
     }
     await auth.currentUser.reload();
     if (!auth.currentUser.emailVerified) {

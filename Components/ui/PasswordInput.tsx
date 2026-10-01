@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 
 type PasswordInputProps = Omit<
@@ -15,6 +16,7 @@ export default function PasswordInput({
   className,
   ...props
 }: PasswordInputProps) {
+  const t = useTranslations("PasswordInput");
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -28,10 +30,10 @@ export default function PasswordInput({
         type="button"
         onClick={() => setIsVisible(!isVisible)}
         className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue1"
-        aria-label={isVisible ? "Hide password" : "Show password"}
+        aria-label={isVisible ? t("hidePassword") : t("showPassword")}
         aria-pressed={isVisible}
       >
-        {isVisible ? "Hide" : "Show"}
+        {isVisible ? t("hide") : t("show")}
       </button>
     </div>
   );

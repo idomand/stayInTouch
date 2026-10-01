@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import FriendRequests from "@/Components/FriendRequests";
 import LanguageSelector from "@/Components/LanguageSelector";
 import PageHeader from "@/Components/ui/PageHeader";
 import { H4 } from "@/Components/ui/Text";
+import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import {
   getIncomingRequests,
@@ -11,14 +14,15 @@ import {
   getOutgoingRequests,
 } from "@/lib/db/queries/links";
 
-export const metadata: Metadata = {
-  title: "Settings | Stay-in-Touch",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Settings");
+  return { title: t("metaTitle") };
+}
 
 /**
- * The settings page: app language (UI only, not wired yet), the notifications
- * center (friend requests for now). The NavBar shows logout only on this page.
- * The password section is still planned (see specs/future-upgrades.md).
+ * The settings page: app language, the notifications center (friend requests
+ * for now). The NavBar shows logout only on this page. The password section is
+ * still planned (see specs/future-upgrades.md).
  */
 export default async function SettingsPage() {
   const user = await getServerUser();
@@ -26,6 +30,8 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
+  const t = await getTranslations("Settings");
+  const savedLocale = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
   const [incoming, outgoing, linkableContacts] = await Promise.all([
     getIncomingRequests(),
     getOutgoingRequests(),
@@ -34,9 +40,11 @@ export default async function SettingsPage() {
 
   return (
     <section className="flex items-center flex-col justify-center gap-4 relative w-[90%] sm:w-[70%] mx-auto mb-8">
-      <PageHeader title="Settings" />
-      <LanguageSelector />
-      <H4 extraClasses="self-start mt-2">Notifications</H4>
+      <PageHeader title={t("title")} />
+      <LanguageSelector
+        savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}
+      />
+      <H4 extraClasses="self-start mt-2">{t("notifications")}</H4>
       <FriendRequests
         incoming={incoming}
         outgoing={outgoing}

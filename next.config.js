@@ -18,7 +18,9 @@ const withPWA = require("next-pwa")({
   // disable: process.env.NODE_ENV === 'development'
 });
 
-module.exports = withPWA({
+const withNextIntl = require("next-intl/plugin")("./i18n/request.ts");
+
+module.exports = withNextIntl(withPWA({
   reactStrictMode: true,
   turbopack: {},
   // firebase-admin pulls in ESM-only `jose` via `jwks-rsa`. When Turbopack
@@ -27,4 +29,4 @@ module.exports = withPWA({
   // firebase-admin external makes Node load it natively, where require(esm) is
   // supported.
   serverExternalPackages: ["firebase-admin"],
-});
+}));

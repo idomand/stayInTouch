@@ -34,6 +34,8 @@ Making it an installable **PWA (Progressive Web App)** is planned.
 - 📝 **Per-contact notes** — jot down and edit notes for each person.
 - 🗓️ **Talk history** — each time you mark that you talked, it is saved, and the
   timer restarts from that date.
+- 🌍 **English and German** — the app follows your browser's language, and you
+  can change it on the Settings page.
 - 📅 **Google Calendar reminders** — create a pre-filled calendar event to
   remind yourself to call a contact, optionally inviting their email.
 - 🔗 **Linked friends** — link a contact with a friend who also uses the app.
