@@ -9,8 +9,13 @@ import EmailAuthForm from "@/Components/EmailAuthForm";
 import VerifyEmailNotice from "@/Components/VerifyEmailNotice";
 
 export default function Login() {
-  const { loginWithGoogle, signInWithEmail, currentUser, hasSession } =
-    useAuth()!;
+  const {
+    loginWithGoogle,
+    signInWithEmail,
+    currentUser,
+    hasSession,
+    refreshSession,
+  } = useAuth()!;
   const router = useRouter();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
@@ -20,10 +25,24 @@ export default function Login() {
   // user without one (unverified, expired cookie, cookie still being minted)
   // would be bounced straight back here in a loop. During a fresh sign-in
   // signInAndGo navigates itself.
+  // hasSession can be stale: the server sends a user here when it rejects
+  // their cookie (revoked by a logout on another device, or expired). So
+  // re-check with refreshSession first instead of trusting the flag.
   useEffect(() => {
-    if (hasSession && !isSigningIn) {
-      router.replace("/");
+    if (!hasSession || isSigningIn) {
+      return;
     }
+    let isCancelled = false;
+    refreshSession().then((isValid) => {
+      if (isValid && !isCancelled) {
+        router.replace("/");
+      }
+    });
+    return () => {
+      isCancelled = true;
+    };
+    // refreshSession is a new function every render; listing it would re-run
+    // this effect, and re-mint the cookie, on every render.
   }, [hasSession, isSigningIn, router]);
 
   /** Shared by Google and email sign-in: sign in, wait for the cookie, go home. */
