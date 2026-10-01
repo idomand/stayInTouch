@@ -83,7 +83,7 @@ Server identity uses Firebase **session cookies**. On login the client POSTs its
 
 **Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
-- Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
+- Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `hasSession` can also be stale (cookie revoked by a logout on another device, or expired), so `/login` calls `refreshSession()` before redirecting. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
 
 ### Google Calendar
 

@@ -24,6 +24,8 @@ type AuthContextType = {
    * be signed in while the cookie is missing (expired, or still being minted).
    */
   hasSession: boolean;
+  /** Renew the cookie, or clear hasSession if the server no longer accepts it. */
+  refreshSession: () => Promise<boolean>;
   logout: () => void;
   loginWithGoogle: () => Promise<void>;
   signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
@@ -115,6 +117,27 @@ export default function AuthProvider({
   async function establishSession(user: User) {
     await postSessionCookie(user);
     setHasSession(true);
+  }
+
+  /**
+   * Re-check a session this tab believes it has. The server can reject the
+   * cookie while hasSession stays true (logout on another device revokes it,
+   * or it expires), and /login would then send the user back to "/" in a loop.
+   * Re-minting either renews the cookie or fails; a failure clears hasSession.
+   */
+  async function refreshSession() {
+    if (!auth.currentUser) {
+      setHasSession(false);
+      return false;
+    }
+    try {
+      await establishSession(auth.currentUser);
+      return true;
+    } catch (error) {
+      console.error("Error refreshing server session:", error);
+      setHasSession(false);
+      return false;
+    }
   }
 
   async function logout() {
@@ -224,6 +247,7 @@ export default function AuthProvider({
   const value = {
     currentUser,
     hasSession,
+    refreshSession,
     logout,
     loginWithGoogle,
     signUpWithEmail,
