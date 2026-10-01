@@ -25,27 +25,41 @@ export default function Privacy() {
         <div className="flex flex-col gap-2">
           <H2>Data we store</H2>
           <P3 extraClasses="normal-case">
-            The only information the app stores is the data you enter yourself:
-            the contacts you add and the reminders you create. This data is kept
-            in your own private database and is used solely to provide the
-            app&apos;s features to you.
+            The app stores only what you enter yourself: your contacts, how
+            often you want to talk to each one, your notes, the dates you
+            talked, and an optional email for each contact. All accounts share
+            one database, and every record is tied to your account, so other
+            users cannot see your data.
           </P3>
         </div>
 
         <div className="flex flex-col gap-2">
           <H2>Authentication</H2>
           <P3 extraClasses="normal-case">
-            Signing in with Google is used only to create a secure account that
-            can access your private database. We do not access your Google
-            contacts, email, or any other Google data beyond what is required to
-            identify your account.
+            You can sign in with Google or with an email and password. Sign-in
+            is handled by Firebase Authentication. We use your name and email
+            only to identify your account and to show them to people you send a
+            link request to. We do not access your Google contacts, email, or
+            any other Google data.
           </P3>
         </div>
 
         <div className="flex flex-col gap-2">
-          <H2>Data sharing</H2>
+          <H2>Linking with friends</H2>
           <P3 extraClasses="normal-case">
-            Your data is never sold, rented, or shared with third parties. The
+            If you send a link request, the person you send it to sees your
+            name and email. After they accept, a talk marked on one side is also
+            recorded on the other. Your friend sees only the dates of those
+            talks. Your notes, contact names and talk frequency are never
+            shared.
+          </P3>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <H2>Service providers</H2>
+          <P3 extraClasses="normal-case">
+            Your data is stored and processed by Firebase (Google), Neon and
+            Vercel, only to run the app. It is never sold or rented, and the
             app will never send you marketing or spam messages.
           </P3>
         </div>
@@ -53,9 +67,9 @@ export default function Privacy() {
         <div className="flex flex-col gap-2">
           <H2>Your control</H2>
           <P3 extraClasses="normal-case">
-            You can view, edit, or delete your contacts and reminders at any
-            time from within the app. Removing this data removes it from your
-            private database.
+            You can view, edit, or delete your contacts and notes at any time.
+            Deleting a contact also deletes its notes and talk history. You can
+            unlink a contact at any time to stop sharing talks.
           </P3>
         </div>
       </div>
