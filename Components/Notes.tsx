@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { addNote, updateNote } from "@/lib/actions/contacts";
 import {
@@ -10,12 +10,22 @@ import type { ContactListItem } from "@/lib/db/queries/contacts";
 import NoteItem from "./NoteItem";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
+import ErrorWarning from "./ErrorWarning";
 
 export default function Notes({ contact }: { contact: ContactListItem }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMood, setIsEditMood] = useState(false);
   const [editNoteId, setEditNoteId] = useState<string | null>(null);
+  const [error, setError] = useState<string | boolean>(false);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [error]);
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);
@@ -44,21 +54,23 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
     }
     const result = await updateNote(contact.id, editNoteId, noteInputValue);
     if (!result.ok) {
-      console.error(result.error);
+      setError(result.error);
+    } else {
+      setIsEditMood(false);
+      setNoteInputValue("");
+      (e.target as HTMLFormElement).blur();
     }
-    setIsEditMood(false);
-    setNoteInputValue("");
-    (e.target as HTMLFormElement).blur();
   }
 
   async function addNewNoteFunc(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const result = await addNote(contact.id, noteInputValue);
     if (!result.ok) {
-      console.error(result.error);
+      setError(result.error);
+    } else {
+      setNoteInputValue("");
+      (e.target as HTMLFormElement).blur();
     }
-    setNoteInputValue("");
-    (e.target as HTMLFormElement).blur();
   }
 
   return (
@@ -82,7 +94,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
         isOpen={isModalOpen}
       >
         <section>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center relative">
             <form
               onSubmit={onSubmitFunc}
               className={twMerge(basicFormClasses, "flex flex-col")}
@@ -110,6 +122,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
                 />
               </div>
             </form>
+            {error && <ErrorWarning errorMessage={error} />}
           </div>
           <div className="flex flex-col items-center">
             <ul className="p-0 m-0">

@@ -5,7 +5,8 @@ Live app: **https://stay-in-touch.vercel.app/**
 ![](https://img.shields.io/badge/Framework-Next.js%2016-informational?style=flat&logo=next.js&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Library-React%2019-informational?style=flat&logo=react&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Language-TypeScript-informational?style=flat&logo=typescript&logoColor=white&color=2bbc8a)
-![](https://img.shields.io/badge/Backend-Firebase-informational?style=flat&logo=firebase&logoColor=white&color=2bbc8a)
+![](https://img.shields.io/badge/Auth-Firebase-informational?style=flat&logo=firebase&logoColor=white&color=2bbc8a)
+![](https://img.shields.io/badge/Database-Neon%20Postgres-informational?style=flat&logo=postgresql&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Styling-Tailwind%20CSS%20v4-informational?style=flat&logo=tailwindcss&logoColor=white&color=2bbc8a)
 
 ## Description
@@ -25,7 +26,8 @@ Making it an installable **PWA (Progressive Web App)** is planned.
 
 ## Features
 
-- 🔐 **Google sign-in** — one-click authentication via Firebase Auth.
+- 🔐 **Sign-in** — Google, or email and password with a verified email, via
+  Firebase Auth.
 - 👥 **Contacts with cadence** — add a contact, choose how often you want to
   talk to them, and the list automatically sorts by who you're most overdue
   to reach out to.
@@ -34,6 +36,9 @@ Making it an installable **PWA (Progressive Web App)** is planned.
   timer restarts from that date.
 - 📅 **Google Calendar reminders** — create a pre-filled calendar event to
   remind yourself to call a contact, optionally inviting their email.
+- 🔗 **Linked friends** — link a contact with a friend who also uses the app.
+  When either of you marks a talk, both timers restart. Only the talk is
+  shared; notes and settings stay private.
 
 ## Tech Stack
 
@@ -53,9 +58,9 @@ Making it an installable **PWA (Progressive Web App)** is planned.
 Components/    Reusable UI + feature components (Tailwind utility classes)
 lib/           Firebase setup, auth context, Calendar helpers
 lib/auth/      Server identity (Firebase session cookies)
-lib/db/        Drizzle client, schema and queries (server only)
-lib/actions/   Server Actions for contact writes
-app/           Next.js App Router routes (/, /login, /about, /privacy, /api/auth/session)
+lib/db/        Drizzle client, schema, migrations and queries (server only)
+lib/actions/   Server Actions for contact, note and link writes
+app/           Next.js App Router routes (/, /settings, /login, /about, /privacy, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations
 public/        Static assets, icons, and a web app manifest (PWA support is planned)

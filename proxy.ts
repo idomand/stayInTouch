@@ -19,5 +19,5 @@ export function proxy(request: NextRequest) {
 export const config = {
   // Protected routes; /login, /about and /privacy are public. Add every new
   // protected route here.
-  matcher: ["/", "/account"],
+  matcher: ["/", "/settings"],
 };

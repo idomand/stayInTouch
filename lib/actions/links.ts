@@ -40,7 +40,7 @@ export type AcceptLinkTarget =
 
 function revalidateLinkPages() {
   revalidatePath("/");
-  revalidatePath("/account");
+  revalidatePath("/settings");
 }
 
 /** Link rows that include any of these contacts, on either side. */
@@ -113,7 +113,7 @@ export async function sendLinkRequest(
   if (crossed) {
     return {
       ok: false,
-      error: `${crossed.fromName} already sent you a request. Accept it on your Account page.`,
+      error: `${crossed.fromName} already sent you a request. Accept it on your Settings page.`,
     };
   }
 

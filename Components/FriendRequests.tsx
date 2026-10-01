@@ -60,7 +60,7 @@ export default function FriendRequests({
   }
 
   return (
-    <section className="bg-white rounded-[10px] border border-black/10 p-6 w-full">
+    <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
       <div className="mb-6">
         <P extraClasses="text-lg font-semibold mb-2">Friend requests</P>
         <P2 extraClasses="text-grey3">
@@ -79,16 +79,16 @@ export default function FriendRequests({
             {incoming.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between p-3 bg-grey1 rounded-lg"
+                className="flex items-center justify-between flex-wrap gap-2 p-3 bg-grey1 rounded-lg"
               >
-                <div className="flex-1">
-                  <P extraClasses="font-medium">{request.fromName}</P>
-                  <P2 extraClasses="text-grey3">{request.fromEmail}</P2>
+                <div className="flex-1 min-w-0">
+                  <P extraClasses="font-medium break-words">{request.fromName}</P>
+                  <P2 extraClasses="text-grey3 break-all">{request.fromEmail}</P2>
                   <P2 extraClasses="text-grey3 text-xs mt-1">
                     wants to link with you
                   </P2>
                 </div>
-                <div className="flex gap-2 ml-4">
+                <div className="flex gap-2">
                   <Button
                     buttonText="Accept"
                     onClick={() => openAcceptDialog(request)}
@@ -117,10 +117,10 @@ export default function FriendRequests({
             {outgoing.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between p-3 bg-grey1 rounded-lg"
+                className="flex items-center justify-between flex-wrap gap-2 p-3 bg-grey1 rounded-lg"
               >
-                <div className="flex-1">
-                  <P extraClasses="text-sm">
+                <div className="flex-1 min-w-0">
+                  <P extraClasses="text-sm break-words">
                     <span className="font-medium">Your contact</span>
                     {` "${request.contactName}"`}
                     {` → ${request.toEmail}`}
