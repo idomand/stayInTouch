@@ -34,7 +34,7 @@ export default function MainForm() {
             {currentUser?.displayName}
           </H1>
         </div>
-        <div>
+        <div className="mx-auto mb-3 sm:mx-0 sm:mb-0">
           <Button
             buttonText={t("mainForm.makeAFriend")}
             onClick={() => setShowMainForm(!showMainForm)}

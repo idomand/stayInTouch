@@ -2,6 +2,7 @@
 
 import { FirebaseError } from "firebase/app";
 import {
+  Auth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   sendPasswordResetEmail,
@@ -94,14 +95,22 @@ export function authErrorMessage(
   return t("authErrors.generic");
 }
 
+/** Below createSessionCookie's five-minute limit, with a margin for clock skew. */
+const FRESH_TOKEN_MAX_AGE_MS = 4 * 60 * 1000;
+
 /**
  * Mint (or refresh) the httpOnly server session cookie from a fresh ID token.
- * Force-refresh because createSessionCookie requires a token issued within the
- * last five minutes. Callers that navigate afterwards must await this — the
- * proxy gate on "/" rejects a request whose cookie is not yet set.
+ * createSessionCookie requires a token issued within the last five minutes, so
+ * force a refresh only for an older one; right after sign-in the token is
+ * seconds old and the refresh would be a wasted round trip. Callers that
+ * navigate afterwards must await this — the proxy gate on "/" rejects a
+ * request whose cookie is not yet set.
  */
 async function postSessionCookie(user: User) {
-  const idToken = await user.getIdToken(true);
+  const { issuedAtTime } = await user.getIdTokenResult();
+  const isTokenFresh =
+    Date.now() - Date.parse(issuedAtTime) < FRESH_TOKEN_MAX_AGE_MS;
+  const idToken = await user.getIdToken(!isTokenFresh);
   const response = await fetch("/api/auth/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -114,6 +123,26 @@ async function postSessionCookie(user: User) {
       response.status === 403 ? "notVerified" : "sessionFailed",
     );
   }
+}
+
+/**
+ * Firebase loads a hidden iframe before it opens the Google popup. On desktop
+ * Chrome it does this on the first click, which delayed the popup by seconds.
+ * Start it early. `_popupRedirectResolver._initialize` is internal Firebase
+ * API: if an upgrade removes it, this does nothing and sign-in still works,
+ * just slower. Firebase caches the result, so repeat calls are free.
+ */
+function warmUpPopupSignIn() {
+  const resolver = (
+    auth as unknown as {
+      _popupRedirectResolver?: {
+        _initialize?: (auth: Auth) => Promise<unknown>;
+      };
+    }
+  )._popupRedirectResolver;
+  resolver?._initialize?.(auth).catch((error) => {
+    console.error("Could not prepare Google sign-in:", error);
+  });
 }
 
 export default function AuthProvider({
@@ -212,8 +241,9 @@ export default function AuthProvider({
   }
 
   /**
-   * Re-read the user after they clicked the email link. postSessionCookie
-   * force-refreshes the ID token, so the server sees the new email_verified.
+   * Re-read the user after they clicked the email link. Force a new ID token:
+   * the cached one can still be fresh but carry email_verified = false, and
+   * the server would reject it.
    */
   async function checkVerified() {
     if (!auth.currentUser) {
@@ -223,6 +253,7 @@ export default function AuthProvider({
     if (!auth.currentUser.emailVerified) {
       return false;
     }
+    await auth.currentUser.getIdToken(true);
     await establishSession(auth.currentUser);
     return true;
   }
@@ -240,6 +271,8 @@ export default function AuthProvider({
       setLoading(false);
       if (!user) {
         setHasSession(false);
+        // Signed out is the only state that shows the Google button.
+        warmUpPopupSignIn();
       }
 
       // Refresh the server session cookie on page load/restore so it survives a
