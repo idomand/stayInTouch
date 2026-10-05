@@ -65,7 +65,7 @@ export default function AddNewContact() {
         onSubmit={createNewContact}
         className={twMerge(
           basicFormClasses,
-          "grid w-[85vw] max-w-full py-2.5 px-1 gap-0 [grid-template-areas:'name_howMuchTime''lastTalked_lastTalked''notes_notes''emailInput_emailInput''submit_submit'] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto sm:[grid-template-areas:'name_howMuchTime_howMuchTime''lastTalked_notes_notes''emailInput_emailInput_emailInput''submit_submit_submit']",
+          "grid w-[85vw] max-w-full mx-auto py-2.5 px-1 gap-0 [grid-template-areas:'name_howMuchTime''lastTalked_lastTalked''notes_notes''emailInput_emailInput''submit_submit'] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto sm:[grid-template-areas:'name_howMuchTime_howMuchTime''lastTalked_notes_notes''emailInput_emailInput_emailInput''submit_submit_submit']",
         )}
       >
         <label className={twMerge(basicLabelClasses, "[grid-area:name]")}>
