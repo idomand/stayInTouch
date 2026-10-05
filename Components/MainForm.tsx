@@ -9,7 +9,7 @@ import Button from "./ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
-  const t = useTranslations("MainForm");
+  const t = useTranslations();
   const [hiddenGameIndicator, setHiddenGameIndicator] = useState(false);
   const [showMainForm, setShowMainForm] = useState(false);
 
@@ -29,14 +29,14 @@ export default function MainForm() {
                 hiddenGameIndicator ? "text-red1" : "text-black"
               }`}
             >
-              {t("hi")}
+              {t("mainForm.hi")}
             </span>{" "}
             {currentUser?.displayName}
           </H1>
         </div>
         <div>
           <Button
-            buttonText={t("makeAFriend")}
+            buttonText={t("mainForm.makeAFriend")}
             onClick={() => setShowMainForm(!showMainForm)}
           />
         </div>

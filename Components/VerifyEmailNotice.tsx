@@ -14,8 +14,7 @@ import Button from "@/Components/ui/Button";
 export default function VerifyEmailNotice() {
   const { currentUser, checkVerified, resendVerification, logout } = useAuth()!;
   const router = useRouter();
-  const t = useTranslations("VerifyEmailNotice");
-  const tAuthErrors = useTranslations("authErrors");
+  const t = useTranslations();
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
@@ -27,7 +26,7 @@ export default function VerifyEmailNotice() {
     try {
       await action();
     } catch (caughtError) {
-      setError(authErrorMessage(caughtError, tAuthErrors));
+      setError(authErrorMessage(caughtError, t));
     } finally {
       setIsBusy(false);
     }
@@ -41,7 +40,7 @@ export default function VerifyEmailNotice() {
         router.replace("/");
         router.refresh();
       } else {
-        setInfo(t("notVerifiedYet"));
+        setInfo(t("verifyEmailNotice.notVerifiedYet"));
       }
     });
   }
@@ -49,15 +48,15 @@ export default function VerifyEmailNotice() {
   function handleResend() {
     return run(async () => {
       await resendVerification();
-      setInfo(t("resent"));
+      setInfo(t("verifyEmailNotice.resent"));
     });
   }
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      <H1>{t("title")}</H1>
+      <H1>{t("verifyEmailNotice.title")}</H1>
       <P2 extraClasses="text-grey3">
-        {t.rich("sentTo", {
+        {t.rich("verifyEmailNotice.sentTo", {
           email: currentUser?.email ?? "",
           strong: (chunks) => <strong>{chunks}</strong>,
         })}
@@ -67,20 +66,20 @@ export default function VerifyEmailNotice() {
       {info && <P2 extraClasses="text-green2">{info}</P2>}
 
       <Button
-        buttonText={t("verified")}
+        buttonText={t("verifyEmailNotice.verified")}
         onClick={handleCheckVerified}
         disabled={isBusy}
         extraClasses="w-full py-2.5 text-base font-semibold"
       />
       <Button
-        buttonText={t("resend")}
+        buttonText={t("verifyEmailNotice.resend")}
         onClick={handleResend}
         disabled={isBusy}
         variant="Secondary"
         extraClasses="w-full"
       />
       <Button
-        buttonText={t("useAnotherAccount")}
+        buttonText={t("verifyEmailNotice.useAnotherAccount")}
         onClick={logout}
         disabled={isBusy}
         variant="Secondary"

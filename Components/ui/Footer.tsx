@@ -7,7 +7,7 @@ import { P } from "./Text";
 
 export default function Footer() {
   const pathname = usePathname();
-  const t = useTranslations("Footer");
+  const t = useTranslations();
 
   return (
     <footer className="flex items-start justify-between gap-2 px-6 py-6 bg-white w-full text-xl shadow-[0px_-1px_0px_#e5e9f2] md:grid md:grid-cols-3 md:items-center md:justify-normal md:gap-0 md:px-0">
@@ -18,14 +18,14 @@ export default function Footer() {
           isLinkActive={pathname == "/about"}
           href="/about"
         >
-          {t("about")}
+          {t("footer.about")}
         </Link>
         <Link
           variant="Nav"
           isLinkActive={pathname == "/privacy"}
           href="/privacy"
         >
-          {t("privacy")}
+          {t("footer.privacy")}
         </Link>
       </div>
       <P extraClasses="text-grey3 whitespace-nowrap justify-self-end md:pr-6">

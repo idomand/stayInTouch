@@ -18,8 +18,7 @@ export default function Login() {
     refreshSession,
   } = useAuth()!;
   const router = useRouter();
-  const t = useTranslations("Login");
-  const tAuthErrors = useTranslations("authErrors");
+  const t = useTranslations();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
 
@@ -67,7 +66,7 @@ export default function Login() {
       await signInAndGo(loginWithGoogle);
     } catch (error) {
       // null when the user closed the popup — nothing to show.
-      setGoogleError(authErrorMessage(error, tAuthErrors));
+      setGoogleError(authErrorMessage(error, t));
     }
   }
 
@@ -81,14 +80,14 @@ export default function Login() {
         ) : (
           <>
             <div className="flex flex-col items-center gap-2">
-              <H1>{t("welcome")}</H1>
+              <H1>{t("login.welcome")}</H1>
               <P2 extraClasses="text-grey3">
-                {t("intro")}
+                {t("login.intro")}
               </P2>
             </div>
             <Button
               extraClasses="w-full gap-3 bg-white text-black border border-grey1 py-2.5 px-4 text-base font-semibold hover:bg-grey1 hover:text-black"
-              buttonText={isSigningIn ? t("signingIn") : t("signInWithGoogle")}
+              buttonText={isSigningIn ? t("login.signingIn") : t("login.signInWithGoogle")}
               onClick={handleGoogleSignIn}
               disabled={isSigningIn}
             >
@@ -115,7 +114,7 @@ export default function Login() {
 
             <div className="flex items-center w-full gap-3 text-grey3 text-sm">
               <span className="h-px flex-1 bg-grey1" />
-              {t("or")}
+              {t("login.or")}
               <span className="h-px flex-1 bg-grey1" />
             </div>
 

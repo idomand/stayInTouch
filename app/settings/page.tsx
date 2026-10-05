@@ -15,8 +15,8 @@ import {
 } from "@/lib/db/queries/links";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Settings");
-  return { title: t("metaTitle") };
+  const t = await getTranslations();
+  return { title: t("settings.metaTitle") };
 }
 
 /**
@@ -30,7 +30,7 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const t = await getTranslations("Settings");
+  const t = await getTranslations();
   const savedLocale = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
   const [incoming, outgoing, linkableContacts] = await Promise.all([
     getIncomingRequests(),
@@ -40,11 +40,11 @@ export default async function SettingsPage() {
 
   return (
     <section className="flex items-center flex-col justify-center gap-4 relative w-[90%] sm:w-[70%] mx-auto mb-8">
-      <PageHeader title={t("title")} />
+      <PageHeader title={t("settings.title")} />
       <LanguageSelector
         savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}
       />
-      <H4 extraClasses="self-start mt-2">{t("notifications")}</H4>
+      <H4 extraClasses="self-start mt-2">{t("settings.notifications")}</H4>
       <FriendRequests
         incoming={incoming}
         outgoing={outgoing}

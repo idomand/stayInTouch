@@ -8,42 +8,42 @@
     "enterNote": "Enter Note...",
     "areYouSure": "Are you sure?"
   },
-  "NavBar": {
+  "navBar": {
     "homeLabel": "Stay-in-Touch home",
     "logoAlt": "Stay-in-Touch logo",
     "home": "Home",
     "settings": "Settings",
     "loginPage": "Login page"
   },
-  "Footer": {
+  "footer": {
     "about": "About",
     "privacy": "Privacy"
   },
-  "PageHeader": {
+  "pageHeader": {
     "backToHome": "Back to home"
   },
-  "ScrollToTopButton": {
+  "scrollToTopButton": {
     "top": "Top"
   },
-  "LogoutButton": {
+  "logoutButton": {
     "confirmTitle": "Are you sure?",
     "logOut": "Log out",
     "logOutButton": "Log Out"
   },
-  "PasswordInput": {
+  "passwordInput": {
     "show": "Show",
     "hide": "Hide",
     "showPassword": "Show password",
     "hidePassword": "Hide password"
   },
-  "Login": {
+  "login": {
     "welcome": "Welcome",
     "intro": "Sign in to manage your reminders and stay in touch with the people you care about.",
     "signingIn": "Signing in…",
     "signInWithGoogle": "Sign in with Google",
     "or": "or"
   },
-  "EmailAuthForm": {
+  "emailAuthForm": {
     "signIn": "Sign in",
     "signUp": "Create account",
     "reset": "Send reset link",
@@ -58,7 +58,7 @@
     "forgotPassword": "Forgot password?",
     "backToSignIn": "Back to sign in"
   },
-  "VerifyEmailNotice": {
+  "verifyEmailNotice": {
     "title": "Check your inbox",
     "sentTo": "We sent a verification link to <strong>{email}</strong>. Click it, then come back here. Not there? Check your spam folder.",
     "notVerifiedYet": "Not verified yet. Click the link in the email, then try again.",
@@ -102,15 +102,15 @@
     "contactsAlreadyLinked": "One of these contacts is already linked.",
     "contactNotLinked": "This contact is not linked."
   },
-  "MainForm": {
+  "mainForm": {
     "hi": "Hi",
     "makeAFriend": "Make a friend!"
   },
-  "ContactList": {
+  "contactList": {
     "empty": "No contacts yet",
     "emptyHint": "Add your first friend with “Make a friend!” above."
   },
-  "AddNewContact": {
+  "addNewContact": {
     "talkTo": "I would like to talk to:",
     "every": "Every",
     "lastSpoken": "Last Time We Have Spoken",
@@ -118,7 +118,7 @@
     "friendEmail": "Friend's Email (optional)",
     "submit": "Add contact"
   },
-  "ContactItem": {
+  "contactItem": {
     "linkedTitle": "Linked — talks are shared",
     "linkedLabel": "{name} is linked - talks are shared",
     "neverTalked": "Never talked",
@@ -127,7 +127,7 @@
     "talkInDays": "Talk in {days} days",
     "talkToday": "Talk Today!"
   },
-  "MoreOptionsDropdown": {
+  "moreOptionsDropdown": {
     "updateContact": "Update Contact",
     "makeAppointment": "Make Appointment",
     "linkWithFriend": "Link with friend",
@@ -138,7 +138,7 @@
     "unlinkTitle": "Stop sharing talks?",
     "unlinkText": "Stop sharing talks with this friend? Both contacts and past talks stay."
   },
-  "UpdateContactForm": {
+  "updateContactForm": {
     "title": "Update contact: {name}",
     "changeName": "Change Name:",
     "changeCadence": "Change Talk Every X Days:",
@@ -146,38 +146,38 @@
     "changeEmail": "Change Friend Email:",
     "update": "Update"
   },
-  "Notes": {
+  "notes": {
     "title": "Notes",
     "updateNote": "Update Note",
     "addNote": "Add Note"
   },
-  "NoteItem": {
+  "noteItem": {
     "note": "Note",
     "edit": "Edit",
     "delete": "Delete"
   },
-  "TalkEvents": {
+  "talkEvents": {
     "title": "Talk history",
     "empty": "No talks recorded yet.",
     "loggedByFriend": "· logged by your friend"
   },
-  "DatePicker": {
+  "datePicker": {
     "dateFormat": "dd/MM/yyyy"
   },
-  "AppointmentForm": {
+  "appointmentForm": {
     "title": "Make Appointment with: {name}",
     "intro": "Add this reminder into Google Calendar",
     "save": "Save to Calendar",
     "calendarAlt": "Google Calendar"
   },
-  "LinkContactDialog": {
+  "linkContactDialog": {
     "title": "Link with a friend",
     "intro": "Send a request to your friend's Stay-in-Touch email. When they accept, a talk marked by either of you resets both timers.",
     "friendEmail": "Friend's email",
     "emailRequired": "Please enter an email address.",
     "send": "Send request"
   },
-  "AcceptLinkDialog": {
+  "acceptLinkDialog": {
     "title": "Link with {name}",
     "question": "Which of your contacts is {name}?",
     "existingContact": "An existing contact",
@@ -190,7 +190,7 @@
     "selectContactError": "Please select a contact.",
     "nameRequiredError": "Please enter a contact name."
   },
-  "FriendRequests": {
+  "friendRequests": {
     "title": "Friend requests",
     "intro": "Linked contacts share talks: when either of you marks that you talked, both timers reset. Notes and settings stay private.",
     "incoming": "Incoming",
@@ -202,16 +202,16 @@
     "yourContact": "Your contact",
     "waiting": " · waiting"
   },
-  "Settings": {
+  "settings": {
     "metaTitle": "Settings | Stay-in-Touch",
     "title": "Settings",
     "notifications": "Notifications"
   },
-  "LanguageSelector": {
+  "languageSelector": {
     "title": "App language",
     "browserDefault": "Browser default"
   },
-  "About": {
+  "about": {
     "title": "About",
     "aboutApp": "About the app",
     "intro1": "This app was created as a way to help people (including myself) to stay in touch with the people they care about.",
@@ -229,7 +229,7 @@
     "website": "You can see more of my projects on my<link>website</link>.",
     "linkedin": "And talk to me on<link>LinkedIn</link>."
   },
-  "Privacy": {
+  "privacy": {
     "title": "Privacy Policy",
     "intro": "This Privacy Policy explains what information Stay-in-Touch handles, how it is used, and the choices you have. By using the app, you agree to the practices described below.",
     "noTrackingTitle": "No tracking",

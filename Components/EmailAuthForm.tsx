@@ -33,8 +33,7 @@ const linkButtonClasses =
 
 export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
   const { signUpWithEmail, sendPasswordReset } = useAuth()!;
-  const t = useTranslations("EmailAuthForm");
-  const tAuthErrors = useTranslations("authErrors");
+  const t = useTranslations();
   const [mode, setMode] = useState<Mode>("signIn");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -58,7 +57,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
     setInfo(null);
 
     if (mode === "signUp" && password !== confirmPassword) {
-      setError(t("passwordsDoNotMatch"));
+      setError(t("emailAuthForm.passwordsDoNotMatch"));
       return;
     }
 
@@ -72,10 +71,10 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       } else {
         await sendPasswordReset(email);
         // Firebase does not reveal whether the email exists, so neither do we.
-        setInfo(t("resetSent"));
+        setInfo(t("emailAuthForm.resetSent"));
       }
     } catch (caughtError) {
-      setError(authErrorMessage(caughtError, tAuthErrors));
+      setError(authErrorMessage(caughtError, t));
     } finally {
       setIsBusy(false);
     }
@@ -87,7 +86,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col w-full gap-2 text-left">
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
-          {t("name")}
+          {t("emailAuthForm.name")}
           <input
             type="text"
             value={name}
@@ -100,7 +99,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
       )}
 
       <label className={basicLabelClasses}>
-        {t("email")}
+        {t("emailAuthForm.email")}
         <input
           type="email"
           value={email}
@@ -113,7 +112,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
 
       {mode !== "reset" && (
         <label className={basicLabelClasses}>
-          {t("password")}
+          {t("emailAuthForm.password")}
           <PasswordInput
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -127,7 +126,7 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
 
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
-          {t("confirmPassword")}
+          {t("emailAuthForm.confirmPassword")}
           <PasswordInput
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
@@ -150,22 +149,22 @@ export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
           "h-10 mx-1 mt-1 bg-blue1 font-semibold text-base hover:bg-blue3 hover:border-blue1 hover:text-blue1",
         )}
       >
-        {isBusy ? t("pleaseWait") : t(mode)}
+        {isBusy ? t("emailAuthForm.pleaseWait") : t(`emailAuthForm.${mode}`)}
       </button>
 
       <div className="flex justify-between mx-1 mt-1">
         {mode === "signIn" ? (
           <>
             <button type="button" onClick={() => switchMode("signUp")} className={linkButtonClasses}>
-              {t("createAccount")}
+              {t("emailAuthForm.createAccount")}
             </button>
             <button type="button" onClick={() => switchMode("reset")} className={linkButtonClasses}>
-              {t("forgotPassword")}
+              {t("emailAuthForm.forgotPassword")}
             </button>
           </>
         ) : (
           <button type="button" onClick={() => switchMode("signIn")} className={linkButtonClasses}>
-            {t("backToSignIn")}
+            {t("emailAuthForm.backToSignIn")}
           </button>
         )}
       </div>

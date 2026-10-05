@@ -14,13 +14,13 @@ export default function ContactList({
 }: {
   contacts: ContactListItem[];
 }) {
-  const t = useTranslations("ContactList");
+  const t = useTranslations();
 
   if (contacts.length === 0) {
     return (
       <div className="flex flex-col items-center mt-10 text-center gap-2">
-        <H1>{t("empty")}</H1>
-        <P3>{t("emptyHint")}</P3>
+        <H1>{t("contactList.empty")}</H1>
+        <P3>{t("contactList.emptyHint")}</P3>
       </div>
     );
   }
