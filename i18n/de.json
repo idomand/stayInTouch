@@ -8,42 +8,42 @@
     "enterNote": "Notiz eingeben...",
     "areYouSure": "Bist du sicher?"
   },
-  "NavBar": {
+  "navBar": {
     "homeLabel": "Stay-in-Touch Startseite",
     "logoAlt": "Stay-in-Touch Logo",
     "home": "Start",
     "settings": "Einstellungen",
     "loginPage": "Anmelden"
   },
-  "Footer": {
+  "footer": {
     "about": "Über",
     "privacy": "Datenschutz"
   },
-  "PageHeader": {
+  "pageHeader": {
     "backToHome": "Zurück zur Startseite"
   },
-  "ScrollToTopButton": {
+  "scrollToTopButton": {
     "top": "Nach oben"
   },
-  "LogoutButton": {
+  "logoutButton": {
     "confirmTitle": "Bist du sicher?",
     "logOut": "Abmelden",
     "logOutButton": "Abmelden"
   },
-  "PasswordInput": {
+  "passwordInput": {
     "show": "Zeigen",
     "hide": "Verbergen",
     "showPassword": "Passwort anzeigen",
     "hidePassword": "Passwort verbergen"
   },
-  "Login": {
+  "login": {
     "welcome": "Willkommen",
     "intro": "Melde dich an, um deine Erinnerungen zu verwalten und mit den Menschen in Kontakt zu bleiben, die dir wichtig sind.",
     "signingIn": "Anmeldung läuft…",
     "signInWithGoogle": "Mit Google anmelden",
     "or": "oder"
   },
-  "EmailAuthForm": {
+  "emailAuthForm": {
     "signIn": "Anmelden",
     "signUp": "Konto erstellen",
     "reset": "Link zum Zurücksetzen senden",
@@ -58,7 +58,7 @@
     "forgotPassword": "Passwort vergessen?",
     "backToSignIn": "Zurück zur Anmeldung"
   },
-  "VerifyEmailNotice": {
+  "verifyEmailNotice": {
     "title": "Schau in dein Postfach",
     "sentTo": "Wir haben einen Bestätigungslink an <strong>{email}</strong> gesendet. Klicke darauf und komm dann hierher zurück. Nicht angekommen? Schau in deinem Spam-Ordner nach.",
     "notVerifiedYet": "Noch nicht bestätigt. Klicke auf den Link in der E-Mail und versuche es dann erneut.",
@@ -102,15 +102,15 @@
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
     "contactNotLinked": "Dieser Kontakt ist nicht verknüpft."
   },
-  "MainForm": {
+  "mainForm": {
     "hi": "Hallo",
     "makeAFriend": "Freund hinzufügen!"
   },
-  "ContactList": {
+  "contactList": {
     "empty": "Noch keine Kontakte",
     "emptyHint": "Füge oben mit „Freund hinzufügen!“ deinen ersten Freund hinzu."
   },
-  "AddNewContact": {
+  "addNewContact": {
     "talkTo": "Ich möchte sprechen mit:",
     "every": "Alle",
     "lastSpoken": "Wann wir zuletzt gesprochen haben",
@@ -118,7 +118,7 @@
     "friendEmail": "E-Mail des Freundes (optional)",
     "submit": "Kontakt hinzufügen"
   },
-  "ContactItem": {
+  "contactItem": {
     "linkedTitle": "Verknüpft — Gespräche werden geteilt",
     "linkedLabel": "{name} ist verknüpft - Gespräche werden geteilt",
     "neverTalked": "Noch nie gesprochen",
@@ -127,7 +127,7 @@
     "talkInDays": "Sprechen in {days} Tagen",
     "talkToday": "Heute sprechen!"
   },
-  "MoreOptionsDropdown": {
+  "moreOptionsDropdown": {
     "updateContact": "Kontakt bearbeiten",
     "makeAppointment": "Termin vereinbaren",
     "linkWithFriend": "Mit Freund verknüpfen",
@@ -138,7 +138,7 @@
     "unlinkTitle": "Gespräche nicht mehr teilen?",
     "unlinkText": "Gespräche mit diesem Freund nicht mehr teilen? Beide Kontakte und vergangene Gespräche bleiben erhalten."
   },
-  "UpdateContactForm": {
+  "updateContactForm": {
     "title": "Kontakt bearbeiten: {name}",
     "changeName": "Name ändern:",
     "changeCadence": "Alle X Tage sprechen:",
@@ -146,38 +146,38 @@
     "changeEmail": "E-Mail des Freundes ändern:",
     "update": "Speichern"
   },
-  "Notes": {
+  "notes": {
     "title": "Notizen",
     "updateNote": "Notiz speichern",
     "addNote": "Notiz hinzufügen"
   },
-  "NoteItem": {
+  "noteItem": {
     "note": "Notiz",
     "edit": "Bearbeiten",
     "delete": "Löschen"
   },
-  "TalkEvents": {
+  "talkEvents": {
     "title": "Gesprächsverlauf",
     "empty": "Noch keine Gespräche erfasst.",
     "loggedByFriend": "· von deinem Freund erfasst"
   },
-  "DatePicker": {
+  "datePicker": {
     "dateFormat": "dd.MM.yyyy"
   },
-  "AppointmentForm": {
+  "appointmentForm": {
     "title": "Termin vereinbaren mit: {name}",
     "intro": "Diese Erinnerung in Google Kalender eintragen",
     "save": "In Kalender speichern",
     "calendarAlt": "Google Kalender"
   },
-  "LinkContactDialog": {
+  "linkContactDialog": {
     "title": "Mit einem Freund verknüpfen",
     "intro": "Sende eine Anfrage an die Stay-in-Touch-E-Mail deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
     "friendEmail": "E-Mail des Freundes",
     "emailRequired": "Bitte gib eine E-Mail-Adresse ein.",
     "send": "Anfrage senden"
   },
-  "AcceptLinkDialog": {
+  "acceptLinkDialog": {
     "title": "Mit {name} verknüpfen",
     "question": "Welcher deiner Kontakte ist {name}?",
     "existingContact": "Ein bestehender Kontakt",
@@ -190,7 +190,7 @@
     "selectContactError": "Bitte wähle einen Kontakt aus.",
     "nameRequiredError": "Bitte gib einen Namen für den Kontakt ein."
   },
-  "FriendRequests": {
+  "friendRequests": {
     "title": "Freundschaftsanfragen",
     "intro": "Verknüpfte Kontakte teilen Gespräche: Wenn einer von euch ein Gespräch markiert, werden beide Timer zurückgesetzt. Notizen und Einstellungen bleiben privat.",
     "incoming": "Eingehend",
@@ -202,16 +202,16 @@
     "yourContact": "Dein Kontakt",
     "waiting": " · wartet"
   },
-  "Settings": {
+  "settings": {
     "metaTitle": "Einstellungen | Stay-in-Touch",
     "title": "Einstellungen",
     "notifications": "Benachrichtigungen"
   },
-  "LanguageSelector": {
+  "languageSelector": {
     "title": "App-Sprache",
     "browserDefault": "Browsersprache"
   },
-  "About": {
+  "about": {
     "title": "Über",
     "aboutApp": "Über die App",
     "intro1": "Diese App ist entstanden, um Menschen (mich eingeschlossen) dabei zu helfen, mit den Menschen in Kontakt zu bleiben, die ihnen wichtig sind.",
@@ -229,7 +229,7 @@
     "website": "Mehr von meinen Projekten findest du auf meiner<link>Website</link>.",
     "linkedin": "Und schreib mir auf<link>LinkedIn</link>."
   },
-  "Privacy": {
+  "privacy": {
     "title": "Datenschutzerklärung",
     "intro": "Diese Datenschutzerklärung erklärt, welche Informationen Stay-in-Touch verarbeitet, wie sie verwendet werden und welche Wahlmöglichkeiten du hast. Mit der Nutzung der App stimmst du den unten beschriebenen Praktiken zu.",
     "noTrackingTitle": "Kein Tracking",

@@ -21,7 +21,7 @@ export default function AppointmentForm({
   isModalOpenProp,
   onClose,
 }: AppointmentFormProps) {
-  const t = useTranslations("AppointmentForm");
+  const t = useTranslations();
   const [error, setError] = useState<string | boolean>(false);
 
   const { name, daysUntilNextTalk, friendEmail } = contact;
@@ -69,7 +69,7 @@ export default function AppointmentForm({
 
   return (
     <Dialog
-      title={t("title", { name })}
+      title={t("appointmentForm.title", { name })}
       close={() => {
         onCloseModal();
       }}
@@ -84,7 +84,7 @@ export default function AppointmentForm({
             )}
           >
             <P1 extraClasses="mb-2.5 ml-3.5 text-start sm:ml-0">
-              {t("intro")}
+              {t("appointmentForm.intro")}
             </P1>
             <div className="m-auto sm:m-0">
               <DatePickerComponent
@@ -95,13 +95,13 @@ export default function AppointmentForm({
             </div>
           </form>
           <Button
-            buttonText={t("save")}
+            buttonText={t("appointmentForm.save")}
             onClick={calendarFunction}
             extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
           >
             <img
               src="/Google_Calendar.svg"
-              alt={t("calendarAlt")}
+              alt={t("appointmentForm.calendarAlt")}
               className="mr-2"
             />
           </Button>

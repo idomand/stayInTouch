@@ -16,7 +16,7 @@ export default function PasswordInput({
   className,
   ...props
 }: PasswordInputProps) {
-  const t = useTranslations("PasswordInput");
+  const t = useTranslations();
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -30,10 +30,10 @@ export default function PasswordInput({
         type="button"
         onClick={() => setIsVisible(!isVisible)}
         className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue1"
-        aria-label={isVisible ? t("hidePassword") : t("showPassword")}
+        aria-label={isVisible ? t("passwordInput.hidePassword") : t("passwordInput.showPassword")}
         aria-pressed={isVisible}
       >
-        {isVisible ? t("hide") : t("show")}
+        {isVisible ? t("passwordInput.hide") : t("passwordInput.show")}
       </button>
     </div>
   );

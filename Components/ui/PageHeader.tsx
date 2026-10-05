@@ -8,13 +8,13 @@ type Props = {
 };
 
 export default function PageHeader({ title }: Props) {
-  const t = useTranslations("PageHeader");
+  const t = useTranslations();
 
   return (
     <div className="flex items-center gap-3 w-full m-2">
       <NextLink
         href="/"
-        aria-label={t("backToHome")}
+        aria-label={t("pageHeader.backToHome")}
         className="text-black hover:text-blue1 transition-colors"
       >
         <FaArrowAltCircleLeft size={30} />

@@ -26,7 +26,7 @@ function formatTalkedAt(iso: string, locale: Locale): string {
  * displays them, newest first.
  */
 export default function TalkEvents({ contact }: { contact: ContactListItem }) {
-  const t = useTranslations("TalkEvents");
+  const t = useTranslations();
   const locale = useLocale();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,7 +40,7 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
       <button
         type="button"
         onClick={onOpenModal}
-        aria-label={t("title")}
+        aria-label={t("talkEvents.title")}
         className="px-1 cursor-pointer h-10 bg-blue3 border-none rounded-[55px] text-center relative transition-all duration-300 hover:bg-grey2 focus:bg-grey2"
       >
         <div className=" leading-4 rounded-[38px] text-center font-semibold h-4.5 w-4.5 absolute bottom-6 left-7 bg-blue1 text-white transition-all duration-300 border border-solid border-transparent">
@@ -50,7 +50,7 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
       </button>
 
       <Dialog
-        title={t("title")}
+        title={t("talkEvents.title")}
         close={() => {
           setIsModalOpen(false);
         }}
@@ -58,7 +58,7 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
       >
         <section className="flex flex-col items-center">
           {contact.talkEvents.length === 0 ? (
-            <P2 extraClasses="text-grey3 my-4">{t("empty")}</P2>
+            <P2 extraClasses="text-grey3 my-4">{t("talkEvents.empty")}</P2>
           ) : (
             <ul className="p-0 m-0 w-auto sm:w-103.5">
               {contact.talkEvents.map((event) => (
@@ -70,7 +70,7 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
                     <span>{formatTalkedAt(event.talkedAt, locale)}</span>
                     {!event.createdByMe && (
                       <P2 extraClasses="text-grey3 text-xs">
-                        {t("loggedByFriend")}
+                        {t("talkEvents.loggedByFriend")}
                       </P2>
                     )}
                   </div>
