@@ -19,15 +19,14 @@ export default function LinkContactDialog({
   isOpen: boolean;
   close: () => void;
 }) {
-  const t = useTranslations("LinkContactDialog");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [email, setEmail] = useState(contact.friendEmail ?? "");
   const [error, setError] = useState<string | false>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit() {
     if (!email.trim()) {
-      setError(t("emailRequired"));
+      setError(t("linkContactDialog.emailRequired"));
       return;
     }
 
@@ -51,17 +50,17 @@ export default function LinkContactDialog({
 
   return (
     <Dialog
-      title={t("title")}
+      title={t("linkContactDialog.title")}
       isOpen={isOpen}
       close={handleDialogClose}
     >
       <div className="flex flex-col gap-4">
         <P2 extraClasses="text-grey3">
-          {t("intro")}
+          {t("linkContactDialog.intro")}
         </P2>
 
         <label className={twMerge(basicLabelClasses, "")}>
-          {t("friendEmail")}
+          {t("linkContactDialog.friendEmail")}
           <input
             type="email"
             placeholder="friend@example.com"
@@ -75,13 +74,13 @@ export default function LinkContactDialog({
 
         <div className="flex gap-2 justify-end mt-4">
           <Button
-            buttonText={tCommon("cancel")}
+            buttonText={t("common.cancel")}
             onClick={handleDialogClose}
             variant="Secondary"
             disabled={isSubmitting}
           />
           <Button
-            buttonText={t("send")}
+            buttonText={t("linkContactDialog.send")}
             onClick={handleSubmit}
             disabled={isSubmitting}
           />

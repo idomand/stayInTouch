@@ -12,6 +12,6 @@ export async function actionError({
   key,
   values,
 }: ErrorMessage): Promise<ActionResult> {
-  const t = await getTranslations("errors");
-  return { ok: false, error: t(key, values) };
+  const t = await getTranslations();
+  return { ok: false, error: t(`errors.${key}`, values) };
 }

@@ -14,8 +14,7 @@ import Dialog from "./ui/Dialog";
 import ErrorWarning from "./ErrorWarning";
 
 export default function Notes({ contact }: { contact: ContactListItem }) {
-  const t = useTranslations("Notes");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
@@ -90,7 +89,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
       </button>
 
       <Dialog
-        title={t("title")}
+        title={t("notes.title")}
         close={() => {
           setIsModalOpen(false);
         }}
@@ -104,7 +103,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
             >
               <textarea
                 required
-                placeholder={tCommon("enterNote")}
+                placeholder={t("common.enterNote")}
                 value={noteInputValue}
                 onChange={(e) => {
                   setNoteInputValue(e.target.value);
@@ -113,11 +112,11 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
               />
               <div className="flex justify-center">
                 {isEditMode && (
-                  <Button onClick={cancelEdit} buttonText={tCommon("cancel")} />
+                  <Button onClick={cancelEdit} buttonText={t("common.cancel")} />
                 )}
                 <input
                   type="submit"
-                  value={isEditMode ? t("updateNote") : t("addNote")}
+                  value={isEditMode ? t("notes.updateNote") : t("notes.addNote")}
                   className={twMerge(
                     inputSubmitClasses,
                     "bg-blue1 text-white px-3.5 py-2.5 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1",
