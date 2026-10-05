@@ -17,6 +17,7 @@ export default function Footer() {
           variant="Nav"
           isLinkActive={pathname == "/about"}
           href="/about"
+          prefetch
         >
           {t("footer.about")}
         </Link>
@@ -24,6 +25,7 @@ export default function Footer() {
           variant="Nav"
           isLinkActive={pathname == "/privacy"}
           href="/privacy"
+          prefetch
         >
           {t("footer.privacy")}
         </Link>
