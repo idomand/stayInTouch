@@ -6,7 +6,7 @@ type ErrorWarningProps = {
 
 export default function ErrorWarning({ errorMessage }: ErrorWarningProps) {
   return (
-    <div className="border-[3px] border-solid border-red1 bg-red2 shadow-[0px_4px_28px_rgba(0,0,0,0.25)] rounded-[13px] px-5 py-3.5 absolute animate-slide max-w-[90vw] break-words">
+    <div className="border-[3px] border-solid border-red1 bg-red2 shadow-[0px_4px_28px_rgba(0,0,0,0.25)] rounded-[13px] px-5 py-3.5 absolute animate-slide max-w-[90vw] wrap-break-word">
       <H5 extraClasses="text-red1 flex items-center capitalize">
         <img src="/Error.svg" className="mr-2.5" />
         {errorMessage}

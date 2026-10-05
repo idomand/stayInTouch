@@ -21,8 +21,7 @@ export default function FriendRequests({
   outgoing: OutgoingLinkRequest[];
   linkableContacts: LinkableContact[];
 }) {
-  const t = useTranslations("FriendRequests");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [selectedRequest, setSelectedRequest] = useState<
     IncomingLinkRequest | null
   >(null);
@@ -65,17 +64,17 @@ export default function FriendRequests({
   return (
     <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
       <div className="mb-6">
-        <P extraClasses="text-lg font-semibold mb-2">{t("title")}</P>
+        <P extraClasses="text-lg font-semibold mb-2">{t("friendRequests.title")}</P>
         <P2 extraClasses="text-grey3">
-          {t("intro")}
+          {t("friendRequests.intro")}
         </P2>
       </div>
 
       {/* Incoming requests */}
       <div className="mb-8">
-        <P extraClasses="font-medium text-base mb-3">{t("incoming")}</P>
+        <P extraClasses="font-medium text-base mb-3">{t("friendRequests.incoming")}</P>
         {incoming.length === 0 ? (
-          <P2 extraClasses="text-grey3">{t("noIncoming")}</P2>
+          <P2 extraClasses="text-grey3">{t("friendRequests.noIncoming")}</P2>
         ) : (
           <div className="space-y-3">
             {incoming.map((request) => (
@@ -87,17 +86,17 @@ export default function FriendRequests({
                   <P extraClasses="font-medium break-words">{request.fromName}</P>
                   <P2 extraClasses="text-grey3 break-all">{request.fromEmail}</P2>
                   <P2 extraClasses="text-grey3 text-xs mt-1">
-                    {t("wantsToLink")}
+                    {t("friendRequests.wantsToLink")}
                   </P2>
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    buttonText={tCommon("accept")}
+                    buttonText={t("common.accept")}
                     onClick={() => openAcceptDialog(request)}
                     disabled={processingId === request.id}
                   />
                   <Button
-                    buttonText={t("reject")}
+                    buttonText={t("friendRequests.reject")}
                     onClick={() => handleRejectRequest(request.id)}
                     variant="Secondary"
                     disabled={processingId === request.id}
@@ -111,9 +110,9 @@ export default function FriendRequests({
 
       {/* Outgoing requests */}
       <div>
-        <P extraClasses="font-medium text-base mb-3">{t("outgoing")}</P>
+        <P extraClasses="font-medium text-base mb-3">{t("friendRequests.outgoing")}</P>
         {outgoing.length === 0 ? (
-          <P2 extraClasses="text-grey3">{t("noOutgoing")}</P2>
+          <P2 extraClasses="text-grey3">{t("friendRequests.noOutgoing")}</P2>
         ) : (
           <div className="space-y-3">
             {outgoing.map((request) => (
@@ -123,14 +122,14 @@ export default function FriendRequests({
               >
                 <div className="flex-1 min-w-0">
                   <P extraClasses="text-sm break-words">
-                    <span className="font-medium">{t("yourContact")}</span>
+                    <span className="font-medium">{t("friendRequests.yourContact")}</span>
                     {` "${request.contactName}"`}
                     {` → ${request.toEmail}`}
-                    <span className="text-grey3">{t("waiting")}</span>
+                    <span className="text-grey3">{t("friendRequests.waiting")}</span>
                   </P>
                 </div>
                 <Button
-                  buttonText={tCommon("cancel")}
+                  buttonText={t("common.cancel")}
                   onClick={() => handleCancelRequest(request.id)}
                   variant="Secondary"
                   disabled={processingId === request.id}

@@ -12,7 +12,7 @@ import LogoutButton from "./LogoutButton";
 export default function NavBar() {
   const { currentUser } = useAuth()!;
   const pathname = usePathname();
-  const t = useTranslations("NavBar");
+  const t = useTranslations();
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
@@ -46,13 +46,13 @@ export default function NavBar() {
     <nav className="grid grid-cols-[1fr_auto_1fr] items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
       <NextLink
         href="/"
-        aria-label={t("homeLabel")}
+        aria-label={t("navBar.homeLabel")}
         className="justify-self-start"
       >
         <img
           src="/friendsLogo.png"
           className="ml-5 my-1 h-10 sm:hidden"
-          alt={t("logoAlt")}
+          alt={t("navBar.logoAlt")}
         />
         <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
           Stay-in-Touch!
@@ -62,7 +62,7 @@ export default function NavBar() {
       {currentUser ? (
         <div className="flex items-center gap-4">
           <Link variant="Nav" isLinkActive={pathname === "/"} href="/">
-            {t("home")}
+            {t("navBar.home")}
           </Link>
           <Link
             variant="Nav"
@@ -70,7 +70,7 @@ export default function NavBar() {
             href="/settings"
             extraClasses="flex items-center"
           >
-            {t("settings")}
+            {t("navBar.settings")}
             {pendingCount > 0 && (
               <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
                 {pendingCount}
@@ -94,7 +94,7 @@ export default function NavBar() {
             href="/login"
             className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
           >
-            {t("loginPage")}
+            {t("navBar.loginPage")}
           </a>
         )}
       </div>

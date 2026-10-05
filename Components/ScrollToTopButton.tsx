@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import Button from "./ui/Button";
 
 export default function ScrollToTopButton() {
-  const t = useTranslations("ScrollToTopButton");
+  const t = useTranslations();
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -33,7 +33,7 @@ export default function ScrollToTopButton() {
       {isVisible && (
         <Button
           onClick={scrollToTop}
-          buttonText={t("top")}
+          buttonText={t("scrollToTopButton.top")}
           extraClasses="fixed md:right-15 md:bottom-20 bottom-25 right-2"
         />
       )}

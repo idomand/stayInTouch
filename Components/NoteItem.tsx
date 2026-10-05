@@ -19,7 +19,7 @@ export default function NoteItem({
   contactId,
   switchToEditMode,
 }: NoteItemProps) {
-  const t = useTranslations("NoteItem");
+  const t = useTranslations();
   const [error, setError] = useState<string | boolean>(false);
 
   useEffect(() => {
@@ -40,16 +40,16 @@ export default function NoteItem({
   return (
     <li className="list-none p-1 m-1 flex flex-col relative">
       <div className="flex justify-between">
-        <H4>{t("note")}</H4>
+        <H4>{t("noteItem.note")}</H4>
         <div className="flex mb-1">
           <Button
-            buttonText={t("edit")}
+            buttonText={t("noteItem.edit")}
             onClick={() => switchToEditMode(body, noteId)}
             variant="Secondary"
             extraClasses="mr-1 hover:bg-blue3 hover:text-blue1"
           />
           <Button
-            buttonText={t("delete")}
+            buttonText={t("noteItem.delete")}
             onClick={deleteNoteFunc}
             variant="Secondary"
             extraClasses="hover:bg-red2 hover:text-red1"

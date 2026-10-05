@@ -20,7 +20,7 @@ export default function LanguageSelector({
 }: {
   savedChoice: LanguageChoice;
 }) {
-  const t = useTranslations("LanguageSelector");
+  const t = useTranslations();
   const [choice, setChoice] = useState<LanguageChoice>(savedChoice);
   const [isPending, startTransition] = useTransition();
 
@@ -40,7 +40,7 @@ export default function LanguageSelector({
   return (
     <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
       <label htmlFor="app-language">
-        <P extraClasses="text-lg font-semibold mb-2">{t("title")}</P>
+        <P extraClasses="text-lg font-semibold mb-2">{t("languageSelector.title")}</P>
       </label>
       <select
         id="app-language"
@@ -49,7 +49,7 @@ export default function LanguageSelector({
         onChange={(e) => handleChange(e.target.value as LanguageChoice)}
         className={twMerge(basicInputClasses, "px-3 w-full sm:w-60")}
       >
-        <option value="auto">{t("browserDefault")}</option>
+        <option value="auto">{t("languageSelector.browserDefault")}</option>
         <option value="en">English</option>
         <option value="de">Deutsch</option>
       </select>
