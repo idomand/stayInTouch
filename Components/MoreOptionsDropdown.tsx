@@ -27,8 +27,7 @@ export default function MoreOptionsDropdown({
     useState(false);
   const [isDeleteContactModalOpen, setIsDeleteContactModalOpen] =
     useState(false);
-  const [isLinkContactDialogOpen, setIsLinkContactDialogOpen] =
-    useState(false);
+  const [isLinkContactDialogOpen, setIsLinkContactDialogOpen] = useState(false);
   const [isUnlinkConfirmOpen, setIsUnlinkConfirmOpen] = useState(false);
   const [unlinkError, setUnlinkError] = useState<string | false>(false);
   const [deleteError, setDeleteError] = useState<string | false>(false);
@@ -107,7 +106,7 @@ export default function MoreOptionsDropdown({
           <SlOptions />
         </button>
         <div
-          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-[1000] overflow-hidden ${
+          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-1000 overflow-hidden ${
             isOpen ? "block" : "hidden"
           }`}
         >
@@ -133,7 +132,9 @@ export default function MoreOptionsDropdown({
           ) : contact.hasPendingRequest ? (
             <NextLink href="/settings">
               <div className="px-4 py-3 text-grey3 text-sm not-last:border-b not-last:border-grey2">
-                <P2 extraClasses="text-grey3">{t("moreOptionsDropdown.linkPending")}</P2>
+                <P2 extraClasses="text-grey3">
+                  {t("moreOptionsDropdown.linkPending")}
+                </P2>
               </div>
             </NextLink>
           ) : contact.isLinked ? (
@@ -173,7 +174,9 @@ export default function MoreOptionsDropdown({
         <div className="flex flex-col gap-4">
           <div className="flex justify-between flex-wrap gap-2">
             <Button
-              buttonText={t("moreOptionsDropdown.deleteName", { name: contact.name })}
+              buttonText={t("moreOptionsDropdown.deleteName", {
+                name: contact.name,
+              })}
               onClick={deleteContactFunc}
             />
             <Button
