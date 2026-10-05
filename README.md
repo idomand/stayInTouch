@@ -53,6 +53,7 @@ Making it an installable **PWA (Progressive Web App)** is planned.
 | Database  | [Neon Postgres](https://neon.tech/) via [Drizzle ORM](https://orm.drizzle.team/)    |
 | Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                          |
 | Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
+| i18n      | [next-intl](https://next-intl.dev/) — English and German                            |
 
 ## Project Structure
 
@@ -61,7 +62,8 @@ Components/    Reusable UI + feature components (Tailwind utility classes)
 lib/           Firebase setup, auth context, Calendar helpers
 lib/auth/      Server identity (Firebase session cookies)
 lib/db/        Drizzle client, schema, migrations and queries (server only)
-lib/actions/   Server Actions for contact, note and link writes
+lib/actions/   Server Actions for contact, note and link writes, and the language setting
+i18n/          Locale config, locale detection, and translations (en.json, de.json)
 app/           Next.js App Router routes (/, /settings, /login, /about, /privacy, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations

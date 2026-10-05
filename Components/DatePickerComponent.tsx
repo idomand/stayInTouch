@@ -25,7 +25,7 @@ export default function DatePickerComponent({
   isInline = false,
   maxDate = addDays(new Date(), 90),
 }: DatePickerComponentProps) {
-  const t = useTranslations("DatePicker");
+  const t = useTranslations();
   const locale = useLocale();
 
   return (
@@ -35,7 +35,7 @@ export default function DatePickerComponent({
         maxDate={maxDate}
         calendarContainer={Calendar}
         popperContainer={Popper}
-        dateFormat={t("dateFormat")}
+        dateFormat={t("datePicker.dateFormat")}
         locale={locale === "en" ? undefined : locale}
         selected={startDate instanceof Date ? startDate : new Date(startDate)}
         onChange={(date) => date && setStartDate(date)}

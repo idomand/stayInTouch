@@ -19,8 +19,7 @@ export default function MoreOptionsDropdown({
 }: {
   contact: ContactListItem;
 }) {
-  const t = useTranslations("MoreOptionsDropdown");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateContactModalOpen, setIsUpdateContactModalOpen] =
     useState(false);
@@ -28,8 +27,7 @@ export default function MoreOptionsDropdown({
     useState(false);
   const [isDeleteContactModalOpen, setIsDeleteContactModalOpen] =
     useState(false);
-  const [isLinkContactDialogOpen, setIsLinkContactDialogOpen] =
-    useState(false);
+  const [isLinkContactDialogOpen, setIsLinkContactDialogOpen] = useState(false);
   const [isUnlinkConfirmOpen, setIsUnlinkConfirmOpen] = useState(false);
   const [unlinkError, setUnlinkError] = useState<string | false>(false);
   const [deleteError, setDeleteError] = useState<string | false>(false);
@@ -108,7 +106,7 @@ export default function MoreOptionsDropdown({
           <SlOptions />
         </button>
         <div
-          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-[1000] overflow-hidden ${
+          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-1000 overflow-hidden ${
             isOpen ? "block" : "hidden"
           }`}
         >
@@ -116,25 +114,27 @@ export default function MoreOptionsDropdown({
             onClick={handleUpdateContact}
             className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
           >
-            {t("updateContact")}
+            {t("moreOptionsDropdown.updateContact")}
           </div>
           <div
             onClick={handleMakeAppointment}
             className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
           >
-            {t("makeAppointment")}
+            {t("moreOptionsDropdown.makeAppointment")}
           </div>
           {!contact.isLinked && !contact.hasPendingRequest ? (
             <div
               onClick={handleLinkContact}
               className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
             >
-              {t("linkWithFriend")}
+              {t("moreOptionsDropdown.linkWithFriend")}
             </div>
           ) : contact.hasPendingRequest ? (
             <NextLink href="/settings">
               <div className="px-4 py-3 text-grey3 text-sm not-last:border-b not-last:border-grey2">
-                <P2 extraClasses="text-grey3">{t("linkPending")}</P2>
+                <P2 extraClasses="text-grey3">
+                  {t("moreOptionsDropdown.linkPending")}
+                </P2>
               </div>
             </NextLink>
           ) : contact.isLinked ? (
@@ -142,14 +142,14 @@ export default function MoreOptionsDropdown({
               onClick={handleUnlinkContact}
               className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
             >
-              {tCommon("unlink")}
+              {t("common.unlink")}
             </div>
           ) : null}
           <div
             onClick={handleDeleteContact}
             className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
           >
-            {t("deleteContact")}
+            {t("moreOptionsDropdown.deleteContact")}
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function MoreOptionsDropdown({
         onClose={() => setIsAppointmentFormModalOpen(false)}
       />
       <Dialog
-        title={tCommon("areYouSure")}
+        title={t("common.areYouSure")}
         isOpen={isDeleteContactModalOpen}
         close={() => {
           setIsDeleteContactModalOpen(false);
@@ -174,11 +174,13 @@ export default function MoreOptionsDropdown({
         <div className="flex flex-col gap-4">
           <div className="flex justify-between flex-wrap gap-2">
             <Button
-              buttonText={t("deleteName", { name: contact.name })}
+              buttonText={t("moreOptionsDropdown.deleteName", {
+                name: contact.name,
+              })}
               onClick={deleteContactFunc}
             />
             <Button
-              buttonText={t("goBack")}
+              buttonText={t("moreOptionsDropdown.goBack")}
               onClick={() => {
                 setIsDeleteContactModalOpen(false);
                 setDeleteError(false);
@@ -194,7 +196,7 @@ export default function MoreOptionsDropdown({
         close={() => setIsLinkContactDialogOpen(false)}
       />
       <Dialog
-        title={t("unlinkTitle")}
+        title={t("moreOptionsDropdown.unlinkTitle")}
         isOpen={isUnlinkConfirmOpen}
         close={() => {
           setIsUnlinkConfirmOpen(false);
@@ -203,16 +205,16 @@ export default function MoreOptionsDropdown({
       >
         <div className="flex flex-col gap-4">
           <P2 extraClasses="text-grey3">
-            {t("unlinkText")}
+            {t("moreOptionsDropdown.unlinkText")}
           </P2>
           <div className="flex justify-between gap-2">
             <Button
-              buttonText={tCommon("unlink")}
+              buttonText={t("common.unlink")}
               onClick={unlinkContactFunc}
               variant="Secondary"
             />
             <Button
-              buttonText={tCommon("cancel")}
+              buttonText={t("common.cancel")}
               onClick={() => {
                 setIsUnlinkConfirmOpen(false);
                 setUnlinkError(false);

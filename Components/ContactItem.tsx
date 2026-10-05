@@ -14,7 +14,7 @@ import ErrorWarning from "./ErrorWarning";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
-  const t = useTranslations("ContactItem");
+  const t = useTranslations();
   const now = Date.now();
   const [error, setError] = useState<string | boolean>(false);
 
@@ -35,19 +35,21 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
 
   let lastTalkedLabel: string;
   if (lastTalkedAt == null) {
-    lastTalkedLabel = t("neverTalked");
+    lastTalkedLabel = t("contactItem.neverTalked");
   } else {
     const elapsed = now - new Date(lastTalkedAt).getTime();
     lastTalkedLabel =
       elapsed < oneDay
-        ? t("talkedToday")
-        : t("daysSinceTalk", { days: Math.floor(elapsed / oneDay) });
+        ? t("contactItem.talkedToday")
+        : t("contactItem.daysSinceTalk", {
+            days: Math.floor(elapsed / oneDay),
+          });
   }
 
   const nextTalkLabel =
     daysUntilNextTalk != null && daysUntilNextTalk > 0
-      ? t("talkInDays", { days: Math.ceil(daysUntilNextTalk) })
-      : t("talkToday");
+      ? t("contactItem.talkInDays", { days: Math.ceil(daysUntilNextTalk) })
+      : t("contactItem.talkToday");
 
   async function resetFunction() {
     const result = await markAsTalked(id);
@@ -63,15 +65,15 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
         <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-full min-w-0 sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
           <div className="flex flex-col justify-center min-w-0">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
-              <span className="font-medium text-xl leading-5.25 capitalize w-full min-w-0 break-words text-center sm:w-max sm:text-left">
+              <span className="font-medium text-xl leading-5.25 capitalize w-full min-w-0 wrap-break-word text-center sm:w-max sm:text-left">
                 {name}
               </span>
               {contact.isLinked && (
                 <FaLink
                   size={14}
-                  className="text-blue1 flex-shrink-0"
-                  title={t("linkedTitle")}
-                  aria-label={t("linkedLabel", { name })}
+                  className="text-blue1 shrink-0"
+                  title={t("contactItem.linkedTitle")}
+                  aria-label={t("contactItem.linkedLabel", { name })}
                 />
               )}
             </div>
