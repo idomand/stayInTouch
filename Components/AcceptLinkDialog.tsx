@@ -28,8 +28,7 @@ export default function AcceptLinkDialog({
   isOpen: boolean;
   close: () => void;
 }) {
-  const t = useTranslations("AcceptLinkDialog");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [choice, setChoice] = useState<"existing" | "new">(
     linkableContacts.length > 0 ? "existing" : "new"
   );
@@ -43,11 +42,11 @@ export default function AcceptLinkDialog({
 
   async function handleSubmit() {
     if (choice === "existing" && !selectedContactId) {
-      setError(t("selectContactError"));
+      setError(t("acceptLinkDialog.selectContactError"));
       return;
     }
     if (choice === "new" && !newContactName.trim()) {
-      setError(t("nameRequiredError"));
+      setError(t("acceptLinkDialog.nameRequiredError"));
       return;
     }
 
@@ -87,13 +86,13 @@ export default function AcceptLinkDialog({
 
   return (
     <Dialog
-      title={t("title", { name: request.fromName })}
+      title={t("acceptLinkDialog.title", { name: request.fromName })}
       isOpen={isOpen}
       close={handleDialogClose}
     >
       <div className="flex flex-col gap-4">
         <P2 extraClasses="text-grey3">
-          {t("question", { name: request.fromName })}
+          {t("acceptLinkDialog.question", { name: request.fromName })}
         </P2>
 
         {/* Radio: Existing contact */}
@@ -107,16 +106,16 @@ export default function AcceptLinkDialog({
               onChange={() => setChoice("existing")}
               className="mt-1"
             />
-            <P2 extraClasses="font-medium">{t("existingContact")}</P2>
+            <P2 extraClasses="font-medium">{t("acceptLinkDialog.existingContact")}</P2>
           </label>
           <div className="flex-1">
             {linkableContacts.length === 0 ? (
               <P2 extraClasses="text-grey3 text-xs mt-1">
-                {t("noUnlinkedContacts")}
+                {t("acceptLinkDialog.noUnlinkedContacts")}
               </P2>
             ) : (
               <select
-                aria-label={t("selectExisting")}
+                aria-label={t("acceptLinkDialog.selectExisting")}
                 value={selectedContactId}
                 onChange={(e) => setSelectedContactId(e.target.value)}
                 disabled={choice !== "existing"}
@@ -146,14 +145,14 @@ export default function AcceptLinkDialog({
               onChange={() => setChoice("new")}
               className="mt-1"
             />
-            <P2 extraClasses="font-medium">{t("newContact")}</P2>
+            <P2 extraClasses="font-medium">{t("acceptLinkDialog.newContact")}</P2>
           </label>
           <div className="flex-1">
             <div className="mt-2 space-y-2">
               <input
-                aria-label={t("contactName")}
+                aria-label={t("acceptLinkDialog.contactName")}
                 type="text"
-                placeholder={t("contactName")}
+                placeholder={t("acceptLinkDialog.contactName")}
                 value={newContactName}
                 onChange={(e) => setNewContactName(e.target.value)}
                 disabled={choice !== "new"}
@@ -163,9 +162,9 @@ export default function AcceptLinkDialog({
                 )}
               />
               <div className={twMerge(basicLabelClasses, "")}>
-                <span className="text-xs text-grey3">{t("everyXDays")}</span>
+                <span className="text-xs text-grey3">{t("acceptLinkDialog.everyXDays")}</span>
                 <input
-                  aria-label={t("cadenceLabel")}
+                  aria-label={t("acceptLinkDialog.cadenceLabel")}
                   type="number"
                   min={1}
                   max={maxCadenceDays}
@@ -186,13 +185,13 @@ export default function AcceptLinkDialog({
 
         <div className="flex gap-2 justify-end mt-4">
           <Button
-            buttonText={tCommon("cancel")}
+            buttonText={t("common.cancel")}
             onClick={handleDialogClose}
             variant="Secondary"
             disabled={isSubmitting}
           />
           <Button
-            buttonText={tCommon("accept")}
+            buttonText={t("common.accept")}
             onClick={handleSubmit}
             disabled={isSubmitting}
           />

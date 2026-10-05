@@ -45,10 +45,8 @@ export function useAuth() {
 
 type AuthErrorKey = keyof Messages["authErrors"];
 
-/** The translator for the "authErrors" messages: useTranslations("authErrors"). */
-export type AuthErrorTranslator = ReturnType<
-  typeof useTranslations<"authErrors">
->;
+/** The root translator, useTranslations(); keys are read under "authErrors". */
+export type AuthErrorTranslator = ReturnType<typeof useTranslations<never>>;
 
 /**
  * A user-facing error this file throws. It carries a message key, not text,
@@ -88,12 +86,12 @@ export function authErrorMessage(
     ) {
       return null;
     }
-    return t(AUTH_ERROR_KEYS[error.code] ?? "generic");
+    return t(`authErrors.${AUTH_ERROR_KEYS[error.code] ?? "generic"}`);
   }
   if (error instanceof AuthMessageError) {
-    return t(error.key);
+    return t(`authErrors.${error.key}`);
   }
-  return t("generic");
+  return t("authErrors.generic");
 }
 
 /**

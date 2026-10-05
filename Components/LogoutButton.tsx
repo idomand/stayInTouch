@@ -8,7 +8,7 @@ import Button from "./ui/Button";
 
 export default function LogoutButton() {
   const { logout } = useAuth()!;
-  const t = useTranslations("LogoutButton");
+  const t = useTranslations();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   function onLogout() {
@@ -20,12 +20,12 @@ export default function LogoutButton() {
     <>
       <Dialog
         isOpen={isLogoutModalOpen}
-        title={t("confirmTitle")}
+        title={t("logoutButton.confirmTitle")}
         close={() => {
           setIsLogoutModalOpen(false);
         }}
       >
-        <Button buttonText={t("logOut")} onClick={onLogout} />
+        <Button buttonText={t("logoutButton.logOut")} onClick={onLogout} />
       </Dialog>
       <button
         onClick={() => {
@@ -33,7 +33,7 @@ export default function LogoutButton() {
         }}
         className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3"
       >
-        {t("logOutButton")}
+        {t("logoutButton.logOutButton")}
         <img src="/log-out.svg" alt="" className="ml-1" />
       </button>
     </>

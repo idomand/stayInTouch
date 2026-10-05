@@ -26,8 +26,7 @@ export default function UpdateContactForm({
   isModalOpenProp,
   onClose,
 }: UpdateContactFormProps) {
-  const t = useTranslations("UpdateContactForm");
-  const tCommon = useTranslations("common");
+  const t = useTranslations();
   const [contactName, setContactName] = useState(contact.name);
   const [newFriendEmail, setNewFriendEmail] = useState(
     contact.friendEmail ?? "",
@@ -109,7 +108,7 @@ export default function UpdateContactForm({
 
   return (
     <Dialog
-      title={t("title", { name: contact.name })}
+      title={t("updateContactForm.title", { name: contact.name })}
       isOpen={isModalOpenProp}
       close={() => {
         onCloseModal();
@@ -125,10 +124,10 @@ export default function UpdateContactForm({
             )}
           >
             <label className={twMerge(basicLabelClasses, "")}>
-              {t("changeName")}
+              {t("updateContactForm.changeName")}
               <input
                 type="text"
-                placeholder={tCommon("enterName")}
+                placeholder={t("common.enterName")}
                 name="name"
                 value={contactName}
                 required
@@ -147,10 +146,10 @@ export default function UpdateContactForm({
               // CSS content needs a quoted string; the variable carries the
               // translated "Days" into the ::after label.
               style={
-                { "--days-label": JSON.stringify(tCommon("days")) } as React.CSSProperties
+                { "--days-label": JSON.stringify(t("common.days")) } as React.CSSProperties
               }
             >
-              {t("changeCadence")}
+              {t("updateContactForm.changeCadence")}
               <input
                 type="number"
                 name="time"
@@ -166,7 +165,7 @@ export default function UpdateContactForm({
               />
             </label>
             <div className="flex flex-col m-1 justify-between">
-              {t("changeLastSpoken")}
+              {t("updateContactForm.changeLastSpoken")}
               <DatePickerComponent
                 setStartDate={onDateChange}
                 startDate={lastTalk}
@@ -175,7 +174,7 @@ export default function UpdateContactForm({
             </div>
 
             <label className={twMerge(basicLabelClasses, "")}>
-              {t("changeEmail")}
+              {t("updateContactForm.changeEmail")}
               <input
                 type="email"
                 value={newFriendEmail}
@@ -191,7 +190,7 @@ export default function UpdateContactForm({
 
             <input
               type="submit"
-              value={t("update")}
+              value={t("updateContactForm.update")}
               disabled={contactName === ""}
               className={twMerge(
                 inputSubmitClasses,
