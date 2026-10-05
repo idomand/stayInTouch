@@ -9,6 +9,7 @@ type Props = {
   variant?: "Primary" | "Nav" | "Text";
   isLinkActive?: boolean;
   target?: React.HTMLAttributeAnchorTarget;
+  prefetch?: LinkProps["prefetch"];
 };
 
 export default function Link({
@@ -18,6 +19,7 @@ export default function Link({
   variant = "Primary",
   isLinkActive = false,
   target = "_self",
+  prefetch,
 }: Props) {
   const baseClasses = "hover:text-blue1 hover:border-b-2 font-bold";
   const primaryClasses = "";
@@ -38,6 +40,7 @@ export default function Link({
     <NextLink
       target={target}
       href={href}
+      prefetch={prefetch}
       aria-current={isLinkActive ? "page" : undefined}
       className={twMerge(
         baseClasses,
