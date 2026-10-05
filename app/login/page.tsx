@@ -52,7 +52,7 @@ export default function Login() {
     setIsSigningIn(true);
     try {
       await signIn();
-      router.replace("/");
+      window.location.replace("/");
       router.refresh();
     } catch (error) {
       setIsSigningIn(false);
@@ -81,13 +81,13 @@ export default function Login() {
           <>
             <div className="flex flex-col items-center gap-2">
               <H1>{t("login.welcome")}</H1>
-              <P2 extraClasses="text-grey3">
-                {t("login.intro")}
-              </P2>
+              <P2 extraClasses="text-grey3">{t("login.intro")}</P2>
             </div>
             <Button
               extraClasses="w-full gap-3 bg-white text-black border border-grey1 py-2.5 px-4 text-base font-semibold hover:bg-grey1 hover:text-black"
-              buttonText={isSigningIn ? t("login.signingIn") : t("login.signInWithGoogle")}
+              buttonText={
+                isSigningIn ? t("login.signingIn") : t("login.signInWithGoogle")
+              }
               onClick={handleGoogleSignIn}
               disabled={isSigningIn}
             >
