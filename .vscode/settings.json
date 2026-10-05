@@ -28,5 +28,6 @@
     "activityBarTop.activeBorder": "#15202b",
     "statusBar.inactiveBackground": "#f9e64f"
   },
-  "peacock.color": "#f9e64f"
+  "peacock.color": "#f9e64f",
+  "i18n-ally.localesPaths": ["i18n"]
 }
