@@ -8,7 +8,6 @@ import { markAsTalked } from "@/lib/actions/contacts";
 import { oneDay } from "@/lib/ConstantsFile";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
-import Notes from "./Notes";
 import TalkEvents from "./TalkEvents";
 import ErrorWarning from "./ErrorWarning";
 
@@ -89,7 +88,6 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
         </div>
         <div className="[grid-area:notes] flex justify-end items-center gap-2 mr-0 sm:mr-5">
           <TalkEvents contact={contact} />
-          <Notes contact={contact} />
         </div>
         <div className="[grid-area:buttons] flex items-center justify-end shrink-0">
           {isTalkingStatusOK ? (

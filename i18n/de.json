@@ -4,7 +4,7 @@
     "accept": "Annehmen",
     "unlink": "Verknüpfung lösen",
     "days": "Tage",
-    "enterName": "Name eingeben",
+    "enterName": "Name des Freundes",
     "enterNote": "Notiz eingeben...",
     "areYouSure": "Bist du sicher?"
   },
@@ -113,7 +113,7 @@
   "addNewContact": {
     "talkTo": "Ich möchte sprechen mit:",
     "every": "Alle",
-    "lastSpoken": "Wann wir zuletzt gesprochen haben",
+    "lastSpoken": "Wann wir zuletzt gesprochen haben (optional)",
     "addNote": "Notiz hinzufügen (optional)",
     "friendEmail": "E-Mail des Freundes (optional)",
     "submit": "Kontakt hinzufügen"

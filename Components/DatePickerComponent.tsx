@@ -10,13 +10,14 @@ import { twMerge } from "tailwind-merge";
 registerLocale("de", de);
 
 type DatePickerComponentProps = {
-  setStartDate:
-    | React.Dispatch<React.SetStateAction<Date>>
-    | React.Dispatch<React.SetStateAction<number | Date>>;
-  startDate: number | Date;
+  setStartDate: (date: Date) => void;
+  /** `null` shows an empty field; only meaningful together with `onClear`. */
+  startDate: number | Date | null;
   isInline?: boolean;
   /** Latest selectable day. Defaults to 90 days ahead (appointments). */
   maxDate?: Date;
+  /** When given, the field can be emptied; called when the user clears it. */
+  onClear?: () => void;
 };
 
 export default function DatePickerComponent({
@@ -24,9 +25,15 @@ export default function DatePickerComponent({
   startDate,
   isInline = false,
   maxDate = addDays(new Date(), 90),
+  onClear,
 }: DatePickerComponentProps) {
   const t = useTranslations();
   const locale = useLocale();
+
+  let selected: Date | null = null;
+  if (startDate != null) {
+    selected = startDate instanceof Date ? startDate : new Date(startDate);
+  }
 
   return (
     <>
@@ -37,8 +44,9 @@ export default function DatePickerComponent({
         popperContainer={Popper}
         dateFormat={t("datePicker.dateFormat")}
         locale={locale === "en" ? undefined : locale}
-        selected={startDate instanceof Date ? startDate : new Date(startDate)}
-        onChange={(date) => date && setStartDate(date)}
+        selected={selected}
+        onChange={(date) => (date ? setStartDate(date) : onClear?.())}
+        isClearable={onClear != null}
         inline={isInline}
       />
     </>
