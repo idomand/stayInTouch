@@ -11,7 +11,6 @@ import {
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import DatePickerComponent from "./DatePickerComponent";
 import ErrorWarning from "./ErrorWarning";
 import Dialog from "./ui/Dialog";
 
@@ -33,12 +32,6 @@ export default function UpdateContactForm({
   );
   const [contactTime, setContactTime] = useState(contact.cadenceDays);
   const [error, setError] = useState<string | boolean>(false);
-  const [lastTalk, setLastTalk] = useState<number | Date>(
-    contact.lastTalkedAt ?? new Date(),
-  );
-  // A new talk event is inserted only when the user actually touches the date —
-  // otherwise editing the name would silently reset "last talked".
-  const [dateTouched, setDateTouched] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -48,11 +41,6 @@ export default function UpdateContactForm({
     }
   }, [error]);
 
-  function onDateChange(value: React.SetStateAction<number | Date>) {
-    setDateTouched(true);
-    setLastTalk(value);
-  }
-
   async function updateContactOnSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -60,22 +48,15 @@ export default function UpdateContactForm({
     const cadenceChanged = +contactTime !== contact.cadenceDays;
     const emailChanged = newFriendEmail !== (contact.friendEmail ?? "");
 
-    if (!nameChanged && !cadenceChanged && !emailChanged && !dateTouched) {
+    if (!nameChanged && !cadenceChanged && !emailChanged) {
       onClose();
       return;
     }
-
-    const talkedAtMs = dateTouched
-      ? lastTalk instanceof Date
-        ? lastTalk.getTime()
-        : lastTalk
-      : undefined;
 
     const result = await updateContact(contact.id, {
       name: contactName,
       cadenceDays: +contactTime,
       friendEmail: newFriendEmail,
-      talkedAtMs,
     });
 
     if (!result.ok) {
@@ -146,7 +127,9 @@ export default function UpdateContactForm({
               // CSS content needs a quoted string; the variable carries the
               // translated "Days" into the ::after label.
               style={
-                { "--days-label": JSON.stringify(t("common.days")) } as React.CSSProperties
+                {
+                  "--days-label": JSON.stringify(t("common.days")),
+                } as React.CSSProperties
               }
             >
               {t("updateContactForm.changeCadence")}
@@ -164,15 +147,6 @@ export default function UpdateContactForm({
                 )}
               />
             </label>
-            <div className="flex flex-col m-1 justify-between">
-              {t("updateContactForm.changeLastSpoken")}
-              <DatePickerComponent
-                setStartDate={onDateChange}
-                startDate={lastTalk}
-                maxDate={new Date()}
-              />
-            </div>
-
             <label className={twMerge(basicLabelClasses, "")}>
               {t("updateContactForm.changeEmail")}
               <input
