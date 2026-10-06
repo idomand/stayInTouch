@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import AuthProvider from "@/lib/AuthContext";
-import Layout from "@/Components/ui/Layout";
+import NavBar from "@/Components/NavBar";
+import ScrollButtonWrapper from "@/Components/ScrollToTopButton";
+import Footer from "@/Components/ui/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +30,12 @@ export default async function RootLayout({
         {/* Outside AuthProvider so everything under it can use t(). */}
         <NextIntlClientProvider>
           <AuthProvider>
-            <Layout>{children}</Layout>
+            <main className="flex flex-col min-h-screen overflow-x-clip">
+              <NavBar />
+              <div className="flex-1">{children}</div>
+              <Footer />
+              <ScrollButtonWrapper />
+            </main>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

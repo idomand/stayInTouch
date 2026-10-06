@@ -55,7 +55,7 @@ export default function NavBar() {
           alt={t("navBar.logoAlt")}
         />
         <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
-          Stay-in-Touch!
+          Stay-in-Touch
         </h2>
       </NextLink>
 
