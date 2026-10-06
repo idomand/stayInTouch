@@ -17,9 +17,9 @@ export default function AddNewContact() {
   const t = useTranslations();
   const [time, setTime] = useState(3);
   const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
+  // null = "never talked": no talk event is recorded for the new contact.
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [error, setError] = useState<string | boolean>(false);
-  const [note, setNote] = useState("");
   const [friendEmail, setFriendEmail] = useState("");
   useEffect(() => {
     if (error) {
@@ -43,16 +43,14 @@ export default function AddNewContact() {
       name,
       cadenceDays: time,
       friendEmail,
-      note,
-      talkedAtMs: startDate.getTime(),
+      talkedAtMs: startDate?.getTime(),
     });
 
     if (!result.ok) {
       setError(result.error);
       setName("");
     } else {
-      setNote("");
-      setStartDate(new Date());
+      setStartDate(null);
       setName("");
       setFriendEmail("");
       setTime(3);
@@ -65,10 +63,10 @@ export default function AddNewContact() {
         onSubmit={createNewContact}
         className={twMerge(
           basicFormClasses,
-          "grid w-[85vw] max-w-full mx-auto py-2.5 px-1 gap-0 [grid-template-areas:'name_howMuchTime''lastTalked_lastTalked''notes_notes''emailInput_emailInput''submit_submit'] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto sm:[grid-template-areas:'name_howMuchTime_howMuchTime''lastTalked_notes_notes''emailInput_emailInput_emailInput''submit_submit_submit']",
+          "grid w-[85vw] max-w-full mx-auto py-2.5 px-1 gap-0 grid-cols-1 sm:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto",
         )}
       >
-        <label className={twMerge(basicLabelClasses, "[grid-area:name]")}>
+        <label className={basicLabelClasses}>
           {t("addNewContact.talkTo")}
           <input
             type="text"
@@ -83,14 +81,10 @@ export default function AddNewContact() {
             )}
           />
         </label>
-        <label
-          className={twMerge(
-            basicLabelClasses,
-            "[grid-area:howMuchTime]",
-          )}
-        >
+        <label className={basicLabelClasses}>
           {t("addNewContact.every")}
-          <div className="flex items-center gap-1">
+          {/* The unit sits inside the field; right-7 leaves room for the number spinner. */}
+          <div className="relative mt-1">
             <input
               value={time}
               onChange={(e) => {
@@ -103,33 +97,16 @@ export default function AddNewContact() {
               min={1}
               className={twMerge(
                 basicInputClasses,
-                "border border-solid border-grey2 rounded-lg flex-1",
+                "border border-solid border-grey2 rounded-lg w-full mt-0 pl-2 pr-14",
               )}
             />
-            <span className="text-[10px] text-grey3 font-bold whitespace-nowrap">{t("common.days")}</span>
+            <span className="pointer-events-none absolute right-7 top-1/2 -translate-y-1/2 text-[10px] text-grey3 font-bold whitespace-nowrap">
+              {t("common.days")}
+            </span>
           </div>
         </label>
 
-        <div className="flex flex-col m-1 justify-between [grid-area:lastTalked]">
-          {t("addNewContact.lastSpoken")}
-          <DatePickerComponent
-            setStartDate={setStartDate}
-            startDate={startDate}
-            maxDate={new Date()}
-          />
-        </div>
-        <label className={twMerge(basicLabelClasses, "[grid-area:notes]")}>
-          {t("addNewContact.addNote")}
-          <textarea
-            placeholder={t("common.enterNote")}
-            value={note}
-            onChange={(e) => {
-              setNote(e.target.value);
-            }}
-            className="h-10 border border-solid border-grey2 rounded-lg bg-grey1 focus:border focus:border-solid focus:border-blue1"
-          />
-        </label>
-        <label className={twMerge(basicLabelClasses, "[grid-area:emailInput]")}>
+        <label className={basicLabelClasses}>
           {t("addNewContact.friendEmail")}
           <input
             placeholder="new-friend@friendship.com"
@@ -140,17 +117,26 @@ export default function AddNewContact() {
             type="email"
             className={twMerge(
               basicInputClasses,
-              "[grid-area:emailInput] border border-solid border-grey2",
+              "border border-solid border-grey2",
             )}
           />
         </label>
+        <div className="flex flex-col m-1 justify-between min-w-0 [&_.react-datepicker-wrapper]:w-full [&_input]:w-full [&_input]:min-w-0">
+          {t("addNewContact.lastSpoken")}
+          <DatePickerComponent
+            setStartDate={setStartDate}
+            startDate={startDate}
+            maxDate={new Date()}
+            onClear={() => setStartDate(null)}
+          />
+        </div>
 
         <input
           type="submit"
           value={t("addNewContact.submit")}
           className={twMerge(
             inputSubmitClasses,
-            "[grid-area:submit] bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",
+            "sm:col-span-2 bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",
           )}
         />
       </form>

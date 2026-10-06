@@ -55,7 +55,7 @@ export default function NavBar() {
           alt={t("navBar.logoAlt")}
         />
         <h2 className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
-          Stay-in-Touch!
+          Stay-in-Touch
         </h2>
       </NextLink>
 
@@ -79,23 +79,20 @@ export default function NavBar() {
           </Link>
         </div>
       ) : (
-        <div />
+        <Link
+          variant="Nav"
+          isLinkActive={pathname === "/login"}
+          href="/login"
+        >
+          {t("navBar.loginPage")}
+        </Link>
       )}
 
       <div className="justify-self-end">
-        {currentUser ? (
-          pathname === "/settings" && (
-            <div className="mr-5">
-              <LogoutButton />
-            </div>
-          )
-        ) : (
-          <a
-            href="/login"
-            className="text-xs font-medium bg-blue1 text-white px-4 py-2 rounded-md border-[1.3px] border-white transition-all duration-300 m-2.5 inline-block hover:bg-blue3 hover:border-blue1 hover:text-blue1"
-          >
-            {t("navBar.loginPage")}
-          </a>
+        {currentUser && pathname === "/settings" && (
+          <div className="mr-5">
+            <LogoutButton />
+          </div>
         )}
       </div>
     </nav>

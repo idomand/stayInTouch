@@ -4,7 +4,7 @@
     "accept": "Accept",
     "unlink": "Unlink",
     "days": "Days",
-    "enterName": "Enter Name",
+    "enterName": "Friend's name",
     "enterNote": "Enter Note...",
     "areYouSure": "Are you sure?"
   },
@@ -113,7 +113,7 @@
   "addNewContact": {
     "talkTo": "I would like to talk to:",
     "every": "Every",
-    "lastSpoken": "Last Time We Have Spoken",
+    "lastSpoken": "Last Time We Have Spoken (optional)",
     "addNote": "Add a Note (optional)",
     "friendEmail": "Friend's Email (optional)",
     "submit": "Add contact"

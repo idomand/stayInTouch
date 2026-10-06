@@ -1,6 +1,6 @@
 # Stay-in-Touch
 
-Live app: **https://stay-in-touch.vercel.app/**
+Live app: **https://stay-in-touch.vip/**
 
 ![](https://img.shields.io/badge/Framework-Next.js%2016-informational?style=flat&logo=next.js&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Library-React%2019-informational?style=flat&logo=react&logoColor=white&color=2bbc8a)
@@ -46,12 +46,12 @@ Making it an installable **PWA (Progressive Web App)** is planned.
 
 | Area      | Technology                                                                          |
 | --------- | ----------------------------------------------------------------------------------- |
-| Framework | [Next.js 16](https://nextjs.org/) (App Router)                                       |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router)                                      |
 | UI        | [React 19](https://react.dev/)                                                      |
 | Language  | [TypeScript](https://www.typescriptlang.org/)                                       |
 | Auth      | [Firebase Auth](https://firebase.google.com/) — client SDK + Admin session cookies  |
 | Database  | [Neon Postgres](https://neon.tech/) via [Drizzle ORM](https://orm.drizzle.team/)    |
-| Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                          |
+| Styling   | [Tailwind CSS v4](https://tailwindcss.com/)                                         |
 | Dates     | [date-fns](https://date-fns.org/), [react-datepicker](https://reactdatepicker.com/) |
 | i18n      | [next-intl](https://next-intl.dev/) — English and German                            |
 
