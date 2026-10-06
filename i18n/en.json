@@ -4,7 +4,7 @@
     "accept": "Accept",
     "unlink": "Unlink",
     "days": "Days",
-    "enterName": "Friend's name",
+    "enterName": "Enter Name",
     "enterNote": "Enter Note...",
     "areYouSure": "Are you sure?"
   },
@@ -142,7 +142,6 @@
     "title": "Update contact: {name}",
     "changeName": "Change Name:",
     "changeCadence": "Change Talk Every X Days:",
-    "changeLastSpoken": "Change Last Time We Have Spoken",
     "changeEmail": "Change Friend Email:",
     "update": "Update"
   },

@@ -142,7 +142,6 @@
     "title": "Kontakt bearbeiten: {name}",
     "changeName": "Name ändern:",
     "changeCadence": "Alle X Tage sprechen:",
-    "changeLastSpoken": "Wann wir zuletzt gesprochen haben ändern",
     "changeEmail": "E-Mail des Freundes ändern:",
     "update": "Speichern"
   },
