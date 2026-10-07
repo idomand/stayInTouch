@@ -98,7 +98,7 @@
     "requestAlreadyPending": "Du hast bereits eine offene Anfrage an diese E-Mail.",
     "requestCrossed": "{name} hat dir bereits eine Anfrage gesendet. Nimm sie auf deiner Einstellungsseite an.",
     "contactHasPendingRequest": "Für diesen Kontakt gibt es bereits eine offene Anfrage.",
-    "inviteLimitReached": "Du kannst {limit} Einladungen pro Tag senden. Versuche es morgen erneut.",
+    "inviteLimitReached": "Du kannst {limit} Einladungen pro Tag senden. Versuche es später erneut.",
     "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
     "contactNotLinked": "Dieser Kontakt ist nicht verknüpft."
@@ -172,10 +172,15 @@
   },
   "linkContactDialog": {
     "title": "Mit einem Freund verknüpfen",
-    "intro": "Sende eine Anfrage an die Stay-in-Touch-E-Mail deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
+    "intro": "Sende eine Anfrage an die E-Mail-Adresse deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
     "friendEmail": "E-Mail des Freundes",
     "emailRequired": "Bitte gib eine E-Mail-Adresse ein.",
-    "send": "Anfrage senden"
+    "continue": "Weiter",
+    "confirmEmail": "Wir senden {email} eine E-Mail mit deinem Namen, deiner E-Mail-Adresse und einem Link zum Annehmen.",
+    "confirmLimit": "Du kannst {limit} Einladungen pro Tag senden. Heute noch {remaining}.",
+    "limitReached": "Du hast in den letzten 24 Stunden {limit} Einladungen gesendet. Versuche es später erneut.",
+    "sendInvite": "Einladung senden",
+    "back": "Zurück"
   },
   "acceptLinkDialog": {
     "title": "Mit {name} verknüpfen",

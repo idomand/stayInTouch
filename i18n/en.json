@@ -98,7 +98,7 @@
     "requestAlreadyPending": "You already have a pending request to this email.",
     "requestCrossed": "{name} already sent you a request. Accept it on your Settings page.",
     "contactHasPendingRequest": "This contact already has a pending request.",
-    "inviteLimitReached": "You can send {limit} invites per day. Try again tomorrow.",
+    "inviteLimitReached": "You can send {limit} invites per day. Try again later.",
     "alreadyLinkedWith": "You are already linked with {name}.",
     "contactsAlreadyLinked": "One of these contacts is already linked.",
     "contactNotLinked": "This contact is not linked."
@@ -172,10 +172,15 @@
   },
   "linkContactDialog": {
     "title": "Link with a friend",
-    "intro": "Send a request to your friend's Stay-in-Touch email. When they accept, a talk marked by either of you resets both timers.",
+    "intro": "Send a request to your friend's email. When they accept, a talk marked by either of you resets both timers.",
     "friendEmail": "Friend's email",
     "emailRequired": "Please enter an email address.",
-    "send": "Send request"
+    "continue": "Continue",
+    "confirmEmail": "We will email {email} with your name and email, and a link to accept.",
+    "confirmLimit": "You can send {limit} invites per day. {remaining} left today.",
+    "limitReached": "You have sent {limit} invites in the last 24 hours. Try again later.",
+    "sendInvite": "Send invite",
+    "back": "Back"
   },
   "acceptLinkDialog": {
     "title": "Link with {name}",
