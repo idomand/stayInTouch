@@ -98,6 +98,7 @@
     "requestAlreadyPending": "You already have a pending request to this email.",
     "requestCrossed": "{name} already sent you a request. Accept it on your Settings page.",
     "contactHasPendingRequest": "This contact already has a pending request.",
+    "inviteLimitReached": "You can send {limit} invites per day. Try again tomorrow.",
     "alreadyLinkedWith": "You are already linked with {name}.",
     "contactsAlreadyLinked": "One of these contacts is already linked.",
     "contactNotLinked": "This contact is not linked."
