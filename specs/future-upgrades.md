@@ -1,7 +1,7 @@
 # Future upgrades
 
 Planned, not scheduled. Each needs its own spec (see `specs/template.md`) before
-building. Background and constraints are in `docs/architecture.md`.
+building. Background and constraints are in `specs/architecture.md`.
 
 1. **`/settings` — the rest of it.** The page (formerly `/account`; the old URL
    redirects in `next.config.js`) holds the language selector, a

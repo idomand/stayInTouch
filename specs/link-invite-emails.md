@@ -129,6 +129,8 @@ account with this email to accept." The sender's UI looks the same in both cases
 | `7509698` | `sendLinkRequest`: per-user advisory lock + 24 h count + insert request and log row in one transaction; email sent with `after()`, failures only logged. `INVITE_LIMIT_PER_DAY` and `invitesInLastDay()` in `lib/db/queries/links.ts`; `getInvitesRemainingToday()` + action wrapper `getMyInvitesRemainingToday()`. Error key `errors.inviteLimitReached`. |
 | `2fd8991` | `LinkContactDialog`: two steps (email → confirm with remaining count; Send disabled at 0). |
 | `215ec37` | Landing: `/login?email=` prefills `EmailAuthForm` (`initialEmail` prop) and shows a note to use that exact email. The page is wrapped in `<Suspense>` for `useSearchParams`. |
+| `8c257db` | Opt-out: `addEmailOptOut()` in `lib/email/optOut.ts` (token check + insert, shared). Server Action `optOutEmail` (`lib/actions/email.ts`) behind a confirm button on public `/unsubscribe`; one-click `POST /api/email/unsubscribe` (RFC 8058, GET → 405). Also `LinkContactDialog` made one step (see below). |
+| `3137959` | NavBar badge follows accept/reject: `PendingRequestCountContext`, fed by `PendingRequestCountSync` on `/settings` after each revalidation. |
 
 ### Changes from the plan above
 - **Sender domain:** `invites@send.stay-in-touch.vip`. That subdomain was already verified in Resend, so no new DNS records were needed. The root DMARC (`p=none`) covers it.
@@ -138,8 +140,6 @@ account with this email to accept." The sender's UI looks the same in both cases
 - **The opt-out page uses a confirm button.** A GET only shows the page, because link scanners open links. The one-click route accepts POST only.
 
 ### Left to do
-- **G. Opt-out:** `app/unsubscribe/page.tsx` + Server Action `optOutEmail(email, token)` in `lib/actions/email.ts` (verify token, upsert into `email_opt_outs`). `app/api/email/unsubscribe/route.ts`, POST only (RFC 8058). Public: do not add these to the `proxy.ts` matcher. Text in the `unsubscribe` section of both JSON files.
-- **H. Privacy and docs:** the privacy text changes listed in step 8. `specs/architecture.md`: Email row, Resend out of "abandoned directions", new tables and env vars. CLAUDE.md: the new env vars checked at module load.
 - **Before merge (manual):** add the three env vars in Vercel (Production + Preview, `APP_URL=https://stay-in-touch.vip`). Migrate production (CLAUDE.md step 5). Run a mail-tester.com check.
 
 ## Verification

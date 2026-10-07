@@ -32,6 +32,11 @@ export default async function Privacy() {
         </div>
 
         <div className="flex flex-col gap-2">
+          <H2>{t("privacy.nonUsersTitle")}</H2>
+          <P3 extraClasses="normal-case">{t("privacy.nonUsers")}</P3>
+        </div>
+
+        <div className="flex flex-col gap-2">
           <H2>{t("privacy.providersTitle")}</H2>
           <P3 extraClasses="normal-case">{t("privacy.providers")}</P3>
         </div>

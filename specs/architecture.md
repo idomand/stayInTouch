@@ -30,7 +30,9 @@ Components read, Server Actions write and call `revalidatePath`.
 | `owner_id`     | Firebase uid, bare `text`, no FK — identity is not in Postgres |
 | Region         | Vercel `fra1`, to match Neon `eu-central-1` |
 | Domain         | `stay-in-touch.vip` |
-| Email          | Firebase's built-in verification and reset emails. No email provider of our own. |
+| Email          | Firebase sends verification and reset emails. Resend sends the one notice per link request, from `invites@send.stay-in-touch.vip`, English only |
+| Invite limit   | 3 invite emails per user per rolling 24 h, counted in `invite_emails_sent` |
+| Email opt-out  | `email_opt_outs` table; HMAC-signed link, confirm page + RFC 8058 one-click POST |
 | Email verification | Required; the session route refuses to mint a cookie for an unverified email |
 | Realtime       | None — Server Component read + `revalidatePath` after each write |
 | Schema changes | Generated migrations only; production migrated by hand before merge, never from the Vercel build |
@@ -48,8 +50,6 @@ The first plan removed Firebase entirely. All of this was dropped:
 
 - **Better Auth** (and before it, **Auth.js**) — not needed. Firebase Auth does
   email+password natively, and moving the database never required moving auth.
-- **Resend** with a DKIM/DMARC/SPF sending domain — Firebase sends its own
-  verification and reset emails. Only worth revisiting for branded emails.
 - **A Google OAuth client** in Google Cloud Console — Firebase handles Google
   sign-in.
 - **`BETTER_AUTH_SECRET` / `BETTER_AUTH_URL`** — replaced by
@@ -134,16 +134,46 @@ would let the sender see which emails have an account. The addressee sees
 requests sent to their verified session email; after accept, the link is two
 contact ids and emails play no part.
 
-Known limitations: the NavBar badge updates on the next navigation after an
-accept or reject. A sender may re-send after every reject (no cooldown). A pending
-request is lost if the addressee changes their email. Request history is deleted
-with the sender's contact.
+The NavBar badge is a client component that loads its count on navigation.
+Accept and reject keep the user on `/settings`, so that page pushes its fresh
+`incoming.length` into `PendingRequestCountContext` after each revalidation.
+
+Known limitations: a sender may re-send after every reject (no cooldown); the
+daily invite limit is the only brake. A pending request is lost if the addressee
+changes their email. Request history is deleted with the sender's contact.
+
+## Link invite emails
+
+Every link request sends one email to the addressee (`lib/email/`, Resend). The
+plan in `specs/link-invite-emails.md` has the full reasoning; the parts that
+shape the code:
+
+- **Same email for everyone.** No branch on "has an account": that needs a uid
+  lookup by email, which would reveal who uses the app. Existing users also had
+  no notification before, so they gain from it too.
+- **The email is best-effort.** It is sent with `after()` once the transaction
+  commits. A failed send is logged and the request still stands: the row is the
+  real invite.
+- **The limit is counted in its own table.** `link_requests` rows are deleted
+  with the sender's contact, so "add contact → send → delete contact" would reset
+  a count taken from there. `invite_emails_sent` has no FK for the same reason.
+  Count and insert run in one transaction under a per-user advisory lock, so two
+  parallel sends cannot both pass.
+- **An opted-out address still uses one daily invite,** and the sender is never
+  told. The behaviour is the same for every address.
+- **Opt-out never happens on GET.** Link scanners open links. `/unsubscribe`
+  shows a confirm button; the `List-Unsubscribe` URL accepts POST only. The
+  link carries an HMAC of the address (`EMAIL_UNSUBSCRIBE_SECRET`), so only the
+  recipient can opt that address out, and no sign-in is needed.
+- **Sender subdomain.** `send.stay-in-touch.vip` was already verified in Resend;
+  bad reputation there cannot hurt the root domain.
 
 ## Lessons learned
 
-- **`DATABASE_URL` and `FIREBASE_SERVICE_ACCOUNT_B64` are build-time
-  requirements.** Both throw at module load, and Next imports route modules while
-  collecting page data. Set them in Vercel before any deploy that imports them.
+- **`DATABASE_URL`, `FIREBASE_SERVICE_ACCOUNT_B64`, `RESEND_API_KEY`,
+  `EMAIL_UNSUBSCRIBE_SECRET` and `APP_URL` are build-time requirements.** All
+  throw at module load, and Next imports route modules while collecting page
+  data. Set them in Vercel before any deploy that imports them.
 - **`firebase-admin` and `jose`.** `firebase-admin` pulls in ESM-only `jose`,
   which broke `require()` in the Vercel bundle. Fixed by pinning Vercel Node to
   24.x, forcing CommonJS `jose@5.10.0` (commits `59e4cf9`, `037592f`) and

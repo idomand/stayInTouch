@@ -249,13 +249,15 @@
     "noTrackingTitle": "No tracking",
     "noTracking": "Stay-in-Touch does not track you. The app uses no analytics, no advertising cookies, and no third-party tracking of any kind. Your activity within the app is not monitored, profiled, or measured for any purpose.",
     "dataTitle": "Data we store",
-    "data": "The app stores only what you enter yourself: your contacts, how often you want to talk to each one, your notes, the dates you talked, and an optional email for each contact. All accounts share one database, and every record is tied to your account, so other users cannot see your data.",
+    "data": "The app stores only what you enter yourself: your contacts, how often you want to talk to each one, your notes, the dates you talked, and an optional email for each contact. All accounts share one database, and every record is tied to your account, so other users cannot see your data. When you send link requests, we also log the time of each invite email, only to enforce the daily invite limit. We keep a list of email addresses that asked not to get invite emails.",
     "authTitle": "Authentication",
     "auth": "You can sign in with Google or with an email and password. Sign-in is handled by Firebase Authentication. We use your name and email only to identify your account and to show them to people you send a link request to. We do not access your Google contacts, email, or any other Google data.",
     "linkingTitle": "Linking with friends",
-    "linking": "If you send a link request, the person you send it to sees your name and email. After they accept, a talk marked on one side is also recorded on the other. Your friend sees only the dates of those talks. Your notes, contact names and talk frequency are never shared.",
+    "linking": "If you send a link request, we send the person one email with your name and email and a link to accept. They also see your name and email in the app. After they accept, a talk marked on one side is also recorded on the other. Your friend sees only the dates of those talks. Your notes, contact names and talk frequency are never shared.",
+    "nonUsersTitle": "If someone sent you a link request",
+    "nonUsers": "Your email address is stored because a user entered it to send you a link request. You get one email per request, with no reminders or follow-ups. The request is deleted when the sender cancels it or deletes that contact. Every email has a link to stop all further emails from Stay-in-Touch. If you use it, we keep your address on an opt-out list, only to honour that choice.",
     "providersTitle": "Service providers",
-    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. It is never sold or rented, and the app will never send you marketing or spam messages.",
+    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Resend sends the link request emails; it processes the recipient's email address and the sender's name and email. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
     "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks."
   }
