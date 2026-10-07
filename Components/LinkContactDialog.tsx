@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { sendLinkRequest } from "@/lib/actions/links";
+import { sendLinkRequest, getMyInvitesRemainingToday } from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
@@ -9,6 +9,10 @@ import ErrorWarning from "./ErrorWarning";
 import { basicInputClasses, basicLabelClasses } from "./ui/formClasses";
 import { twMerge } from "tailwind-merge";
 import { P2 } from "./ui/Text";
+
+// Mirrors INVITE_LIMIT_PER_DAY in lib/db/queries/links.ts (a server-only
+// module); the server enforces the real limit.
+const INVITE_LIMIT_PER_DAY = 3;
 
 export default function LinkContactDialog({
   contact,
@@ -23,8 +27,33 @@ export default function LinkContactDialog({
   const [email, setEmail] = useState(contact.friendEmail ?? "");
   const [error, setError] = useState<string | false>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [remaining, setRemaining] = useState<number | null>(null);
 
-  async function handleSubmit() {
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    (async () => {
+      try {
+        const invitesRemaining = await getMyInvitesRemainingToday();
+        if (!isCancelled) {
+          setRemaining(invitesRemaining);
+        }
+      } catch (caughtError) {
+        // The server still enforces the limit; only the count is missing.
+        console.error("Could not load remaining invites:", caughtError);
+      }
+    })();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isOpen]);
+
+  async function handleSend() {
     if (!email.trim()) {
       setError(t("linkContactDialog.emailRequired"));
       return;
@@ -38,6 +67,8 @@ export default function LinkContactDialog({
       setError(result.error);
     } else {
       setEmail(contact.friendEmail ?? "");
+      setError(false);
+      setRemaining(null);
       close();
     }
   }
@@ -45,6 +76,7 @@ export default function LinkContactDialog({
   function handleDialogClose() {
     setEmail(contact.friendEmail ?? "");
     setError(false);
+    setRemaining(null);
     close();
   }
 
@@ -65,10 +97,31 @@ export default function LinkContactDialog({
             type="email"
             placeholder="friend@example.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             className={twMerge(basicInputClasses, "")}
           />
         </label>
+
+        <P2 extraClasses="text-grey3">
+          {t("linkContactDialog.emailNotice")}
+        </P2>
+
+        {remaining !== null && remaining > 0 && (
+          <P2 extraClasses="text-grey3">
+            {t("linkContactDialog.confirmLimit", {
+              limit: INVITE_LIMIT_PER_DAY,
+              remaining,
+            })}
+          </P2>
+        )}
+
+        {remaining === 0 && (
+          <P2 extraClasses="text-red1">
+            {t("linkContactDialog.limitReached", {
+              limit: INVITE_LIMIT_PER_DAY,
+            })}
+          </P2>
+        )}
 
         {error && <ErrorWarning errorMessage={error} />}
 
@@ -80,9 +133,9 @@ export default function LinkContactDialog({
             disabled={isSubmitting}
           />
           <Button
-            buttonText={t("linkContactDialog.send")}
-            onClick={handleSubmit}
-            disabled={isSubmitting}
+            buttonText={t("linkContactDialog.sendInvite")}
+            onClick={handleSend}
+            disabled={isSubmitting || remaining === 0}
           />
         </div>
       </div>

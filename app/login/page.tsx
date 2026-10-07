@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { H1, P2 } from "@/Components/ui/Text";
@@ -9,7 +9,7 @@ import Button from "@/Components/ui/Button";
 import EmailAuthForm from "@/Components/EmailAuthForm";
 import VerifyEmailNotice from "@/Components/VerifyEmailNotice";
 
-export default function Login() {
+function Login() {
   const {
     loginWithGoogle,
     signInWithEmail,
@@ -18,9 +18,11 @@ export default function Login() {
     refreshSession,
   } = useAuth()!;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
+  const invitedEmail = searchParams.get("email")?.trim() || undefined;
 
   // Handles an already-signed-in user landing on /login. Gate on hasSession,
   // not currentUser: the proxy checks the cookie, and a client-signed-in
@@ -83,6 +85,16 @@ export default function Login() {
               <H1>{t("login.welcome")}</H1>
               <P2 extraClasses="text-grey3">{t("login.intro")}</P2>
             </div>
+            {invitedEmail && (
+              <P2 extraClasses="text-grey3">
+                {t.rich("login.invitedEmailNote", {
+                  email: invitedEmail,
+                  strong: (chunks) => (
+                    <strong className="text-black">{chunks}</strong>
+                  ),
+                })}
+              </P2>
+            )}
             <Button
               extraClasses="w-full gap-3 bg-white text-black border border-grey1 py-2.5 px-4 text-base font-semibold hover:bg-grey1 hover:text-black"
               buttonText={
@@ -122,11 +134,20 @@ export default function Login() {
               onSignIn={(email, password) =>
                 signInAndGo(() => signInWithEmail(email, password))
               }
+              initialEmail={invitedEmail}
               disabled={isSigningIn}
             />
           </>
         )}
       </div>
     </section>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <Login />
+    </Suspense>
   );
 }

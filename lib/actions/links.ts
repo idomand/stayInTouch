@@ -1,6 +1,7 @@
 "use server";
-import { and, eq, inArray, or, sql } from "drizzle-orm";
+import { and, count, eq, inArray, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { db } from "@/lib/db";
 import {
   getOwnedContact,
@@ -8,8 +9,19 @@ import {
   requireUser,
   requireUserWithEmail,
 } from "@/lib/db/queries/guards";
-import { getPendingRequestCount } from "@/lib/db/queries/links";
-import { contactLinks, contacts, linkRequests } from "@/lib/db/schema";
+import {
+  getInvitesRemainingToday,
+  getPendingRequestCount,
+  INVITE_LIMIT_PER_DAY,
+  invitesInLastDay,
+} from "@/lib/db/queries/links";
+import {
+  contactLinks,
+  contacts,
+  inviteEmailsSent,
+  linkRequests,
+} from "@/lib/db/schema";
+import { sendLinkInviteEmail } from "@/lib/email/sendLinkInviteEmail";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import { actionError } from "@/lib/actions/actionError";
 import {
@@ -123,13 +135,33 @@ export async function sendLinkRequest(
     console.error("Could not read the sender's display name:", error);
   }
 
+  let result: ActionResult;
   try {
-    await db.insert(linkRequests).values({
-      fromUserId: uid,
-      fromContactId: contact.id,
-      fromName,
-      fromEmail: myEmail,
-      toEmail,
+    result = await db.transaction(async (tx): Promise<ActionResult> => {
+      // Serializes this user's sends so two parallel requests cannot both
+      // pass the daily limit check.
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtext(${`invite:${uid}`}))`,
+      );
+      const [sent] = await tx
+        .select({ value: count() })
+        .from(inviteEmailsSent)
+        .where(invitesInLastDay(uid));
+      if ((sent?.value ?? 0) >= INVITE_LIMIT_PER_DAY) {
+        return actionError({
+          key: "inviteLimitReached",
+          values: { limit: INVITE_LIMIT_PER_DAY },
+        });
+      }
+      await tx.insert(linkRequests).values({
+        fromUserId: uid,
+        fromContactId: contact.id,
+        fromName,
+        fromEmail: myEmail,
+        toEmail,
+      });
+      await tx.insert(inviteEmailsSent).values({ fromUserId: uid });
+      return { ok: true };
     });
   } catch (error) {
     // link_requests_one_pending_per_contact
@@ -138,9 +170,27 @@ export async function sendLinkRequest(
     }
     throw error;
   }
+  if (!result.ok) {
+    return result;
+  }
+
+  // The row is the real invite; the email is a best-effort notification, sent
+  // after the response so the action does not wait on Resend.
+  after(() =>
+    sendLinkInviteEmail({ fromName, fromEmail: myEmail, toEmail }).catch(
+      (error) => {
+        console.error("Could not send the link invite email:", error);
+      },
+    ),
+  );
 
   revalidateLinkPages();
   return { ok: true };
+}
+
+/** For the confirm popup in the link dialog, a client component. */
+export async function getMyInvitesRemainingToday(): Promise<number> {
+  return getInvitesRemainingToday();
 }
 
 export async function acceptLinkRequest(

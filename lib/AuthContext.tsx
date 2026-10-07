@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import type { Messages, useTranslations } from "next-intl";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
+import { deleteAccount as deleteAccountAction } from "@/lib/actions/account";
+import type { ActionResult } from "@/lib/actions/validation";
 import { Result } from "@/Components/ui/Spinner";
 
 type AuthContextType = {
@@ -29,6 +31,8 @@ type AuthContextType = {
   /** Renew the cookie, or clear hasSession if the server no longer accepts it. */
   refreshSession: () => Promise<boolean>;
   logout: () => void;
+  /** Deletes the account and all its data, then signs out on success. */
+  deleteAccount: () => Promise<ActionResult>;
   loginWithGoogle: () => Promise<void>;
   signUpWithEmail: (name: string, email: string, password: string) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
@@ -182,20 +186,34 @@ export default function AuthProvider({
     }
   }
 
+  /** Client half of signing out, once the server cookie is already gone. */
+  async function finishSignOut() {
+    setHasSession(false);
+    await signOut(auth);
+    setCurrentUser(null);
+    // The home page is server-rendered now, so clearing state does not move
+    // the user off it — navigate, and refresh so no cached authed view remains.
+    router.replace("/login");
+    router.refresh();
+  }
+
   async function logout() {
     try {
       // Clear the server session cookie first, then the client SDK session.
       await fetch("/api/auth/session", { method: "DELETE" });
-      setHasSession(false);
-      await signOut(auth);
-      setCurrentUser(null);
-      // The home page is server-rendered now, so clearing state does not move
-      // the user off it — navigate, and refresh so no cached authed view remains.
-      router.replace("/login");
-      router.refresh();
+      await finishSignOut();
     } catch (error) {
       console.error("Error signing out:", error);
     }
+  }
+
+  /** The Server Action deletes the data, the user and the cookie. */
+  async function deleteAccount(): Promise<ActionResult> {
+    const result = await deleteAccountAction();
+    if (result.ok) {
+      await finishSignOut();
+    }
+    return result;
   }
 
   async function loginWithGoogle() {
@@ -295,6 +313,7 @@ export default function AuthProvider({
     hasSession,
     refreshSession,
     logout,
+    deleteAccount,
     loginWithGoogle,
     signUpWithEmail,
     signInWithEmail,

@@ -41,7 +41,17 @@
     "intro": "Melde dich an, um deine Erinnerungen zu verwalten und mit den Menschen in Kontakt zu bleiben, die dir wichtig sind.",
     "signingIn": "Anmeldung läuft…",
     "signInWithGoogle": "Mit Google anmelden",
-    "or": "oder"
+    "or": "oder",
+    "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen."
+  },
+  "unsubscribe": {
+    "title": "Einladungs-E-Mails abbestellen",
+    "confirmText": "Alle E-Mails von Stay in Touch an <strong>{email}</strong> abbestellen?",
+    "confirm": "E-Mails abbestellen",
+    "working": "Bitte warten…",
+    "done": "Erledigt. Wir schreiben dieser Adresse keine E-Mails mehr.",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "missingParams": "Dieser Link ist unvollständig. Verwende den Link aus der E-Mail."
   },
   "emailAuthForm": {
     "signIn": "Anmelden",
@@ -98,9 +108,12 @@
     "requestAlreadyPending": "Du hast bereits eine offene Anfrage an diese E-Mail.",
     "requestCrossed": "{name} hat dir bereits eine Anfrage gesendet. Nimm sie auf deiner Einstellungsseite an.",
     "contactHasPendingRequest": "Für diesen Kontakt gibt es bereits eine offene Anfrage.",
+    "inviteLimitReached": "Du kannst {limit} Einladungen pro Tag senden. Versuche es später erneut.",
     "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
-    "contactNotLinked": "Dieser Kontakt ist nicht verknüpft."
+    "contactNotLinked": "Dieser Kontakt ist nicht verknüpft.",
+    "unsubscribeLinkInvalid": "Dieser Abmeldelink ist ungültig. Verwende den Link aus der E-Mail.",
+    "accountDeleteFailed": "Deine Daten wurden gelöscht, aber das Konto konnte nicht entfernt werden. Bitte versuche es erneut."
   },
   "mainForm": {
     "hi": "Hallo",
@@ -171,10 +184,13 @@
   },
   "linkContactDialog": {
     "title": "Mit einem Freund verknüpfen",
-    "intro": "Sende eine Anfrage an die Stay-in-Touch-E-Mail deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
+    "intro": "Sende eine Anfrage an die E-Mail-Adresse deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
     "friendEmail": "E-Mail des Freundes",
     "emailRequired": "Bitte gib eine E-Mail-Adresse ein.",
-    "send": "Anfrage senden"
+    "emailNotice": "Wir senden deinem Freund eine E-Mail mit deinem Namen, deiner E-Mail-Adresse und einem Link zum Annehmen.",
+    "confirmLimit": "Du kannst {limit} Einladungen pro Tag senden. Heute noch {remaining}.",
+    "limitReached": "Du hast in den letzten 24 Stunden {limit} Einladungen gesendet. Versuche es später erneut.",
+    "sendInvite": "Einladung senden"
   },
   "acceptLinkDialog": {
     "title": "Mit {name} verknüpfen",
@@ -200,6 +216,18 @@
     "noOutgoing": "Keine offenen gesendeten Anfragen.",
     "yourContact": "Dein Kontakt",
     "waiting": " · wartet"
+  },
+  "deleteAccount": {
+    "title": "Konto löschen",
+    "intro": "Lösche dein Konto und alle deine Daten endgültig.",
+    "open": "Konto löschen",
+    "dialogTitle": "Dein Konto löschen?",
+    "whatIsDeleted": "Dadurch werden dein Konto, deine Kontakte, Notizen und Gesprächsverläufe, deine Verknüpfungen mit Freunden und alle Verknüpfungsanfragen von dir oder an dich gelöscht.",
+    "friendsKeep": "Verknüpfte Freunde behalten ihren eigenen Kontakt und dessen Verlauf, er ist aber nicht mehr mit dir verknüpft.",
+    "cannotUndo": "Das kann nicht rückgängig gemacht werden.",
+    "confirm": "Mein Konto löschen",
+    "deleting": "Wird gelöscht…",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "settings": {
     "metaTitle": "Einstellungen | Stay-in-Touch",
@@ -234,14 +262,16 @@
     "noTrackingTitle": "Kein Tracking",
     "noTracking": "Stay-in-Touch verfolgt dich nicht. Die App verwendet keine Analysetools, keine Werbe-Cookies und kein Tracking durch Dritte. Deine Aktivität in der App wird zu keinem Zweck überwacht, ausgewertet oder gemessen.",
     "dataTitle": "Welche Daten wir speichern",
-    "data": "Die App speichert nur, was du selbst eingibst: deine Kontakte, wie oft du mit jedem sprechen möchtest, deine Notizen, die Daten eurer Gespräche und optional eine E-Mail pro Kontakt. Alle Konten teilen sich eine Datenbank, und jeder Eintrag ist an dein Konto gebunden, sodass andere Nutzer deine Daten nicht sehen können.",
+    "data": "Die App speichert nur, was du selbst eingibst: deine Kontakte, wie oft du mit jedem sprechen möchtest, deine Notizen, die Daten eurer Gespräche und optional eine E-Mail pro Kontakt. Alle Konten teilen sich eine Datenbank, und jeder Eintrag ist an dein Konto gebunden, sodass andere Nutzer deine Daten nicht sehen können. Wenn du Verknüpfungsanfragen sendest, speichern wir außerdem den Zeitpunkt jeder Einladungs-E-Mail, nur um das tägliche Einladungslimit durchzusetzen. Wir führen eine Liste der E-Mail-Adressen, die keine Einladungs-E-Mails mehr erhalten möchten.",
     "authTitle": "Anmeldung",
     "auth": "Du kannst dich mit Google oder mit E-Mail und Passwort anmelden. Die Anmeldung läuft über Firebase Authentication. Wir verwenden deinen Namen und deine E-Mail nur, um dein Konto zu identifizieren und sie Personen zu zeigen, denen du eine Verknüpfungsanfrage sendest. Wir greifen nicht auf deine Google-Kontakte, E-Mails oder andere Google-Daten zu.",
     "linkingTitle": "Verknüpfen mit Freunden",
-    "linking": "Wenn du eine Verknüpfungsanfrage sendest, sieht die Empfängerin oder der Empfänger deinen Namen und deine E-Mail. Nach der Annahme wird ein Gespräch, das auf einer Seite markiert wird, auch auf der anderen erfasst. Dein Freund sieht nur die Daten dieser Gespräche. Deine Notizen, Kontaktnamen und Gesprächsabstände werden nie geteilt.",
+    "linking": "Wenn du eine Verknüpfungsanfrage sendest, schicken wir der Empfängerin oder dem Empfänger eine E-Mail mit deinem Namen, deiner E-Mail-Adresse und einem Link zum Annehmen. In der App sieht sie oder er deinen Namen und deine E-Mail ebenfalls. Nach der Annahme wird ein Gespräch, das auf einer Seite markiert wird, auch auf der anderen erfasst. Dein Freund sieht nur die Daten dieser Gespräche. Deine Notizen, Kontaktnamen und Gesprächsabstände werden nie geteilt.",
+    "nonUsersTitle": "Wenn dir jemand eine Verknüpfungsanfrage gesendet hat",
+    "nonUsers": "Deine E-Mail-Adresse ist gespeichert, weil ein Nutzer sie eingegeben hat, um dir eine Verknüpfungsanfrage zu senden. Du bekommst eine E-Mail pro Anfrage, ohne Erinnerungen oder Nachfassen. Die Anfrage wird gelöscht, wenn der Absender sie zurückzieht oder den Kontakt löscht. Jede E-Mail enthält einen Link, mit dem du alle weiteren E-Mails von Stay-in-Touch abbestellen kannst. Wenn du ihn nutzt, speichern wir deine Adresse auf einer Abmeldeliste, nur um diese Entscheidung zu respektieren.",
     "providersTitle": "Dienstleister",
-    "providers": "Deine Daten werden von Firebase (Google), Neon und Vercel gespeichert und verarbeitet, nur um die App zu betreiben. Sie werden nie verkauft oder vermietet, und die App sendet dir nie Werbung oder Spam.",
+    "providers": "Deine Daten werden von Firebase (Google), Neon und Vercel gespeichert und verarbeitet, nur um die App zu betreiben. Resend versendet die E-Mails zu Verknüpfungsanfragen und verarbeitet dabei die E-Mail-Adresse des Empfängers sowie Namen und E-Mail-Adresse des Absenders. Deine Daten werden nie verkauft oder vermietet, und die App sendet dir nie Werbung oder Spam.",
     "controlTitle": "Deine Kontrolle",
-    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen."
+    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen. Du kannst dein Konto in den Einstellungen löschen. Dadurch werden dein Konto, deine Kontakte, Notizen, Gesprächsverläufe, Verknüpfungen und alle Verknüpfungsanfragen von dir oder an dich entfernt. Gesprächsdaten, die bereits beim Kontakt eines verknüpften Freundes erfasst sind, bleiben bei diesem Freund. Wenn du Einladungs-E-Mails abbestellt hast, bleibt diese Entscheidung gespeichert."
   }
 }

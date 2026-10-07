@@ -1,10 +1,11 @@
 "use client";
 
 import NextLink from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAuth } from "../lib/AuthContext";
+import { usePendingRequestCount } from "@/lib/PendingRequestCountContext";
 import { getMyPendingRequestCount } from "@/lib/actions/links";
 import Link from "./ui/Link";
 import LogoutButton from "./LogoutButton";
@@ -13,7 +14,8 @@ export default function NavBar() {
   const { currentUser } = useAuth()!;
   const pathname = usePathname();
   const t = useTranslations();
-  const [pendingCount, setPendingCount] = useState(0);
+  const { count: pendingCount, setCount: setPendingCount } =
+    usePendingRequestCount();
 
   useEffect(() => {
     if (!currentUser?.uid) {

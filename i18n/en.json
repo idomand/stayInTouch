@@ -41,7 +41,17 @@
     "intro": "Sign in to manage your reminders and stay in touch with the people you care about.",
     "signingIn": "Signing in…",
     "signInWithGoogle": "Sign in with Google",
-    "or": "or"
+    "or": "or",
+    "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request."
+  },
+  "unsubscribe": {
+    "title": "Stop invite emails",
+    "confirmText": "Stop all Stay in Touch emails to <strong>{email}</strong>?",
+    "confirm": "Stop emails",
+    "working": "Please wait…",
+    "done": "Done. We will not email this address again.",
+    "failed": "Something went wrong. Please try again.",
+    "missingParams": "This link is incomplete. Use the link from the email."
   },
   "emailAuthForm": {
     "signIn": "Sign in",
@@ -98,9 +108,12 @@
     "requestAlreadyPending": "You already have a pending request to this email.",
     "requestCrossed": "{name} already sent you a request. Accept it on your Settings page.",
     "contactHasPendingRequest": "This contact already has a pending request.",
+    "inviteLimitReached": "You can send {limit} invites per day. Try again later.",
     "alreadyLinkedWith": "You are already linked with {name}.",
     "contactsAlreadyLinked": "One of these contacts is already linked.",
-    "contactNotLinked": "This contact is not linked."
+    "contactNotLinked": "This contact is not linked.",
+    "unsubscribeLinkInvalid": "This unsubscribe link is not valid. Use the link from the email.",
+    "accountDeleteFailed": "Your data was deleted, but the account could not be removed. Please try again."
   },
   "mainForm": {
     "hi": "Hi",
@@ -171,10 +184,13 @@
   },
   "linkContactDialog": {
     "title": "Link with a friend",
-    "intro": "Send a request to your friend's Stay-in-Touch email. When they accept, a talk marked by either of you resets both timers.",
+    "intro": "Send a request to your friend's email. When they accept, a talk marked by either of you resets both timers.",
     "friendEmail": "Friend's email",
     "emailRequired": "Please enter an email address.",
-    "send": "Send request"
+    "emailNotice": "We will email your friend your name and email, and a link to accept.",
+    "confirmLimit": "You can send {limit} invites per day. {remaining} left today.",
+    "limitReached": "You have sent {limit} invites in the last 24 hours. Try again later.",
+    "sendInvite": "Send invite"
   },
   "acceptLinkDialog": {
     "title": "Link with {name}",
@@ -200,6 +216,18 @@
     "noOutgoing": "No pending requests sent.",
     "yourContact": "Your contact",
     "waiting": " · waiting"
+  },
+  "deleteAccount": {
+    "title": "Delete account",
+    "intro": "Permanently delete your account and all your data.",
+    "open": "Delete account",
+    "dialogTitle": "Delete your account?",
+    "whatIsDeleted": "This deletes your account, your contacts, notes and talk history, your links with friends, and all link requests to or from you.",
+    "friendsKeep": "Linked friends keep their own contact and its history, but it is no longer linked to you.",
+    "cannotUndo": "This cannot be undone.",
+    "confirm": "Delete my account",
+    "deleting": "Deleting…",
+    "failed": "Something went wrong. Please try again."
   },
   "settings": {
     "metaTitle": "Settings | Stay-in-Touch",
@@ -234,14 +262,16 @@
     "noTrackingTitle": "No tracking",
     "noTracking": "Stay-in-Touch does not track you. The app uses no analytics, no advertising cookies, and no third-party tracking of any kind. Your activity within the app is not monitored, profiled, or measured for any purpose.",
     "dataTitle": "Data we store",
-    "data": "The app stores only what you enter yourself: your contacts, how often you want to talk to each one, your notes, the dates you talked, and an optional email for each contact. All accounts share one database, and every record is tied to your account, so other users cannot see your data.",
+    "data": "The app stores only what you enter yourself: your contacts, how often you want to talk to each one, your notes, the dates you talked, and an optional email for each contact. All accounts share one database, and every record is tied to your account, so other users cannot see your data. When you send link requests, we also log the time of each invite email, only to enforce the daily invite limit. We keep a list of email addresses that asked not to get invite emails.",
     "authTitle": "Authentication",
     "auth": "You can sign in with Google or with an email and password. Sign-in is handled by Firebase Authentication. We use your name and email only to identify your account and to show them to people you send a link request to. We do not access your Google contacts, email, or any other Google data.",
     "linkingTitle": "Linking with friends",
-    "linking": "If you send a link request, the person you send it to sees your name and email. After they accept, a talk marked on one side is also recorded on the other. Your friend sees only the dates of those talks. Your notes, contact names and talk frequency are never shared.",
+    "linking": "If you send a link request, we send the person one email with your name and email and a link to accept. They also see your name and email in the app. After they accept, a talk marked on one side is also recorded on the other. Your friend sees only the dates of those talks. Your notes, contact names and talk frequency are never shared.",
+    "nonUsersTitle": "If someone sent you a link request",
+    "nonUsers": "Your email address is stored because a user entered it to send you a link request. You get one email per request, with no reminders or follow-ups. The request is deleted when the sender cancels it or deletes that contact. Every email has a link to stop all further emails from Stay-in-Touch. If you use it, we keep your address on an opt-out list, only to honour that choice.",
     "providersTitle": "Service providers",
-    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. It is never sold or rented, and the app will never send you marketing or spam messages.",
+    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Resend sends the link request emails; it processes the recipient's email address and the sender's name and email. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
-    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks."
+    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can delete your account in Settings. This removes your account, contacts, notes, talk history, links, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
   }
 }

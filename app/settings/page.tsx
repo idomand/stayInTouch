@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import DeleteAccountSection from "@/Components/DeleteAccountSection";
 import FriendRequests from "@/Components/FriendRequests";
 import LanguageSelector from "@/Components/LanguageSelector";
+import PendingRequestCountSync from "@/Components/PendingRequestCountSync";
 import PageHeader from "@/Components/ui/PageHeader";
 import { H4 } from "@/Components/ui/Text";
 import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
@@ -45,11 +47,13 @@ export default async function SettingsPage() {
         savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}
       />
       <H4 extraClasses="self-start mt-2">{t("settings.notifications")}</H4>
+      <PendingRequestCountSync count={incoming.length} />
       <FriendRequests
         incoming={incoming}
         outgoing={outgoing}
         linkableContacts={linkableContacts}
       />
+      <DeleteAccountSection />
     </section>
   );
 }
