@@ -44,6 +44,15 @@
     "or": "or",
     "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request."
   },
+  "unsubscribe": {
+    "title": "Stop invite emails",
+    "confirmText": "Stop all Stay in Touch emails to <strong>{email}</strong>?",
+    "confirm": "Stop emails",
+    "working": "Please wait…",
+    "done": "Done. We will not email this address again.",
+    "failed": "Something went wrong. Please try again.",
+    "missingParams": "This link is incomplete. Use the link from the email."
+  },
   "emailAuthForm": {
     "signIn": "Sign in",
     "signUp": "Create account",
@@ -102,7 +111,8 @@
     "inviteLimitReached": "You can send {limit} invites per day. Try again later.",
     "alreadyLinkedWith": "You are already linked with {name}.",
     "contactsAlreadyLinked": "One of these contacts is already linked.",
-    "contactNotLinked": "This contact is not linked."
+    "contactNotLinked": "This contact is not linked.",
+    "unsubscribeLinkInvalid": "This unsubscribe link is not valid. Use the link from the email."
   },
   "mainForm": {
     "hi": "Hi",
@@ -176,12 +186,10 @@
     "intro": "Send a request to your friend's email. When they accept, a talk marked by either of you resets both timers.",
     "friendEmail": "Friend's email",
     "emailRequired": "Please enter an email address.",
-    "continue": "Continue",
-    "confirmEmail": "We will email {email} with your name and email, and a link to accept.",
+    "emailNotice": "We will email your friend your name and email, and a link to accept.",
     "confirmLimit": "You can send {limit} invites per day. {remaining} left today.",
     "limitReached": "You have sent {limit} invites in the last 24 hours. Try again later.",
-    "sendInvite": "Send invite",
-    "back": "Back"
+    "sendInvite": "Send invite"
   },
   "acceptLinkDialog": {
     "title": "Link with {name}",

@@ -44,6 +44,15 @@
     "or": "oder",
     "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen."
   },
+  "unsubscribe": {
+    "title": "Einladungs-E-Mails abbestellen",
+    "confirmText": "Alle E-Mails von Stay in Touch an <strong>{email}</strong> abbestellen?",
+    "confirm": "E-Mails abbestellen",
+    "working": "Bitte warten…",
+    "done": "Erledigt. Wir schreiben dieser Adresse keine E-Mails mehr.",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "missingParams": "Dieser Link ist unvollständig. Verwende den Link aus der E-Mail."
+  },
   "emailAuthForm": {
     "signIn": "Anmelden",
     "signUp": "Konto erstellen",
@@ -102,7 +111,8 @@
     "inviteLimitReached": "Du kannst {limit} Einladungen pro Tag senden. Versuche es später erneut.",
     "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
-    "contactNotLinked": "Dieser Kontakt ist nicht verknüpft."
+    "contactNotLinked": "Dieser Kontakt ist nicht verknüpft.",
+    "unsubscribeLinkInvalid": "Dieser Abmeldelink ist ungültig. Verwende den Link aus der E-Mail."
   },
   "mainForm": {
     "hi": "Hallo",
@@ -176,12 +186,10 @@
     "intro": "Sende eine Anfrage an die E-Mail-Adresse deines Freundes. Sobald er annimmt, setzt ein Gespräch, das einer von euch markiert, beide Timer zurück.",
     "friendEmail": "E-Mail des Freundes",
     "emailRequired": "Bitte gib eine E-Mail-Adresse ein.",
-    "continue": "Weiter",
-    "confirmEmail": "Wir senden {email} eine E-Mail mit deinem Namen, deiner E-Mail-Adresse und einem Link zum Annehmen.",
+    "emailNotice": "Wir senden deinem Freund eine E-Mail mit deinem Namen, deiner E-Mail-Adresse und einem Link zum Annehmen.",
     "confirmLimit": "Du kannst {limit} Einladungen pro Tag senden. Heute noch {remaining}.",
     "limitReached": "Du hast in den letzten 24 Stunden {limit} Einladungen gesendet. Versuche es später erneut.",
-    "sendInvite": "Einladung senden",
-    "back": "Zurück"
+    "sendInvite": "Einladung senden"
   },
   "acceptLinkDialog": {
     "title": "Mit {name} verknüpfen",

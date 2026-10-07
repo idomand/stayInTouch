@@ -128,16 +128,16 @@ account with this email to accept." The sender's UI looks the same in both cases
 | `61c743d` | `lib/email/`: `client.ts` (Resend client, env checks at load), `unsubscribeToken.ts` (HMAC sign/verify), `sendLinkInviteEmail.ts` (text + HTML, escaped, Reply-To, `List-Unsubscribe` headers, skips opted-out addresses). Dependency `resend`. |
 | `7509698` | `sendLinkRequest`: per-user advisory lock + 24 h count + insert request and log row in one transaction; email sent with `after()`, failures only logged. `INVITE_LIMIT_PER_DAY` and `invitesInLastDay()` in `lib/db/queries/links.ts`; `getInvitesRemainingToday()` + action wrapper `getMyInvitesRemainingToday()`. Error key `errors.inviteLimitReached`. |
 | `2fd8991` | `LinkContactDialog`: two steps (email → confirm with remaining count; Send disabled at 0). |
+| `215ec37` | Landing: `/login?email=` prefills `EmailAuthForm` (`initialEmail` prop) and shows a note to use that exact email. The page is wrapped in `<Suspense>` for `useSearchParams`. |
 
 ### Changes from the plan above
 - **Sender domain:** `invites@send.stay-in-touch.vip`. That subdomain was already verified in Resend, so no new DNS records were needed. The root DMARC (`p=none`) covers it.
 - **Two more env vars:** `EMAIL_UNSUBSCRIBE_SECRET` (signs opt-out links) and `APP_URL` (base for email links: `http://localhost:3000` locally). Both, plus `RESEND_API_KEY` (send-only key), are in `.env.local`. **They are not in Vercel yet.**
 - **An opted-out address still uses one daily invite.** The behaviour is the same for every address, so the sender learns nothing.
+- **No separate confirm step.** `LinkContactDialog` is one step: the email notice and the remaining count show under the email input, and "Send invite" sends at once. The count loads when the dialog opens. At 0, a red text (not the `ErrorWarning` popup) explains the limit and Send is disabled.
 - **The opt-out page uses a confirm button.** A GET only shows the page, because link scanners open links. The one-click route accepts POST only.
 
 ### Left to do
-- **F. Landing:** `app/login/page.tsx` reads `?email=` with `useSearchParams` (needs a `<Suspense>` wrapper or the build fails). It passes the email to `EmailAuthForm` as a new `initialEmail` prop and shows a note to use that exact email. The form stays in sign-in mode.
-- **First real test:** send an invite to the account owner's address. Check delivery with the Resend MCP (plugin `resend@claude-plugins-official`; needs a session restart to load its tools) and the Gmail MCP.
 - **G. Opt-out:** `app/unsubscribe/page.tsx` + Server Action `optOutEmail(email, token)` in `lib/actions/email.ts` (verify token, upsert into `email_opt_outs`). `app/api/email/unsubscribe/route.ts`, POST only (RFC 8058). Public: do not add these to the `proxy.ts` matcher. Text in the `unsubscribe` section of both JSON files.
 - **H. Privacy and docs:** the privacy text changes listed in step 8. `specs/architecture.md`: Email row, Resend out of "abandoned directions", new tables and env vars. CLAUDE.md: the new env vars checked at module load.
 - **Before merge (manual):** add the three env vars in Vercel (Production + Preview, `APP_URL=https://stay-in-touch.vip`). Migrate production (CLAUDE.md step 5). Run a mail-tester.com check.
