@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import DeleteAccountSection from "@/Components/DeleteAccountSection";
 import FriendRequests from "@/Components/FriendRequests";
 import LanguageSelector from "@/Components/LanguageSelector";
 import PendingRequestCountSync from "@/Components/PendingRequestCountSync";
@@ -52,6 +53,7 @@ export default async function SettingsPage() {
         outgoing={outgoing}
         linkableContacts={linkableContacts}
       />
+      <DeleteAccountSection />
     </section>
   );
 }

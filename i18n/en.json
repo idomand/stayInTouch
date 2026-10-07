@@ -112,7 +112,8 @@
     "alreadyLinkedWith": "You are already linked with {name}.",
     "contactsAlreadyLinked": "One of these contacts is already linked.",
     "contactNotLinked": "This contact is not linked.",
-    "unsubscribeLinkInvalid": "This unsubscribe link is not valid. Use the link from the email."
+    "unsubscribeLinkInvalid": "This unsubscribe link is not valid. Use the link from the email.",
+    "accountDeleteFailed": "Your data was deleted, but the account could not be removed. Please try again."
   },
   "mainForm": {
     "hi": "Hi",
@@ -216,6 +217,18 @@
     "yourContact": "Your contact",
     "waiting": " · waiting"
   },
+  "deleteAccount": {
+    "title": "Delete account",
+    "intro": "Permanently delete your account and all your data.",
+    "open": "Delete account",
+    "dialogTitle": "Delete your account?",
+    "whatIsDeleted": "This deletes your account, your contacts, notes and talk history, your links with friends, and all link requests to or from you.",
+    "friendsKeep": "Linked friends keep their own contact and its history, but it is no longer linked to you.",
+    "cannotUndo": "This cannot be undone.",
+    "confirm": "Delete my account",
+    "deleting": "Deleting…",
+    "failed": "Something went wrong. Please try again."
+  },
   "settings": {
     "metaTitle": "Settings | Stay-in-Touch",
     "title": "Settings",
@@ -259,6 +272,6 @@
     "providersTitle": "Service providers",
     "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Resend sends the link request emails; it processes the recipient's email address and the sender's name and email. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
-    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks."
+    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can delete your account in Settings. This removes your account, contacts, notes, talk history, links, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
   }
 }

@@ -168,6 +168,23 @@ shape the code:
 - **Sender subdomain.** `send.stay-in-touch.vip` was already verified in Resend;
   bad reputation there cannot hurt the root domain.
 
+## Account deletion
+
+`deleteAccount()` in `lib/actions/account.ts`, from `/settings` (simple confirm,
+no re-sign-in). Spec: `specs/account-deletion.md`.
+
+- **Database first, Firebase second.** One transaction deletes the requests
+  addressed to the user's email, their `invite_emails_sent` rows and their
+  contacts (the cascade removes notes, talks, links and sent requests). Then
+  `adminAuth.deleteUser`. If Firebase fails, the user can sign in and retry;
+  the reverse order could leave rows nobody can delete.
+- **Kept on purpose.** Talk events the user created on a linked friend's
+  contact are the friend's history (`created_by` is an opaque uid).
+  `email_opt_outs` must outlive the account, or the address could get invite
+  emails again.
+- Other devices are signed out because `verifySessionCookie(…, true)` rejects
+  a deleted user.
+
 ## Lessons learned
 
 - **`DATABASE_URL`, `FIREBASE_SERVICE_ACCOUNT_B64`, `RESEND_API_KEY`,

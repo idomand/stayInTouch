@@ -112,7 +112,8 @@
     "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
     "contactNotLinked": "Dieser Kontakt ist nicht verknüpft.",
-    "unsubscribeLinkInvalid": "Dieser Abmeldelink ist ungültig. Verwende den Link aus der E-Mail."
+    "unsubscribeLinkInvalid": "Dieser Abmeldelink ist ungültig. Verwende den Link aus der E-Mail.",
+    "accountDeleteFailed": "Deine Daten wurden gelöscht, aber das Konto konnte nicht entfernt werden. Bitte versuche es erneut."
   },
   "mainForm": {
     "hi": "Hallo",
@@ -216,6 +217,18 @@
     "yourContact": "Dein Kontakt",
     "waiting": " · wartet"
   },
+  "deleteAccount": {
+    "title": "Konto löschen",
+    "intro": "Lösche dein Konto und alle deine Daten endgültig.",
+    "open": "Konto löschen",
+    "dialogTitle": "Dein Konto löschen?",
+    "whatIsDeleted": "Dadurch werden dein Konto, deine Kontakte, Notizen und Gesprächsverläufe, deine Verknüpfungen mit Freunden und alle Verknüpfungsanfragen von dir oder an dich gelöscht.",
+    "friendsKeep": "Verknüpfte Freunde behalten ihren eigenen Kontakt und dessen Verlauf, er ist aber nicht mehr mit dir verknüpft.",
+    "cannotUndo": "Das kann nicht rückgängig gemacht werden.",
+    "confirm": "Mein Konto löschen",
+    "deleting": "Wird gelöscht…",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
   "settings": {
     "metaTitle": "Einstellungen | Stay-in-Touch",
     "title": "Einstellungen",
@@ -259,6 +272,6 @@
     "providersTitle": "Dienstleister",
     "providers": "Deine Daten werden von Firebase (Google), Neon und Vercel gespeichert und verarbeitet, nur um die App zu betreiben. Resend versendet die E-Mails zu Verknüpfungsanfragen und verarbeitet dabei die E-Mail-Adresse des Empfängers sowie Namen und E-Mail-Adresse des Absenders. Deine Daten werden nie verkauft oder vermietet, und die App sendet dir nie Werbung oder Spam.",
     "controlTitle": "Deine Kontrolle",
-    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen."
+    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen. Du kannst dein Konto in den Einstellungen löschen. Dadurch werden dein Konto, deine Kontakte, Notizen, Gesprächsverläufe, Verknüpfungen und alle Verknüpfungsanfragen von dir oder an dich entfernt. Gesprächsdaten, die bereits beim Kontakt eines verknüpften Freundes erfasst sind, bleiben bei diesem Freund. Wenn du Einladungs-E-Mails abbestellt hast, bleibt diese Entscheidung gespeichert."
   }
 }
