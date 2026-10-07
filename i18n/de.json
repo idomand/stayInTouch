@@ -41,7 +41,8 @@
     "intro": "Melde dich an, um deine Erinnerungen zu verwalten und mit den Menschen in Kontakt zu bleiben, die dir wichtig sind.",
     "signingIn": "Anmeldung läuft…",
     "signInWithGoogle": "Mit Google anmelden",
-    "or": "oder"
+    "or": "oder",
+    "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen."
   },
   "emailAuthForm": {
     "signIn": "Anmelden",

@@ -41,7 +41,8 @@
     "intro": "Sign in to manage your reminders and stay in touch with the people you care about.",
     "signingIn": "Signing in…",
     "signInWithGoogle": "Sign in with Google",
-    "or": "or"
+    "or": "or",
+    "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request."
   },
   "emailAuthForm": {
     "signIn": "Sign in",

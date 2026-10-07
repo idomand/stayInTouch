@@ -21,6 +21,10 @@ type Props = {
    * would fire before the session cookie is set.
    */
   onSignIn: (email: string, password: string) => Promise<void>;
+  /**
+   * Prefills the email field, e.g. from an invite link.
+   */
+  initialEmail?: string;
   disabled?: boolean;
 };
 
@@ -31,12 +35,12 @@ const inputClasses = twMerge(
 const linkButtonClasses =
   "cursor-pointer bg-transparent border-none p-0 text-sm text-blue1 hover:underline";
 
-export default function EmailAuthForm({ onSignIn, disabled = false }: Props) {
+export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false }: Props) {
   const { signUpWithEmail, sendPasswordReset } = useAuth()!;
   const t = useTranslations();
   const [mode, setMode] = useState<Mode>("signIn");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail ?? "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
