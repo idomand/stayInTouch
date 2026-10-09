@@ -47,3 +47,15 @@ building. Background and constraints are in `specs/architecture.md`.
    purpose: `refreshSession` is a new function on every render, so listing it
    would re-run the effect, and re-mint the session cookie, on every render.
    Once the function is stable, listing it is safe and makes the deps honest.
+
+6. **Don't block server-rendered pages on Firebase start-up.** Moved here from
+   P1 (High) in `specs/app-review-fixes.md`. Until the Firebase client reports
+   the auth state, `AuthProvider` (`lib/AuthContext.tsx`) shows only a spinner
+   and renders no children. So server-rendered content, including the home list
+   and the public pages (`/about`, `/privacy`, `/login`), waits for the
+   Firebase script to download and resolve. Checked during the review: the
+   server HTML for `/about` contains no page content at all, only the spinner.
+   Server-rendered content must show without waiting for client auth start-up.
+   - Edge case: a user whose JavaScript loads slowly must not see an
+     authenticated page flash and then redirect.
+   - It touches the auth flow, so it needs its own spec and its own branch.
