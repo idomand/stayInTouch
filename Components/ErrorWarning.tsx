@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
 type ErrorWarningProps = {
@@ -18,11 +19,17 @@ export default function ErrorWarning({
     <p
       role="alert"
       className={twMerge(
-        "m-0 flex items-center gap-2 text-sm text-red1 wrap-break-word",
+        "text-red1 m-0 flex items-center gap-2 text-sm wrap-break-word",
         extraClasses,
       )}
     >
-      <img src="/Error.svg" alt="" className="h-4 w-4 shrink-0" />
+      <Image
+        src="/Error.svg"
+        alt=""
+        width={16}
+        height={16}
+        className="h-4 w-4 shrink-0"
+      />
       {errorMessage}
     </p>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import NextLink from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -54,9 +55,11 @@ export default function NavBar() {
         aria-label={t("navBar.homeLabel")}
         className="justify-self-start"
       >
-        <img
+        <Image
           src="/friendsLogo.png"
-          className="my-1 ml-5 h-10 sm:hidden"
+          width={610}
+          height={545}
+          className="my-1 ml-5 h-10 w-auto sm:hidden"
           alt={t("navBar.logoAlt")}
         />
         <span className="hover:text-blue1 m-0 ml-10 hidden p-0 text-2xl font-semibold transition-colors duration-300 sm:block">

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
@@ -65,7 +66,7 @@ export default function AppointmentForm({
           <div
             className={twMerge(
               basicFormClasses,
-              "mt-0 flex flex-col justify-center items-start sm:mt-5 sm:items-center",
+              "mt-0 flex flex-col items-start justify-center sm:mt-5 sm:items-center",
             )}
           >
             <P1 extraClasses="mb-2.5 ml-3.5 text-start sm:ml-0">
@@ -84,9 +85,11 @@ export default function AppointmentForm({
             onClick={calendarFunction}
             extraClasses="mt-2 hover:bg-green3 hover:text-blue1"
           >
-            <img
+            <Image
               src="/Google_Calendar.svg"
               alt={t("appointmentForm.calendarAlt")}
+              width={35}
+              height={35}
               className="mr-2"
             />
           </Button>

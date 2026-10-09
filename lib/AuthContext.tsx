@@ -14,7 +14,7 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import type { Messages, useTranslations } from "next-intl";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { auth, provider } from "@/lib/Firebase";
 import { deleteAccount as deleteAccountAction } from "@/lib/actions/account";
 import type { ActionResult } from "@/lib/actions/validation";
@@ -164,18 +164,19 @@ export default function AuthProvider({
   const router = useRouter();
 
   /** Every cookie mint goes through here so hasSession stays in step. */
-  async function establishSession(user: User) {
+  const establishSession = useCallback(async (user: User) => {
     await postSessionCookie(user);
     setHasSession(true);
-  }
+  }, []);
 
   /**
    * Re-check a session this tab believes it has. The server can reject the
    * cookie while hasSession stays true (logout on another device revokes it,
    * or it expires), and /login would then send the user back to "/" in a loop.
    * Re-minting either renews the cookie or fails; a failure clears hasSession.
+   * Stable across renders, so /login can list it as an effect dependency.
    */
-  async function refreshSession() {
+  const refreshSession = useCallback(async () => {
     if (!auth.currentUser) {
       setHasSession(false);
       return false;
@@ -188,7 +189,7 @@ export default function AuthProvider({
       setHasSession(false);
       return false;
     }
-  }
+  }, [establishSession]);
 
   /** Client half of signing out, once the server cookie is already gone. */
   async function finishSignOut() {
@@ -318,7 +319,7 @@ export default function AuthProvider({
       }
     });
     return unsubscribe;
-  }, []);
+  }, [establishSession]);
 
   const value = {
     currentUser,

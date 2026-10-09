@@ -47,9 +47,7 @@ function Login() {
     return () => {
       isCancelled = true;
     };
-    // refreshSession is a new function every render; listing it would re-run
-    // this effect, and re-mint the cookie, on every render.
-  }, [hasSession, isSigningIn, router]);
+  }, [hasSession, isSigningIn, refreshSession, router]);
 
   /** Shared by Google and email sign-in: sign in, wait for the cookie, go home. */
   async function signInAndGo(signIn: () => Promise<void>) {
