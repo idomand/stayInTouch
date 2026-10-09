@@ -87,7 +87,7 @@ export default function UpdateContactForm({
             onSubmit={updateContactOnSubmit}
             className={twMerge(
               basicFormClasses,
-              " rounded-none p-2.5 m-0 gap-1  sm:p-3.5 sm:m-2.5 sm:gap-7.5 ",
+              "m-0 gap-1 rounded-none p-2.5 sm:m-2.5 sm:gap-7.5 sm:p-3.5",
             )}
           >
             <label className={twMerge(basicLabelClasses, "")}>
@@ -101,14 +101,14 @@ export default function UpdateContactForm({
                 onChange={nameChangeHandler}
                 className={twMerge(
                   basicInputClasses,
-                  "border border-solid border-grey2 p-1",
+                  "border-grey2 border border-solid p-1",
                 )}
               />
             </label>
             <label
               className={twMerge(
                 basicLabelClasses,
-                " relative after:content-(--days-label) after:font-bold after:absolute after:top-8 after:left-5 after:text-[10px] after:text-grey3",
+                "after:text-grey3 relative after:absolute after:top-8 after:left-5 after:text-[10px] after:font-bold after:content-(--days-label)",
               )}
               // CSS content needs a quoted string; the variable carries the
               // translated "Days" into the ::after label.
@@ -129,7 +129,7 @@ export default function UpdateContactForm({
                 onChange={timeChangeHandler}
                 className={twMerge(
                   basicInputClasses,
-                  "border border-solid border-grey2 rounded-lg",
+                  "border-grey2 rounded-lg border border-solid",
                 )}
               />
             </label>
@@ -143,7 +143,7 @@ export default function UpdateContactForm({
                 }}
                 className={twMerge(
                   basicInputClasses,
-                  " border border-solid border-grey2",
+                  "border-grey2 border border-solid",
                 )}
               />
             </label>
@@ -154,7 +154,7 @@ export default function UpdateContactForm({
               disabled={contactName === ""}
               className={twMerge(
                 inputSubmitClasses,
-                " bg-blue1 text-white w-auto h-11 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1 sm:w-103.5",
+                "bg-blue1 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1 h-11 w-auto text-white sm:w-103.5",
               )}
             />
             {error && <ErrorWarning errorMessage={error} />}

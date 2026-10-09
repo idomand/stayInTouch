@@ -32,7 +32,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <AuthProvider>
             <PendingRequestCountProvider>
-              <main className="flex flex-col min-h-screen overflow-x-clip">
+              <main className="flex min-h-screen flex-col overflow-x-clip">
                 <NavBar />
                 <div className="flex-1">{children}</div>
                 <Footer />

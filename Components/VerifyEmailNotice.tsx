@@ -54,7 +54,7 @@ export default function VerifyEmailNotice() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
+    <div className="flex w-full flex-col items-center gap-4">
       <H1>{t("verifyEmailNotice.title")}</H1>
       <P2 extraClasses="text-grey3">
         {t.rich("verifyEmailNotice.sentTo", {

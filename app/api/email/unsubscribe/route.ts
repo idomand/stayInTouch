@@ -17,7 +17,10 @@ export async function POST(request: NextRequest) {
     searchParams.get("token"),
   );
   if (!isOptedOut) {
-    return NextResponse.json({ error: "Invalid unsubscribe link." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid unsubscribe link." },
+      { status: 400 },
+    );
   }
   return NextResponse.json({ status: "ok" });
 }

@@ -47,7 +47,10 @@ export const linkRequests = pgTable(
     respondedAt: timestamp("responded_at", { withTimezone: true }),
   },
   (table) => [
-    check("link_requests_not_self", sql`${table.toEmail} <> ${table.fromEmail}`),
+    check(
+      "link_requests_not_self",
+      sql`${table.toEmail} <> ${table.fromEmail}`,
+    ),
     // At most one open request per contact; history rows are not constrained.
     uniqueIndex("link_requests_one_pending_per_contact")
       .on(table.fromContactId)

@@ -57,7 +57,7 @@ export default function Button({
         baseClasses,
         variantClasses,
         disabled && disabledClasses,
-        extraClasses
+        extraClasses,
       )}
       onClick={onClick}
       disabled={disabled}

@@ -40,7 +40,7 @@ export default function UnsubscribeConfirm({ email, token }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <P2 extraClasses="text-grey3">
         {t.rich("unsubscribe.confirmText", {
           email,
@@ -49,7 +49,9 @@ export default function UnsubscribeConfirm({ email, token }: Props) {
       </P2>
       <Button
         extraClasses="w-full py-2.5 text-base font-semibold"
-        buttonText={isPending ? t("unsubscribe.working") : t("unsubscribe.confirm")}
+        buttonText={
+          isPending ? t("unsubscribe.working") : t("unsubscribe.confirm")
+        }
         onClick={handleOptOut}
         disabled={isPending}
       />

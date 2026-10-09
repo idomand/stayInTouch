@@ -137,13 +137,13 @@ export default function MoreOptionsDropdown({
           })}
           aria-expanded={isOpen}
           aria-controls={menuId}
-          className="bg-transparent px-5 py-2.5 text-base border-0 rounded-md cursor-pointer hover:bg-transparent focus:bg-transparent"
+          className="cursor-pointer rounded-md border-0 bg-transparent px-5 py-2.5 text-base hover:bg-transparent focus:bg-transparent"
         >
           <SlOptions aria-hidden="true" />
         </button>
         <div
           id={menuId}
-          className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-1000 overflow-hidden ${
+          className={`absolute top-full right-0 z-1000 mt-2 min-w-50 overflow-hidden rounded-lg bg-white shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] ${
             isOpen ? "block" : "hidden"
           }`}
         >
@@ -219,7 +219,7 @@ export default function MoreOptionsDropdown({
           <P2 extraClasses="text-grey3">
             {t("moreOptionsDropdown.deleteText")}
           </P2>
-          <div className="flex justify-between flex-wrap gap-2">
+          <div className="flex flex-wrap justify-between gap-2">
             <Button
               buttonText={t("moreOptionsDropdown.deleteName", {
                 name: contact.name,

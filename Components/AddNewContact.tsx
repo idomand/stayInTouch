@@ -58,7 +58,7 @@ export default function AddNewContact() {
         onSubmit={createNewContact}
         className={twMerge(
           basicFormClasses,
-          "grid w-[85vw] max-w-full mx-auto py-2.5 px-1 gap-0 grid-cols-1 sm:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] sm:max-w-[50%] sm:m-auto sm:p-3.5 sm:gap-1 sm:w-auto",
+          "mx-auto grid w-[85vw] max-w-full grid-cols-1 gap-0 px-1 py-2.5 sm:m-auto sm:w-auto sm:max-w-[50%] sm:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] sm:gap-1 sm:p-3.5",
         )}
       >
         <label className={basicLabelClasses}>
@@ -72,7 +72,7 @@ export default function AddNewContact() {
             onChange={nameChangeHandler}
             className={twMerge(
               basicInputClasses,
-              "border border-solid border-grey2",
+              "border-grey2 border border-solid",
             )}
           />
         </label>
@@ -92,10 +92,10 @@ export default function AddNewContact() {
               min={1}
               className={twMerge(
                 basicInputClasses,
-                "border border-solid border-grey2 rounded-lg w-full mt-0 pl-2 pr-14",
+                "border-grey2 mt-0 w-full rounded-lg border border-solid pr-14 pl-2",
               )}
             />
-            <span className="pointer-events-none absolute right-7 top-1/2 -translate-y-1/2 text-[10px] text-grey3 font-bold whitespace-nowrap">
+            <span className="text-grey3 pointer-events-none absolute top-1/2 right-7 -translate-y-1/2 text-[10px] font-bold whitespace-nowrap">
               {t("common.days")}
             </span>
           </div>
@@ -112,11 +112,11 @@ export default function AddNewContact() {
             type="email"
             className={twMerge(
               basicInputClasses,
-              "border border-solid border-grey2",
+              "border-grey2 border border-solid",
             )}
           />
         </label>
-        <div className="flex flex-col m-1 justify-between min-w-0 [&_.react-datepicker-wrapper]:w-full [&_input]:w-full [&_input]:min-w-0">
+        <div className="m-1 flex min-w-0 flex-col justify-between [&_.react-datepicker-wrapper]:w-full [&_input]:w-full [&_input]:min-w-0">
           <label htmlFor={lastSpokenId}>{t("addNewContact.lastSpoken")}</label>
           <DatePickerComponent
             id={lastSpokenId}
@@ -132,7 +132,7 @@ export default function AddNewContact() {
           value={t("addNewContact.submit")}
           className={twMerge(
             inputSubmitClasses,
-            "sm:col-span-2 bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",
+            "bg-green1 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1 mx-1 my-0 h-10 text-white sm:col-span-2",
           )}
         />
         {error && (

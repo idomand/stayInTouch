@@ -8,12 +8,7 @@ type Props = {
 
 export function H1({ children, extraClasses = "" }: Props) {
   return (
-    <h1
-      className={twMerge(
-        "m-0 p-0 text-[2rem] font-bold",
-        extraClasses,
-      )}
-    >
+    <h1 className={twMerge("m-0 p-0 text-[2rem] font-bold", extraClasses)}>
       {children}
     </h1>
   );
@@ -88,7 +83,7 @@ export function P3({ children, extraClasses = "" }: Props) {
   return (
     <p
       className={twMerge(
-        "m-0 p-0 text-sm font-medium  leading-8 text-black",
+        "m-0 p-0 text-sm leading-8 font-medium text-black",
         extraClasses,
       )}
     >

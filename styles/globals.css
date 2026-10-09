@@ -75,7 +75,6 @@
   }
 }
 
-
 /* react-datepicker internal DOM overrides (migrated from DatePickerComponent styled-components) */
 .datePickerClass .react-datepicker__input-container input {
   background-color: lightgrey;

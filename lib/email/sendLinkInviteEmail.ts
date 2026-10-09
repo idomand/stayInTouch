@@ -48,7 +48,8 @@ export async function sendLinkInviteEmail({
   const unsubscribeUrl = `${appUrl}/unsubscribe?email=${recipient}&token=${token}`;
   const oneClickUrl = `${appUrl}/api/email/unsubscribe?email=${recipient}&token=${token}`;
 
-  const sender = fromName === fromEmail ? fromEmail : `${fromName} (${fromEmail})`;
+  const sender =
+    fromName === fromEmail ? fromEmail : `${fromName} (${fromEmail})`;
   const text = [
     `${sender} wants to stay in touch with you on Stay-in-Touch.`,
     "",
@@ -77,6 +78,8 @@ export async function sendLinkInviteEmail({
     },
   });
   if (error) {
-    throw new Error(`Resend rejected the invite email: ${error.name}: ${error.message}`);
+    throw new Error(
+      `Resend rejected the invite email: ${error.name}: ${error.message}`,
+    );
   }
 }

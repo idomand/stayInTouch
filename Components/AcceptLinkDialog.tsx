@@ -92,14 +92,14 @@ export default function AcceptLinkDialog({
       close={handleDialogClose}
     >
       <div className="flex flex-col gap-4">
-        <fieldset className="flex flex-col gap-4 border-0 p-0 m-0">
-          <legend className="p-0 mb-4 text-sm text-grey3">
+        <fieldset className="m-0 flex flex-col gap-4 border-0 p-0">
+          <legend className="text-grey3 mb-4 p-0 text-sm">
             {t("acceptLinkDialog.question", { name: request.fromName })}
           </legend>
 
           {/* Radio: Existing contact */}
           <div className="flex items-start gap-3">
-            <label className="flex items-start gap-3 cursor-pointer">
+            <label className="flex cursor-pointer items-start gap-3">
               <input
                 type="radio"
                 name="choice"
@@ -125,7 +125,7 @@ export default function AcceptLinkDialog({
                   disabled={choice !== "existing"}
                   className={twMerge(
                     basicInputClasses,
-                    "mt-2 disabled:opacity-50 disabled:cursor-not-allowed",
+                    "mt-2 disabled:cursor-not-allowed disabled:opacity-50",
                   )}
                 >
                   {linkableContacts.map((contact) => (
@@ -140,7 +140,7 @@ export default function AcceptLinkDialog({
 
           {/* Radio: New contact */}
           <div className="flex items-start gap-3">
-            <label className="flex items-start gap-3 cursor-pointer">
+            <label className="flex cursor-pointer items-start gap-3">
               <input
                 type="radio"
                 name="choice"
@@ -164,11 +164,11 @@ export default function AcceptLinkDialog({
                   disabled={choice !== "new"}
                   className={twMerge(
                     basicInputClasses,
-                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    "disabled:cursor-not-allowed disabled:opacity-50",
                   )}
                 />
                 <div className={twMerge(basicLabelClasses, "")}>
-                  <span className="text-xs text-grey3">
+                  <span className="text-grey3 text-xs">
                     {t("acceptLinkDialog.everyXDays")}
                   </span>
                   <input
@@ -181,7 +181,7 @@ export default function AcceptLinkDialog({
                     disabled={choice !== "new"}
                     className={twMerge(
                       basicInputClasses,
-                      "disabled:opacity-50 disabled:cursor-not-allowed",
+                      "disabled:cursor-not-allowed disabled:opacity-50",
                     )}
                   />
                 </div>
@@ -192,7 +192,7 @@ export default function AcceptLinkDialog({
 
         {error && <ErrorWarning errorMessage={error} />}
 
-        <div className="flex gap-2 justify-end mt-4">
+        <div className="mt-4 flex justify-end gap-2">
           <Button
             buttonText={t("common.cancel")}
             onClick={handleDialogClose}

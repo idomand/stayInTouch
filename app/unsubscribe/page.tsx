@@ -25,8 +25,8 @@ export default async function UnsubscribePage({
   const hasMissingParams = !email || !token;
 
   return (
-    <section className="flex items-center justify-center min-h-[80vh] px-4">
-      <div className="flex flex-col items-center text-center gap-6 w-full max-w-sm rounded-2xl bg-white p-8 shadow-lg border border-black/5">
+    <section className="flex min-h-[80vh] items-center justify-center px-4">
+      <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-black/5 bg-white p-8 text-center shadow-lg">
         <H1>{t("unsubscribe.title")}</H1>
         {hasMissingParams ? (
           <P2 extraClasses="text-grey3">{t("unsubscribe.missingParams")}</P2>

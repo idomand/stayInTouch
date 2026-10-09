@@ -47,8 +47,7 @@ const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
 
 /** Accept by linking an existing contact, or by creating a new one. */
 export type AcceptLinkTarget =
-  | { contactId: string }
-  | { newContact: { name: string; cadenceDays: number } };
+  { contactId: string } | { newContact: { name: string; cadenceDays: number } };
 
 function revalidateLinkPages() {
   revalidatePath("/");
@@ -309,7 +308,10 @@ export async function acceptLinkRequest(
 
       // Lower-case uuid strings sort like Postgres uuids, matching the
       // contact_a_id < contact_b_id check.
-      const [contactAId, contactBId] = [myContactId, request.fromContactId].sort();
+      const [contactAId, contactBId] = [
+        myContactId,
+        request.fromContactId,
+      ].sort();
       await tx.insert(contactLinks).values({ contactAId, contactBId });
       await tx
         .update(linkRequests)

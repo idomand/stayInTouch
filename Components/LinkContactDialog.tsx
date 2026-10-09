@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { sendLinkRequest, getMyInvitesRemainingToday } from "@/lib/actions/links";
+import {
+  sendLinkRequest,
+  getMyInvitesRemainingToday,
+} from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
@@ -73,15 +76,9 @@ export default function LinkContactDialog({
   }
 
   return (
-    <Dialog
-      title={t("linkContactDialog.title")}
-      isOpen={isOpen}
-      close={close}
-    >
+    <Dialog title={t("linkContactDialog.title")} isOpen={isOpen} close={close}>
       <div className="flex flex-col gap-4">
-        <P2 extraClasses="text-grey3">
-          {t("linkContactDialog.intro")}
-        </P2>
+        <P2 extraClasses="text-grey3">{t("linkContactDialog.intro")}</P2>
 
         <label className={twMerge(basicLabelClasses, "")}>
           {t("linkContactDialog.friendEmail")}
@@ -94,9 +91,7 @@ export default function LinkContactDialog({
           />
         </label>
 
-        <P2 extraClasses="text-grey3">
-          {t("linkContactDialog.emailNotice")}
-        </P2>
+        <P2 extraClasses="text-grey3">{t("linkContactDialog.emailNotice")}</P2>
 
         {remaining !== null && remaining > 0 && (
           <P2 extraClasses="text-grey3">
@@ -117,7 +112,7 @@ export default function LinkContactDialog({
 
         {error && <ErrorWarning errorMessage={error} />}
 
-        <div className="flex gap-2 justify-end mt-4">
+        <div className="mt-4 flex justify-end gap-2">
           <Button
             buttonText={t("common.cancel")}
             onClick={close}

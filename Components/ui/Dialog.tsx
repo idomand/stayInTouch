@@ -59,7 +59,7 @@ export default function Dialog({
               type="button"
               onClick={close}
               aria-label={t("common.close")}
-              className="cursor-pointer px-1 bg-transparent text-2xl text-black border-none rounded-md hover:bg-grey1"
+              className="hover:bg-grey1 cursor-pointer rounded-md border-none bg-transparent px-1 text-2xl text-black"
             >
               <span aria-hidden="true">×</span>
             </button>

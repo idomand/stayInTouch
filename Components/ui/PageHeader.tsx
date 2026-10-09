@@ -11,11 +11,11 @@ export default function PageHeader({ title }: Props) {
   const t = useTranslations();
 
   return (
-    <div className="flex items-center gap-3 w-full m-2">
+    <div className="m-2 flex w-full items-center gap-3">
       <NextLink
         href="/"
         aria-label={t("pageHeader.backToHome")}
-        className="text-black hover:text-blue1 transition-colors"
+        className="hover:text-blue1 text-black transition-colors"
       >
         <FaArrowAltCircleLeft size={30} />
       </NextLink>

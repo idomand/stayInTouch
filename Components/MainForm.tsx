@@ -14,8 +14,8 @@ export default function MainForm() {
 
   return (
     <>
-      <section className="flex items-center flex-wrap gap-2 mt-1 mx-5 sm:block sm:ml-5 sm:mt-0 sm:mr-0">
-        <div className="flex justify-between w-full">
+      <section className="mx-5 mt-1 flex flex-wrap items-center gap-2 sm:mt-0 sm:mr-0 sm:ml-5 sm:block">
+        <div className="flex w-full justify-between">
           <H1 extraClasses="pt-2.5 min-w-0 break-words">
             {displayName
               ? t("mainForm.greeting", { name: displayName })

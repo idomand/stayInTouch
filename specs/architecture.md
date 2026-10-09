@@ -1,7 +1,7 @@
 # Architecture — why it is built this way
 
-The *what* (files, commands, the schema-change workflow) is in `CLAUDE.md`. This
-file keeps the *why*: the reasoning behind the design, the directions we dropped,
+The _what_ (files, commands, the schema-change workflow) is in `CLAUDE.md`. This
+file keeps the _why_: the reasoning behind the design, the directions we dropped,
 and the lessons that cost time to learn. Read it before changing the schema, the
 auth layer or the database setup.
 
@@ -21,28 +21,28 @@ Components read, Server Actions write and call `revalidatePath`.
 
 ## Decisions
 
-| Concern        | Choice |
-| -------------- | ------ |
-| Database       | Neon (PostgreSQL), `eu-central-1`, pooled connection |
-| ORM            | Drizzle, WebSocket driver (`neon-serverless`) — the HTTP driver can't run transactions |
-| Auth provider  | Firebase. Google and email+password. |
-| Server identity| Firebase session cookies verified by `firebase-admin`, through one `getServerUser()` |
-| `owner_id`     | Firebase uid, bare `text`, no FK — identity is not in Postgres |
-| Region         | Vercel `fra1`, to match Neon `eu-central-1` |
-| Domain         | `stay-in-touch.vip` |
-| Email          | Firebase sends verification and reset emails. Resend sends the one notice per link request, from `invites@send.stay-in-touch.vip`, English only |
-| Invite limit   | 3 invite emails per user per rolling 24 h, counted in `invite_emails_sent` |
-| Email opt-out  | `email_opt_outs` table; HMAC-signed link, confirm page + RFC 8058 one-click POST |
-| Email verification | Required; the session route refuses to mint a cookie for an unverified email |
-| Realtime       | None — Server Component read + `revalidatePath` after each write |
-| Schema changes | Generated migrations only; production migrated by hand before merge, never from the Vercel build |
-| Environments   | Neon branch `dev` for local work, `production` for Vercel |
-| Primary keys   | `uuid` / `gen_random_uuid()`, not `serial` |
-| Timestamps     | `timestamptz`, never epoch ms |
-| Talk events    | Own append-only `talk_events` table; no `last_talked` column |
-| Notes          | Own table, private, never shared across a link |
-| Linked users   | Share the talk event only; links in a `contact_links` table |
-| Access control | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts` |
+| Concern            | Choice                                                                                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Database           | Neon (PostgreSQL), `eu-central-1`, pooled connection                                                                                            |
+| ORM                | Drizzle, WebSocket driver (`neon-serverless`) — the HTTP driver can't run transactions                                                          |
+| Auth provider      | Firebase. Google and email+password.                                                                                                            |
+| Server identity    | Firebase session cookies verified by `firebase-admin`, through one `getServerUser()`                                                            |
+| `owner_id`         | Firebase uid, bare `text`, no FK — identity is not in Postgres                                                                                  |
+| Region             | Vercel `fra1`, to match Neon `eu-central-1`                                                                                                     |
+| Domain             | `stay-in-touch.vip`                                                                                                                             |
+| Email              | Firebase sends verification and reset emails. Resend sends the one notice per link request, from `invites@send.stay-in-touch.vip`, English only |
+| Invite limit       | 3 invite emails per user per rolling 24 h, counted in `invite_emails_sent`                                                                      |
+| Email opt-out      | `email_opt_outs` table; HMAC-signed link, confirm page + RFC 8058 one-click POST                                                                |
+| Email verification | Required; the session route refuses to mint a cookie for an unverified email                                                                    |
+| Realtime           | None — Server Component read + `revalidatePath` after each write                                                                                |
+| Schema changes     | Generated migrations only; production migrated by hand before merge, never from the Vercel build                                                |
+| Environments       | Neon branch `dev` for local work, `production` for Vercel                                                                                       |
+| Primary keys       | `uuid` / `gen_random_uuid()`, not `serial`                                                                                                      |
+| Timestamps         | `timestamptz`, never epoch ms                                                                                                                   |
+| Talk events        | Own append-only `talk_events` table; no `last_talked` column                                                                                    |
+| Notes              | Own table, private, never shared across a link                                                                                                  |
+| Linked users       | Share the talk event only; links in a `contact_links` table                                                                                     |
+| Access control     | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts`                                                       |
 
 ## Abandoned directions — do not rebuild
 
@@ -135,13 +135,13 @@ every caller at once.
 When Bob marks that he talked to Alice, Alice's timer resets too. Only the talk
 event is shared; notes, names and cadence stay private.
 
-| Question | Answer |
-| --- | --- |
-| How is a link stored? | A `contact_links` table, both contact ids as FKs `ON DELETE CASCADE`. A `linked_user_id` column would allow half-links (one side deleted, the other still "linked") and push cleanup into code. The cost is one join. |
-| Can a rejected request be sent again? | Yes. Only one *pending* request per contact (partial unique index); rejected rows stay as history. |
-| How many links between two people? | One. Enforced in the accept transaction (advisory lock on the uid pair), because the link row holds contact ids and no constraint can express it. |
-| What does the addressee see? | The requester's display name and email only. |
-| Accepting with no matching contact? | The accept dialog lets you pick an existing contact or create one. No silent auto-create — name matching is unreliable. |
+| Question                              | Answer                                                                                                                                                                                                                |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| How is a link stored?                 | A `contact_links` table, both contact ids as FKs `ON DELETE CASCADE`. A `linked_user_id` column would allow half-links (one side deleted, the other still "linked") and push cleanup into code. The cost is one join. |
+| Can a rejected request be sent again? | Yes. Only one _pending_ request per contact (partial unique index); rejected rows stay as history.                                                                                                                    |
+| How many links between two people?    | One. Enforced in the accept transaction (advisory lock on the uid pair), because the link row holds contact ids and no constraint can express it.                                                                     |
+| What does the addressee see?          | The requester's display name and email only.                                                                                                                                                                          |
+| Accepting with no matching contact?   | The accept dialog lets you pick an existing contact or create one. No silent auto-create — name matching is unreliable.                                                                                               |
 
 Requests are addressed to an **email and never resolved to a uid**. Resolving
 would let the sender see which emails have an account. The addressee sees

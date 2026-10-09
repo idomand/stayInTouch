@@ -55,12 +55,12 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   }
 
   return (
-    <li className="flex items-center justify-between list-none mx-1 my-2.5 w-[85vw] sm:w-auto">
-      <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons'] grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-none relative">
-        <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-full min-w-0 sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
-          <div className="flex flex-col justify-center min-w-0">
-            <div className="flex items-center gap-2 justify-center sm:justify-start">
-              <span className="font-medium text-xl leading-5.25 w-full min-w-0 wrap-break-word text-center sm:w-max sm:text-left">
+    <li className="mx-1 my-2.5 flex w-[85vw] list-none items-center justify-between sm:w-auto">
+      <div className="relative grid grow grid-cols-[minmax(0,1fr)_auto] justify-between rounded-[15px] bg-white p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:grid-cols-none sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
+        <div className="flex w-full min-w-0 flex-col items-center justify-center [grid-area:contactDetails] sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
+          <div className="flex min-w-0 flex-col justify-center">
+            <div className="flex items-center justify-center gap-2 sm:justify-start">
+              <span className="w-full min-w-0 text-center text-xl leading-5.25 font-medium wrap-break-word sm:w-max sm:text-left">
                 {name}
               </span>
               {contact.isLinked && (
@@ -74,24 +74,24 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             </div>
           </div>
         </div>
-        <div className="[grid-area:contactDates] flex w-full min-w-0 border-t border-black/10 pt-3.5 mt-3.5 mb-5 sm:w-100 sm:max-w-none sm:border-t-0 sm:pt-0 sm:mt-0 sm:mb-0">
-          <div className="flex flex-col justify-center items-center mx-3.5">
+        <div className="mt-3.5 mb-5 flex w-full min-w-0 border-t border-black/10 pt-3.5 [grid-area:contactDates] sm:mt-0 sm:mb-0 sm:w-100 sm:max-w-none sm:border-t-0 sm:pt-0">
+          <div className="mx-3.5 flex flex-col items-center justify-center">
             <span className={statusClasses}>{lastTalkedLabel}</span>
           </div>
-          <div className="flex flex-col justify-center items-center mx-3.5">
+          <div className="mx-3.5 flex flex-col items-center justify-center">
             <span className={statusClasses}>{nextTalkLabel}</span>
           </div>
         </div>
-        <div className="[grid-area:notes] flex justify-end items-center gap-2 mr-0 sm:mr-5">
+        <div className="mr-0 flex items-center justify-end gap-2 [grid-area:notes] sm:mr-5">
           <TalkEvents contact={contact} />
         </div>
-        <div className="[grid-area:buttons] flex items-center justify-end shrink-0">
+        <div className="flex shrink-0 items-center justify-end [grid-area:buttons]">
           <button
             type="button"
             onClick={resetFunction}
             disabled={isMarking}
             aria-label={t("contactItem.markAsTalked", { name })}
-            className={`cursor-pointer bg-transparent border-none p-0 rounded-md hover:text-blue1 disabled:cursor-wait disabled:opacity-50 ${
+            className={`hover:text-blue1 cursor-pointer rounded-md border-none bg-transparent p-0 disabled:cursor-wait disabled:opacity-50 ${
               isTalkingStatusOK ? "text-green1" : "text-red1"
             }`}
           >
