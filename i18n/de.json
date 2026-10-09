@@ -177,7 +177,9 @@
   "talkEvents": {
     "title": "Gesprächsverlauf",
     "empty": "Noch keine Gespräche erfasst.",
-    "loggedByFriend": "· von der anderen Person erfasst"
+    "loggedByFriend": "· von der anderen Person erfasst",
+    "loading": "Wird geladen…",
+    "loadFailed": "Der Gesprächsverlauf konnte nicht geladen werden. Bitte versuche es erneut."
   },
   "datePicker": {
     "dateFormat": "dd.MM.yyyy"

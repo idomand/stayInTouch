@@ -2,11 +2,11 @@
 import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
+import { getOwnedContact, requireUser } from "@/lib/db/queries/guards";
 import {
-  getOwnedContact,
-  isUuid,
-  requireUser,
-} from "@/lib/db/queries/guards";
+  type ContactTalkEvent,
+  getTalkEventsForOwnedContact,
+} from "@/lib/db/queries/contacts";
 import { contacts, notes, talkEvents } from "@/lib/db/schema";
 import { actionError } from "@/lib/actions/actionError";
 import {
@@ -19,7 +19,8 @@ import {
 } from "@/lib/actions/validation";
 
 const NOT_FOUND: ErrorMessage = { key: "contactNotFound" };
-const NOTE_NOT_FOUND: ErrorMessage = { key: "noteNotFound" };
+// Parked with the note actions below (C1).
+// const NOTE_NOT_FOUND: ErrorMessage = { key: "noteNotFound" };
 const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
 
 export type AddContactInput = {
@@ -40,11 +41,12 @@ export type UpdateContactInput = {
   talkedAtMs?: number;
 };
 
-export async function addContact(input: AddContactInput): Promise<ActionResult> {
+export async function addContact(
+  input: AddContactInput,
+): Promise<ActionResult> {
   const uid = await requireUser();
   const invalid =
-    validateFields(input) ??
-    validateNoteBody(input.note, { optional: true });
+    validateFields(input) ?? validateNoteBody(input.note, { optional: true });
   if (invalid) {
     return actionError(invalid);
   }
@@ -167,72 +169,92 @@ export async function markAsTalked(contactId: string): Promise<ActionResult> {
   return { ok: true };
 }
 
-export async function addNote(
+/**
+ * The talk history of one contact, for its history dialog. Loaded on demand so
+ * the home page does not send every contact's full history.
+ */
+export async function getTalkEvents(
   contactId: string,
-  body: string,
-): Promise<ActionResult> {
+): Promise<
+  { ok: true; events: ContactTalkEvent[] } | { ok: false; error: string }
+> {
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
     return actionError(NOT_FOUND);
   }
-  const invalid = validateNoteBody(body);
-  if (invalid) {
-    return actionError(invalid);
-  }
-  await db.insert(notes).values({ contactId, body: body.trim() });
-  revalidatePath("/");
-  return { ok: true };
+  const events = await getTalkEventsForOwnedContact(uid, contactId);
+  return { ok: true, events };
 }
 
-export async function updateNote(
-  contactId: string,
-  noteId: string,
-  body: string,
-): Promise<ActionResult> {
-  const uid = await requireUser();
-  const existing = await getOwnedContact(uid, contactId);
-  if (!existing) {
-    return actionError(NOT_FOUND);
-  }
-  if (!isUuid(noteId)) {
-    return actionError(NOTE_NOT_FOUND);
-  }
-  const invalid = validateNoteBody(body);
-  if (invalid) {
-    return actionError(invalid);
-  }
-  const updated = await db
-    .update(notes)
-    .set({ body: body.trim() })
-    .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
-    .returning({ id: notes.id });
-  if (updated.length === 0) {
-    return actionError(NOTE_NOT_FOUND);
-  }
-  revalidatePath("/");
-  return { ok: true };
-}
-
-export async function deleteNote(
-  contactId: string,
-  noteId: string,
-): Promise<ActionResult> {
-  const uid = await requireUser();
-  const existing = await getOwnedContact(uid, contactId);
-  if (!existing) {
-    return actionError(NOT_FOUND);
-  }
-  if (!isUuid(noteId)) {
-    return actionError(NOTE_NOT_FOUND);
-  }
-  const deleted = await db
-    .delete(notes)
-    .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
-    .returning({ id: notes.id });
-  if (deleted.length === 0) {
-    return actionError(NOTE_NOT_FOUND);
-  }
-  revalidatePath("/");
-  return { ok: true };
-}
+// Notes are parked (C1 in specs/app-review-fixes.md): no UI reaches them.
+// Restore these actions, NOTE_NOT_FOUND and the isUuid import with the UI.
+// export async function addNote(
+//   contactId: string,
+//   body: string,
+// ): Promise<ActionResult> {
+//   const uid = await requireUser();
+//   const existing = await getOwnedContact(uid, contactId);
+//   if (!existing) {
+//     return actionError(NOT_FOUND);
+//   }
+//   const invalid = validateNoteBody(body);
+//   if (invalid) {
+//     return actionError(invalid);
+//   }
+//   await db.insert(notes).values({ contactId, body: body.trim() });
+//   revalidatePath("/");
+//   return { ok: true };
+// }
+//
+// export async function updateNote(
+//   contactId: string,
+//   noteId: string,
+//   body: string,
+// ): Promise<ActionResult> {
+//   const uid = await requireUser();
+//   const existing = await getOwnedContact(uid, contactId);
+//   if (!existing) {
+//     return actionError(NOT_FOUND);
+//   }
+//   if (!isUuid(noteId)) {
+//     return actionError(NOTE_NOT_FOUND);
+//   }
+//   const invalid = validateNoteBody(body);
+//   if (invalid) {
+//     return actionError(invalid);
+//   }
+//   const updated = await db
+//     .update(notes)
+//     .set({ body: body.trim() })
+//     .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
+//     .returning({ id: notes.id });
+//   if (updated.length === 0) {
+//     return actionError(NOTE_NOT_FOUND);
+//   }
+//   revalidatePath("/");
+//   return { ok: true };
+// }
+//
+// export async function deleteNote(
+//   contactId: string,
+//   noteId: string,
+// ): Promise<ActionResult> {
+//   const uid = await requireUser();
+//   const existing = await getOwnedContact(uid, contactId);
+//   if (!existing) {
+//     return actionError(NOT_FOUND);
+//   }
+//   if (!isUuid(noteId)) {
+//     return actionError(NOTE_NOT_FOUND);
+//   }
+//   const deleted = await db
+//     .delete(notes)
+//     .where(and(eq(notes.id, noteId), eq(notes.contactId, contactId)))
+//     .returning({ id: notes.id });
+//   if (deleted.length === 0) {
+//     return actionError(NOTE_NOT_FOUND);
+//   }
+//   revalidatePath("/");
+//   return { ok: true };
+// }

@@ -11,7 +11,7 @@ import type { ActionResult, ErrorMessage } from "@/lib/actions/validation";
 export async function actionError({
   key,
   values,
-}: ErrorMessage): Promise<ActionResult> {
+}: ErrorMessage): Promise<Extract<ActionResult, { ok: false }>> {
   const t = await getTranslations();
   return { ok: false, error: t(`errors.${key}`, values) };
 }

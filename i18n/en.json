@@ -177,7 +177,9 @@
   "talkEvents": {
     "title": "Talk history",
     "empty": "No talks recorded yet.",
-    "loggedByFriend": "· logged by your friend"
+    "loggedByFriend": "· logged by your friend",
+    "loading": "Loading…",
+    "loadFailed": "Could not load the talk history. Please try again."
   },
   "datePicker": {
     "dateFormat": "dd/MM/yyyy"
