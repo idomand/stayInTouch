@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { H2, P3 } from "@/Components/ui/Text";
 import PageHeader from "@/Components/ui/PageHeader";
+import Card from "@/Components/ui/Card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -12,9 +13,9 @@ export default async function Privacy() {
   const t = await getTranslations();
 
   return (
-    <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
+    <section className="relative mx-auto flex w-[90%] flex-col items-center justify-center sm:w-[70%]">
       <PageHeader title={t("privacy.title")} />
-      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full flex flex-col gap-3">
+      <Card extraClasses="m-2 flex flex-col gap-3 text-left sm:text-justify">
         <P3 extraClasses="normal-case">{t("privacy.intro")}</P3>
 
         <div className="flex flex-col gap-2">
@@ -51,7 +52,7 @@ export default async function Privacy() {
           <H2>{t("privacy.controlTitle")}</H2>
           <P3 extraClasses="normal-case">{t("privacy.control")}</P3>
         </div>
-      </div>
+      </Card>
     </section>
   );
 }

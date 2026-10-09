@@ -9,6 +9,7 @@ import type {
 } from "@/lib/db/queries/links";
 import { P, P2 } from "./ui/Text";
 import Button from "./ui/Button";
+import Card from "@/Components/ui/Card";
 import AcceptLinkDialog from "./AcceptLinkDialog";
 import ErrorWarning from "./ErrorWarning";
 
@@ -22,13 +23,11 @@ export default function FriendRequests({
   linkableContacts: LinkableContact[];
 }) {
   const t = useTranslations();
-  const [selectedRequest, setSelectedRequest] = useState<
-    IncomingLinkRequest | null
-  >(null);
+  const [selectedRequest, setSelectedRequest] =
+    useState<IncomingLinkRequest | null>(null);
   const [isAcceptDialogOpen, setIsAcceptDialogOpen] = useState(false);
   const [error, setError] = useState<string | false>(false);
   const [processingId, setProcessingId] = useState<string | null>(null);
-
 
   function openAcceptDialog(request: IncomingLinkRequest) {
     setSelectedRequest(request);
@@ -56,17 +55,19 @@ export default function FriendRequests({
   }
 
   return (
-    <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
+    <Card>
       <div className="mb-6">
-        <P extraClasses="text-lg font-semibold mb-2">{t("friendRequests.title")}</P>
-        <P2 extraClasses="text-grey3">
-          {t("friendRequests.intro")}
-        </P2>
+        <P extraClasses="text-lg font-semibold mb-2">
+          {t("friendRequests.title")}
+        </P>
+        <P2 extraClasses="text-grey3">{t("friendRequests.intro")}</P2>
       </div>
 
       {/* Incoming requests */}
       <div className="mb-8">
-        <P extraClasses="font-medium text-base mb-3">{t("friendRequests.incoming")}</P>
+        <P extraClasses="font-medium text-base mb-3">
+          {t("friendRequests.incoming")}
+        </P>
         {incoming.length === 0 ? (
           <P2 extraClasses="text-grey3">{t("friendRequests.noIncoming")}</P2>
         ) : (
@@ -74,11 +75,15 @@ export default function FriendRequests({
             {incoming.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between flex-wrap gap-2 p-3 bg-grey1 rounded-lg"
+                className="bg-grey1 flex flex-wrap items-center justify-between gap-2 rounded-lg p-3"
               >
-                <div className="flex-1 min-w-0">
-                  <P extraClasses="font-medium break-words">{request.fromName}</P>
-                  <P2 extraClasses="text-grey3 break-all">{request.fromEmail}</P2>
+                <div className="min-w-0 flex-1">
+                  <P extraClasses="font-medium break-words">
+                    {request.fromName}
+                  </P>
+                  <P2 extraClasses="text-grey3 break-all">
+                    {request.fromEmail}
+                  </P2>
                   <P2 extraClasses="text-grey3 text-xs mt-1">
                     {t("friendRequests.wantsToLink")}
                   </P2>
@@ -104,7 +109,9 @@ export default function FriendRequests({
 
       {/* Outgoing requests */}
       <div>
-        <P extraClasses="font-medium text-base mb-3">{t("friendRequests.outgoing")}</P>
+        <P extraClasses="font-medium text-base mb-3">
+          {t("friendRequests.outgoing")}
+        </P>
         {outgoing.length === 0 ? (
           <P2 extraClasses="text-grey3">{t("friendRequests.noOutgoing")}</P2>
         ) : (
@@ -112,9 +119,9 @@ export default function FriendRequests({
             {outgoing.map((request) => (
               <div
                 key={request.id}
-                className="flex items-center justify-between flex-wrap gap-2 p-3 bg-grey1 rounded-lg"
+                className="bg-grey1 flex flex-wrap items-center justify-between gap-2 rounded-lg p-3"
               >
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <P extraClasses="text-sm break-words">
                     {t.rich("friendRequests.outgoingLine", {
                       name: request.contactName,
@@ -150,6 +157,6 @@ export default function FriendRequests({
           }}
         />
       )}
-    </section>
+    </Card>
   );
 }

@@ -13,8 +13,8 @@ building. Background and constraints are in `specs/architecture.md`.
      sign-in (check `providerData` for `password`). Firebase requires a recent
      sign-in, so re-authenticate (`reauthenticateWithCredential`) before
      `updatePassword`; show errors through `authErrorMessage()`.
-2. **A real PWA setup.** `next-pwa` is a webpack plugin and the build uses
-   Turbopack, so it is inert and no service worker is generated. Replace it with a
+2. **A real PWA setup.** There is no service worker. `next-pwa` was removed: it
+   is a webpack plugin and the build uses Turbopack, so it never ran. Use a
    Turbopack-compatible approach (e.g. Serwist, or a hand-written service worker),
    check `public/manifest.json` and the icons, and decide what may be cached:
    never serve a signed-in page after sign-out. Then put the "installable" claim

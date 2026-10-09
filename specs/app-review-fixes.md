@@ -21,6 +21,7 @@ Severity: **High** = a user-facing bug, or a group of users is blocked. **Med** 
 ## Functional Requirements
 
 ### Code and behaviour
+
 - **C1 (High) Notes are unreachable.** Commit `b7fbe94` ("style: update AddNewContact") removed the Notes button from the contact row. The Notes components, the note Server Actions, the `notes`/`noteItem` messages and the notes join in the contacts query are still there, but nothing uses them. Users cannot see the notes they wrote. **Decision:** park the feature. Comment out the Notes components' use, the note Server Actions and the notes join in the contacts query. Delete nothing. Keep the `notes` and `noteItem` message keys (JSON cannot hold comments); they are exempt from the "no unused keys" rule. `deleteAccount` still deletes notes, and the privacy text still describes them.
 - **C2 (High) Shared Button defaults to submit.** The shared Button sets no button type, so the browser default ("submit") applies. Inside a form, any Button submits it. Today this makes the Notes "Cancel" button save the note instead of cancelling. The shared Button must default to a plain button. Submitting must be opt-in.
 - **C3 (Med) Talks can be recorded twice.** "Mark as talked" has no in-flight guard. A double click records two talks, and two more on a linked friend's contact. While the request runs, the control must be disabled.
@@ -33,11 +34,12 @@ Severity: **High** = a user-facing bug, or a group of users is blocked. **Med** 
 - **C10 (Low) Dead code in the appointment flow.** The appointment dialog has an error state that nothing sets, and a form with no submit. The calendar helper is async but awaits nothing, its result is ignored, and the event time is fixed at 19:00. Remove the dead parts.
 - **C11 (Low) Easter egg breaks the logging rule.** The easter egg writes to the console with `console.log`, which the project rules forbid, and ships its ASCII art to every user. **Decision:** delete the easter egg completely: the console output, the ASCII art and the clickable "Hi" span. The greeting stays as plain text (see T2).
 - **C12 (Low) Broken PWA manifest.** The manifest points to an icon that does not exist (`/icons/maskable.png`) and uses one relative icon path. It also gives a PNG the wrong MIME type, has a trailing space in `theme_color`, and sets `name` to "Stay_in_Touch". **Decision:** keep the manifest and fix it: only existing icons, absolute paths, correct MIME types, no trailing space, `name` "Stay-in-Touch".
-- **C13 (Low) Unused dependencies.** `react-modal`, `@types/react-modal` and `react-use` are installed but never used. `next-pwa` does nothing under Turbopack. ESLint is installed with no config. `next.config.js` has a commented-out block. **Decision:** uninstall `react-modal`, `@types/react-modal`, `react-use`, `next-pwa` and ESLint (with its packages), remove the `next-pwa` wrapper from `next.config.js`, and delete the commented-out block. A lint setup can be added later on purpose.
+- **C13 (Low) Unused dependencies.** `react-modal`, `@types/react-modal` and `react-use` are installed but never used. `next-pwa` does nothing under Turbopack. ESLint is installed with no config. `next.config.js` has a commented-out block. **Decision:** uninstall `react-modal`, `@types/react-modal`, `react-use` and `next-pwa`, remove the `next-pwa` wrapper from `next.config.js`, and delete the commented-out block. ESLint stays: a flat config (`eslint.config.mjs`) and `npm run lint` were added after this review, so it works now.
 - **C14 (Low) Outdated comments.** Comments in `formClasses.ts` and `Spinner.tsx` refer to files that no longer exist.
 - **C15 (Low) Repeated styles.** The card style on the settings, about and privacy pages appears six times. The dropdown item style appears five times. Use one shared definition for each.
 
 ### Accessibility
+
 - **A1 (High) No focus outline.** A global rule removes the focus outline from every element. Keyboard focus must be visible on every interactive element.
 - **A2 (High) "Mark as talked" is an icon only.** It cannot be focused and has no accessible name. It must be a real button, with a translated label that says what it does and names the contact.
 - **A3 (High) The "more options" menu needs a mouse.** The trigger has no accessible name and does not report open or closed. The items cannot be focused. The menu must work with Tab, Enter or Space, and Escape. It must report its state and return focus to the trigger when it closes.
@@ -48,6 +50,7 @@ Severity: **High** = a user-facing bug, or a group of users is blocked. **Med** 
 - **A8 (Low) Headings, titles and link text.** Pages have several top-level headings. The nav brand is a heading. Only Settings sets a page title. The About page uses "here" as link text.
 
 ### UI
+
 - **U1 (Med) Forced capitalisation.** CSS capitalisation on headings, error messages and contact names upper-cases every word. Examples: "No Contacts Yet", "A Contact With This Name Already Exists.", German "Noch Keine Kontakte", and "van der Berg" shown as "Van Der Berg". Show text as written.
 - **U2 (Med) Delete confirmation says too little.** The delete-contact confirmation only asks "Are you sure?". It must say that talk history and any link are deleted too. The delete button must look destructive, matching Delete Account.
 - **U3 (Med) Two error styles.** Some screens use a floating error box and others use inline red text. **Decision:** inline everywhere. The error shows next to the form or control that caused it. Remove the floating error box.
@@ -55,6 +58,7 @@ Severity: **High** = a user-facing bug, or a group of users is blocked. **Med** 
 - **U5 (Low) Hard-coded footer year.** The footer copyright year is fixed at 2026. Calculate it from the current date.
 
 ### Translations
+
 - **T1 (High) No plural forms.** Day counts have no plural forms, so users see "Talk in 1 days", "Didn't talk for 1 days" and "Sprechen in 1 Tagen". Every count message needs proper singular and plural forms in English and German.
 - **T2 (Med) Sentences built from parts.** The greeting ("Hi" + name) and the outgoing-request line ("Your contact" + name + arrow + email + "waiting", with English quotation marks and a leading-space trick in the JSON) are glued together from pieces. Each must be one whole message with placeholders.
 - **T3 (Med) English and German disagree.** For `common.enterName`, English says "Enter Name" and German says "Name des Freundes".
@@ -73,6 +77,7 @@ Severity: **High** = a user-facing bug, or a group of users is blocked. **Med** 
 - **T8 (Low) Untranslated or unused strings.** Two email placeholders, the dialog "X" and the calendar event title are not translated. Remove unused message keys, except the `notes` and `noteItem` sections (kept for C1).
 
 ### Performance
+
 - **P1 (High) Pages wait for Firebase.** Until the Firebase client reports the auth state, the auth provider shows only a spinner. Server-rendered content, including the home list and the public pages, waits for the Firebase script to download and resolve. Server-rendered content must show without waiting for client auth start-up. **Decision:** out of scope here. It gets its own spec and branch, because it touches the auth flow.
 - **P2 (High) Every contact row mounts its dialogs up front.** Each row mounts about six hidden dialogs, including a full inline date picker. Dialog content must mount only while the dialog is open.
 - **P3 (Med) The home query sends too much.** Every load of the home page sends every note (unused today) and the full talk history of every contact, and both grow without limit. Send only what the first screen shows. **Decision:** drop the notes join (C1) and the talk history from the home query. Load a contact's history when its history dialog opens. `lastTalkedAt` and `daysUntilNextTalk` already come from SQL, so the list needs no history.
@@ -122,7 +127,7 @@ Answered on 2026-10-09. Details are in each item above.
 - **German tone (T7):** neutral nouns ("Kontakt", "Person").
 - **P1 scope:** its own spec and branch.
 - **Contrast (A5):** darken the existing tokens.
-- **Cleanup (C12, C13):** fix the manifest; uninstall `next-pwa`, `react-modal`, `@types/react-modal`, `react-use` and ESLint.
+- **Cleanup (C12, C13):** fix the manifest; uninstall `next-pwa`, `react-modal`, `@types/react-modal` and `react-use`. ESLint stays (it now has a working flat config).
 - **Wording (T6):** "Last talk {days} days ago" / "Letztes Gespräch vor {days} Tagen".
 - **Footer (U5):** year from the current date.
 

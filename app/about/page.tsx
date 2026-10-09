@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { H2, P3 } from "@/Components/ui/Text";
 import Link from "@/Components/ui/Link";
 import PageHeader from "@/Components/ui/PageHeader";
+import Card from "@/Components/ui/Card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -25,31 +26,25 @@ export default async function About() {
   const t = await getTranslations();
 
   return (
-    <section className="flex items-center flex-col justify-center relative w-[90%] sm:w-[70%] mx-auto">
+    <section className="relative mx-auto flex w-[90%] flex-col items-center justify-center sm:w-[70%]">
       <PageHeader title={t("about.title")} />
-      <div className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full">
+      <Card extraClasses="m-2 text-left sm:text-justify">
         <H2>{t("about.aboutApp")}</H2>
         <P3>
           {t("about.intro1")}
           <br />
           {t("about.intro2")}
         </P3>
-      </div>
-      <div
-        id="HowToUseSection"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
-      >
+      </Card>
+      <Card id="HowToUseSection" extraClasses="m-2 text-left sm:text-justify">
         <H2>{t("about.howToUse")}</H2>
         <P3>{t("about.howTo1")}</P3>
         <P3>{t("about.howTo2")}</P3>
         <P3>{t("about.howTo3")}</P3>
         <P3>{t("about.howTo4")}</P3>
-      </div>
+      </Card>
 
-      <div
-        id="AboutTheCreator"
-        className="bg-white m-2 rounded-[10px] border border-black/10 p-4 sm:p-6 text-left sm:text-justify w-full"
-      >
+      <Card id="AboutTheCreator" extraClasses="m-2 text-left sm:text-justify">
         <H2>{t("about.aboutMe")}</H2>
         <P3>{t("about.me1")}</P3>
         <P3>{t("about.me2")}</P3>
@@ -69,7 +64,7 @@ export default async function About() {
             link: externalLink("https://www.linkedin.com/in/ido-mandelman"),
           })}
         </P3>
-      </div>
+      </Card>
     </section>
   );
 }

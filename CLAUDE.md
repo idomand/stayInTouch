@@ -23,11 +23,12 @@ npm run db:migrate   # apply unapplied migrations to the DATABASE_URL database
 npm run db:studio    # browse the database (dev, via .env.local)
 npm run format       # prettier --write . (whole repo)
 npm run format:check # prettier --check .
+npm run lint         # eslint . (flat config)
 ```
 
 There is no `db:push` on purpose — see "Changing the schema" below.
 
-There is **no test framework** and **no working lint** in this project (the `next lint` script was removed — Next 16 dropped `next lint` and ESLint 9 needs a flat config the repo doesn't have). "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
+There is **no test framework** in this project. Lint is ESLint 9 with a flat config (`eslint.config.mjs`, using `eslint-config-next`): run `npm run lint` as an extra check, but `type-check` stays the gate. "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
 
 **Formatting.** Prettier (`.prettierrc.json`, with `prettier-plugin-tailwindcss`, which also sorts Tailwind classes) formats the code. In final checks, run it on the files you touched, not the whole repo, so the diff stays yours:
 
@@ -43,7 +44,7 @@ A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error 
 
 Next.js 16 **App Router** (`app/`) + React 19, TypeScript. Firebase Auth for identity; contact data in Neon Postgres through Drizzle. Deployed on Vercel. Path alias `@/*` maps to the repo root.
 
-`next-pwa` is installed but inert: it is a webpack plugin and the build uses Turbopack, so no service worker is generated. The app is not an installable PWA today — don't design around a service worker.
+There is no service worker and no PWA plugin (`next-pwa` was removed: it was a webpack plugin and the build uses Turbopack). `public/manifest.json` exists, but the app is not an installable PWA today — don't design around a service worker. See item 2 in `specs/future-upgrades.md`.
 
 Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout. Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. `app/page.tsx` (home) is a Server Component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
 

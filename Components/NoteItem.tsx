@@ -1,59 +1,66 @@
-"use client";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { deleteNote } from "@/lib/actions/contacts";
-import { H4 } from "@/Components/ui/Text";
-import Button from "./ui/Button";
-import ErrorWarning from "./ErrorWarning";
+// Notes are parked (C1 in specs/app-review-fixes.md): nothing renders this
+// component, and the note actions it calls are commented out in
+// lib/actions/contacts.ts. Uncomment both, plus the notes join in
+// lib/db/queries/contacts.ts, to bring notes back.
 
-type NoteItemProps = {
-  noteId: string;
-  body: string;
-  contactId: string;
-  switchToEditMode: (oldNoteData: string, oldNoteId: string) => void;
-};
+export {};
 
-export default function NoteItem({
-  noteId,
-  body,
-  contactId,
-  switchToEditMode,
-}: NoteItemProps) {
-  const t = useTranslations();
-  const [error, setError] = useState<string | false>(false);
-
-
-  async function deleteNoteFunc() {
-    const result = await deleteNote(contactId, noteId);
-    if (!result.ok) {
-      setError(result.error);
-    }
-  }
-
-  return (
-    <li className="list-none p-1 m-1 flex flex-col relative">
-      <div className="flex justify-between">
-        <H4>{t("noteItem.note")}</H4>
-        <div className="flex mb-1">
-          <Button
-            buttonText={t("noteItem.edit")}
-            onClick={() => switchToEditMode(body, noteId)}
-            variant="Secondary"
-            extraClasses="mr-1 hover:bg-blue3 hover:text-blue1"
-          />
-          <Button
-            buttonText={t("noteItem.delete")}
-            onClick={deleteNoteFunc}
-            variant="Secondary"
-            extraClasses="hover:bg-red2 hover:text-red1"
-          />
-        </div>
-      </div>
-
-      <div className="border border-solid border-blue2 p-1 bg-grey1 overflow-auto w-auto sm:w-95 h-12.5 text-sm">
-        {body}
-      </div>
-      {error && <ErrorWarning errorMessage={error} />}
-    </li>
-  );
-}
+// "use client";
+// import { useState } from "react";
+// import { useTranslations } from "next-intl";
+// import { deleteNote } from "@/lib/actions/contacts";
+// import { H4 } from "@/Components/ui/Text";
+// import Button from "./ui/Button";
+// import ErrorWarning from "./ErrorWarning";
+//
+// type NoteItemProps = {
+//   noteId: string;
+//   body: string;
+//   contactId: string;
+//   switchToEditMode: (oldNoteData: string, oldNoteId: string) => void;
+// };
+//
+// export default function NoteItem({
+//   noteId,
+//   body,
+//   contactId,
+//   switchToEditMode,
+// }: NoteItemProps) {
+//   const t = useTranslations();
+//   const [error, setError] = useState<string | false>(false);
+//
+//
+//   async function deleteNoteFunc() {
+//     const result = await deleteNote(contactId, noteId);
+//     if (!result.ok) {
+//       setError(result.error);
+//     }
+//   }
+//
+//   return (
+//     <li className="list-none p-1 m-1 flex flex-col relative">
+//       <div className="flex justify-between">
+//         <H4>{t("noteItem.note")}</H4>
+//         <div className="flex mb-1">
+//           <Button
+//             buttonText={t("noteItem.edit")}
+//             onClick={() => switchToEditMode(body, noteId)}
+//             variant="Secondary"
+//             extraClasses="mr-1 hover:bg-blue3 hover:text-blue1"
+//           />
+//           <Button
+//             buttonText={t("noteItem.delete")}
+//             onClick={deleteNoteFunc}
+//             variant="Secondary"
+//             extraClasses="hover:bg-red2 hover:text-red1"
+//           />
+//         </div>
+//       </div>
+//
+//       <div className="border border-solid border-blue2 p-1 bg-grey1 overflow-auto w-auto sm:w-95 h-12.5 text-sm">
+//         {body}
+//       </div>
+//       {error && <ErrorWarning errorMessage={error} />}
+//     </li>
+//   );
+// }
