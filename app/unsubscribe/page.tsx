@@ -1,11 +1,20 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { H1, P2 } from "@/Components/ui/Text";
 import UnsubscribeConfirm from "@/Components/UnsubscribeConfirm";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations();
+  return { title: t("unsubscribe.title") };
+}
+
 export default async function UnsubscribePage({
   searchParams,
 }: {
-  searchParams: Promise<{ email?: string | string[]; token?: string | string[] }>;
+  searchParams: Promise<{
+    email?: string | string[];
+    token?: string | string[];
+  }>;
 }) {
   const t = await getTranslations();
   const params = await searchParams;

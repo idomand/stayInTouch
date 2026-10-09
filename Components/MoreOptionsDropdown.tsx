@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SlOptions } from "react-icons/sl";
 import { deleteContact } from "@/lib/actions/contacts";
@@ -13,6 +13,9 @@ import LinkContactDialog from "./LinkContactDialog";
 import ErrorWarning from "./ErrorWarning";
 import { P2 } from "./ui/Text";
 import NextLink from "next/link";
+
+const menuItemClasses =
+  "block w-full text-left px-4 py-3 cursor-pointer bg-transparent border-0 text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2";
 
 export default function MoreOptionsDropdown({
   contact,
@@ -33,10 +36,31 @@ export default function MoreOptionsDropdown({
   const [deleteError, setDeleteError] = useState<string | false>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuId = useId();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  function closeAndFocusTrigger() {
+    setIsOpen(false);
+    triggerRef.current?.focus();
+  }
+
+  function handleMenuKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Escape" && isOpen) {
+      event.stopPropagation();
+      closeAndFocusTrigger();
+    }
+  }
+
+  // Tabbing out of the menu closes it, like a click outside.
+  function handleMenuBlur(event: React.FocusEvent) {
+    if (!dropdownRef.current?.contains(event.relatedTarget as Node | null)) {
+      setIsOpen(false);
+    }
+  }
 
   const handleUpdateContact = () => {
     setIsUpdateContactModalOpen(true);
@@ -98,59 +122,73 @@ export default function MoreOptionsDropdown({
 
   return (
     <>
-      <div className="relative inline-block" ref={dropdownRef}>
+      <div
+        className="relative inline-block"
+        ref={dropdownRef}
+        onKeyDown={handleMenuKeyDown}
+        onBlur={handleMenuBlur}
+      >
         <button
+          ref={triggerRef}
+          type="button"
           onClick={toggleDropdown}
-          className="bg-transparent px-5 py-2.5 text-base outline-0 border-0 cursor-pointer hover:bg-transparent focus:bg-transparent"
+          aria-label={t("moreOptionsDropdown.moreOptions", {
+            name: contact.name,
+          })}
+          aria-expanded={isOpen}
+          aria-controls={menuId}
+          className="bg-transparent px-5 py-2.5 text-base border-0 rounded-md cursor-pointer hover:bg-transparent focus:bg-transparent"
         >
-          <SlOptions />
+          <SlOptions aria-hidden="true" />
         </button>
         <div
+          id={menuId}
           className={`absolute top-full right-0 mt-2 bg-white min-w-50 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] rounded-lg z-1000 overflow-hidden ${
             isOpen ? "block" : "hidden"
           }`}
         >
-          <div
+          <button
+            type="button"
             onClick={handleUpdateContact}
-            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+            className={menuItemClasses}
           >
             {t("moreOptionsDropdown.updateContact")}
-          </div>
-          <div
+          </button>
+          <button
+            type="button"
             onClick={handleMakeAppointment}
-            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+            className={menuItemClasses}
           >
             {t("moreOptionsDropdown.makeAppointment")}
-          </div>
+          </button>
           {!contact.isLinked && !contact.hasPendingRequest ? (
-            <div
+            <button
+              type="button"
               onClick={handleLinkContact}
-              className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+              className={menuItemClasses}
             >
               {t("moreOptionsDropdown.linkWithFriend")}
-            </div>
+            </button>
           ) : contact.hasPendingRequest ? (
-            <NextLink href="/settings">
-              <div className="px-4 py-3 text-grey3 text-sm not-last:border-b not-last:border-grey2">
-                <P2 extraClasses="text-grey3">
-                  {t("moreOptionsDropdown.linkPending")}
-                </P2>
-              </div>
+            <NextLink href="/settings" className={menuItemClasses}>
+              {t("moreOptionsDropdown.linkPending")}
             </NextLink>
           ) : contact.isLinked ? (
-            <div
+            <button
+              type="button"
               onClick={handleUnlinkContact}
-              className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+              className={menuItemClasses}
             >
               {t("common.unlink")}
-            </div>
+            </button>
           ) : null}
-          <div
+          <button
+            type="button"
             onClick={handleDeleteContact}
-            className="px-4 py-3 cursor-pointer text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2"
+            className={menuItemClasses}
           >
             {t("moreOptionsDropdown.deleteContact")}
-          </div>
+          </button>
         </div>
       </div>
       <UpdateContactForm

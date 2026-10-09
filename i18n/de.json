@@ -43,7 +43,8 @@
     "signingIn": "Anmeldung läuft…",
     "signInWithGoogle": "Mit Google anmelden",
     "or": "oder",
-    "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen."
+    "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen.",
+    "metaTitle": "Anmelden"
   },
   "unsubscribe": {
     "title": "Einladungs-E-Mails abbestellen",
@@ -139,18 +140,20 @@
     "talkedToday": "Heute gesprochen",
     "daysSinceTalk": "Seit {days} Tagen nicht gesprochen",
     "talkInDays": "Sprechen in {days} Tagen",
-    "talkToday": "Heute sprechen!"
+    "talkToday": "Heute sprechen!",
+    "markAsTalked": "Markieren, dass du mit {name} gesprochen hast"
   },
   "moreOptionsDropdown": {
     "updateContact": "Kontakt bearbeiten",
     "makeAppointment": "Termin vereinbaren",
     "linkWithFriend": "Mit Freund verknüpfen",
-    "linkPending": "Verknüpfungsanfrage offen",
+    "linkPending": "Verknüpfungsanfrage offen – in den Einstellungen ansehen",
     "deleteContact": "Kontakt löschen",
     "deleteName": "{name} löschen",
     "goBack": "Zurück",
     "unlinkTitle": "Gespräche nicht mehr teilen?",
-    "unlinkText": "Gespräche mit diesem Freund nicht mehr teilen? Beide Kontakte und vergangene Gespräche bleiben erhalten."
+    "unlinkText": "Gespräche mit diesem Freund nicht mehr teilen? Beide Kontakte und vergangene Gespräche bleiben erhalten.",
+    "moreOptions": "Weitere Optionen für {name}"
   },
   "updateContactForm": {
     "title": "Kontakt bearbeiten: {name}",
@@ -231,7 +234,6 @@
     "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "settings": {
-    "metaTitle": "Einstellungen | Stay-in-Touch",
     "title": "Einstellungen",
     "notifications": "Benachrichtigungen"
   },
@@ -253,7 +255,7 @@
     "me1": "Ich heiße Ido Mandelman und bin leidenschaftlicher Fullstack-Entwickler.",
     "me2": "Ursprünglich komme ich aus Israel und bin mit meiner Frau nach Berlin gezogen, um in dieser schönen Stadt ein neues Leben zu beginnen.",
     "me3": "In meiner Freizeit lese ich gern Bücher über Programmierung, Geschichte und Science-Fiction, koche und lerne Deutsch.",
-    "github": "Diese App ist komplett Open Source, den ganzen Code findest du auf meinem GitHub,<link>hier</link>.",
+    "github": "Diese App ist komplett Open Source. Den ganzen Code findest du<link>auf GitHub</link>.",
     "website": "Mehr von meinen Projekten findest du auf meiner<link>Website</link>.",
     "linkedin": "Und schreib mir auf<link>LinkedIn</link>."
   },

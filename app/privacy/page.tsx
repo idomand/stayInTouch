@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { H2, P3 } from "@/Components/ui/Text";
 import PageHeader from "@/Components/ui/PageHeader";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations();
+  return { title: t("privacy.title") };
+}
 
 export default async function Privacy() {
   const t = await getTranslations();

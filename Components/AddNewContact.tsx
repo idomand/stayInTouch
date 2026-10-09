@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { useTranslations } from "next-intl";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
@@ -15,6 +15,7 @@ import { twMerge } from "tailwind-merge";
 
 export default function AddNewContact() {
   const t = useTranslations();
+  const lastSpokenId = useId();
   const [time, setTime] = useState(3);
   const [name, setName] = useState("");
   // null = "never talked": no talk event is recorded for the new contact.
@@ -122,8 +123,9 @@ export default function AddNewContact() {
           />
         </label>
         <div className="flex flex-col m-1 justify-between min-w-0 [&_.react-datepicker-wrapper]:w-full [&_input]:w-full [&_input]:min-w-0">
-          {t("addNewContact.lastSpoken")}
+          <label htmlFor={lastSpokenId}>{t("addNewContact.lastSpoken")}</label>
           <DatePickerComponent
+            id={lastSpokenId}
             setStartDate={setStartDate}
             startDate={startDate}
             maxDate={new Date()}

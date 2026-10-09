@@ -10,7 +10,7 @@ import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stay-in-touch.vip"),
-  title: "Stay-in-Touch",
+  title: { default: "Stay-in-Touch", template: "%s | Stay-in-Touch" },
   manifest: "/manifest.json",
 };
 

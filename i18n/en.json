@@ -43,7 +43,8 @@
     "signingIn": "Signing in…",
     "signInWithGoogle": "Sign in with Google",
     "or": "or",
-    "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request."
+    "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request.",
+    "metaTitle": "Log in"
   },
   "unsubscribe": {
     "title": "Stop invite emails",
@@ -139,18 +140,20 @@
     "talkedToday": "Talked today",
     "daysSinceTalk": "Didn’t talk for {days} days",
     "talkInDays": "Talk in {days} days",
-    "talkToday": "Talk Today!"
+    "talkToday": "Talk Today!",
+    "markAsTalked": "Mark that you talked to {name}"
   },
   "moreOptionsDropdown": {
     "updateContact": "Update Contact",
     "makeAppointment": "Make Appointment",
     "linkWithFriend": "Link with friend",
-    "linkPending": "Link request pending",
+    "linkPending": "Link request pending – view in Settings",
     "deleteContact": "Delete Contact",
     "deleteName": "Delete {name}",
     "goBack": "Go back",
     "unlinkTitle": "Stop sharing talks?",
-    "unlinkText": "Stop sharing talks with this friend? Both contacts and past talks stay."
+    "unlinkText": "Stop sharing talks with this friend? Both contacts and past talks stay.",
+    "moreOptions": "More options for {name}"
   },
   "updateContactForm": {
     "title": "Update contact: {name}",
@@ -231,7 +234,6 @@
     "failed": "Something went wrong. Please try again."
   },
   "settings": {
-    "metaTitle": "Settings | Stay-in-Touch",
     "title": "Settings",
     "notifications": "Notifications"
   },
@@ -253,7 +255,7 @@
     "me1": "My name is Ido Mandelman and I am a passionate Fullstack developer.",
     "me2": "Originally from Israel, I have moved to Berlin with my wife to start a new life in this beautiful city.",
     "me3": "In my free time I love reading programming, history, and science-fiction books, cooking and learning German.",
-    "github": "This app is completely open source and you can see the full codebase on my GitHub,<link>here</link>.",
+    "github": "This app is completely open source. You can see the full code<link>on GitHub</link>.",
     "website": "You can see more of my projects on my<link>website</link>.",
     "linkedin": "And talk to me on<link>LinkedIn</link>."
   },

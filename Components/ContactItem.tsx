@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
@@ -16,14 +16,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const t = useTranslations();
   const now = Date.now();
   const [error, setError] = useState<string | false>(false);
-
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
+  const [isMarking, setIsMarking] = useState(false);
 
   // On time when there are days left before the next talk; never-talked
   // (null) and overdue (<= 0) both read as "needs attention".
@@ -51,16 +44,22 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       : t("contactItem.talkToday");
 
   async function resetFunction() {
-    const result = await markAsTalked(id);
-    if (!result.ok) {
-      setError(result.error);
+    // Clearing first remounts a repeated error, so it is announced again.
+    setError(false);
+    setIsMarking(true);
+    try {
+      const result = await markAsTalked(id);
+      if (!result.ok) {
+        setError(result.error);
+      }
+    } finally {
+      setIsMarking(false);
     }
   }
 
   return (
     <li className="flex items-center justify-between list-none mx-1 my-2.5 w-[85vw] sm:w-auto">
       <div className="grid grow justify-between bg-white rounded-[15px] p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons'] grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-none relative">
-        {error && <ErrorWarning errorMessage={error} />}
         <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-full min-w-0 sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
           <div className="flex flex-col justify-center min-w-0">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
@@ -90,22 +89,30 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
           <TalkEvents contact={contact} />
         </div>
         <div className="[grid-area:buttons] flex items-center justify-end shrink-0">
-          {isTalkingStatusOK ? (
-            <IoCheckboxOutline
-              onClick={resetFunction}
-              size={50}
-              className="cursor-pointer text-green1 hover:text-blue1"
-            />
-          ) : (
-            <BsExclamationSquare
-              onClick={resetFunction}
-              size={50}
-              className="cursor-pointer text-red1 hover:text-blue1"
-            />
-          )}
+          <button
+            type="button"
+            onClick={resetFunction}
+            disabled={isMarking}
+            aria-label={t("contactItem.markAsTalked", { name })}
+            className={`cursor-pointer bg-transparent border-none p-0 rounded-md hover:text-blue1 disabled:cursor-wait disabled:opacity-50 ${
+              isTalkingStatusOK ? "text-green1" : "text-red1"
+            }`}
+          >
+            {isTalkingStatusOK ? (
+              <IoCheckboxOutline size={50} aria-hidden="true" />
+            ) : (
+              <BsExclamationSquare size={50} aria-hidden="true" />
+            )}
+          </button>
 
           <MoreOptionsDropdown contact={contact} />
         </div>
+        {error && (
+          <ErrorWarning
+            errorMessage={error}
+            extraClasses="col-span-full mt-2"
+          />
+        )}
       </div>
     </li>
   );

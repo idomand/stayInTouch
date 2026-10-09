@@ -18,6 +18,8 @@ type DatePickerComponentProps = {
   maxDate?: Date;
   /** When given, the field can be emptied; called when the user clears it. */
   onClear?: () => void;
+  /** Id for the input, so a <label htmlFor> can name it. */
+  id?: string;
 };
 
 export default function DatePickerComponent({
@@ -26,6 +28,7 @@ export default function DatePickerComponent({
   isInline = false,
   maxDate = addDays(new Date(), 90),
   onClear,
+  id,
 }: DatePickerComponentProps) {
   const t = useTranslations();
   const locale = useLocale();
@@ -38,6 +41,7 @@ export default function DatePickerComponent({
   return (
     <>
       <DatePicker
+        id={id}
         wrapperClassName="datePickerClass"
         maxDate={maxDate}
         calendarContainer={Calendar}
