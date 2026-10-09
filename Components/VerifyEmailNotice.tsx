@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { H1, P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
+import ErrorWarning from "@/Components/ErrorWarning";
 
 /**
  * Shown on /login while a user is signed in on the client but has not
@@ -53,7 +54,7 @@ export default function VerifyEmailNotice() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
+    <div className="flex w-full flex-col items-center gap-4">
       <H1>{t("verifyEmailNotice.title")}</H1>
       <P2 extraClasses="text-grey3">
         {t.rich("verifyEmailNotice.sentTo", {
@@ -62,7 +63,7 @@ export default function VerifyEmailNotice() {
         })}
       </P2>
 
-      {error && <P2 extraClasses="text-red1">{error}</P2>}
+      {error && <ErrorWarning errorMessage={error} />}
       {info && <P2 extraClasses="text-green2">{info}</P2>}
 
       <Button

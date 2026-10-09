@@ -109,12 +109,18 @@ export function normalizeEmail(email?: string | null): string | null {
   return trimmed ? trimmed : null;
 }
 
-/** Postgres unique_violation — a unique index rejected a duplicate. */
+/**
+ * Postgres unique_violation — a unique index rejected a duplicate. Drizzle
+ * wraps driver errors in DrizzleQueryError and keeps the Postgres error in
+ * `cause`, so walk the cause chain instead of reading only the top level.
+ */
 export function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "23505"
-  );
+  let current: unknown = error;
+  while (typeof current === "object" && current !== null) {
+    if ((current as { code?: unknown }).code === "23505") {
+      return true;
+    }
+    current = (current as { cause?: unknown }).cause;
+  }
+  return false;
 }

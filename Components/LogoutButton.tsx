@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "../lib/AuthContext";
@@ -31,10 +32,16 @@ export default function LogoutButton() {
         onClick={() => {
           setIsLogoutModalOpen(true);
         }}
-        className="cursor-pointer flex items-center transition-all duration-300 bg-transparent border-none text-xs font-medium text-blue1 rounded-[10px] px-1 py-0.5 hover:text-black hover:bg-blue3"
+        className="text-blue1 hover:bg-blue3 flex cursor-pointer items-center rounded-[10px] border-none bg-transparent px-1 py-0.5 text-xs font-medium transition-all duration-300 hover:text-black"
       >
         {t("logoutButton.logOutButton")}
-        <img src="/log-out.svg" alt="" className="ml-1" />
+        <Image
+          src="/log-out.svg"
+          alt=""
+          width={24}
+          height={24}
+          className="ml-1"
+        />
       </button>
     </>
   );

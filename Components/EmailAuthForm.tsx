@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { P2 } from "@/Components/ui/Text";
+import ErrorWarning from "@/Components/ErrorWarning";
 import PasswordInput from "@/Components/ui/PasswordInput";
 import {
   basicInputClasses,
@@ -35,7 +36,11 @@ const inputClasses = twMerge(
 const linkButtonClasses =
   "cursor-pointer bg-transparent border-none p-0 text-sm text-blue1 hover:underline";
 
-export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false }: Props) {
+export default function EmailAuthForm({
+  onSignIn,
+  initialEmail,
+  disabled = false,
+}: Props) {
   const { signUpWithEmail, sendPasswordReset } = useAuth()!;
   const t = useTranslations();
   const [mode, setMode] = useState<Mode>("signIn");
@@ -87,7 +92,10 @@ export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false
   const isDisabled = disabled || isBusy;
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col w-full gap-2 text-left">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full flex-col gap-2 text-left"
+    >
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
           {t("emailAuthForm.name")}
@@ -120,7 +128,9 @@ export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false
           <PasswordInput
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            autoComplete={mode === "signUp" ? "new-password" : "current-password"}
+            autoComplete={
+              mode === "signUp" ? "new-password" : "current-password"
+            }
             minLength={6}
             required
             className={inputClasses}
@@ -142,7 +152,7 @@ export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false
         </label>
       )}
 
-      {error && <P2 extraClasses="text-red1 mx-1">{error}</P2>}
+      {error && <ErrorWarning errorMessage={error} extraClasses="mx-1" />}
       {info && <P2 extraClasses="text-green2 mx-1">{info}</P2>}
 
       <button
@@ -150,24 +160,36 @@ export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false
         disabled={isDisabled}
         className={twMerge(
           inputSubmitClasses,
-          "h-10 mx-1 mt-1 bg-blue1 font-semibold text-base hover:bg-blue3 hover:border-blue1 hover:text-blue1",
+          "bg-blue1 hover:bg-blue3 hover:border-blue1 hover:text-blue1 mx-1 mt-1 h-10 text-base font-semibold",
         )}
       >
         {isBusy ? t("emailAuthForm.pleaseWait") : t(`emailAuthForm.${mode}`)}
       </button>
 
-      <div className="flex justify-between mx-1 mt-1">
+      <div className="mx-1 mt-1 flex justify-between">
         {mode === "signIn" ? (
           <>
-            <button type="button" onClick={() => switchMode("signUp")} className={linkButtonClasses}>
+            <button
+              type="button"
+              onClick={() => switchMode("signUp")}
+              className={linkButtonClasses}
+            >
               {t("emailAuthForm.createAccount")}
             </button>
-            <button type="button" onClick={() => switchMode("reset")} className={linkButtonClasses}>
+            <button
+              type="button"
+              onClick={() => switchMode("reset")}
+              className={linkButtonClasses}
+            >
               {t("emailAuthForm.forgotPassword")}
             </button>
           </>
         ) : (
-          <button type="button" onClick={() => switchMode("signIn")} className={linkButtonClasses}>
+          <button
+            type="button"
+            onClick={() => switchMode("signIn")}
+            className={linkButtonClasses}
+          >
             {t("emailAuthForm.backToSignIn")}
           </button>
         )}

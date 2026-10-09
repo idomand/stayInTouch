@@ -8,7 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Do not agree by default. If the user proposes something and a better approach exists, say so and explain why — briefly and directly.
 - Push back on suboptimal suggestions instead of implementing them silently. State the tradeoff, recommend the better option, and let the user decide. Agreeing to a worse approach to be accommodating is not helpful here.
 - Being wrong is fine; being agreeable at the cost of correctness is not. When you disagree, lead with the disagreement, not with hedging.
-- Do not commit. The user makes all commits. When a step is done and checked (`type-check` + `build`), say it is ready and suggest a commit message. Other git actions (branch, push) still need explicit confirmation first.
+- Do not commit. The user makes all commits. When a step is done and checked (`type-check` + Prettier + `build`), say it is ready and suggest a commit message.
+- Whenever you run `npm run type-check` as part of final checks, also run Prettier on every file you touched (see "Formatting" below), before `build`. Other git actions (branch, push) still need explicit confirmation first.
 
 ## Commands
 
@@ -20,11 +21,22 @@ npm run type-check   # tsc --noEmit — the source of truth for correctness
 npm run db:generate  # write a new migration SQL file from lib/db/schema/ (no DB access)
 npm run db:migrate   # apply unapplied migrations to the DATABASE_URL database
 npm run db:studio    # browse the database (dev, via .env.local)
+npm run format       # prettier --write . (whole repo)
+npm run format:check # prettier --check .
+npm run lint         # eslint . (flat config)
 ```
 
 There is no `db:push` on purpose — see "Changing the schema" below.
 
-There is **no test framework** and **no working lint** in this project (the `next lint` script was removed — Next 16 dropped `next lint` and ESLint 9 needs a flat config the repo doesn't have). "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
+There is **no test framework** in this project. Lint is ESLint 9 with a flat config (`eslint.config.mjs`, using `eslint-config-next`): run `npm run lint` as an extra check, but `type-check` stays the gate. "Verify it works" means `npm run type-check` plus `npm run build`, and running the app.
+
+**Formatting.** Prettier (`.prettierrc.json`, with `prettier-plugin-tailwindcss`, which also sorts Tailwind classes) formats the code. In final checks, run it on the files you touched, not the whole repo, so the diff stays yours:
+
+```bash
+npx prettier --write --ignore-unknown $(git diff --name-only --diff-filter=d HEAD) $(git ls-files --others --exclude-standard)
+```
+
+Then run `type-check` and `build` on the formatted result.
 
 A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error (wired up by the `postinstall` script setting `core.hooksPath`). Keep the build type-clean or pushes fail. Note `tsconfig.json` sets `noUnusedLocals` and `noUnusedParameters`, so unused variables — an import or `const` you defined but never referenced — are hard errors, not warnings.
 
@@ -32,7 +44,7 @@ A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error 
 
 Next.js 16 **App Router** (`app/`) + React 19, TypeScript. Firebase Auth for identity; contact data in Neon Postgres through Drizzle. Deployed on Vercel. Path alias `@/*` maps to the repo root.
 
-`next-pwa` is installed but inert: it is a webpack plugin and the build uses Turbopack, so no service worker is generated. The app is not an installable PWA today — don't design around a service worker.
+There is no service worker and no PWA plugin (`next-pwa` was removed: it was a webpack plugin and the build uses Turbopack). `public/manifest.json` exists, but the app is not an installable PWA today — don't design around a service worker. See item 2 in `specs/future-upgrades.md`.
 
 Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout. Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. `app/page.tsx` (home) is a Server Component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
 
@@ -46,6 +58,7 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 - Writes: Server Actions in `lib/actions/contacts.ts` and `lib/actions/links.ts`. Each one calls `revalidatePath` for the pages it affects. There is no realtime listener. Shared input checks (`validateFields`, `isValidEmail`, `ActionResult`, …) live in `lib/actions/validation.ts` — a plain module, because a `"use server"` file may only export async functions.
 
 **Linked users.** Two users can link one contact each; a talk marked on either contact is then recorded on both (`markAsTalked` inserts the second row through `contact_links` in the same transaction — the link row is the only permission for that cross-user write). Only talk events are shared; notes, names and cadence stay private.
+
 - A request (`link_requests`) is addressed to an **email** and never resolved to a uid, so nothing reveals whether an email has an account. The addressee sees requests sent to their verified session email. After accept, the link (`contact_links`) is two contact ids; emails play no part.
 - Invariants the database cannot express are enforced in `acceptLinkRequest`'s transaction: a contact is in at most one link (row locks), and two users have at most one link (advisory lock on the uid pair).
 - Reads for `/settings` are in `lib/db/queries/links.ts`.
@@ -85,6 +98,7 @@ Account deletion is `deleteAccount()` in `lib/actions/account.ts`, called throug
 `getServerUser()` is wrapped in React `cache()` (one verification per request), so call it freely. Logout (`DELETE /api/auth/session`) revokes the user's refresh tokens, which signs them out on every device. `requireUser()` / `requireUserWithEmail()` call `redirect("/login")` when there is no session, so don't wrap them in a `try/catch` — it would swallow the redirect.
 
 **Email verification is required.** The session route returns 403 for an unverified email, so such a user is signed in on the client but has no cookie. Two consequences:
+
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
 - Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `hasSession` can also be stale (cookie revoked by a logout on another device, or expired), so `/login` calls `refreshSession()` before redirecting. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
 

@@ -38,16 +38,18 @@ export default function LanguageSelector({
   }
 
   return (
-    <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
+    <section className="w-full rounded-[10px] border border-black/10 bg-white p-4 sm:p-6">
       <label htmlFor="app-language">
-        <P extraClasses="text-lg font-semibold mb-2">{t("languageSelector.title")}</P>
+        <P extraClasses="text-lg font-semibold mb-2">
+          {t("languageSelector.title")}
+        </P>
       </label>
       <select
         id="app-language"
         value={choice}
         disabled={isPending}
         onChange={(e) => handleChange(e.target.value as LanguageChoice)}
-        className={twMerge(basicInputClasses, "px-3 w-full sm:w-60")}
+        className={twMerge(basicInputClasses, "w-full px-3 sm:w-60")}
       >
         <option value="auto">{t("languageSelector.browserDefault")}</option>
         <option value="en">English</option>

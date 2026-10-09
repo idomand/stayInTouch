@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { H1, P3 } from "@/Components/ui/Text";
+import { H2, P3 } from "@/Components/ui/Text";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import ContactItem from "./ContactItem";
 
@@ -18,15 +18,15 @@ export default function ContactList({
 
   if (contacts.length === 0) {
     return (
-      <div className="flex flex-col items-center mt-10 text-center gap-2">
-        <H1>{t("contactList.empty")}</H1>
+      <div className="mt-10 flex flex-col items-center gap-2 text-center">
+        <H2>{t("contactList.empty")}</H2>
         <P3>{t("contactList.emptyHint")}</P3>
       </div>
     );
   }
 
   return (
-    <ul className="p-0 flex flex-col items-center relative">
+    <ul className="relative flex flex-col items-center p-0">
       {contacts.map((contact) => (
         <ContactItem key={contact.id} contact={contact} />
       ))}

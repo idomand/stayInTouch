@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { sendLinkRequest, getMyInvitesRemainingToday } from "@/lib/actions/links";
+import {
+  sendLinkRequest,
+  getMyInvitesRemainingToday,
+} from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
@@ -14,6 +17,7 @@ import { P2 } from "./ui/Text";
 // module); the server enforces the real limit.
 const INVITE_LIMIT_PER_DAY = 3;
 
+/** Mount this only while it is open, so its fields start fresh each time. */
 export default function LinkContactDialog({
   contact,
   isOpen,
@@ -59,6 +63,7 @@ export default function LinkContactDialog({
       return;
     }
 
+    setError(false);
     setIsSubmitting(true);
     const result = await sendLinkRequest(contact.id, email);
     setIsSubmitting(false);
@@ -66,45 +71,27 @@ export default function LinkContactDialog({
     if (!result.ok) {
       setError(result.error);
     } else {
-      setEmail(contact.friendEmail ?? "");
-      setError(false);
-      setRemaining(null);
       close();
     }
   }
 
-  function handleDialogClose() {
-    setEmail(contact.friendEmail ?? "");
-    setError(false);
-    setRemaining(null);
-    close();
-  }
-
   return (
-    <Dialog
-      title={t("linkContactDialog.title")}
-      isOpen={isOpen}
-      close={handleDialogClose}
-    >
+    <Dialog title={t("linkContactDialog.title")} isOpen={isOpen} close={close}>
       <div className="flex flex-col gap-4">
-        <P2 extraClasses="text-grey3">
-          {t("linkContactDialog.intro")}
-        </P2>
+        <P2 extraClasses="text-grey3">{t("linkContactDialog.intro")}</P2>
 
         <label className={twMerge(basicLabelClasses, "")}>
           {t("linkContactDialog.friendEmail")}
           <input
             type="email"
-            placeholder="friend@example.com"
+            placeholder={t("linkContactDialog.emailPlaceholder")}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className={twMerge(basicInputClasses, "")}
           />
         </label>
 
-        <P2 extraClasses="text-grey3">
-          {t("linkContactDialog.emailNotice")}
-        </P2>
+        <P2 extraClasses="text-grey3">{t("linkContactDialog.emailNotice")}</P2>
 
         {remaining !== null && remaining > 0 && (
           <P2 extraClasses="text-grey3">
@@ -116,19 +103,19 @@ export default function LinkContactDialog({
         )}
 
         {remaining === 0 && (
-          <P2 extraClasses="text-red1">
-            {t("linkContactDialog.limitReached", {
+          <ErrorWarning
+            errorMessage={t("linkContactDialog.limitReached", {
               limit: INVITE_LIMIT_PER_DAY,
             })}
-          </P2>
+          />
         )}
 
         {error && <ErrorWarning errorMessage={error} />}
 
-        <div className="flex gap-2 justify-end mt-4">
+        <div className="mt-4 flex justify-end gap-2">
           <Button
             buttonText={t("common.cancel")}
-            onClick={handleDialogClose}
+            onClick={close}
             variant="Secondary"
             disabled={isSubmitting}
           />

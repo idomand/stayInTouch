@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 type PendingRequestCount = {
   count: number;
@@ -13,8 +19,8 @@ const PendingRequestCountContext = createContext<PendingRequestCount | null>(
 
 /**
  * The NavBar badge count, shared so /settings can push a fresh value after an
- * accept or reject (see PendingRequestCountSync). Without it the NavBar only
- * refetches on navigation, and those actions keep the user on /settings.
+ * accept or reject (see PendingRequestCountSync). The NavBar itself fetches
+ * only on sign-in, so this is how the badge follows those actions.
  */
 export function PendingRequestCountProvider({
   children,
@@ -22,8 +28,9 @@ export function PendingRequestCountProvider({
   children: ReactNode;
 }) {
   const [count, setCount] = useState(0);
+  const value = useMemo(() => ({ count, setCount }), [count]);
   return (
-    <PendingRequestCountContext.Provider value={{ count, setCount }}>
+    <PendingRequestCountContext.Provider value={value}>
       {children}
     </PendingRequestCountContext.Provider>
   );

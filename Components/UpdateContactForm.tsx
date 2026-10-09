@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { updateContact } from "@/lib/actions/contacts";
@@ -20,6 +20,10 @@ type UpdateContactFormProps = {
   onClose: () => void;
 };
 
+/**
+ * Mount this only while it is open: its fields start from the contact as it
+ * is now, so every open shows current data.
+ */
 export default function UpdateContactForm({
   contact,
   isModalOpenProp,
@@ -30,22 +34,16 @@ export default function UpdateContactForm({
   const [newFriendEmail, setNewFriendEmail] = useState(
     contact.friendEmail ?? "",
   );
-  const [contactTime, setContactTime] = useState(contact.cadenceDays);
-  const [error, setError] = useState<string | boolean>(false);
-
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
+  // A string, so the field can be emptied while typing; checked on submit.
+  const [contactTime, setContactTime] = useState(String(contact.cadenceDays));
+  const [error, setError] = useState<string | false>(false);
 
   async function updateContactOnSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(false);
 
     const nameChanged = contactName !== contact.name;
-    const cadenceChanged = +contactTime !== contact.cadenceDays;
+    const cadenceChanged = Number(contactTime) !== contact.cadenceDays;
     const emailChanged = newFriendEmail !== (contact.friendEmail ?? "");
 
     if (!nameChanged && !cadenceChanged && !emailChanged) {
@@ -55,20 +53,19 @@ export default function UpdateContactForm({
 
     const result = await updateContact(contact.id, {
       name: contactName,
-      cadenceDays: +contactTime,
+      cadenceDays: Number(contactTime),
       friendEmail: newFriendEmail,
     });
 
     if (!result.ok) {
       setError(result.error);
-      setContactName(contact.name);
     } else {
       onClose();
     }
   }
 
   function timeChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    setContactTime(+e.target.value);
+    setContactTime(e.target.value);
   }
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,22 +75,11 @@ export default function UpdateContactForm({
     }
   }
 
-  function onCloseModal() {
-    setContactName(contact.name);
-    setContactTime(contact.cadenceDays);
-    if (error) {
-      setError(false);
-    }
-    onClose();
-  }
-
   return (
     <Dialog
       title={t("updateContactForm.title", { name: contact.name })}
       isOpen={isModalOpenProp}
-      close={() => {
-        onCloseModal();
-      }}
+      close={onClose}
     >
       <section className="flex flex-col justify-center sm:flex-row">
         <div>
@@ -101,7 +87,7 @@ export default function UpdateContactForm({
             onSubmit={updateContactOnSubmit}
             className={twMerge(
               basicFormClasses,
-              " rounded-none p-2.5 m-0 gap-1  sm:p-3.5 sm:m-2.5 sm:gap-7.5 ",
+              "m-0 gap-1 rounded-none p-2.5 sm:m-2.5 sm:gap-7.5 sm:p-3.5",
             )}
           >
             <label className={twMerge(basicLabelClasses, "")}>
@@ -115,14 +101,14 @@ export default function UpdateContactForm({
                 onChange={nameChangeHandler}
                 className={twMerge(
                   basicInputClasses,
-                  "border border-solid border-grey2 p-1",
+                  "border-grey2 border border-solid p-1",
                 )}
               />
             </label>
             <label
               className={twMerge(
                 basicLabelClasses,
-                " relative after:content-(--days-label) after:font-bold after:absolute after:top-8 after:left-5 after:text-[10px] after:text-grey3",
+                "after:text-grey3 relative after:absolute after:top-8 after:left-5 after:text-[10px] after:font-bold after:content-(--days-label)",
               )}
               // CSS content needs a quoted string; the variable carries the
               // translated "Days" into the ::after label.
@@ -136,14 +122,14 @@ export default function UpdateContactForm({
               <input
                 type="number"
                 name="time"
-                id="time"
+                required
                 max={maxCadenceDays}
                 min={1}
                 value={contactTime}
                 onChange={timeChangeHandler}
                 className={twMerge(
                   basicInputClasses,
-                  "border border-solid border-grey2 rounded-lg",
+                  "border-grey2 rounded-lg border border-solid",
                 )}
               />
             </label>
@@ -157,7 +143,7 @@ export default function UpdateContactForm({
                 }}
                 className={twMerge(
                   basicInputClasses,
-                  " border border-solid border-grey2",
+                  "border-grey2 border border-solid",
                 )}
               />
             </label>
@@ -168,7 +154,7 @@ export default function UpdateContactForm({
               disabled={contactName === ""}
               className={twMerge(
                 inputSubmitClasses,
-                " bg-blue1 text-white w-auto h-11 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1 sm:w-103.5",
+                "bg-blue1 hover:bg-blue3 hover:border-blue1 hover:text-blue1 focus:bg-blue3 focus:border-blue1 focus:text-blue1 h-11 w-auto text-white sm:w-103.5",
               )}
             />
             {error && <ErrorWarning errorMessage={error} />}

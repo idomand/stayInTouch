@@ -1,7 +1,6 @@
-// Tailwind class-string equivalents of the legacy styled form primitives
-// (Components/Common/StyledFormElements.ts). Exported as strings so native
-// <form>/<input>/<label> keep free prop pass-through and consumers can extend
-// them with twMerge, mirroring the old `styled(BasicInput)` pattern.
+// Shared Tailwind class strings for native <form>, <input> and <label>.
+// Strings, not components, so callers keep every native prop and extend the
+// classes with twMerge.
 
 export const inputSubmitClasses =
   "cursor-pointer transition-all duration-500 text-white text-sm rounded-lg border-[1.3px] border-white text-center disabled:cursor-not-allowed disabled:bg-[grey] disabled:text-white disabled:border-white";

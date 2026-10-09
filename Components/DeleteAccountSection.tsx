@@ -6,6 +6,8 @@ import { useAuth } from "@/lib/AuthContext";
 import { P, P2 } from "./ui/Text";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
+import Card from "@/Components/ui/Card";
+import ErrorWarning from "./ErrorWarning";
 
 export default function DeleteAccountSection() {
   const t = useTranslations();
@@ -38,25 +40,31 @@ export default function DeleteAccountSection() {
   }
 
   return (
-    <section className="bg-white rounded-[10px] border border-black/10 p-4 sm:p-6 w-full">
+    <Card>
       <div>
-        <P extraClasses="text-lg font-semibold mb-2">{t("deleteAccount.title")}</P>
+        <P extraClasses="text-lg font-semibold mb-2">
+          {t("deleteAccount.title")}
+        </P>
         <P2 extraClasses="text-grey3 mb-4">{t("deleteAccount.intro")}</P2>
       </div>
 
       <Button
         buttonText={t("deleteAccount.open")}
         onClick={() => setIsOpen(true)}
-        extraClasses="bg-red1 border-red1 hover:bg-white hover:text-red1"
+        variant="Danger"
       />
 
-      <Dialog title={t("deleteAccount.dialogTitle")} isOpen={isOpen} close={handleClose}>
+      <Dialog
+        title={t("deleteAccount.dialogTitle")}
+        isOpen={isOpen}
+        close={handleClose}
+      >
         <div className="flex flex-col gap-4">
           <P2>{t("deleteAccount.whatIsDeleted")}</P2>
           <P2 extraClasses="text-grey3">{t("deleteAccount.friendsKeep")}</P2>
           <P2 extraClasses="font-semibold">{t("deleteAccount.cannotUndo")}</P2>
-          {error && <P2 extraClasses="text-red1">{error}</P2>}
-          <div className="flex gap-2 justify-end mt-4">
+          {error && <ErrorWarning errorMessage={error} />}
+          <div className="mt-4 flex justify-end gap-2">
             <Button
               buttonText={t("common.cancel")}
               onClick={handleClose}
@@ -64,14 +72,18 @@ export default function DeleteAccountSection() {
               disabled={isDeleting}
             />
             <Button
-              buttonText={isDeleting ? t("deleteAccount.deleting") : t("deleteAccount.confirm")}
+              buttonText={
+                isDeleting
+                  ? t("deleteAccount.deleting")
+                  : t("deleteAccount.confirm")
+              }
               onClick={handleDelete}
-              extraClasses="bg-red1 border-red1 hover:bg-white hover:text-red1"
+              variant="Danger"
               disabled={isDeleting}
             />
           </div>
         </div>
       </Dialog>
-    </section>
+    </Card>
   );
 }

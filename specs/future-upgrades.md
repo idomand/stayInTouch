@@ -13,8 +13,8 @@ building. Background and constraints are in `specs/architecture.md`.
      sign-in (check `providerData` for `password`). Firebase requires a recent
      sign-in, so re-authenticate (`reauthenticateWithCredential`) before
      `updatePassword`; show errors through `authErrorMessage()`.
-2. **A real PWA setup.** `next-pwa` is a webpack plugin and the build uses
-   Turbopack, so it is inert and no service worker is generated. Replace it with a
+2. **A real PWA setup.** There is no service worker. `next-pwa` was removed: it
+   is a webpack plugin and the build uses Turbopack, so it never ran. Use a
    Turbopack-compatible approach (e.g. Serwist, or a hand-written service worker),
    check `public/manifest.json` and the icons, and decide what may be cached:
    never serve a signed-in page after sign-out. Then put the "installable" claim
@@ -28,3 +28,34 @@ building. Background and constraints are in `specs/architecture.md`.
    `user_settings` row would make it follow the user. (The old
    `specs/i18n-german-translations.md` on the `70-add-i18n-and-german-translations`
    branch is superseded by the shipped i18n work.)
+5. **Stable auth context value.** `AuthProvider` in `lib/AuthContext.tsx` builds
+   a new `value` object on every render, so every `useAuth()` consumer
+   re-renders with it (P6 in `specs/app-review-fixes.md`). A `useMemo` keyed on
+   `[currentUser, hasSession]` was tried and reverted: the functions in the
+   value are recreated each render, so that list was incomplete. The
+   `react-hooks/preserve-manual-memoization` rule flagged it, and React Compiler
+   would skip the component. Pick one:
+   - wrap each function in `useCallback` with its real dependencies, then
+     memoize the value on all of them; or
+   - turn on React Compiler and let it memoize, with no manual `useMemo`.
+
+   Any function in the value that reads `currentUser` or `hasSession` must list
+   it as a dependency, or it reads a stale value.
+
+   Then add `refreshSession` to the deps of the redirect effect in
+   `app/login/page.tsx` and update its comment. It is left out today on
+   purpose: `refreshSession` is a new function on every render, so listing it
+   would re-run the effect, and re-mint the session cookie, on every render.
+   Once the function is stable, listing it is safe and makes the deps honest.
+
+6. **Don't block server-rendered pages on Firebase start-up.** Moved here from
+   P1 (High) in `specs/app-review-fixes.md`. Until the Firebase client reports
+   the auth state, `AuthProvider` (`lib/AuthContext.tsx`) shows only a spinner
+   and renders no children. So server-rendered content, including the home list
+   and the public pages (`/about`, `/privacy`, `/login`), waits for the
+   Firebase script to download and resolve. Checked during the review: the
+   server HTML for `/about` contains no page content at all, only the spinner.
+   Server-rendered content must show without waiting for client auth start-up.
+   - Edge case: a user whose JavaScript loads slowly must not see an
+     authenticated page flash and then redirect.
+   - It touches the auth flow, so it needs its own spec and its own branch.

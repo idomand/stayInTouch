@@ -7,10 +7,10 @@
   --color-blue1: #053bbc;
   --color-blue2: #2c61e0;
   --color-blue3: rgba(44, 97, 224, 0.1);
-  --color-green1: #02cf60;
-  --color-green2: #00ae50;
-  --color-green3: rgba(2, 207, 96, 0.1);
-  --color-red1: #ff0000;
+  --color-green1: #047857;
+  --color-green2: #065f46;
+  --color-green3: rgba(4, 120, 87, 0.1);
+  --color-red1: #b91c1c;
   --color-red2: #ffd8d8;
 
   --animate-slide: slide 300ms forwards;
@@ -66,10 +66,14 @@
 
   * {
     box-sizing: border-box;
-    outline: none;
+  }
+
+  /* Keyboard focus must always be visible; mouse clicks do not show it. */
+  :focus-visible {
+    outline: 2px solid var(--color-blue1);
+    outline-offset: 2px;
   }
 }
-
 
 /* react-datepicker internal DOM overrides (migrated from DatePickerComponent styled-components) */
 .datePickerClass .react-datepicker__input-container input {

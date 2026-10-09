@@ -10,7 +10,7 @@ import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stay-in-touch.vip"),
-  title: "Stay-in-Touch",
+  title: { default: "Stay-in-Touch", template: "%s | Stay-in-Touch" },
   manifest: "/manifest.json",
 };
 
@@ -32,7 +32,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <AuthProvider>
             <PendingRequestCountProvider>
-              <main className="flex flex-col min-h-screen overflow-x-clip">
+              <main className="flex min-h-screen flex-col overflow-x-clip">
                 <NavBar />
                 <div className="flex-1">{children}</div>
                 <Footer />

@@ -18,7 +18,7 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  return { title: t("settings.metaTitle") };
+  return { title: t("settings.title") };
 }
 
 /**
@@ -41,7 +41,7 @@ export default async function SettingsPage() {
   ]);
 
   return (
-    <section className="flex items-center flex-col justify-center gap-4 relative w-[90%] sm:w-[70%] mx-auto mb-8">
+    <section className="relative mx-auto mb-8 flex w-[90%] flex-col items-center justify-center gap-4 sm:w-[70%]">
       <PageHeader title={t("settings.title")} />
       <LanguageSelector
         savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}

@@ -1,26 +1,6 @@
-// const withPWA = require("next-pwa");
-
-// module.exports = withPWA({
-//   reactStrictMode: true,
-//   pwa: {
-//     dest: "public",
-//     register: true,
-//     skipWaiting: true,
-//     // disable: process.env.NODE_ENV === 'development'
-//   },
-// });
-
-const withPWA = require("next-pwa")({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  // Uncomment the following line if you want to disable PWA in development
-  // disable: process.env.NODE_ENV === 'development'
-});
-
 const withNextIntl = require("next-intl/plugin")("./i18n/request.ts");
 
-module.exports = withNextIntl(withPWA({
+module.exports = withNextIntl({
   reactStrictMode: true,
   turbopack: {},
   experimental: {
@@ -36,4 +16,4 @@ module.exports = withNextIntl(withPWA({
   // firebase-admin external makes Node load it natively, where require(esm) is
   // supported.
   serverExternalPackages: ["firebase-admin"],
-}));
+});

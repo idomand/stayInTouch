@@ -1,5 +1,5 @@
-// Tailwind replacement for Components/Common/StyledSpinner.tsx.
-// Animations (`spin-slow` = rotate, `dash`) are defined in styles/globals.css.
+// Loading spinner. Its animations (`spin-slow` = rotate, `dash`) are defined in
+// styles/globals.css.
 
 const Spinner = () => (
   <svg

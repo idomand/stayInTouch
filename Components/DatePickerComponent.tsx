@@ -18,6 +18,8 @@ type DatePickerComponentProps = {
   maxDate?: Date;
   /** When given, the field can be emptied; called when the user clears it. */
   onClear?: () => void;
+  /** Id for the input, so a <label htmlFor> can name it. */
+  id?: string;
 };
 
 export default function DatePickerComponent({
@@ -26,6 +28,7 @@ export default function DatePickerComponent({
   isInline = false,
   maxDate = addDays(new Date(), 90),
   onClear,
+  id,
 }: DatePickerComponentProps) {
   const t = useTranslations();
   const locale = useLocale();
@@ -38,6 +41,7 @@ export default function DatePickerComponent({
   return (
     <>
       <DatePicker
+        id={id}
         wrapperClassName="datePickerClass"
         maxDate={maxDate}
         calendarContainer={Calendar}
@@ -62,7 +66,7 @@ const Calendar = ({
 }) => (
   <div
     className={twMerge(
-      "rounded-[10px] shadow-[0_6px_12px_rgba(27,37,86,0.16)] overflow-hidden",
+      "overflow-hidden rounded-[10px] shadow-[0_6px_12px_rgba(27,37,86,0.16)]",
       className,
     )}
   >
@@ -71,5 +75,5 @@ const Calendar = ({
 );
 
 const Popper = ({ children }: { children?: React.ReactNode }) => (
-  <div className="absolute m-auto top-0 left-0 z-20000">{children}</div>
+  <div className="absolute top-0 left-0 z-20000 m-auto">{children}</div>
 );

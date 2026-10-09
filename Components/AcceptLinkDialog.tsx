@@ -11,10 +11,7 @@ import { P2 } from "./ui/Text";
 import Dialog from "./ui/Dialog";
 import Button from "./ui/Button";
 import ErrorWarning from "./ErrorWarning";
-import {
-  basicInputClasses,
-  basicLabelClasses,
-} from "./ui/formClasses";
+import { basicInputClasses, basicLabelClasses } from "./ui/formClasses";
 import { twMerge } from "tailwind-merge";
 
 export default function AcceptLinkDialog({
@@ -30,13 +27,14 @@ export default function AcceptLinkDialog({
 }) {
   const t = useTranslations();
   const [choice, setChoice] = useState<"existing" | "new">(
-    linkableContacts.length > 0 ? "existing" : "new"
+    linkableContacts.length > 0 ? "existing" : "new",
   );
   const [selectedContactId, setSelectedContactId] = useState(
-    linkableContacts.length > 0 ? linkableContacts[0]?.id : ""
+    linkableContacts.length > 0 ? linkableContacts[0]?.id : "",
   );
   const [newContactName, setNewContactName] = useState(request.fromName);
-  const [newContactCadence, setNewContactCadence] = useState(7);
+  // A string, so the field can be emptied while typing; checked on submit.
+  const [newContactCadence, setNewContactCadence] = useState("7");
   const [error, setError] = useState<string | false>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,6 +48,7 @@ export default function AcceptLinkDialog({
       return;
     }
 
+    setError(false);
     setIsSubmitting(true);
     const target =
       choice === "existing"
@@ -57,7 +56,7 @@ export default function AcceptLinkDialog({
         : {
             newContact: {
               name: newContactName,
-              cadenceDays: newContactCadence,
+              cadenceDays: Number(newContactCadence),
             },
           };
 
@@ -73,9 +72,11 @@ export default function AcceptLinkDialog({
 
   function resetForm() {
     setChoice(linkableContacts.length > 0 ? "existing" : "new");
-    setSelectedContactId(linkableContacts.length > 0 ? linkableContacts[0]?.id ?? "" : "");
+    setSelectedContactId(
+      linkableContacts.length > 0 ? (linkableContacts[0]?.id ?? "") : "",
+    );
     setNewContactName(request.fromName);
-    setNewContactCadence(7);
+    setNewContactCadence("7");
     setError(false);
   }
 
@@ -91,99 +92,107 @@ export default function AcceptLinkDialog({
       close={handleDialogClose}
     >
       <div className="flex flex-col gap-4">
-        <P2 extraClasses="text-grey3">
-          {t("acceptLinkDialog.question", { name: request.fromName })}
-        </P2>
+        <fieldset className="m-0 flex flex-col gap-4 border-0 p-0">
+          <legend className="text-grey3 mb-4 p-0 text-sm">
+            {t("acceptLinkDialog.question", { name: request.fromName })}
+          </legend>
 
-        {/* Radio: Existing contact */}
-        <div className="flex items-start gap-3">
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="radio"
-              name="choice"
-              value="existing"
-              checked={choice === "existing"}
-              onChange={() => setChoice("existing")}
-              className="mt-1"
-            />
-            <P2 extraClasses="font-medium">{t("acceptLinkDialog.existingContact")}</P2>
-          </label>
-          <div className="flex-1">
-            {linkableContacts.length === 0 ? (
-              <P2 extraClasses="text-grey3 text-xs mt-1">
-                {t("acceptLinkDialog.noUnlinkedContacts")}
-              </P2>
-            ) : (
-              <select
-                aria-label={t("acceptLinkDialog.selectExisting")}
-                value={selectedContactId}
-                onChange={(e) => setSelectedContactId(e.target.value)}
-                disabled={choice !== "existing"}
-                className={twMerge(
-                  basicInputClasses,
-                  "mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                )}
-              >
-                {linkableContacts.map((contact) => (
-                  <option key={contact.id} value={contact.id}>
-                    {contact.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div>
-
-        {/* Radio: New contact */}
-        <div className="flex items-start gap-3">
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="radio"
-              name="choice"
-              value="new"
-              checked={choice === "new"}
-              onChange={() => setChoice("new")}
-              className="mt-1"
-            />
-            <P2 extraClasses="font-medium">{t("acceptLinkDialog.newContact")}</P2>
-          </label>
-          <div className="flex-1">
-            <div className="mt-2 space-y-2">
+          {/* Radio: Existing contact */}
+          <div className="flex items-start gap-3">
+            <label className="flex cursor-pointer items-start gap-3">
               <input
-                aria-label={t("acceptLinkDialog.contactName")}
-                type="text"
-                placeholder={t("acceptLinkDialog.contactName")}
-                value={newContactName}
-                onChange={(e) => setNewContactName(e.target.value)}
-                disabled={choice !== "new"}
-                className={twMerge(
-                  basicInputClasses,
-                  "disabled:opacity-50 disabled:cursor-not-allowed"
-                )}
+                type="radio"
+                name="choice"
+                value="existing"
+                checked={choice === "existing"}
+                onChange={() => setChoice("existing")}
+                className="mt-1"
               />
-              <div className={twMerge(basicLabelClasses, "")}>
-                <span className="text-xs text-grey3">{t("acceptLinkDialog.everyXDays")}</span>
+              <P2 extraClasses="font-medium">
+                {t("acceptLinkDialog.existingContact")}
+              </P2>
+            </label>
+            <div className="flex-1">
+              {linkableContacts.length === 0 ? (
+                <P2 extraClasses="text-grey3 text-xs mt-1">
+                  {t("acceptLinkDialog.noUnlinkedContacts")}
+                </P2>
+              ) : (
+                <select
+                  aria-label={t("acceptLinkDialog.selectExisting")}
+                  value={selectedContactId}
+                  onChange={(e) => setSelectedContactId(e.target.value)}
+                  disabled={choice !== "existing"}
+                  className={twMerge(
+                    basicInputClasses,
+                    "mt-2 disabled:cursor-not-allowed disabled:opacity-50",
+                  )}
+                >
+                  {linkableContacts.map((contact) => (
+                    <option key={contact.id} value={contact.id}>
+                      {contact.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </div>
+
+          {/* Radio: New contact */}
+          <div className="flex items-start gap-3">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="radio"
+                name="choice"
+                value="new"
+                checked={choice === "new"}
+                onChange={() => setChoice("new")}
+                className="mt-1"
+              />
+              <P2 extraClasses="font-medium">
+                {t("acceptLinkDialog.newContact")}
+              </P2>
+            </label>
+            <div className="flex-1">
+              <div className="mt-2 space-y-2">
                 <input
-                  aria-label={t("acceptLinkDialog.cadenceLabel")}
-                  type="number"
-                  min={1}
-                  max={maxCadenceDays}
-                  value={newContactCadence}
-                  onChange={(e) => setNewContactCadence(+e.target.value)}
+                  aria-label={t("acceptLinkDialog.contactName")}
+                  type="text"
+                  placeholder={t("acceptLinkDialog.contactName")}
+                  value={newContactName}
+                  onChange={(e) => setNewContactName(e.target.value)}
                   disabled={choice !== "new"}
                   className={twMerge(
                     basicInputClasses,
-                    "disabled:opacity-50 disabled:cursor-not-allowed"
+                    "disabled:cursor-not-allowed disabled:opacity-50",
                   )}
                 />
+                <div className={twMerge(basicLabelClasses, "")}>
+                  <span className="text-grey3 text-xs">
+                    {t("acceptLinkDialog.everyXDays")}
+                  </span>
+                  <input
+                    aria-label={t("acceptLinkDialog.cadenceLabel")}
+                    type="number"
+                    min={1}
+                    max={maxCadenceDays}
+                    value={newContactCadence}
+                    onChange={(e) => setNewContactCadence(e.target.value)}
+                    disabled={choice !== "new"}
+                    className={twMerge(
+                      basicInputClasses,
+                      "disabled:cursor-not-allowed disabled:opacity-50",
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </fieldset>
 
         {error && <ErrorWarning errorMessage={error} />}
 
-        <div className="flex gap-2 justify-end mt-4">
+        <div className="mt-4 flex justify-end gap-2">
           <Button
             buttonText={t("common.cancel")}
             onClick={handleDialogClose}

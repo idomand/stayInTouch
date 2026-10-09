@@ -1,18 +1,21 @@
 # Spec for link invite emails
 
 ## Context
+
 Today `sendLinkRequest` (`lib/actions/links.ts`) stores a `link_requests` row
 addressed to an email. The friend sees it only if they already use the app and
 happen to open `/settings`. Goal: a friend without an account gets an email
 inviting them to join Stay in Touch, and ends up linked.
 
 ## Key finding
+
 The data model already supports non-users. A request is keyed by `to_email`
 and never resolved to a uid. If the friend signs up later with that email and
 verifies it, the pending request is already in their incoming list. **The only
 missing piece is an email notification.** No schema change is needed for the core.
 
 ## Recommended design: always send the email; do not branch on "has account"
+
 The proposed "if they have an account → in-app request, else → invite email"
 needs a uid lookup by email. That reveals who uses the app (account
 enumeration), which the current design deliberately prevents
@@ -24,6 +27,7 @@ So: every link request sends one email, with the same wording for everyone:
 account with this email to accept." The sender's UI looks the same in both cases.
 
 ## Steps (high level)
+
 1. **Email provider**: Resend (listed as "only worth revisiting for branded
    emails" in `specs/architecture.md`). Set up SPF/DKIM/DMARC on
    `stay-in-touch.vip`. New env var `RESEND_API_KEY`, checked at module load
@@ -78,6 +82,7 @@ account with this email to accept." The sender's UI looks the same in both cases
    of "abandoned directions").
 
 ## Avoiding spam (deliverability)
+
 - **DNS auth on the domain** — SPF, DKIM (Resend gives the records), DMARC
   (start at `p=none` with a report address, move to `p=quarantine` once
   reports are clean). Gmail and Yahoo reject or spam-folder mail without these.
@@ -96,12 +101,14 @@ account with this email to accept." The sender's UI looks the same in both cases
   Tools for the domain. Before launch, test with mail-tester.com.
 
 ## Pros
+
 - Small change: reuses the existing request/accept flow and invariants.
 - Growth: every link request can bring in a new user.
 - Fixes the current gap that existing users are never notified.
 - Keeps the no-enumeration privacy property.
 
 ## Cons / risks
+
 - First outbound email provider: cost, DNS setup, deliverability, a new secret.
 - Spam/abuse vector; needs rate limits and opt-out.
 - Email-binding friction: if the friend signs up with a different Google
@@ -112,6 +119,7 @@ account with this email to accept." The sender's UI looks the same in both cases
   makes the action slower. Acceptable; could move to `after()` from `next/server`.
 
 ## Decisions (confirmed by user)
+
 - Always send the same email; no branching on account existence.
 - Provider: Resend.
 - Email language: English only (no i18n for the email template; in-app
@@ -122,17 +130,19 @@ account with this email to accept." The sender's UI looks the same in both cases
 ## Progress (branch `feat/link-invite-emails`)
 
 ### Done
-| Commit | What |
-|---|---|
-| `409cd7d` | Tables `invite_emails_sent` and `email_opt_outs` (`lib/db/schema/inviteEmails.ts`, migration `0002_dazzling_glorian.sql`). **Applied to `dev` only.** |
-| `61c743d` | `lib/email/`: `client.ts` (Resend client, env checks at load), `unsubscribeToken.ts` (HMAC sign/verify), `sendLinkInviteEmail.ts` (text + HTML, escaped, Reply-To, `List-Unsubscribe` headers, skips opted-out addresses). Dependency `resend`. |
+
+| Commit    | What                                                                                                                                                                                                                                                                                                                                                        |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `409cd7d` | Tables `invite_emails_sent` and `email_opt_outs` (`lib/db/schema/inviteEmails.ts`, migration `0002_dazzling_glorian.sql`). **Applied to `dev` only.**                                                                                                                                                                                                       |
+| `61c743d` | `lib/email/`: `client.ts` (Resend client, env checks at load), `unsubscribeToken.ts` (HMAC sign/verify), `sendLinkInviteEmail.ts` (text + HTML, escaped, Reply-To, `List-Unsubscribe` headers, skips opted-out addresses). Dependency `resend`.                                                                                                             |
 | `7509698` | `sendLinkRequest`: per-user advisory lock + 24 h count + insert request and log row in one transaction; email sent with `after()`, failures only logged. `INVITE_LIMIT_PER_DAY` and `invitesInLastDay()` in `lib/db/queries/links.ts`; `getInvitesRemainingToday()` + action wrapper `getMyInvitesRemainingToday()`. Error key `errors.inviteLimitReached`. |
-| `2fd8991` | `LinkContactDialog`: two steps (email → confirm with remaining count; Send disabled at 0). |
-| `215ec37` | Landing: `/login?email=` prefills `EmailAuthForm` (`initialEmail` prop) and shows a note to use that exact email. The page is wrapped in `<Suspense>` for `useSearchParams`. |
-| `8c257db` | Opt-out: `addEmailOptOut()` in `lib/email/optOut.ts` (token check + insert, shared). Server Action `optOutEmail` (`lib/actions/email.ts`) behind a confirm button on public `/unsubscribe`; one-click `POST /api/email/unsubscribe` (RFC 8058, GET → 405). Also `LinkContactDialog` made one step (see below). |
-| `3137959` | NavBar badge follows accept/reject: `PendingRequestCountContext`, fed by `PendingRequestCountSync` on `/settings` after each revalidation. |
+| `2fd8991` | `LinkContactDialog`: two steps (email → confirm with remaining count; Send disabled at 0).                                                                                                                                                                                                                                                                  |
+| `215ec37` | Landing: `/login?email=` prefills `EmailAuthForm` (`initialEmail` prop) and shows a note to use that exact email. The page is wrapped in `<Suspense>` for `useSearchParams`.                                                                                                                                                                                |
+| `8c257db` | Opt-out: `addEmailOptOut()` in `lib/email/optOut.ts` (token check + insert, shared). Server Action `optOutEmail` (`lib/actions/email.ts`) behind a confirm button on public `/unsubscribe`; one-click `POST /api/email/unsubscribe` (RFC 8058, GET → 405). Also `LinkContactDialog` made one step (see below).                                              |
+| `3137959` | NavBar badge follows accept/reject: `PendingRequestCountContext`, fed by `PendingRequestCountSync` on `/settings` after each revalidation.                                                                                                                                                                                                                  |
 
 ### Changes from the plan above
+
 - **Sender domain:** `invites@send.stay-in-touch.vip`. That subdomain was already verified in Resend, so no new DNS records were needed. The root DMARC (`p=none`) covers it.
 - **Two more env vars:** `EMAIL_UNSUBSCRIBE_SECRET` (signs opt-out links) and `APP_URL` (base for email links: `http://localhost:3000` locally). Both, plus `RESEND_API_KEY` (send-only key), are in `.env.local`. **They are not in Vercel yet.**
 - **An opted-out address still uses one daily invite.** The behaviour is the same for every address, so the sender learns nothing.
@@ -140,9 +150,11 @@ account with this email to accept." The sender's UI looks the same in both cases
 - **The opt-out page uses a confirm button.** A GET only shows the page, because link scanners open links. The one-click route accepts POST only.
 
 ### Left to do
+
 - **Before merge (manual):** add the three env vars in Vercel (Production + Preview, `APP_URL=https://stay-in-touch.vip`). Migrate production (CLAUDE.md step 5). Run a mail-tester.com check.
 
 ## Verification
+
 `npm run type-check`, `npm run build`; on `dev`: send a request to an address
 with no account → email arrives → sign up with that email → request visible →
 accept → talk marked on one side appears on both. Repeat for an existing user.

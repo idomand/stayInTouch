@@ -17,7 +17,10 @@ export async function POST(request: NextRequest) {
   try {
     ({ idToken } = await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid request body." },
+      { status: 400 },
+    );
   }
 
   if (typeof idToken !== "string" || idToken.length === 0) {
@@ -30,7 +33,10 @@ export async function POST(request: NextRequest) {
     // arrive already verified.
     const decoded = await adminAuth.verifyIdToken(idToken);
     if (decoded.email_verified !== true) {
-      return NextResponse.json({ error: "Email not verified." }, { status: 403 });
+      return NextResponse.json(
+        { error: "Email not verified." },
+        { status: 403 },
+      );
     }
 
     const sessionCookie = await adminAuth.createSessionCookie(idToken, {

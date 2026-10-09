@@ -24,13 +24,17 @@ export default function PasswordInput({
       <input
         {...props}
         type={isVisible ? "text" : "password"}
-        className={twMerge(className, "pr-14 w-full")}
+        className={twMerge(className, "w-full pr-14")}
       />
       <button
         type="button"
         onClick={() => setIsVisible(!isVisible)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue1"
-        aria-label={isVisible ? t("passwordInput.hidePassword") : t("passwordInput.showPassword")}
+        className="text-blue1 absolute top-1/2 right-3 -translate-y-1/2 text-xs"
+        aria-label={
+          isVisible
+            ? t("passwordInput.hidePassword")
+            : t("passwordInput.showPassword")
+        }
         aria-pressed={isVisible}
       >
         {isVisible ? t("passwordInput.hide") : t("passwordInput.show")}

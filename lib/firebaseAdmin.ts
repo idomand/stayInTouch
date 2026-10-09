@@ -24,6 +24,7 @@ const serviceAccount = JSON.parse(
 
 // Reuse the app across hot reloads and serverless invocations; initializeApp
 // throws if called twice for the default app.
-const app: App = getApps()[0] ?? initializeApp({ credential: cert(serviceAccount) });
+const app: App =
+  getApps()[0] ?? initializeApp({ credential: cert(serviceAccount) });
 
 export const adminAuth = getAuth(app);
