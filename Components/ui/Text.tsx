@@ -10,7 +10,7 @@ export function H1({ children, extraClasses = "" }: Props) {
   return (
     <h1
       className={twMerge(
-        "m-0 p-0 capitalize text-[2rem] font-bold",
+        "m-0 p-0 text-[2rem] font-bold",
         extraClasses,
       )}
     >
@@ -19,9 +19,16 @@ export function H1({ children, extraClasses = "" }: Props) {
   );
 }
 
-export function H2({ children, extraClasses = "" }: Props) {
+export function H2({
+  children,
+  extraClasses = "",
+  id,
+}: Props & { id?: string }) {
   return (
-    <h2 className={twMerge("m-0 p-0 text-2xl font-semibold", extraClasses)}>
+    <h2
+      id={id}
+      className={twMerge("m-0 p-0 text-2xl font-semibold", extraClasses)}
+    >
       {children}
     </h2>
   );

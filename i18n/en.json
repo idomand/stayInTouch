@@ -6,7 +6,8 @@
     "days": "Days",
     "enterName": "Enter Name",
     "enterNote": "Enter Note...",
-    "areYouSure": "Are you sure?"
+    "areYouSure": "Are you sure?",
+    "close": "Close"
   },
   "navBar": {
     "homeLabel": "Stay-in-Touch home",

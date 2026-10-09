@@ -15,7 +15,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
   const t = useTranslations();
   const now = Date.now();
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
 
   useEffect(() => {
     if (error) {

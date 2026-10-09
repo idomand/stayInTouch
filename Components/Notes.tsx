@@ -19,7 +19,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
   const [noteInputValue, setNoteInputValue] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [editNoteId, setEditNoteId] = useState<string | null>(null);
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
 
   useEffect(() => {
     if (error) {

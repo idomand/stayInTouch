@@ -20,7 +20,7 @@ export default function NoteItem({
   switchToEditMode,
 }: NoteItemProps) {
   const t = useTranslations();
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
 
   useEffect(() => {
     if (error) {

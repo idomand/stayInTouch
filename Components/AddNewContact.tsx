@@ -19,7 +19,7 @@ export default function AddNewContact() {
   const [name, setName] = useState("");
   // null = "never talked": no talk event is recorded for the new contact.
   const [startDate, setStartDate] = useState<Date | null>(null);
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
   const [friendEmail, setFriendEmail] = useState("");
   useEffect(() => {
     if (error) {

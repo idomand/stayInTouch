@@ -47,7 +47,7 @@ export default function DeleteAccountSection() {
       <Button
         buttonText={t("deleteAccount.open")}
         onClick={() => setIsOpen(true)}
-        extraClasses="bg-red1 border-red1 hover:bg-white hover:text-red1"
+        variant="Danger"
       />
 
       <Dialog title={t("deleteAccount.dialogTitle")} isOpen={isOpen} close={handleClose}>
@@ -66,7 +66,7 @@ export default function DeleteAccountSection() {
             <Button
               buttonText={isDeleting ? t("deleteAccount.deleting") : t("deleteAccount.confirm")}
               onClick={handleDelete}
-              extraClasses="bg-red1 border-red1 hover:bg-white hover:text-red1"
+              variant="Danger"
               disabled={isDeleting}
             />
           </div>

@@ -31,7 +31,7 @@ export default function UpdateContactForm({
     contact.friendEmail ?? "",
   );
   const [contactTime, setContactTime] = useState(contact.cadenceDays);
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
 
   useEffect(() => {
     if (error) {

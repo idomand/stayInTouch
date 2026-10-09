@@ -22,7 +22,7 @@ export default function AppointmentForm({
   onClose,
 }: AppointmentFormProps) {
   const t = useTranslations();
-  const [error, setError] = useState<string | boolean>(false);
+  const [error, setError] = useState<string | false>(false);
 
   const { name, daysUntilNextTalk, friendEmail } = contact;
 

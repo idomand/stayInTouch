@@ -6,7 +6,8 @@
     "days": "Tage",
     "enterName": "Name des Freundes",
     "enterNote": "Notiz eingeben...",
-    "areYouSure": "Bist du sicher?"
+    "areYouSure": "Bist du sicher?",
+    "close": "Schließen"
   },
   "navBar": {
     "homeLabel": "Stay-in-Touch Startseite",
