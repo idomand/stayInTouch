@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { updateContact } from "@/lib/actions/contacts";
@@ -20,6 +20,10 @@ type UpdateContactFormProps = {
   onClose: () => void;
 };
 
+/**
+ * Mount this only while it is open: its fields start from the contact as it
+ * is now, so every open shows current data.
+ */
 export default function UpdateContactForm({
   contact,
   isModalOpenProp,
@@ -30,22 +34,16 @@ export default function UpdateContactForm({
   const [newFriendEmail, setNewFriendEmail] = useState(
     contact.friendEmail ?? "",
   );
-  const [contactTime, setContactTime] = useState(contact.cadenceDays);
+  // A string, so the field can be emptied while typing; checked on submit.
+  const [contactTime, setContactTime] = useState(String(contact.cadenceDays));
   const [error, setError] = useState<string | false>(false);
-
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
 
   async function updateContactOnSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(false);
 
     const nameChanged = contactName !== contact.name;
-    const cadenceChanged = +contactTime !== contact.cadenceDays;
+    const cadenceChanged = Number(contactTime) !== contact.cadenceDays;
     const emailChanged = newFriendEmail !== (contact.friendEmail ?? "");
 
     if (!nameChanged && !cadenceChanged && !emailChanged) {
@@ -55,20 +53,19 @@ export default function UpdateContactForm({
 
     const result = await updateContact(contact.id, {
       name: contactName,
-      cadenceDays: +contactTime,
+      cadenceDays: Number(contactTime),
       friendEmail: newFriendEmail,
     });
 
     if (!result.ok) {
       setError(result.error);
-      setContactName(contact.name);
     } else {
       onClose();
     }
   }
 
   function timeChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    setContactTime(+e.target.value);
+    setContactTime(e.target.value);
   }
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,22 +75,11 @@ export default function UpdateContactForm({
     }
   }
 
-  function onCloseModal() {
-    setContactName(contact.name);
-    setContactTime(contact.cadenceDays);
-    if (error) {
-      setError(false);
-    }
-    onClose();
-  }
-
   return (
     <Dialog
       title={t("updateContactForm.title", { name: contact.name })}
       isOpen={isModalOpenProp}
-      close={() => {
-        onCloseModal();
-      }}
+      close={onClose}
     >
       <section className="flex flex-col justify-center sm:flex-row">
         <div>
@@ -136,7 +122,7 @@ export default function UpdateContactForm({
               <input
                 type="number"
                 name="time"
-                id="time"
+                required
                 max={maxCadenceDays}
                 min={1}
                 value={contactTime}

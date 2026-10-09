@@ -14,6 +14,7 @@ import { P2 } from "./ui/Text";
 // module); the server enforces the real limit.
 const INVITE_LIMIT_PER_DAY = 3;
 
+/** Mount this only while it is open, so its fields start fresh each time. */
 export default function LinkContactDialog({
   contact,
   isOpen,
@@ -59,6 +60,7 @@ export default function LinkContactDialog({
       return;
     }
 
+    setError(false);
     setIsSubmitting(true);
     const result = await sendLinkRequest(contact.id, email);
     setIsSubmitting(false);
@@ -66,25 +68,15 @@ export default function LinkContactDialog({
     if (!result.ok) {
       setError(result.error);
     } else {
-      setEmail(contact.friendEmail ?? "");
-      setError(false);
-      setRemaining(null);
       close();
     }
-  }
-
-  function handleDialogClose() {
-    setEmail(contact.friendEmail ?? "");
-    setError(false);
-    setRemaining(null);
-    close();
   }
 
   return (
     <Dialog
       title={t("linkContactDialog.title")}
       isOpen={isOpen}
-      close={handleDialogClose}
+      close={close}
     >
       <div className="flex flex-col gap-4">
         <P2 extraClasses="text-grey3">
@@ -116,11 +108,11 @@ export default function LinkContactDialog({
         )}
 
         {remaining === 0 && (
-          <P2 extraClasses="text-red1">
-            {t("linkContactDialog.limitReached", {
+          <ErrorWarning
+            errorMessage={t("linkContactDialog.limitReached", {
               limit: INVITE_LIMIT_PER_DAY,
             })}
-          </P2>
+          />
         )}
 
         {error && <ErrorWarning errorMessage={error} />}
@@ -128,7 +120,7 @@ export default function LinkContactDialog({
         <div className="flex gap-2 justify-end mt-4">
           <Button
             buttonText={t("common.cancel")}
-            onClick={handleDialogClose}
+            onClick={close}
             variant="Secondary"
             disabled={isSubmitting}
           />

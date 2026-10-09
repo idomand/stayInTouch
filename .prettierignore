@@ -1,0 +1,13 @@
+# Build output and dependencies
+node_modules
+.next
+out
+build
+coverage
+
+# Generated / lockfiles — don't reformat
+next-env.d.ts
+package-lock.json
+
+# Drizzle migrations are the source of truth for the DB shape; leave them byte-exact
+lib/db/migrations

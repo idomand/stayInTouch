@@ -1,7 +1,3 @@
-type CalendarEventResult =
-  | { success: true; message: string }
-  | { success: false; error: string };
-
 /**
  * Formats a date to Google Calendar URL format (YYYYMMDDTHHmmssZ)
  */
@@ -17,55 +13,33 @@ function formatDateForGoogleCalendar(date: Date): string {
 }
 
 /**
- * Opens Google Calendar dialog with pre-filled event details
+ * Opens Google Calendar's "new event" page with the fields filled in. No API
+ * call and no token: the user saves the event themselves.
  * @param title - The event title, already translated
- * @param eventDate - The date for the event (defaults to today)
- * @param description - Optional description for the event
- * @returns Promise with success status
+ * @param eventDate - The day of the event; it is set to 19:00–20:00 local time
+ * @param friendEmail - Added as a guest when given
  */
-export async function createGoogleCalendarEvent(
+export function openGoogleCalendarEvent(
   title: string,
-  eventDate: Date = new Date(),
+  eventDate: Date,
   friendEmail?: string,
-  description?: string,
-): Promise<CalendarEventResult> {
-  try {
-    // Set the event to be at a specific time
-    const startDateTime = new Date(eventDate);
-    startDateTime.setHours(19, 0, 0, 0); // Set to 7:00 PM
+): void {
+  const startDateTime = new Date(eventDate);
+  startDateTime.setHours(19, 0, 0, 0);
 
-    const endDateTime = new Date(eventDate);
-    endDateTime.setHours(20, 0, 0, 0); // Set to 8:00 PM (1 hour duration)
+  const endDateTime = new Date(eventDate);
+  endDateTime.setHours(20, 0, 0, 0);
 
-    // Format dates for Google Calendar URL
-    const startFormatted = formatDateForGoogleCalendar(startDateTime);
-    const endFormatted = formatDateForGoogleCalendar(endDateTime);
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    dates: `${formatDateForGoogleCalendar(startDateTime)}/${formatDateForGoogleCalendar(endDateTime)}`,
+    add: friendEmail || "",
+  });
 
-    // Build Google Calendar URL with pre-filled event details
-    // Note: The URL template method doesn't support setting colors
-    // Colors can only be set via the Calendar API after the event is created
-    const params = new URLSearchParams({
-      action: "TEMPLATE",
-      text: title,
-      dates: `${startFormatted}/${endFormatted}`,
-      details: description || "",
-      add: friendEmail || "",
-    });
-
-    const calendarUrl = `https://calendar.google.com/calendar/render?${params.toString()}`;
-
-    // Open Google Calendar in a new window
-    window.open(calendarUrl, "_blank", "width=800,height=600");
-
-    return {
-      success: true,
-      message: "Google Calendar opened",
-    };
-  } catch (error: unknown) {
-    console.error("Error opening calendar:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Failed to open calendar",
-    };
-  }
+  window.open(
+    `https://calendar.google.com/calendar/render?${params.toString()}`,
+    "_blank",
+    "width=800,height=600",
+  );
 }

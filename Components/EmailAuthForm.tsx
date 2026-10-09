@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { P2 } from "@/Components/ui/Text";
+import ErrorWarning from "@/Components/ErrorWarning";
 import PasswordInput from "@/Components/ui/PasswordInput";
 import {
   basicInputClasses,
@@ -142,7 +143,7 @@ export default function EmailAuthForm({ onSignIn, initialEmail, disabled = false
         </label>
       )}
 
-      {error && <P2 extraClasses="text-red1 mx-1">{error}</P2>}
+      {error && <ErrorWarning errorMessage={error} extraClasses="mx-1" />}
       {info && <P2 extraClasses="text-green2 mx-1">{info}</P2>}
 
       <button

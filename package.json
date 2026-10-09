@@ -12,6 +12,10 @@
     "start": "next start",
     "type-check": "tsc --noEmit",
     "typecheck:watch": "tsc -w",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
@@ -40,6 +44,7 @@
     "ws": "^8.21.3"
   },
   "devDependencies": {
+    "@eslint/js": "9.19.0",
     "@types/node": "22.19.3",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
@@ -48,6 +53,8 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "9.19.0",
     "eslint-config-next": "16.1.1",
+    "prettier": "3.9.9",
+    "prettier-plugin-tailwindcss": "0.8.1",
     "typescript": "5.9.3"
   },
   "overrides": {

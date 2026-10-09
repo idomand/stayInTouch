@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { addNote, updateNote } from "@/lib/actions/contacts";
@@ -21,13 +21,6 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
   const [editNoteId, setEditNoteId] = useState<string | null>(null);
   const [error, setError] = useState<string | false>(false);
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
 
   function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     setIsModalOpen(true);

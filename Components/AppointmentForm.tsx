@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
-import { createGoogleCalendarEvent } from "@/lib/CalendarFunctions";
+import { openGoogleCalendarEvent } from "@/lib/CalendarFunctions";
 import { useAuth } from "@/lib/AuthContext";
 import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
@@ -14,9 +14,13 @@ import Dialog from "./ui/Dialog";
 type AppointmentFormProps = {
   contact: ContactListItem;
   isModalOpenProp: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 };
 
+/**
+ * Mount this only while it is open: the suggested date is worked out from the
+ * contact as it is now, so it follows a "mark as talked".
+ */
 export default function AppointmentForm({
   contact,
   isModalOpenProp,
@@ -24,7 +28,6 @@ export default function AppointmentForm({
 }: AppointmentFormProps) {
   const t = useTranslations();
   const { currentUser } = useAuth()!;
-  const [error, setError] = useState<string | false>(false);
 
   const { name, daysUntilNextTalk, friendEmail } = contact;
 
@@ -39,51 +42,27 @@ export default function AppointmentForm({
     return reminderDate;
   };
 
-  const [specificReminder, setSpecificReminder] = useState<number | Date>(
-    calculateReminderDate(),
+  const [specificReminder, setSpecificReminder] = useState<Date>(
+    calculateReminderDate,
   );
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
-
-  function onCloseModal() {
-    if (error) {
-      setError(false);
-    }
-    if (onClose) {
-      onClose();
-    }
-  }
-
   function calendarFunction() {
-    const eventDate =
-      specificReminder instanceof Date
-        ? specificReminder
-        : new Date(specificReminder);
-
     const userName = currentUser?.displayName?.split(" ")[0];
     const title = userName
       ? t("appointmentForm.eventTitle", { name, userName })
       : name;
-    createGoogleCalendarEvent(title, eventDate, friendEmail ?? undefined);
+    openGoogleCalendarEvent(title, specificReminder, friendEmail ?? undefined);
   }
 
   return (
     <Dialog
       title={t("appointmentForm.title", { name })}
-      close={() => {
-        onCloseModal();
-      }}
+      close={onClose}
       isOpen={isModalOpenProp}
     >
       <section className="flex flex-col justify-center sm:flex-row">
         <div className="mr-0 flex flex-col sm:mr-5">
-          <form
+          <div
             className={twMerge(
               basicFormClasses,
               "mt-0 flex flex-col justify-center items-start sm:mt-5 sm:items-center",
@@ -99,7 +78,7 @@ export default function AppointmentForm({
                 startDate={specificReminder}
               />
             </div>
-          </form>
+          </div>
           <Button
             buttonText={t("appointmentForm.save")}
             onClick={calendarFunction}

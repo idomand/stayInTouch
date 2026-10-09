@@ -33,7 +33,8 @@ export default function AcceptLinkDialog({
     linkableContacts.length > 0 ? linkableContacts[0]?.id : "",
   );
   const [newContactName, setNewContactName] = useState(request.fromName);
-  const [newContactCadence, setNewContactCadence] = useState(7);
+  // A string, so the field can be emptied while typing; checked on submit.
+  const [newContactCadence, setNewContactCadence] = useState("7");
   const [error, setError] = useState<string | false>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,6 +48,7 @@ export default function AcceptLinkDialog({
       return;
     }
 
+    setError(false);
     setIsSubmitting(true);
     const target =
       choice === "existing"
@@ -54,7 +56,7 @@ export default function AcceptLinkDialog({
         : {
             newContact: {
               name: newContactName,
-              cadenceDays: newContactCadence,
+              cadenceDays: Number(newContactCadence),
             },
           };
 
@@ -74,7 +76,7 @@ export default function AcceptLinkDialog({
       linkableContacts.length > 0 ? (linkableContacts[0]?.id ?? "") : "",
     );
     setNewContactName(request.fromName);
-    setNewContactCadence(7);
+    setNewContactCadence("7");
     setError(false);
   }
 
@@ -175,7 +177,7 @@ export default function AcceptLinkDialog({
                     min={1}
                     max={maxCadenceDays}
                     value={newContactCadence}
-                    onChange={(e) => setNewContactCadence(+e.target.value)}
+                    onChange={(e) => setNewContactCadence(e.target.value)}
                     disabled={choice !== "new"}
                     className={twMerge(
                       basicInputClasses,

@@ -8,6 +8,7 @@ import { H1, P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 import EmailAuthForm from "@/Components/EmailAuthForm";
 import VerifyEmailNotice from "@/Components/VerifyEmailNotice";
+import ErrorWarning from "@/Components/ErrorWarning";
 
 function Login() {
   const {
@@ -122,7 +123,7 @@ function Login() {
                 <img src="/Google-logo.png" alt="" className="h-5 w-5" />
               )}
             </Button>
-            {googleError && <P2 extraClasses="text-red1">{googleError}</P2>}
+            {googleError && <ErrorWarning errorMessage={googleError} />}
 
             <div className="flex items-center w-full gap-3 text-grey3 text-sm">
               <span className="h-px flex-1 bg-grey1" />

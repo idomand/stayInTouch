@@ -191,16 +191,22 @@ export default function MoreOptionsDropdown({
           </button>
         </div>
       </div>
-      <UpdateContactForm
-        contact={contact}
-        isModalOpenProp={isUpdateContactModalOpen}
-        onClose={() => setIsUpdateContactModalOpen(false)}
-      />
-      <AppointmentForm
-        contact={contact}
-        isModalOpenProp={isAppointmentFormModalOpen}
-        onClose={() => setIsAppointmentFormModalOpen(false)}
-      />
+      {/* Mounted only while open, so each open starts from current contact
+          data (C5) and closed forms cost nothing (P2). */}
+      {isUpdateContactModalOpen && (
+        <UpdateContactForm
+          contact={contact}
+          isModalOpenProp={isUpdateContactModalOpen}
+          onClose={() => setIsUpdateContactModalOpen(false)}
+        />
+      )}
+      {isAppointmentFormModalOpen && (
+        <AppointmentForm
+          contact={contact}
+          isModalOpenProp={isAppointmentFormModalOpen}
+          onClose={() => setIsAppointmentFormModalOpen(false)}
+        />
+      )}
       <Dialog
         title={t("moreOptionsDropdown.deleteTitle", { name: contact.name })}
         isOpen={isDeleteContactModalOpen}
@@ -232,11 +238,13 @@ export default function MoreOptionsDropdown({
           {deleteError && <ErrorWarning errorMessage={deleteError} />}
         </div>
       </Dialog>
-      <LinkContactDialog
-        contact={contact}
-        isOpen={isLinkContactDialogOpen}
-        close={() => setIsLinkContactDialogOpen(false)}
-      />
+      {isLinkContactDialogOpen && (
+        <LinkContactDialog
+          contact={contact}
+          isOpen={isLinkContactDialogOpen}
+          close={() => setIsLinkContactDialogOpen(false)}
+        />
+      )}
       <Dialog
         title={t("moreOptionsDropdown.unlinkTitle")}
         isOpen={isUnlinkConfirmOpen}

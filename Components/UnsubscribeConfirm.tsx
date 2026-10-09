@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { optOutEmail } from "@/lib/actions/email";
 import { P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
+import ErrorWarning from "@/Components/ErrorWarning";
 
 type Props = {
   email: string;
@@ -52,7 +53,7 @@ export default function UnsubscribeConfirm({ email, token }: Props) {
         onClick={handleOptOut}
         disabled={isPending}
       />
-      {error && <P2 extraClasses="text-red1">{error}</P2>}
+      {error && <ErrorWarning errorMessage={error} />}
     </div>
   );
 }

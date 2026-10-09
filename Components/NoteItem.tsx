@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { deleteNote } from "@/lib/actions/contacts";
 import { H4 } from "@/Components/ui/Text";
@@ -22,13 +22,6 @@ export default function NoteItem({
   const t = useTranslations();
   const [error, setError] = useState<string | false>(false);
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
 
   async function deleteNoteFunc() {
     const result = await deleteNote(contactId, noteId);

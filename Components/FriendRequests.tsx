@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { rejectLinkRequest, cancelLinkRequest } from "@/lib/actions/links";
 import type {
@@ -29,14 +29,6 @@ export default function FriendRequests({
   const [error, setError] = useState<string | false>(false);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (error) {
-      const timeoutId = setTimeout(() => {
-        setError(false);
-      }, 2000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [error]);
 
   function openAcceptDialog(request: IncomingLinkRequest) {
     setSelectedRequest(request);
@@ -44,6 +36,7 @@ export default function FriendRequests({
   }
 
   async function handleRejectRequest(requestId: string) {
+    setError(false);
     setProcessingId(requestId);
     const result = await rejectLinkRequest(requestId);
     setProcessingId(null);
@@ -53,6 +46,7 @@ export default function FriendRequests({
   }
 
   async function handleCancelRequest(requestId: string) {
+    setError(false);
     setProcessingId(requestId);
     const result = await cancelLinkRequest(requestId);
     setProcessingId(null);

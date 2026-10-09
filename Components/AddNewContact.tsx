@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect, useId } from "react";
+import React, { useState, useId } from "react";
 import { useTranslations } from "next-intl";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
-import ErrorWrapper from "./ErrorWarning";
+import ErrorWarning from "./ErrorWarning";
 import DatePickerComponent from "./DatePickerComponent";
 import {
   basicFormClasses,
@@ -16,19 +16,13 @@ import { twMerge } from "tailwind-merge";
 export default function AddNewContact() {
   const t = useTranslations();
   const lastSpokenId = useId();
-  const [time, setTime] = useState(3);
+  // A string, so the field can be emptied while typing; checked on submit.
+  const [time, setTime] = useState("3");
   const [name, setName] = useState("");
   // null = "never talked": no talk event is recorded for the new contact.
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [error, setError] = useState<string | false>(false);
   const [friendEmail, setFriendEmail] = useState("");
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 2000);
-    }
-  }, [error]);
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
@@ -39,22 +33,22 @@ export default function AddNewContact() {
 
   async function createNewContact(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(false);
 
     const result = await addContact({
       name,
-      cadenceDays: time,
+      cadenceDays: Number(time),
       friendEmail,
       talkedAtMs: startDate?.getTime(),
     });
 
     if (!result.ok) {
       setError(result.error);
-      setName("");
     } else {
       setStartDate(null);
       setName("");
       setFriendEmail("");
-      setTime(3);
+      setTime("3");
     }
   }
 
@@ -89,11 +83,11 @@ export default function AddNewContact() {
             <input
               value={time}
               onChange={(e) => {
-                setTime(+e.target.value);
+                setTime(e.target.value);
               }}
               type="number"
               name="time"
-              id="time"
+              required
               max={maxCadenceDays}
               min={1}
               className={twMerge(
@@ -141,8 +135,10 @@ export default function AddNewContact() {
             "sm:col-span-2 bg-green1 text-white h-10 mx-1 my-0 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1",
           )}
         />
+        {error && (
+          <ErrorWarning errorMessage={error} extraClasses="sm:col-span-2 m-1" />
+        )}
       </form>
-      {error && <ErrorWrapper errorMessage={error} />}
     </>
   );
 }

@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { P, P2 } from "./ui/Text";
 import Button from "./ui/Button";
 import Dialog from "./ui/Dialog";
+import ErrorWarning from "./ErrorWarning";
 
 export default function DeleteAccountSection() {
   const t = useTranslations();
@@ -55,7 +56,7 @@ export default function DeleteAccountSection() {
           <P2>{t("deleteAccount.whatIsDeleted")}</P2>
           <P2 extraClasses="text-grey3">{t("deleteAccount.friendsKeep")}</P2>
           <P2 extraClasses="font-semibold">{t("deleteAccount.cannotUndo")}</P2>
-          {error && <P2 extraClasses="text-red1">{error}</P2>}
+          {error && <ErrorWarning errorMessage={error} />}
           <div className="flex gap-2 justify-end mt-4">
             <Button
               buttonText={t("common.cancel")}
