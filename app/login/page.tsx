@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { useTranslations } from "next-intl";
@@ -76,8 +77,8 @@ function Login() {
   const isUnverified = Boolean(currentUser && !currentUser.emailVerified);
 
   return (
-    <section className="flex items-center justify-center min-h-[80vh] px-4">
-      <div className="flex flex-col items-center text-center gap-6 w-full max-w-sm rounded-2xl bg-white p-8 shadow-lg border border-black/5">
+    <section className="flex min-h-[80vh] items-center justify-center px-4">
+      <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-black/5 bg-white p-8 text-center shadow-lg">
         {isUnverified ? (
           <VerifyEmailNotice />
         ) : (
@@ -106,7 +107,7 @@ function Login() {
             >
               {isSigningIn ? (
                 <svg
-                  className="h-5 w-5 animate-spin-slow"
+                  className="animate-spin-slow h-5 w-5"
                   viewBox="0 0 50 50"
                   aria-hidden="true"
                 >
@@ -120,15 +121,21 @@ function Login() {
                   />
                 </svg>
               ) : (
-                <img src="/Google-logo.png" alt="" className="h-5 w-5" />
+                <Image
+                  src="/Google-logo.png"
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="h-5 w-5"
+                />
               )}
             </Button>
             {googleError && <ErrorWarning errorMessage={googleError} />}
 
-            <div className="flex items-center w-full gap-3 text-grey3 text-sm">
-              <span className="h-px flex-1 bg-grey1" />
+            <div className="text-grey3 flex w-full items-center gap-3 text-sm">
+              <span className="bg-grey1 h-px flex-1" />
               {t("login.or")}
-              <span className="h-px flex-1 bg-grey1" />
+              <span className="bg-grey1 h-px flex-1" />
             </div>
 
             <EmailAuthForm

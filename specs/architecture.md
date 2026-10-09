@@ -72,6 +72,20 @@ bridge the two:
    copied cookie valid for its full 5 days.
 4. `proxy.ts` checks only that the cookie **exists**. Full verification needs the
    Admin SDK, which can't run on Edge.
+5. The cookie is minted again on every full page load (the `onAuthStateChanged`
+   handler in `AuthContext`), so it never expires while the user keeps using
+   the app. It runs after render, fire-and-forget, so it does not delay the
+   page. Cost per full load:
+   - In the browser: `getIdTokenResult()` (local), plus `getIdToken(true)` — one
+     call to Google's token service — only when the token is older than 4 min.
+   - One POST to `/api/auth/session`, which runs `verifyIdToken` (local check
+     against cached Google public keys; a key fetch only when the cache expires)
+     and `createSessionCookie` (one call to Google's Identity Toolkit).
+   - Client-side navigation does not trigger it; only a full load does.
+
+   Timing is not yet measured. To measure: DevTools → Network, reload `/`
+   signed in, and read the duration of `POST /api/auth/session` (and of the
+   `securetoken.googleapis.com` request when present). Record it here.
 
 ## Why the schema is shaped this way
 

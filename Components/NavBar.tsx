@@ -17,6 +17,9 @@ export default function NavBar() {
   const { count: pendingCount, setCount: setPendingCount } =
     usePendingRequestCount();
 
+  // Fetch on sign-in only. Accept and reject on /settings push the new count
+  // through PendingRequestCountSync, and sign-out resets it here (uid → none).
+  // Refetching on every route change cost a session check and a query each time.
   useEffect(() => {
     if (!currentUser?.uid) {
       setPendingCount(0);
@@ -41,11 +44,11 @@ export default function NavBar() {
     return () => {
       isMounted = false;
     };
-  }, [currentUser?.uid, pathname]);
+  }, [currentUser?.uid, setPendingCount]);
 
   return (
     // Equal side columns keep the links centred whether or not Log Out shows.
-    <nav className="grid grid-cols-[1fr_auto_1fr] items-center bg-white sticky z-2 top-0 w-full h-15 shadow-[0px_1px_0px_#e5e9f2]">
+    <nav className="sticky top-0 z-2 grid h-15 w-full grid-cols-[1fr_auto_1fr] items-center bg-white shadow-[0px_1px_0px_#e5e9f2]">
       <NextLink
         href="/"
         aria-label={t("navBar.homeLabel")}
@@ -53,10 +56,10 @@ export default function NavBar() {
       >
         <img
           src="/friendsLogo.png"
-          className="ml-5 my-1 h-10 sm:hidden"
+          className="my-1 ml-5 h-10 sm:hidden"
           alt={t("navBar.logoAlt")}
         />
-        <span className="ml-10 hidden sm:block text-2xl font-semibold m-0 p-0 transition-colors duration-300 hover:text-blue1">
+        <span className="hover:text-blue1 m-0 ml-10 hidden p-0 text-2xl font-semibold transition-colors duration-300 sm:block">
           Stay-in-Touch
         </span>
       </NextLink>
@@ -74,18 +77,14 @@ export default function NavBar() {
           >
             {t("navBar.settings")}
             {pendingCount > 0 && (
-              <span className="ml-1 inline-flex items-center justify-center bg-blue1 text-white rounded-full h-4 w-4 text-xs font-bold">
+              <span className="bg-blue1 ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-xs font-bold text-white">
                 {pendingCount}
               </span>
             )}
           </Link>
         </div>
       ) : (
-        <Link
-          variant="Nav"
-          isLinkActive={pathname === "/login"}
-          href="/login"
-        >
+        <Link variant="Nav" isLinkActive={pathname === "/login"} href="/login">
           {t("navBar.loginPage")}
         </Link>
       )}

@@ -5,16 +5,14 @@ import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { markAsTalked } from "@/lib/actions/contacts";
-import { oneDay } from "@/lib/ConstantsFile";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import TalkEvents from "./TalkEvents";
 import ErrorWarning from "./ErrorWarning";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
-  const { id, name, lastTalkedAt, daysUntilNextTalk } = contact;
+  const { id, name, daysSinceLastTalk, daysUntilNextTalk } = contact;
   const t = useTranslations();
-  const now = Date.now();
   const [error, setError] = useState<string | false>(false);
   const [isMarking, setIsMarking] = useState(false);
 
@@ -26,15 +24,14 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   }`;
 
   let lastTalkedLabel: string;
-  if (lastTalkedAt == null) {
+  if (daysSinceLastTalk == null) {
     lastTalkedLabel = t("contactItem.neverTalked");
   } else {
-    const elapsed = now - new Date(lastTalkedAt).getTime();
     lastTalkedLabel =
-      elapsed < oneDay
+      daysSinceLastTalk < 1
         ? t("contactItem.talkedToday")
         : t("contactItem.daysSinceTalk", {
-            days: Math.floor(elapsed / oneDay),
+            days: Math.floor(daysSinceLastTalk),
           });
   }
 

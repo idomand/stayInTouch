@@ -28,3 +28,22 @@ building. Background and constraints are in `specs/architecture.md`.
    `user_settings` row would make it follow the user. (The old
    `specs/i18n-german-translations.md` on the `70-add-i18n-and-german-translations`
    branch is superseded by the shipped i18n work.)
+5. **Stable auth context value.** `AuthProvider` in `lib/AuthContext.tsx` builds
+   a new `value` object on every render, so every `useAuth()` consumer
+   re-renders with it (P6 in `specs/app-review-fixes.md`). A `useMemo` keyed on
+   `[currentUser, hasSession]` was tried and reverted: the functions in the
+   value are recreated each render, so that list was incomplete. The
+   `react-hooks/preserve-manual-memoization` rule flagged it, and React Compiler
+   would skip the component. Pick one:
+   - wrap each function in `useCallback` with its real dependencies, then
+     memoize the value on all of them; or
+   - turn on React Compiler and let it memoize, with no manual `useMemo`.
+
+   Any function in the value that reads `currentUser` or `hasSession` must list
+   it as a dependency, or it reads a stale value.
+
+   Then add `refreshSession` to the deps of the redirect effect in
+   `app/login/page.tsx` and update its comment. It is left out today on
+   purpose: `refreshSession` is a new function on every render, so listing it
+   would re-run the effect, and re-mint the session cookie, on every render.
+   Once the function is stable, listing it is safe and makes the deps honest.

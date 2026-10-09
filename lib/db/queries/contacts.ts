@@ -34,6 +34,11 @@ export type ContactListItem = {
   lastTalkedAt: Date | null;
   /** cadence minus days elapsed; null (never talked) sorts first. */
   daysUntilNextTalk: number | null;
+  /**
+   * Days since the last talk, fractional; null when never talked. Computed
+   * here, not in render, so server and client show the same label.
+   */
+  daysSinceLastTalk: number | null;
   notes: ContactNote[];
   /** Full talk history, newest first. */
   talkEvents: ContactTalkEvent[];
@@ -67,6 +72,8 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
       -- would hand back as a string. double precision comes back as a JS number.
       (c.cadence_days - EXTRACT(EPOCH FROM (now() - t.talked_at)) / 86400)::double precision
                      AS "daysUntilNextTalk",
+      (EXTRACT(EPOCH FROM (now() - t.talked_at)) / 86400)::double precision
+                     AS "daysSinceLastTalk",
       COALESCE(n.notes, '[]'::json) AS notes,
       COALESCE(te.events, '[]'::json) AS "talkEvents",
       EXISTS (
