@@ -3,10 +3,8 @@
     "cancel": "Cancel",
     "accept": "Accept",
     "unlink": "Unlink",
-    "days": "Days",
-    "enterName": "Enter Name",
-    "enterNote": "Enter Note...",
-    "areYouSure": "Are you sure?",
+    "days": "days",
+    "enterName": "Enter name",
     "close": "Close"
   },
   "navBar": {
@@ -14,7 +12,7 @@
     "logoAlt": "Stay-in-Touch logo",
     "home": "Home",
     "settings": "Settings",
-    "loginPage": "Login page"
+    "loginPage": "Log in"
   },
   "footer": {
     "about": "About",
@@ -29,7 +27,7 @@
   "logoutButton": {
     "confirmTitle": "Are you sure?",
     "logOut": "Log out",
-    "logOutButton": "Log Out"
+    "logOutButton": "Log out"
   },
   "passwordInput": {
     "show": "Show",
@@ -48,7 +46,7 @@
   },
   "unsubscribe": {
     "title": "Stop invite emails",
-    "confirmText": "Stop all Stay in Touch emails to <strong>{email}</strong>?",
+    "confirmText": "Stop all Stay-in-Touch emails to <strong>{email}</strong>?",
     "confirm": "Stop emails",
     "working": "Please wait…",
     "done": "Done. We will not email this address again.",
@@ -118,8 +116,9 @@
     "accountDeleteFailed": "Your data was deleted, but the account could not be removed. Please try again."
   },
   "mainForm": {
-    "hi": "Hi",
-    "makeAFriend": "Make a friend!"
+    "makeAFriend": "Make a friend!",
+    "greeting": "Hi {name}",
+    "greetingNoName": "Hi"
   },
   "contactList": {
     "empty": "No contacts yet",
@@ -128,44 +127,47 @@
   "addNewContact": {
     "talkTo": "I would like to talk to:",
     "every": "Every",
-    "lastSpoken": "Last Time We Have Spoken (optional)",
-    "addNote": "Add a Note (optional)",
-    "friendEmail": "Friend's Email (optional)",
-    "submit": "Add contact"
+    "lastSpoken": "Last time we spoke (optional)",
+    "friendEmail": "Friend’s email (optional)",
+    "submit": "Add contact",
+    "emailPlaceholder": "friend@example.com"
   },
   "contactItem": {
     "linkedTitle": "Linked — talks are shared",
-    "linkedLabel": "{name} is linked - talks are shared",
+    "linkedLabel": "{name} is linked – talks are shared",
     "neverTalked": "Never talked",
     "talkedToday": "Talked today",
-    "daysSinceTalk": "Didn’t talk for {days} days",
-    "talkInDays": "Talk in {days} days",
-    "talkToday": "Talk Today!",
+    "daysSinceTalk": "Last talk {days, plural, one {# day} other {# days}} ago",
+    "talkInDays": "Talk in {days, plural, one {# day} other {# days}}",
+    "talkToday": "Talk today!",
     "markAsTalked": "Mark that you talked to {name}"
   },
   "moreOptionsDropdown": {
-    "updateContact": "Update Contact",
-    "makeAppointment": "Make Appointment",
+    "updateContact": "Update contact",
+    "makeAppointment": "Make appointment",
     "linkWithFriend": "Link with friend",
     "linkPending": "Link request pending – view in Settings",
-    "deleteContact": "Delete Contact",
+    "deleteContact": "Delete contact",
     "deleteName": "Delete {name}",
     "goBack": "Go back",
     "unlinkTitle": "Stop sharing talks?",
     "unlinkText": "Stop sharing talks with this friend? Both contacts and past talks stay.",
-    "moreOptions": "More options for {name}"
+    "moreOptions": "More options for {name}",
+    "deleteTitle": "Delete {name}?",
+    "deleteText": "This also deletes the talk history. If the contact is linked, the link is removed."
   },
   "updateContactForm": {
     "title": "Update contact: {name}",
-    "changeName": "Change Name:",
-    "changeCadence": "Change Talk Every X Days:",
-    "changeEmail": "Change Friend Email:",
+    "changeName": "Name",
+    "changeCadence": "How often to talk (days)",
+    "changeEmail": "Friend’s email",
     "update": "Update"
   },
   "notes": {
     "title": "Notes",
     "updateNote": "Update Note",
-    "addNote": "Add Note"
+    "addNote": "Add Note",
+    "enterNote": "Enter note…"
   },
   "noteItem": {
     "note": "Note",
@@ -181,10 +183,11 @@
     "dateFormat": "dd/MM/yyyy"
   },
   "appointmentForm": {
-    "title": "Make Appointment with: {name}",
+    "title": "Make an appointment with {name}",
     "intro": "Add this reminder into Google Calendar",
-    "save": "Save to Calendar",
-    "calendarAlt": "Google Calendar"
+    "save": "Save to calendar",
+    "calendarAlt": "Google Calendar",
+    "eventTitle": "{name} – {userName}"
   },
   "linkContactDialog": {
     "title": "Link with a friend",
@@ -194,7 +197,8 @@
     "emailNotice": "We will email your friend your name and email, and a link to accept.",
     "confirmLimit": "You can send {limit} invites per day. {remaining} left today.",
     "limitReached": "You have sent {limit} invites in the last 24 hours. Try again later.",
-    "sendInvite": "Send invite"
+    "sendInvite": "Send invite",
+    "emailPlaceholder": "friend@example.com"
   },
   "acceptLinkDialog": {
     "title": "Link with {name}",
@@ -210,7 +214,7 @@
     "nameRequiredError": "Please enter a contact name."
   },
   "friendRequests": {
-    "title": "Friend requests",
+    "title": "Link requests",
     "intro": "Linked contacts share talks: when either of you marks that you talked, both timers reset. Notes and settings stay private.",
     "incoming": "Incoming",
     "noIncoming": "No incoming requests.",
@@ -218,8 +222,7 @@
     "reject": "Reject",
     "outgoing": "Outgoing",
     "noOutgoing": "No pending requests sent.",
-    "yourContact": "Your contact",
-    "waiting": " · waiting"
+    "outgoingLine": "Your contact <strong>“{name}”</strong> → {email} · waiting"
   },
   "deleteAccount": {
     "title": "Delete account",
@@ -247,10 +250,10 @@
     "intro1": "This app was created as a way to help people (including myself) to stay in touch with the people they care about.",
     "intro2": "Everyone has had that experience of waking up one day and realizing we haven't talked to that good friend from college in a couple of months. Thankfully, Stay-in-Touch is here to help!",
     "howToUse": "How to use",
-    "howTo1": "To begin, log in to the app using an Email or your Google account.",
-    "howTo2": "Next, add \"friend cards\" of people in your life to stay in touch with.",
+    "howTo1": "To begin, log in with your email or your Google account.",
+    "howTo2": "Next, add a contact card for each person in your life you want to stay in touch with.",
     "howTo3": "All you need to do is enter their names and how often you would like to contact them, and Stay-in-Touch will take care of the rest.",
-    "howTo4": "By adding their Email you could create a direct link to them to allow you to send them calendar invites and synchronize your counters.",
+    "howTo4": "Add a contact’s email to send them a link request. Once they accept, a talk marked by either of you resets both timers.",
     "aboutMe": "About me",
     "me1": "My name is Ido Mandelman and I am a passionate Fullstack developer.",
     "me2": "Originally from Israel, I have moved to Berlin with my wife to start a new life in this beautiful city.",
@@ -260,7 +263,7 @@
     "linkedin": "And talk to me on<link>LinkedIn</link>."
   },
   "privacy": {
-    "title": "Privacy Policy",
+    "title": "Privacy policy",
     "intro": "This Privacy Policy explains what information Stay-in-Touch handles, how it is used, and the choices you have. By using the app, you agree to the practices described below.",
     "noTrackingTitle": "No tracking",
     "noTracking": "Stay-in-Touch does not track you. The app uses no analytics, no advertising cookies, and no third-party tracking of any kind. Your activity within the app is not monitored, profiled, or measured for any purpose.",

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { createGoogleCalendarEvent } from "@/lib/CalendarFunctions";
+import { useAuth } from "@/lib/AuthContext";
 import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
@@ -22,6 +23,7 @@ export default function AppointmentForm({
   onClose,
 }: AppointmentFormProps) {
   const t = useTranslations();
+  const { currentUser } = useAuth()!;
   const [error, setError] = useState<string | false>(false);
 
   const { name, daysUntilNextTalk, friendEmail } = contact;
@@ -64,7 +66,11 @@ export default function AppointmentForm({
         ? specificReminder
         : new Date(specificReminder);
 
-    createGoogleCalendarEvent(name, eventDate, friendEmail ?? undefined);
+    const userName = currentUser?.displayName?.split(" ")[0];
+    const title = userName
+      ? t("appointmentForm.eventTitle", { name, userName })
+      : name;
+    createGoogleCalendarEvent(title, eventDate, friendEmail ?? undefined);
   }
 
   return (

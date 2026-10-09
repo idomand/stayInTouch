@@ -63,7 +63,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
         <div className="[grid-area:contactDetails] flex flex-col items-center justify-center w-full min-w-0 sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
           <div className="flex flex-col justify-center min-w-0">
             <div className="flex items-center gap-2 justify-center sm:justify-start">
-              <span className="font-medium text-xl leading-5.25 capitalize w-full min-w-0 wrap-break-word text-center sm:w-max sm:text-left">
+              <span className="font-medium text-xl leading-5.25 w-full min-w-0 wrap-break-word text-center sm:w-max sm:text-left">
                 {name}
               </span>
               {contact.isLinked && (

@@ -122,10 +122,13 @@ export default function FriendRequests({
               >
                 <div className="flex-1 min-w-0">
                   <P extraClasses="text-sm break-words">
-                    <span className="font-medium">{t("friendRequests.yourContact")}</span>
-                    {` "${request.contactName}"`}
-                    {` → ${request.toEmail}`}
-                    <span className="text-grey3">{t("friendRequests.waiting")}</span>
+                    {t.rich("friendRequests.outgoingLine", {
+                      name: request.contactName,
+                      email: request.toEmail,
+                      strong: (chunks) => (
+                        <strong className="font-medium">{chunks}</strong>
+                      ),
+                    })}
                   </P>
                 </div>
                 <Button

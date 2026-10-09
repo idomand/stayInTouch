@@ -95,7 +95,7 @@ export default function LinkContactDialog({
           {t("linkContactDialog.friendEmail")}
           <input
             type="email"
-            placeholder="friend@example.com"
+            placeholder={t("linkContactDialog.emailPlaceholder")}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className={twMerge(basicInputClasses, "")}

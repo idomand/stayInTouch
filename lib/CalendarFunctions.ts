@@ -1,5 +1,3 @@
-import { auth } from "./Firebase";
-
 type CalendarEventResult =
   | { success: true; message: string }
   | { success: false; error: string };
@@ -20,24 +18,18 @@ function formatDateForGoogleCalendar(date: Date): string {
 
 /**
  * Opens Google Calendar dialog with pre-filled event details
- * @param eventName - The name/summary of the event
+ * @param title - The event title, already translated
  * @param eventDate - The date for the event (defaults to today)
  * @param description - Optional description for the event
  * @returns Promise with success status
  */
 export async function createGoogleCalendarEvent(
-  eventName: string,
+  title: string,
   eventDate: Date = new Date(),
   friendEmail?: string,
   description?: string,
 ): Promise<CalendarEventResult> {
   try {
-    const user = auth.currentUser;
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
-    const userName = user?.displayName?.split(" ")[0];
-
     // Set the event to be at a specific time
     const startDateTime = new Date(eventDate);
     startDateTime.setHours(19, 0, 0, 0); // Set to 7:00 PM
@@ -54,7 +46,7 @@ export async function createGoogleCalendarEvent(
     // Colors can only be set via the Calendar API after the event is created
     const params = new URLSearchParams({
       action: "TEMPLATE",
-      text: `${eventName} - ${userName}`,
+      text: title,
       dates: `${startFormatted}/${endFormatted}`,
       details: description || "",
       add: friendEmail || "",

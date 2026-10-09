@@ -202,7 +202,7 @@ export default function MoreOptionsDropdown({
         onClose={() => setIsAppointmentFormModalOpen(false)}
       />
       <Dialog
-        title={t("common.areYouSure")}
+        title={t("moreOptionsDropdown.deleteTitle", { name: contact.name })}
         isOpen={isDeleteContactModalOpen}
         close={() => {
           setIsDeleteContactModalOpen(false);
@@ -210,12 +210,16 @@ export default function MoreOptionsDropdown({
         }}
       >
         <div className="flex flex-col gap-4">
+          <P2 extraClasses="text-grey3">
+            {t("moreOptionsDropdown.deleteText")}
+          </P2>
           <div className="flex justify-between flex-wrap gap-2">
             <Button
               buttonText={t("moreOptionsDropdown.deleteName", {
                 name: contact.name,
               })}
               onClick={deleteContactFunc}
+              variant="Danger"
             />
             <Button
               buttonText={t("moreOptionsDropdown.goBack")}

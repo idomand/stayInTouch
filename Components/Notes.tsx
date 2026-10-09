@@ -103,7 +103,7 @@ export default function Notes({ contact }: { contact: ContactListItem }) {
             >
               <textarea
                 required
-                placeholder={t("common.enterNote")}
+                placeholder={t("notes.enterNote")}
                 value={noteInputValue}
                 onChange={(e) => {
                   setNoteInputValue(e.target.value);

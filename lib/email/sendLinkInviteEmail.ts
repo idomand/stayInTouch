@@ -5,7 +5,7 @@ import { emailOptOuts } from "@/lib/db/schema";
 import { appUrl, resend } from "./client";
 import { signEmail } from "./unsubscribeToken";
 
-const FROM = "Stay in Touch <invites@send.stay-in-touch.vip>";
+const FROM = "Stay-in-Touch <invites@send.stay-in-touch.vip>";
 
 function escapeHtml(value: string): string {
   return value
@@ -50,18 +50,18 @@ export async function sendLinkInviteEmail({
 
   const sender = fromName === fromEmail ? fromEmail : `${fromName} (${fromEmail})`;
   const text = [
-    `${sender} wants to stay in touch with you on Stay in Touch.`,
+    `${sender} wants to stay in touch with you on Stay-in-Touch.`,
     "",
     `Sign in or create an account with ${toEmail} to accept:`,
     loginUrl,
     "",
-    "You got this email because someone entered your address in Stay in Touch.",
+    "You got this email because someone entered your address in Stay-in-Touch.",
     `Don't want these emails? ${unsubscribeUrl}`,
   ].join("\n");
-  const html = `<p>${escapeHtml(sender)} wants to stay in touch with you on Stay in Touch.</p>
+  const html = `<p>${escapeHtml(sender)} wants to stay in touch with you on Stay-in-Touch.</p>
 <p>Sign in or create an account with <strong>${escapeHtml(toEmail)}</strong> to accept:<br>
-<a href="${escapeHtml(loginUrl)}">Open Stay in Touch</a></p>
-<p style="color:#666;font-size:12px">You got this email because someone entered your address in Stay in Touch.
+<a href="${escapeHtml(loginUrl)}">Open Stay-in-Touch</a></p>
+<p style="color:#666;font-size:12px">You got this email because someone entered your address in Stay-in-Touch.
 <a href="${escapeHtml(unsubscribeUrl)}">Don't email me again</a>.</p>`;
 
   const { error } = await resend.emails.send({

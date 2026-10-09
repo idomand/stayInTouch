@@ -31,7 +31,7 @@ export default function Footer() {
         </Link>
       </div>
       <P extraClasses="text-grey3 whitespace-nowrap justify-self-end md:pr-6">
-        © 2026 Stay-in-Touch
+        © {new Date().getFullYear()} Stay-in-Touch
       </P>
     </footer>
   );

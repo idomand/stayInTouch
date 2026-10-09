@@ -110,7 +110,7 @@ export default function AddNewContact() {
         <label className={basicLabelClasses}>
           {t("addNewContact.friendEmail")}
           <input
-            placeholder="new-friend@friendship.com"
+            placeholder={t("addNewContact.emailPlaceholder")}
             value={friendEmail}
             onChange={(e) => {
               setFriendEmail(e.target.value);
