@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
@@ -9,12 +9,13 @@ import type { ContactListItem } from "@/lib/db/queries/contacts";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import TalkEvents from "./TalkEvents";
 import ErrorWarning from "./ErrorWarning";
+import Spinner from "./ui/Spinner";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, daysSinceLastTalk, daysUntilNextTalk } = contact;
   const t = useTranslations();
   const [error, setError] = useState<string | false>(false);
-  const [isMarking, setIsMarking] = useState(false);
+  const [isMarking, startMarking] = useTransition();
 
   // On time when there are days left before the next talk; never-talked
   // (null) and overdue (<= 0) both read as "needs attention".
@@ -40,18 +41,17 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       ? t("contactItem.talkInDays", { days: Math.ceil(daysUntilNextTalk) })
       : t("contactItem.talkToday");
 
-  async function resetFunction() {
+  function resetFunction() {
     // Clearing first remounts a repeated error, so it is announced again.
     setError(false);
-    setIsMarking(true);
-    try {
+    // A transition keeps isMarking true until the revalidated contact data is
+    // rendered; resetting a flag after `await` would briefly show the old icon.
+    startMarking(async () => {
       const result = await markAsTalked(id);
       if (!result.ok) {
         setError(result.error);
       }
-    } finally {
-      setIsMarking(false);
-    }
+    });
   }
 
   return (
@@ -91,11 +91,14 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             onClick={resetFunction}
             disabled={isMarking}
             aria-label={t("contactItem.markAsTalked", { name })}
-            className={`hover:text-blue1 cursor-pointer rounded-md border-none bg-transparent p-0 disabled:cursor-wait disabled:opacity-50 ${
+            aria-busy={isMarking}
+            className={`hover:text-blue1 cursor-pointer rounded-md border-none bg-transparent p-0 disabled:cursor-wait ${
               isTalkingStatusOK ? "text-green1" : "text-red1"
             }`}
           >
-            {isTalkingStatusOK ? (
+            {isMarking ? (
+              <Spinner className="m-0" />
+            ) : isTalkingStatusOK ? (
               <IoCheckboxOutline size={50} aria-hidden="true" />
             ) : (
               <BsExclamationSquare size={50} aria-hidden="true" />

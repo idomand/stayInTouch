@@ -143,7 +143,7 @@ export default function MoreOptionsDropdown({
         </button>
         <div
           id={menuId}
-          className={`absolute top-full right-0 z-1000 mt-2 min-w-50 overflow-hidden rounded-lg bg-white shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] ${
+          className={`bg-offwhite absolute top-full right-0 z-1000 mt-2 min-w-50 overflow-hidden rounded-lg border shadow-[0px_8px_16px_0px_rgba(0,0,0,0.2)] ${
             isOpen ? "block" : "hidden"
           }`}
         >

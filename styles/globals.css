@@ -12,6 +12,7 @@
   --color-green3: rgba(4, 120, 87, 0.1);
   --color-red1: #b91c1c;
   --color-red2: #ffd8d8;
+  --color-offwhite: #f8f8f6;
 
   --animate-slide: slide 300ms forwards;
   --animate-spin-slow: rotate 2s linear infinite;
