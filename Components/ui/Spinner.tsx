@@ -1,10 +1,15 @@
 // Loading spinner. Its animations (`spin-slow` = rotate, `dash`) are defined in
 // styles/globals.css.
+import { twMerge } from "tailwind-merge";
 
-const Spinner = () => (
+const Spinner = ({ className }: { className?: string }) => (
   <svg
-    className="animate-spin-slow -mt-6 -ml-6 h-12.5 w-12.5"
+    className={twMerge(
+      "animate-spin-slow -mt-6 -ml-6 h-12.5 w-12.5",
+      className,
+    )}
     viewBox="0 0 50 50"
+    aria-hidden="true"
   >
     <circle
       className="animate-dash stroke-blue1 [stroke-linecap:round]"

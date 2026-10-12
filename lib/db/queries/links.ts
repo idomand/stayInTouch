@@ -1,5 +1,6 @@
 import "server-only";
 import { and, asc, count, desc, eq, gt, sql } from "drizzle-orm";
+import { inviteLimitPerDay } from "@/lib/ConstantsFile";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import { db } from "@/lib/db";
 import { contacts, inviteEmailsSent, linkRequests } from "@/lib/db/schema";
@@ -88,9 +89,6 @@ export async function getPendingRequestCount(): Promise<number> {
   return row?.value ?? 0;
 }
 
-/** Invite emails a user may trigger per rolling 24 hours. */
-export const INVITE_LIMIT_PER_DAY = 3;
-
 /** The user's invite log rows from the last 24 hours. */
 export function invitesInLastDay(uid: string) {
   return and(
@@ -109,7 +107,7 @@ export async function getInvitesRemainingToday(): Promise<number> {
     .select({ value: count() })
     .from(inviteEmailsSent)
     .where(invitesInLastDay(user.uid));
-  return Math.max(0, INVITE_LIMIT_PER_DAY - (row?.value ?? 0));
+  return Math.max(0, inviteLimitPerDay - (row?.value ?? 0));
 }
 
 /** The caller's contacts that are not in a link yet, for the accept dialog. */
