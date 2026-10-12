@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useId } from "react";
+import React, { useState, useId, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { FaUserPlus } from "react-icons/fa";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
 import ErrorWarning from "./ErrorWarning";
 import DatePickerComponent from "./DatePickerComponent";
+import Spinner from "@/Components/ui/Spinner";
 import {
   basicFormClasses,
   basicInputClasses,
@@ -23,6 +25,7 @@ export default function AddNewContact() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [error, setError] = useState<string | false>(false);
   const [friendEmail, setFriendEmail] = useState("");
+  const [isAdding, startAdding] = useTransition();
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
@@ -35,21 +38,25 @@ export default function AddNewContact() {
     e.preventDefault();
     setError(false);
 
-    const result = await addContact({
-      name,
-      cadenceDays: Number(time),
-      friendEmail,
-      talkedAtMs: startDate?.getTime(),
-    });
+    // A transition keeps isAdding true until the revalidated contact list is
+    // rendered; resetting a flag after `await` would drop the spinner too early.
+    startAdding(async () => {
+      const result = await addContact({
+        name,
+        cadenceDays: Number(time),
+        friendEmail,
+        talkedAtMs: startDate?.getTime(),
+      });
 
-    if (!result.ok) {
-      setError(result.error);
-    } else {
-      setStartDate(null);
-      setName("");
-      setFriendEmail("");
-      setTime("3");
-    }
+      if (!result.ok) {
+        setError(result.error);
+      } else {
+        setStartDate(null);
+        setName("");
+        setFriendEmail("");
+        setTime("3");
+      }
+    });
   }
 
   return (
@@ -127,14 +134,22 @@ export default function AddNewContact() {
           />
         </div>
 
-        <input
+        <button
           type="submit"
-          value={t("addNewContact.submit")}
+          disabled={isAdding}
+          aria-busy={isAdding}
           className={twMerge(
             inputSubmitClasses,
-            "bg-green1 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1 mx-1 my-0 h-10 text-white sm:col-span-2",
+            "bg-green1 hover:bg-green3 hover:border-green1 hover:text-green1 focus:bg-green3 focus:border-green1 focus:text-green1 mx-1 my-0 flex h-10 items-center justify-center gap-2 text-white sm:col-span-2",
           )}
-        />
+        >
+          {isAdding ? (
+            <Spinner className="m-0 h-5 w-5 [&_circle]:stroke-white" />
+          ) : (
+            <FaUserPlus size={18} aria-hidden="true" />
+          )}
+          {t("addNewContact.submit")}
+        </button>
         {error && (
           <ErrorWarning errorMessage={error} extraClasses="sm:col-span-2 m-1" />
         )}
