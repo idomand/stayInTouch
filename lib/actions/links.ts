@@ -12,9 +12,9 @@ import {
 import {
   getInvitesRemainingToday,
   getPendingRequestCount,
-  INVITE_LIMIT_PER_DAY,
   invitesInLastDay,
 } from "@/lib/db/queries/links";
+import { inviteLimitPerDay } from "@/lib/ConstantsFile";
 import {
   contactLinks,
   contacts,
@@ -146,10 +146,10 @@ export async function sendLinkRequest(
         .select({ value: count() })
         .from(inviteEmailsSent)
         .where(invitesInLastDay(uid));
-      if ((sent?.value ?? 0) >= INVITE_LIMIT_PER_DAY) {
+      if ((sent?.value ?? 0) >= inviteLimitPerDay) {
         return actionError({
           key: "inviteLimitReached",
-          values: { limit: INVITE_LIMIT_PER_DAY },
+          values: { limit: inviteLimitPerDay },
         });
       }
       await tx.insert(linkRequests).values({

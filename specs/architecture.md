@@ -31,7 +31,7 @@ Components read, Server Actions write and call `revalidatePath`.
 | Region             | Vercel `fra1`, to match Neon `eu-central-1`                                                                                                     |
 | Domain             | `stay-in-touch.vip`                                                                                                                             |
 | Email              | Firebase sends verification and reset emails. Resend sends the one notice per link request, from `invites@send.stay-in-touch.vip`, English only |
-| Invite limit       | 3 invite emails per user per rolling 24 h, counted in `invite_emails_sent`                                                                      |
+| Invite limit       | 5 invite emails per user per rolling 24 h, counted in `invite_emails_sent`                                                                      |
 | Email opt-out      | `email_opt_outs` table; HMAC-signed link, confirm page + RFC 8058 one-click POST                                                                |
 | Email verification | Required; the session route refuses to mint a cookie for an unverified email                                                                    |
 | Realtime           | None — Server Component read + `revalidatePath` after each write                                                                                |

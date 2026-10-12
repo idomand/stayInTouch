@@ -12,10 +12,7 @@ import ErrorWarning from "./ErrorWarning";
 import { basicInputClasses, basicLabelClasses } from "./ui/formClasses";
 import { twMerge } from "tailwind-merge";
 import { P2 } from "./ui/Text";
-
-// Mirrors INVITE_LIMIT_PER_DAY in lib/db/queries/links.ts (a server-only
-// module); the server enforces the real limit.
-const INVITE_LIMIT_PER_DAY = 3;
+import { inviteLimitPerDay } from "@/lib/ConstantsFile";
 
 /** Mount this only while it is open, so its fields start fresh each time. */
 export default function LinkContactDialog({
@@ -96,7 +93,7 @@ export default function LinkContactDialog({
         {remaining !== null && remaining > 0 && (
           <P2 extraClasses="text-grey3">
             {t("linkContactDialog.confirmLimit", {
-              limit: INVITE_LIMIT_PER_DAY,
+              limit: inviteLimitPerDay,
               remaining,
             })}
           </P2>
@@ -105,7 +102,7 @@ export default function LinkContactDialog({
         {remaining === 0 && (
           <ErrorWarning
             errorMessage={t("linkContactDialog.limitReached", {
-              limit: INVITE_LIMIT_PER_DAY,
+              limit: inviteLimitPerDay,
             })}
           />
         )}
