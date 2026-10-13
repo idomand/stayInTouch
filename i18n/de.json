@@ -42,7 +42,26 @@
     "signInWithGoogle": "Mit Google anmelden",
     "or": "oder",
     "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen.",
-    "metaTitle": "Anmelden"
+    "metaTitle": "Anmelden",
+    "whatIsThis": "Neu hier?<link>Sieh dir an, was Stay-in-Touch kann</link>"
+  },
+  "welcome": {
+    "metaDescription": "Stay-in-Touch erinnert dich daran, mit wem du lange nicht gesprochen hast. Lege fest, wie oft du mit jeder Person sprechen willst, und sieh zuerst, wer überfällig ist.",
+    "headline": "Verliere nie den Kontakt zu den Menschen, die dir wichtig sind",
+    "subline": "Lege fest, wie oft du mit jeder Person sprechen willst. Stay-in-Touch zeigt dir, bei wem du dich melden solltest, damit keine Freundschaft aus Versehen einschläft.",
+    "getStarted": "Jetzt starten",
+    "alreadyHaveAccount": "Du hast schon ein Konto?<link>Anmelden</link>",
+    "howItWorks": "So funktioniert es",
+    "step1Title": "Füge die Menschen hinzu, die dir wichtig sind",
+    "step1Text": "Erstelle eine Karte für jede Freundin, jeden Freund und jedes Familienmitglied. Ein Name reicht für den Anfang.",
+    "step2Title": "Lege fest, wie oft ihr sprecht",
+    "step2Text": "Jede Woche, jeden Monat oder alle paar Monate. Du entscheidest für jede Person.",
+    "step3Title": "Sieh, wer überfällig ist",
+    "step3Text": "Wer lange nichts von dir gehört hat, steht oben. Markiere ein Gespräch mit einem Tippen und der Timer startet neu.",
+    "linkedTitle": "Gemeinsam besser",
+    "linkedText": "Nutzt eine Freundin oder ein Freund auch Stay-in-Touch, verknüpft eure Kontakte. Ein Gespräch, das einer von euch markiert, zählt für beide. Deine Notizen bleiben privat.",
+    "privacyNote": "Keine Werbung. Kein Tracking.<link>Zur Datenschutzerklärung</link>",
+    "closingTitle": "Bereit, in Kontakt zu bleiben?"
   },
   "unsubscribe": {
     "title": "Einladungs-E-Mails abbestellen",

@@ -42,7 +42,26 @@
     "signInWithGoogle": "Sign in with Google",
     "or": "or",
     "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request.",
-    "metaTitle": "Log in"
+    "metaTitle": "Log in",
+    "whatIsThis": "New here?<link>See what Stay-in-Touch does</link>"
+  },
+  "welcome": {
+    "metaDescription": "Stay-in-Touch reminds you who you haven't talked to in a while. Choose how often you want to talk to each person and see who is overdue first.",
+    "headline": "Never lose touch with the people who matter",
+    "subline": "Choose how often you want to talk to each person. Stay-in-Touch shows you who you are overdue with, so no friendship fades by accident.",
+    "getStarted": "Get started",
+    "alreadyHaveAccount": "Already have an account?<link>Sign in</link>",
+    "howItWorks": "How it works",
+    "step1Title": "Add the people you care about",
+    "step1Text": "Create a card for each friend or family member. A name is enough to start.",
+    "step2Title": "Choose how often to talk",
+    "step2Text": "Every week, every month or every few months. You decide for each person.",
+    "step3Title": "See who is overdue",
+    "step3Text": "People you have not talked to in a while move to the top. Mark a talk with one tap and the timer starts again.",
+    "linkedTitle": "Better together",
+    "linkedText": "If a friend uses Stay-in-Touch too, link your contacts. A talk marked by either of you counts for both. Your notes stay private.",
+    "privacyNote": "No ads. No tracking.<link>Read the privacy policy</link>",
+    "closingTitle": "Ready to stay in touch?"
   },
   "unsubscribe": {
     "title": "Stop invite emails",
