@@ -88,6 +88,19 @@ export function validateTalkedAt(talkedAtMs: unknown): ErrorMessage | null {
   return null;
 }
 
+/** True for an IANA time zone name the runtime knows, e.g. "Europe/Berlin". */
+export function isValidTimeZone(value: unknown): value is string {
+  if (typeof value !== "string") {
+    return false;
+  }
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Checks a note body. `optional` allows a missing or blank note (addContact). */
 export function validateNoteBody(
   body: unknown,

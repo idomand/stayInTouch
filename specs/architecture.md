@@ -109,7 +109,8 @@ bridge the two:
   be backdated); `created_at` is when the row was written; `created_by` is who
   clicked, which matters once a linked friend can click. A past talk added by
   day is stored at local noon, so the day shown does not shift across time
-  zones.
+  zones. The quick-mark button adds at most one talk per local calendar day
+  (the client sends its time zone); the history dialog has no such limit.
 - **Index `(contact_id, talked_at DESC)`.** Every read is "newest event for this
   contact", served straight off the index.
 - **Derived values in SQL.** `lastTalkedAt` and `daysUntilNextTalk` are computed

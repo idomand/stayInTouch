@@ -47,7 +47,10 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
     // A transition keeps isMarking true until the revalidated contact data is
     // rendered; resetting a flag after `await` would briefly show the old icon.
     startMarking(async () => {
-      const result = await markAsTalked(id);
+      const result = await markAsTalked(
+        id,
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+      );
       if (!result.ok) {
         setError(result.error);
       }

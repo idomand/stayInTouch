@@ -13,6 +13,7 @@ import {
   type ActionResult,
   type ErrorMessage,
   isUniqueViolation,
+  isValidTimeZone,
   normalizeEmail,
   validateFields,
   validateNoteBody,
@@ -145,12 +146,33 @@ export async function deleteContact(contactId: string): Promise<ActionResult> {
   return { ok: true };
 }
 
-/** Record a talk now — one append-only row, no more "Talked on:" note. */
-export async function markAsTalked(contactId: string): Promise<ActionResult> {
+/**
+ * Record a talk now, unless the contact already has a talk today in the
+ * caller's time zone — a second click on the same day is a no-op. On a linked
+ * contact a talk the friend marked today counts too. Two tabs clicking at the
+ * same instant could still both insert; not worth a lock.
+ */
+export async function markAsTalked(
+  contactId: string,
+  timeZone: string,
+): Promise<ActionResult> {
   const uid = await requireUser();
   const existing = await getOwnedContact(uid, contactId);
   if (!existing) {
     return actionError(NOT_FOUND);
+  }
+  // Only a tampered request sends an unknown zone; UTC never blocks a real user.
+  const zone = isValidTimeZone(timeZone) ? timeZone : "UTC";
+  // Start of the caller's local day as a timestamptz, so the range filter uses
+  // the (contact_id, talked_at DESC) index.
+  const talkedToday = await db.execute(sql`
+    SELECT 1 FROM talk_events
+    WHERE contact_id = ${contactId}
+      AND talked_at >= date_trunc('day', now() AT TIME ZONE ${zone}::text) AT TIME ZONE ${zone}::text
+    LIMIT 1
+  `);
+  if (talkedToday.rows.length > 0) {
+    return { ok: true };
   }
   await insertSharedTalkEvent(uid, contactId, new Date());
   revalidatePath("/");
