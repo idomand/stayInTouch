@@ -8,7 +8,7 @@ import {
   subscribeTalkEffect,
   TALK_EFFECTS,
 } from "@/lib/talkEffect";
-import { P, P2 } from "./ui/Text";
+import { P, P2 } from "@/Components/ui/Text";
 
 /**
  * Per-browser choice of the celebration shown after marking a talk. Default is

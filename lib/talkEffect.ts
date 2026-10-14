@@ -1,7 +1,8 @@
 /**
  * The celebration shown after marking a contact as talked. The choice is a
  * per-browser preference in localStorage, picked on /settings. The particle
- * libraries load only when an effect actually plays.
+ * library is not in the initial bundle: `preloadTalkEffect` loads it once the
+ * page is idle, so the first effect does not wait for a download.
  */
 
 export const TALK_EFFECTS = ["none", "small", "extreme"] as const;
@@ -14,6 +15,28 @@ const EXTREME_DURATION_MS = 2500;
 
 // One party at a time: extra clicks during the extreme effect add nothing.
 let isPartying = false;
+
+let confettiModule: Promise<typeof import("@tsparticles/confetti")> | null =
+  null;
+let isPreloadScheduled = false;
+
+function loadConfetti() {
+  if (!confettiModule) {
+    confettiModule = import("@tsparticles/confetti");
+    // A failed load (offline) is retried on the next call.
+    confettiModule.catch(() => {
+      confettiModule = null;
+    });
+  }
+  return confettiModule;
+}
+
+function canPlay(effect: TalkEffect) {
+  return (
+    effect !== "none" &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
 
 function isTalkEffect(value: unknown): value is TalkEffect {
   return TALK_EFFECTS.includes(value as TalkEffect);
@@ -53,6 +76,28 @@ export function subscribeTalkEffect(onChange: () => void) {
 }
 
 /**
+ * Loads the particle library when the browser is idle, so the first effect
+ * plays without a download. Safe to call many times; it schedules once, and
+ * skips the download when no effect can play.
+ */
+export function preloadTalkEffect() {
+  if (isPreloadScheduled || !canPlay(readTalkEffect())) {
+    return;
+  }
+  isPreloadScheduled = true;
+  const load = () => {
+    // Best effort: playTalkEffect retries and logs a failed load.
+    loadConfetti().catch(() => {});
+  };
+  // Safari has no requestIdleCallback.
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(load, { timeout: 3000 });
+  } else {
+    setTimeout(load, 2000);
+  }
+}
+
+/**
  * Plays the effect. "small" bursts from `sourceElement` when given. Never
  * throws: the effect is decoration and must not break the action behind it.
  */
@@ -60,15 +105,12 @@ export async function playTalkEffect(
   effect: TalkEffect,
   sourceElement?: Element | null,
 ) {
-  if (
-    effect === "none" ||
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ) {
+  if (!canPlay(effect)) {
     return;
   }
   try {
     if (effect === "small") {
-      const { confetti } = await import("@tsparticles/confetti");
+      const { confetti } = await loadConfetti();
       await confetti({
         particleCount: 100,
         spread: 70,
@@ -104,7 +146,7 @@ async function playExtreme() {
   }
   isPartying = true;
   try {
-    const { confetti } = await import("@tsparticles/confetti");
+    const { confetti } = await loadConfetti();
     await confetti({
       particleCount: 150,
       spread: 120,

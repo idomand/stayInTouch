@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { optOutEmail } from "@/lib/actions/email";
 import { P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
-import ErrorWarning from "@/Components/ErrorWarning";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 type Props = {
   email: string;

@@ -6,12 +6,15 @@ import {
   getMyInvitesRemainingToday,
 } from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import Dialog from "./ui/Dialog";
-import Button from "./ui/Button";
-import ErrorWarning from "./ErrorWarning";
-import { basicInputClasses, basicLabelClasses } from "./ui/formClasses";
+import Dialog from "@/Components/ui/Dialog";
+import Button from "@/Components/ui/Button";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import {
+  basicInputClasses,
+  basicLabelClasses,
+} from "@/Components/ui/formClasses";
 import { twMerge } from "tailwind-merge";
-import { P2 } from "./ui/Text";
+import { P2 } from "@/Components/ui/Text";
 import { inviteLimitPerDay } from "@/lib/ConstantsFile";
 
 /** Mount this only while it is open, so its fields start fresh each time. */

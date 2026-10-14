@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { H1, P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
-import ErrorWarning from "@/Components/ErrorWarning";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 /**
  * Shown on /login while a user is signed in on the client but has not

@@ -5,13 +5,13 @@ import { SlOptions } from "react-icons/sl";
 import { deleteContact } from "@/lib/actions/contacts";
 import { unlinkContact } from "@/lib/actions/links";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import AppointmentForm from "./AppointmentForm";
-import UpdateContactForm from "./UpdateContactForm";
-import Button from "./ui/Button";
-import Dialog from "./ui/Dialog";
-import LinkContactDialog from "./LinkContactDialog";
-import ErrorWarning from "./ErrorWarning";
-import { P2 } from "./ui/Text";
+import AppointmentForm from "@/Components/contacts/AppointmentForm";
+import UpdateContactForm from "@/Components/contacts/UpdateContactForm";
+import Button from "@/Components/ui/Button";
+import Dialog from "@/Components/ui/Dialog";
+import LinkContactDialog from "@/Components/links/LinkContactDialog";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import { P2 } from "@/Components/ui/Text";
 import NextLink from "next/link";
 
 const menuItemClasses =

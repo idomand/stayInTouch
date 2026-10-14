@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { P2 } from "@/Components/ui/Text";
-import ErrorWarning from "@/Components/ErrorWarning";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 import PasswordInput from "@/Components/ui/PasswordInput";
 import {
   basicInputClasses,

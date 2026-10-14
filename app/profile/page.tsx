@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import DeleteAccountSection from "@/Components/DeleteAccountSection";
-import FriendRequests from "@/Components/FriendRequests";
-import PendingRequestCountSync from "@/Components/PendingRequestCountSync";
+import DeleteAccountSection from "@/Components/settings/DeleteAccountSection";
+import FriendRequests from "@/Components/links/FriendRequests";
+import PendingRequestCountSync from "@/Components/links/PendingRequestCountSync";
 import PageHeader from "@/Components/ui/PageHeader";
 import { H4 } from "@/Components/ui/Text";
 import { getServerUser } from "@/lib/auth/getServerUser";

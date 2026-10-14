@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl";
 import { FaUserPlus } from "react-icons/fa";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays } from "@/lib/ConstantsFile";
-import ErrorWarning from "./ErrorWarning";
-import DatePickerComponent from "./DatePickerComponent";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import DatePickerComponent from "@/Components/ui/DatePickerComponent";
 import Spinner from "@/Components/ui/Spinner";
 import {
   basicFormClasses,

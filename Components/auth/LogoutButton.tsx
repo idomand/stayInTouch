@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth } from "../lib/AuthContext";
-import Dialog from "./ui/Dialog";
-import Button from "./ui/Button";
+import { useAuth } from "@/lib/AuthContext";
+import Dialog from "@/Components/ui/Dialog";
+import Button from "@/Components/ui/Button";
 
 export default function LogoutButton() {
   const { logout } = useAuth()!;

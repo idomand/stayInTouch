@@ -8,9 +8,9 @@ import { authErrorMessage, useAuth } from "@/lib/AuthContext";
 import { H1, P2 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 import Link from "@/Components/ui/Link";
-import EmailAuthForm from "@/Components/EmailAuthForm";
-import VerifyEmailNotice from "@/Components/VerifyEmailNotice";
-import ErrorWarning from "@/Components/ErrorWarning";
+import EmailAuthForm from "@/Components/auth/EmailAuthForm";
+import VerifyEmailNotice from "@/Components/auth/VerifyEmailNotice";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 function Login() {
   const {

@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth } from "../lib/AuthContext";
-import AddNewContact from "./AddNewContact";
+import { useAuth } from "@/lib/AuthContext";
+import AddNewContact from "@/Components/contacts/AddNewContact";
 import { H1 } from "@/Components/ui/Text";
-import Button from "./ui/Button";
+import Button from "@/Components/ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
