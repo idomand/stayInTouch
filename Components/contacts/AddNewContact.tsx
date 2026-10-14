@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useId, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { FaUserPlus } from "react-icons/fa";
+import { FaUserPlus, FaWhatsapp } from "react-icons/fa";
 import { addContact } from "@/lib/actions/contacts";
 import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
@@ -27,6 +27,18 @@ export default function AddNewContact() {
   const [error, setError] = useState<string | false>(false);
   const [friendEmail, setFriendEmail] = useState("");
   const [isAdding, startAdding] = useTransition();
+
+  function inviteOnWhatsApp() {
+    // Built in the handler, not at render: window does not exist during SSR.
+    const message = t("addNewContact.whatsAppMessage", {
+      url: window.location.origin,
+    });
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }
 
   function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value);
@@ -158,6 +170,17 @@ export default function AddNewContact() {
         {error && (
           <ErrorWarning errorMessage={error} extraClasses="sm:col-span-2 m-1" />
         )}
+        <button
+          type="button"
+          onClick={inviteOnWhatsApp}
+          className={twMerge(
+            inputSubmitClasses,
+            "text-green1 border-green1 hover:bg-green3 focus:bg-green3 mx-1 my-0 mt-2 flex h-10 items-center justify-center gap-2 bg-white sm:col-span-2",
+          )}
+        >
+          <FaWhatsapp size={18} aria-hidden="true" />
+          {t("addNewContact.inviteWhatsApp")}
+        </button>
       </form>
     </>
   );
