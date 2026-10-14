@@ -106,7 +106,7 @@ export default function NavBar() {
       </div>
 
       <div className="justify-self-end">
-        {currentUser && pathname === "/profile" && (
+        {currentUser && (
           <div className="mr-5">
             <LogoutButton />
           </div>

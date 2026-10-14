@@ -75,14 +75,7 @@ building. Background and constraints are in `specs/architecture.md`.
    Option 3 shares state across users, so check it against the "only talk events
    are shared" rule before building.
 
-8. **"Party" effect toggle (`/profile` setting).** A confetti effect when the
-   user marks "I talked to them", which each user can turn on or off. Examples:
-   https://codepen.io/sethbmckinney/pen/QwpwXxQ and
-   https://preline.co/docs/components/confetti.html. Respect
-   `prefers-reduced-motion`. Prefer a small library (e.g. `canvas-confetti`) or
-   plain CSS over adding Preline. The on/off value goes in the same
-   `user_settings` row as item 7.
-9. **Calendar appointment indicator on the card.** When the user opens a Google
+8. **Calendar appointment indicator on the card.** When the user opens a Google
    Calendar appointment from a card, show an icon on that card. The icon starts
    with the date picked in the appointment form. The user can edit the date (the
    app cannot see the real calendar event: `lib/CalendarFunctions.ts` only opens
@@ -91,7 +84,7 @@ building. Background and constraints are in `specs/architecture.md`.
    the date per contact (a nullable column on `contacts`, or a small table).
    Opening the form does not mean the user saved the event, so the edit option
    should also allow clearing it.
-10. **Maybe: turn notes back on.** Not decided. Notes are parked (C1 in
-    `specs/app-review-fixes.md`): the `notes` table, `Notes.tsx`, `NoteItem.tsx`
-    and the commented-out actions in `lib/actions/contacts.ts` still exist.
-    Decide whether notes are wanted before writing a spec.
+9. **Maybe: turn notes back on.** Not decided. Notes are parked (C1 in
+   `specs/app-review-fixes.md`): the `notes` table, `Notes.tsx`, `NoteItem.tsx`
+   and the commented-out actions in `lib/actions/contacts.ts` still exist.
+   Decide whether notes are wanted before writing a spec.
