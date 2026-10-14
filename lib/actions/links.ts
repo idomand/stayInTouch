@@ -51,7 +51,7 @@ export type AcceptLinkTarget =
 
 function revalidateLinkPages() {
   revalidatePath("/");
-  revalidatePath("/settings");
+  revalidatePath("/profile");
 }
 
 /** Link rows that include any of these contacts, on either side. */

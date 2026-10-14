@@ -2,7 +2,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
-import { getOwnedContact, requireUser } from "@/lib/db/queries/guards";
+import { getOwnedContact, isUuid, requireUser } from "@/lib/db/queries/guards";
 import {
   type ContactTalkEvent,
   getTalkEventsForOwnedContact,
@@ -16,9 +16,11 @@ import {
   normalizeEmail,
   validateFields,
   validateNoteBody,
+  validateTalkedAt,
 } from "@/lib/actions/validation";
 
 const NOT_FOUND: ErrorMessage = { key: "contactNotFound" };
+const TALK_EVENT_NOT_FOUND: ErrorMessage = { key: "talkEventNotFound" };
 // Parked with the note actions below (C1).
 // const NOTE_NOT_FOUND: ErrorMessage = { key: "noteNotFound" };
 const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
@@ -150,23 +152,100 @@ export async function markAsTalked(contactId: string): Promise<ActionResult> {
   if (!existing) {
     return actionError(NOT_FOUND);
   }
-  const talkedAt = new Date();
+  await insertSharedTalkEvent(uid, contactId, new Date());
+  revalidatePath("/");
+  return { ok: true };
+}
+
+/** Record a past talk from the history dialog, on both sides when linked. */
+export async function addTalkEvent(
+  contactId: string,
+  talkedAtMs: number,
+): Promise<ActionResult> {
+  const uid = await requireUser();
+  const existing = await getOwnedContact(uid, contactId);
+  if (!existing) {
+    return actionError(NOT_FOUND);
+  }
+  const invalid = validateTalkedAt(talkedAtMs);
+  if (invalid) {
+    return actionError(invalid);
+  }
+  await insertSharedTalkEvent(uid, contactId, new Date(talkedAtMs));
+  revalidatePath("/");
+  return { ok: true };
+}
+
+/**
+ * Delete a talk from a contact's history, whoever logged it. On a linked
+ * contact the same talk on the friend's contact goes too (matched by
+ * shared_id), but only while the link exists: the link row is the only
+ * permission for a cross-user write. Rows without a shared_id (written before
+ * it existed) delete on this side only.
+ */
+export async function deleteTalkEvent(
+  contactId: string,
+  eventId: string,
+): Promise<ActionResult> {
+  const uid = await requireUser();
+  const existing = await getOwnedContact(uid, contactId);
+  if (!existing) {
+    return actionError(NOT_FOUND);
+  }
+  if (!isUuid(eventId)) {
+    return actionError(TALK_EVENT_NOT_FOUND);
+  }
+  // One statement, so both rows go or neither. `shared_id = NULL` matches
+  // nothing, so a row without one deletes alone.
+  const result = await db.execute(sql`
+    DELETE FROM talk_events t
+    WHERE (t.id = ${eventId} AND t.contact_id = ${contactId})
+       OR (t.shared_id = (SELECT shared_id FROM talk_events
+                          WHERE id = ${eventId} AND contact_id = ${contactId})
+           AND t.contact_id IN (${linkedContactIds(contactId)}))
+    RETURNING t.id
+  `);
+  if (result.rows.length === 0) {
+    return actionError(TALK_EVENT_NOT_FOUND);
+  }
+  revalidatePath("/");
+  return { ok: true };
+}
+
+/** The id of the contact linked to this one, as a subquery (zero or one row). */
+function linkedContactIds(contactId: string) {
+  return sql`
+    SELECT CASE WHEN l.contact_a_id = ${contactId}
+                THEN l.contact_b_id ELSE l.contact_a_id END
+    FROM contact_links l
+    WHERE l.contact_a_id = ${contactId} OR l.contact_b_id = ${contactId}
+  `;
+}
+
+/**
+ * Insert one talk on the caller's contact and, when it is linked, the same talk
+ * on the friend's contact. Both rows get one shared_id so a delete can find the
+ * pair. The caller must have checked ownership of contactId.
+ */
+async function insertSharedTalkEvent(
+  uid: string,
+  contactId: string,
+  talkedAt: Date,
+) {
+  const sharedId = crypto.randomUUID();
   await db.transaction(async (tx) => {
-    await tx.insert(talkEvents).values({ contactId, createdBy: uid, talkedAt });
+    await tx
+      .insert(talkEvents)
+      .values({ contactId, createdBy: uid, talkedAt, sharedId });
     // The same talk on the linked contact, owned by the other user. The link
     // row is the only permission for this cross-user write. Zero rows when the
     // contact is not linked, so no `if`.
     await tx.execute(sql`
-      INSERT INTO talk_events (contact_id, created_by, talked_at)
-      SELECT CASE WHEN l.contact_a_id = ${contactId}
-                  THEN l.contact_b_id ELSE l.contact_a_id END,
-             ${uid}, ${talkedAt}
-      FROM contact_links l
-      WHERE l.contact_a_id = ${contactId} OR l.contact_b_id = ${contactId}
+      INSERT INTO talk_events (contact_id, created_by, talked_at, shared_id)
+      SELECT linked.id, ${uid}, ${talkedAt}, ${sharedId}
+      FROM (${linkedContactIds(contactId)}) AS linked(id)
     `);
   });
-  revalidatePath("/");
-  return { ok: true };
 }
 
 /**
@@ -188,7 +267,7 @@ export async function getTalkEvents(
 }
 
 // Notes are parked (C1 in specs/app-review-fixes.md): no UI reaches them.
-// Restore these actions, NOTE_NOT_FOUND and the isUuid import with the UI.
+// Restore these actions and NOTE_NOT_FOUND with the UI.
 // export async function addNote(
 //   contactId: string,
 //   body: string,

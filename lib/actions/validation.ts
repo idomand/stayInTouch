@@ -65,19 +65,25 @@ export function validateFields(input: ContactFieldsInput): ErrorMessage | null {
     }
   }
   if (talkedAtMs != null) {
-    // new Date() of a finite but out-of-range number is an Invalid Date, which
-    // Postgres rejects — so check the Date, not just the number.
-    if (
-      typeof talkedAtMs !== "number" ||
-      Number.isNaN(new Date(talkedAtMs).getTime())
-    ) {
-      return { key: "talkDateInvalid" };
-    }
-    // A future talk would make "days since last talk" negative. One day of
-    // slack covers client clock and time-zone skew.
-    if (talkedAtMs > Date.now() + ONE_DAY_MS) {
-      return { key: "talkDateInFuture" };
-    }
+    return validateTalkedAt(talkedAtMs);
+  }
+  return null;
+}
+
+/** Checks a talk date in epoch ms: a valid date, not in the future. */
+export function validateTalkedAt(talkedAtMs: unknown): ErrorMessage | null {
+  // new Date() of a finite but out-of-range number is an Invalid Date, which
+  // Postgres rejects — so check the Date, not just the number.
+  if (
+    typeof talkedAtMs !== "number" ||
+    Number.isNaN(new Date(talkedAtMs).getTime())
+  ) {
+    return { key: "talkDateInvalid" };
+  }
+  // A future talk would make "days since last talk" negative. One day of
+  // slack covers client clock and time-zone skew.
+  if (talkedAtMs > Date.now() + ONE_DAY_MS) {
+    return { key: "talkDateInFuture" };
   }
   return null;
 }
