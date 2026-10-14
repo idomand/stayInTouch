@@ -3,10 +3,10 @@
 Planned, not scheduled. Each needs its own spec (see `specs/template.md`) before
 building. Background and constraints are in `specs/architecture.md`.
 
-1. **`/settings` — the rest of it.** The page (formerly `/account`; the old URL
-   redirects in `next.config.js`) holds the language selector, a
-   "Notifications" section with the friend requests, and the NavBar shows Log Out
-   only there. Still to build:
+1. **`/profile` — the rest of it.** The page holds a "Notifications" section
+   with the friend requests and the delete-account option, and the NavBar shows
+   Log Out only there. `/settings` is public and holds only the language
+   selector. Still to build on `/profile`:
    - **Notifications and social:** a notifications list (e.g. "Bob accepted your
      request", "you and Alice talked"), and other social features built on links.
    - **Change password:** only for email+password accounts — hide it for Google
@@ -59,3 +59,32 @@ building. Background and constraints are in `specs/architecture.md`.
    - Edge case: a user whose JavaScript loads slowly must not see an
      authenticated page flash and then redirect.
    - It touches the auth flow, so it needs its own spec and its own branch.
+
+7. **What happens when the timer is up (`/profile` setting).** Each user picks
+   one option:
+   1. Only turn the card red (today's behaviour, the default).
+   2. Send the user an email that the timer for that contact is up.
+   3. If the user and the friend are linked **and** both contacts have been red
+      for over 48 hours, notify both of them.
+
+   Needs: a per-user settings row (`user_settings`, shared with item 4); a
+   scheduled job (Vercel cron) that finds contacts that just went red; the email
+   sender in `lib/email/` and the opt-out in `email_opt_outs`; a "sent" record so
+   one red contact sends one email, not one per cron run. "Red for 48 hours" can
+   be computed from the last talk and the cadence, with no new timestamp.
+   Option 3 shares state across users, so check it against the "only talk events
+   are shared" rule before building.
+
+8. **Calendar appointment indicator on the card.** When the user opens a Google
+   Calendar appointment from a card, show an icon on that card. The icon starts
+   with the date picked in the appointment form. The user can edit the date (the
+   app cannot see the real calendar event: `lib/CalendarFunctions.ts` only opens
+   a prefilled URL, with no API and no token). The icon goes away once the date
+   has passed — compute that when reading, so no cleanup job is needed. Store
+   the date per contact (a nullable column on `contacts`, or a small table).
+   Opening the form does not mean the user saved the event, so the edit option
+   should also allow clearing it.
+9. **Maybe: turn notes back on.** Not decided. Notes are parked (C1 in
+   `specs/app-review-fixes.md`): the `notes` table, `Notes.tsx`, `NoteItem.tsx`
+   and the commented-out actions in `lib/actions/contacts.ts` still exist.
+   Decide whether notes are wanted before writing a spec.

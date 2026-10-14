@@ -11,12 +11,14 @@
     "homeLabel": "Stay-in-Touch Startseite",
     "logoAlt": "Stay-in-Touch Logo",
     "home": "Start",
+    "profile": "Profil",
     "settings": "Einstellungen",
     "loginPage": "Anmelden"
   },
   "footer": {
     "about": "Über",
-    "privacy": "Datenschutz"
+    "privacy": "Datenschutz",
+    "faq": "FAQ"
   },
   "pageHeader": {
     "backToHome": "Zurück zur Startseite"
@@ -119,13 +121,14 @@
     "noteEmpty": "Die Notiz ist leer.",
     "noteTooLong": "Die Notiz darf höchstens {max} Zeichen lang sein.",
     "contactNotFound": "Kontakt nicht gefunden.",
+    "talkEventNotFound": "Gespräch nicht gefunden.",
     "noteNotFound": "Notiz nicht gefunden.",
     "requestNotFound": "Anfrage nicht gefunden.",
     "nameTaken": "Es gibt bereits einen Kontakt mit diesem Namen.",
     "linkToSelf": "Du kannst dir selbst keine Verknüpfungsanfrage senden.",
     "contactAlreadyLinked": "Dieser Kontakt ist bereits verknüpft.",
     "requestAlreadyPending": "Du hast bereits eine offene Anfrage an diese E-Mail.",
-    "requestCrossed": "{name} hat dir bereits eine Anfrage gesendet. Nimm sie auf deiner Einstellungsseite an.",
+    "requestCrossed": "{name} hat dir bereits eine Anfrage gesendet. Nimm sie auf deiner Profilseite an.",
     "contactHasPendingRequest": "Für diesen Kontakt gibt es bereits eine offene Anfrage.",
     "inviteLimitReached": "Du kannst {limit} Einladungen pro Tag senden. Versuche es später erneut.",
     "alreadyLinkedWith": "Du bist bereits mit {name} verknüpft.",
@@ -165,7 +168,7 @@
     "updateContact": "Kontakt bearbeiten",
     "makeAppointment": "Termin vereinbaren",
     "linkWithFriend": "Verknüpfung anfragen",
-    "linkPending": "Verknüpfungsanfrage offen – in den Einstellungen ansehen",
+    "linkPending": "Verknüpfungsanfrage offen – im Profil ansehen",
     "deleteContact": "Kontakt löschen",
     "deleteName": "{name} löschen",
     "goBack": "Zurück",
@@ -198,7 +201,16 @@
     "empty": "Noch keine Gespräche erfasst.",
     "loggedByFriend": "· von der anderen Person erfasst",
     "loading": "Wird geladen…",
-    "loadFailed": "Der Gesprächsverlauf konnte nicht geladen werden. Bitte versuche es erneut."
+    "loadFailed": "Der Gesprächsverlauf konnte nicht geladen werden. Bitte versuche es erneut.",
+    "addTitle": "Gespräch hinzufügen",
+    "addDate": "Datum des Gesprächs",
+    "add": "Hinzufügen",
+    "adding": "Wird hinzugefügt…",
+    "linkedNote": "Dieser Kontakt ist verknüpft: Wenn du ein Gespräch hinzufügst oder löschst, ändert sich auch der Verlauf der anderen Person.",
+    "deleteLabel": "Gespräch vom {date} löschen",
+    "confirmDelete": "Dieses Gespräch löschen?",
+    "delete": "Löschen",
+    "saveFailed": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es erneut."
   },
   "datePicker": {
     "dateFormat": "dd.MM.yyyy"
@@ -258,12 +270,22 @@
     "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "settings": {
-    "title": "Einstellungen",
+    "title": "Einstellungen"
+  },
+  "profile": {
+    "title": "Profil",
     "notifications": "Benachrichtigungen"
   },
   "languageSelector": {
     "title": "App-Sprache",
     "browserDefault": "Browsersprache"
+  },
+  "talkEffectSelector": {
+    "title": "Gesprächsmarker",
+    "description": "Was du nach dem Markieren eines Gesprächs siehst.",
+    "none": "Keine",
+    "small": "Klein",
+    "extreme": "Extrem"
   },
   "about": {
     "title": "Über",
@@ -279,9 +301,52 @@
     "me1": "Ich heiße Ido Mandelman und bin leidenschaftlicher Fullstack-Entwickler.",
     "me2": "Ursprünglich komme ich aus Israel und bin mit meiner Frau nach Berlin gezogen, um in dieser schönen Stadt ein neues Leben zu beginnen.",
     "me3": "In meiner Freizeit lese ich gern Bücher über Programmierung, Geschichte und Science-Fiction, koche und lerne Deutsch.",
-    "github": "Diese App ist komplett Open Source. Den ganzen Code findest du<link>auf GitHub</link>.",
+    "github": "Diese App ist komplett Open Source. Den ganzen Code findest du auf <link>GitHub</link>.",
     "website": "Mehr von meinen Projekten findest du auf meiner<link>Website</link>.",
     "linkedin": "Und schreib mir auf<link>LinkedIn</link>."
+  },
+  "faq": {
+    "title": "Häufige Fragen",
+    "whatIsApp": {
+      "question": "Was ist Stay-in-Touch?",
+      "answer": "Eine einfache Erinnerungs-App für die Menschen, die dir wichtig sind. Füge einen Kontakt hinzu, wähle, wie oft du mit der Person sprechen möchtest, und die App zeigt dir, bei wem du dich als Nächstes melden solltest."
+    },
+    "timer": {
+      "question": "Was bedeuten die Farben und der Timer auf einer Karte?",
+      "answer": "Jede Karte zählt bis zu eurem nächsten Gespräch herunter, je nachdem, wie oft du mit der Person sprechen möchtest. Wenn die Zeit abgelaufen ist oder ihr noch nie gesprochen habt, wird die Karte rot. Markiere ein Gespräch, und der Timer beginnt von vorn."
+    },
+    "talkHistory": {
+      "question": "Wie erfasse ich ein Gespräch?",
+      "answer": "Drücke nach dem Gespräch den Gesprächs-Button auf der Karte des Kontakts. Im Gesprächsverlauf (das Uhr-Symbol) siehst du alle früheren Gespräche. Dort kannst du auch ein vergessenes Gespräch an einem früheren Datum hinzufügen oder ein versehentlich erfasstes löschen."
+    },
+    "privacy": {
+      "question": "Wer kann meine Kontakte sehen?",
+      "answer": "Nur du. Deine Kontakte, die Namen, die du ihnen gibst, und wie oft du sprechen möchtest, bleiben privat. Wenn du einen Kontakt mit einer anderen Person verknüpfst, teilt ihr nur die Daten eurer Gespräche."
+    },
+    "language": {
+      "question": "Wie ändere ich die Sprache?",
+      "answer": "Öffne die Einstellungen und wähle Englisch oder Deutsch. Das geht auch ohne Anmeldung. Die Auswahl wird in diesem Browser gespeichert."
+    },
+    "inviteLimit": {
+      "question": "Warum kann ich nur {limit} Einladungen pro Tag senden?",
+      "answer": "Jede Verknüpfungsanfrage sendet eine E-Mail an die andere Person, die vielleicht noch kein Konto hat. Das Limit verhindert, dass die App für Spam genutzt wird, und hält unsere E-Mails aus dem Spam-Ordner, damit deine Einladungen ankommen. Gezählt werden die letzten 24 Stunden."
+    },
+    "linking": {
+      "question": "Wie funktioniert die Verknüpfung mit einer anderen Person?",
+      "answer": "Öffne das Menü auf der Karte eines Kontakts und wähle „Verknüpfung anfragen“. Gib die E-Mail der Person ein, und die App sendet ihr eine Anfrage. Die Person nimmt sie auf ihrer Profilseite an und wählt aus, welcher ihrer Kontakte du bist, oder legt einen neuen an. Ab dann gilt: Wenn einer von euch ein Gespräch markiert, erscheint es auf beiden Karten, und beide Timer werden zurückgesetzt. Ein Gespräch, das ihr im Verlauf hinzufügt oder löscht, ändert sich ebenfalls bei beiden. Jeder Kontakt kann nur mit einer Person verknüpft sein. Über dasselbe Menü kannst du die Verknüpfung jederzeit lösen."
+    },
+    "ownCadence": {
+      "question": "Müssen verknüpfte Kontakte denselben Abstand haben?",
+      "answer": "Nein. Jeder von euch behält seine eigene Einstellung. Du kannst zum Beispiel alle 7 Tage sprechen wollen, während die andere Person alle 14 Tage wählt. Ein Gespräch setzt beide Timer zurück, aber jeder Timer zählt mit seiner eigenen Anzahl an Tagen herunter."
+    },
+    "deleteAccount": {
+      "question": "Was passiert, wenn ich mein Konto lösche?",
+      "answer": "Alles, was zu deinem Konto gehört, wird gelöscht: deine Kontakte, ihr Gesprächsverlauf, deine Verknüpfungen und alle Verknüpfungsanfragen von dir oder an dich. Danach wird das Konto selbst entfernt. Das lässt sich nicht rückgängig machen. Du kannst dein Konto auf deiner Profilseite löschen."
+    },
+    "deleteWithLinks": {
+      "question": "Was passiert mit verknüpften Personen, wenn ich mein Konto lösche?",
+      "answer": "Die Verknüpfungen enden, und deine Gespräche werden nicht mehr geteilt. Jede verknüpfte Person behält ihren eigenen Kontakt für dich und die Gespräche, die dort bereits erfasst sind. Sie wird nicht benachrichtigt, dass du dein Konto gelöscht hast."
+    }
   },
   "privacy": {
     "title": "Datenschutzerklärung",
@@ -299,6 +364,6 @@
     "providersTitle": "Dienstleister",
     "providers": "Deine Daten werden von Firebase (Google), Neon und Vercel gespeichert und verarbeitet, nur um die App zu betreiben. Resend versendet die E-Mails zu Verknüpfungsanfragen und verarbeitet dabei die E-Mail-Adresse der angefragten Person sowie Namen und E-Mail-Adresse der anfragenden Person. Deine Daten werden nie verkauft oder vermietet, und die App sendet dir nie Werbung oder Spam.",
     "controlTitle": "Deine Kontrolle",
-    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen. Du kannst dein Konto in den Einstellungen löschen. Dadurch werden dein Konto, deine Kontakte, Notizen, Gesprächsverläufe, Verknüpfungen und alle Verknüpfungsanfragen von dir oder an dich entfernt. Gesprächsdaten, die bereits beim Kontakt einer verknüpften Person erfasst sind, bleiben bei dieser Person. Wenn du Einladungs-E-Mails abbestellt hast, bleibt diese Entscheidung gespeichert."
+    "control": "Du kannst deine Kontakte und Notizen jederzeit ansehen, bearbeiten oder löschen. Wenn du einen Kontakt löschst, werden auch seine Notizen und sein Gesprächsverlauf gelöscht. Du kannst die Verknüpfung eines Kontakts jederzeit lösen, um keine Gespräche mehr zu teilen. Du kannst dein Konto auf deiner Profilseite löschen. Dadurch werden dein Konto, deine Kontakte, Notizen, Gesprächsverläufe, Verknüpfungen und alle Verknüpfungsanfragen von dir oder an dich entfernt. Gesprächsdaten, die bereits beim Kontakt einer verknüpften Person erfasst sind, bleiben bei dieser Person. Wenn du Einladungs-E-Mails abbestellt hast, bleibt diese Entscheidung gespeichert."
   }
 }

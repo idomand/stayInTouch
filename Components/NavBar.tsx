@@ -18,7 +18,7 @@ export default function NavBar() {
   const { count: pendingCount, setCount: setPendingCount } =
     usePendingRequestCount();
 
-  // Fetch on sign-in only. Accept and reject on /settings push the new count
+  // Fetch on sign-in only. Accept and reject on /profile push the new count
   // through PendingRequestCountSync, and sign-out resets it here (uid → none).
   // Refetching on every route change cost a session check and a query each time.
   useEffect(() => {
@@ -67,33 +67,46 @@ export default function NavBar() {
         </span>
       </NextLink>
 
-      {currentUser ? (
-        <div className="flex items-center gap-4">
-          <Link variant="Nav" isLinkActive={pathname === "/"} href="/">
-            {t("navBar.home")}
-          </Link>
+      <div className="flex items-center gap-4">
+        {currentUser ? (
+          <>
+            <Link variant="Nav" isLinkActive={pathname === "/"} href="/">
+              {t("navBar.home")}
+            </Link>
+            <Link
+              variant="Nav"
+              isLinkActive={pathname === "/profile"}
+              href="/profile"
+              extraClasses="flex items-center"
+            >
+              {t("navBar.profile")}
+              {pendingCount > 0 && (
+                <span className="bg-blue1 ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-xs font-bold text-white">
+                  {pendingCount}
+                </span>
+              )}
+            </Link>
+          </>
+        ) : (
           <Link
             variant="Nav"
-            isLinkActive={pathname === "/settings"}
-            href="/settings"
-            extraClasses="flex items-center"
+            isLinkActive={pathname === "/login"}
+            href="/login"
           >
-            {t("navBar.settings")}
-            {pendingCount > 0 && (
-              <span className="bg-blue1 ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-xs font-bold text-white">
-                {pendingCount}
-              </span>
-            )}
+            {t("navBar.loginPage")}
           </Link>
-        </div>
-      ) : (
-        <Link variant="Nav" isLinkActive={pathname === "/login"} href="/login">
-          {t("navBar.loginPage")}
+        )}
+        <Link
+          variant="Nav"
+          isLinkActive={pathname === "/settings"}
+          href="/settings"
+        >
+          {t("navBar.settings")}
         </Link>
-      )}
+      </div>
 
       <div className="justify-self-end">
-        {currentUser && pathname === "/settings" && (
+        {currentUser && (
           <div className="mr-5">
             <LogoutButton />
           </div>

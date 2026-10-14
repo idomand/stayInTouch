@@ -64,6 +64,14 @@ export default async function About() {
             link: externalLink("https://www.linkedin.com/in/ido-mandelman"),
           })}
         </P3>
+        <Link href="https://www.buymeacoffee.com/idomand" target="_blank">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+            alt="Buy me a coffee"
+            className="h-12"
+          />
+        </Link>
       </Card>
     </section>
   );

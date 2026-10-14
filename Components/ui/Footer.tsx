@@ -29,6 +29,14 @@ export default function Footer() {
         >
           {t("footer.privacy")}
         </Link>
+        <Link
+          variant="Nav"
+          isLinkActive={pathname == "/faq"}
+          href="/faq"
+          prefetch
+        >
+          {t("footer.faq")}
+        </Link>
       </div>
       <P extraClasses="text-grey3 whitespace-nowrap justify-self-end md:pr-6">
         © {new Date().getFullYear()} Stay-in-Touch

@@ -23,6 +23,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tsparticles/confetti": "^4.4.0",
     "date-fns": "4.1.0",
     "drizzle-orm": "^0.45.2",
     "firebase": "11.10.0",

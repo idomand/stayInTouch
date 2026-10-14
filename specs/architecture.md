@@ -39,7 +39,7 @@ Components read, Server Actions write and call `revalidatePath`.
 | Environments       | Neon branch `dev` for local work, `production` for Vercel                                                                                       |
 | Primary keys       | `uuid` / `gen_random_uuid()`, not `serial`                                                                                                      |
 | Timestamps         | `timestamptz`, never epoch ms                                                                                                                   |
-| Talk events        | Own append-only `talk_events` table; no `last_talked` column                                                                                    |
+| Talk events        | Own `talk_events` table, rows inserted or deleted, never updated; no `last_talked` column                                                       |
 | Notes              | Own table, private, never shared across a link                                                                                                  |
 | Linked users       | Share the talk event only; links in a `contact_links` table                                                                                     |
 | Access control     | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts`                                                       |
@@ -103,10 +103,14 @@ bridge the two:
   impossible; actions catch error `23505` as "name taken".
 - **`notes` is its own table.** Editing one note is one `UPDATE`, not
   read-whole-document → rebuild array → write. Ids are never reused.
-- **`talk_events` is append-only.** "Last talked" is derived by a query, not
-  stored. `talked_at` is when the talk happened (may be backdated); `created_at`
-  is when the row was written; `created_by` is who clicked, which matters once a
-  linked friend can click.
+- **`talk_events` rows are never updated.** The user can add a past talk or
+  delete one from the history dialog, but a row is never changed. "Last talked"
+  is derived by a query, not stored. `talked_at` is when the talk happened (may
+  be backdated); `created_at` is when the row was written; `created_by` is who
+  clicked, which matters once a linked friend can click. A past talk added by
+  day is stored at local noon, so the day shown does not shift across time
+  zones. The quick-mark button adds at most one talk per local calendar day
+  (the client sends its time zone); the history dialog has no such limit.
 - **Index `(contact_id, talked_at DESC)`.** Every read is "newest event for this
   contact", served straight off the index.
 - **Derived values in SQL.** `lastTalkedAt` and `daysUntilNextTalk` are computed
@@ -143,13 +147,20 @@ event is shared; notes, names and cadence stay private.
 | What does the addressee see?          | The requester's display name and email only.                                                                                                                                                                          |
 | Accepting with no matching contact?   | The accept dialog lets you pick an existing contact or create one. No silent auto-create — name matching is unreliable.                                                                                               |
 
+One talk on a linked pair is two rows, one per contact, with the same
+`shared_id`. Deleting the talk on either side deletes both rows in one
+statement, but only while the link exists: the link row is the only permission
+for a cross-user write. Rows from before `shared_id` existed have none, and
+delete on one side only (no backfill: matching old pairs by timestamp is
+fragile).
+
 Requests are addressed to an **email and never resolved to a uid**. Resolving
 would let the sender see which emails have an account. The addressee sees
 requests sent to their verified session email; after accept, the link is two
 contact ids and emails play no part.
 
 The NavBar badge is a client component that loads its count on navigation.
-Accept and reject keep the user on `/settings`, so that page pushes its fresh
+Accept and reject keep the user on `/profile`, so that page pushes its fresh
 `incoming.length` into `PendingRequestCountContext` after each revalidation.
 
 Known limitations: a sender may re-send after every reject (no cooldown); the
@@ -184,7 +195,7 @@ shape the code:
 
 ## Account deletion
 
-`deleteAccount()` in `lib/actions/account.ts`, from `/settings` (simple confirm,
+`deleteAccount()` in `lib/actions/account.ts`, from `/profile` (simple confirm,
 no re-sign-in). Spec: `specs/account-deletion.md`.
 
 - **Database first, Firebase second.** One transaction deletes the requests
