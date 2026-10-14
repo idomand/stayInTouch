@@ -280,6 +280,13 @@
     "title": "App-Sprache",
     "browserDefault": "Browsersprache"
   },
+  "talkEffectSelector": {
+    "title": "Gesprächsmarker",
+    "description": "Was du nach dem Markieren eines Gesprächs siehst.",
+    "none": "Keine",
+    "small": "Klein",
+    "extreme": "Extrem"
+  },
   "about": {
     "title": "Über",
     "aboutApp": "Über die App",

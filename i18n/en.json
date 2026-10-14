@@ -280,6 +280,13 @@
     "title": "App language",
     "browserDefault": "Browser default"
   },
+  "talkEffectSelector": {
+    "title": "Talk Marker",
+    "description": "What you see after you mark a talk.",
+    "none": "None",
+    "small": "Small",
+    "extreme": "Extreme"
+  },
   "about": {
     "title": "About",
     "aboutApp": "About the app",

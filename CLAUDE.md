@@ -91,7 +91,7 @@ Drizzle has no down migrations: undo a change with a new forward migration. Neve
 
 `lib/Firebase.ts` holds the client Firebase app, `auth` and the Google `provider` — nothing else. `lib/AuthContext.tsx` wraps the app in `app/layout.tsx` and exposes `useAuth()`: Google popup sign-in plus email+password (sign up, sign in, resend verification, check verified, password reset). Consumers call `useAuth()!` with a non-null assertion and read `currentUser`. `AuthProvider` blocks rendering (shows a spinner) until the initial `onAuthStateChanged` resolves. Show auth errors through `authErrorMessage(error, t)` (same file), not raw Firebase codes.
 
-Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/profile` on cookie presence only (`/settings`, which holds only the language selector, is public, like `/about`, `/privacy` and `/faq`); real verification happens on the server. Every new protected route must be added to its `matcher`.
+Server identity uses Firebase **session cookies**. On login the client POSTs its ID token to `app/api/auth/session/route.ts`, which sets an httpOnly `session` cookie via `firebase-admin` (`lib/firebaseAdmin.ts`). Server code reads identity only through `getServerUser()` (`lib/auth/getServerUser.ts`), which returns `{ uid, email }` — the email lower-cased and always verified. `proxy.ts` (Next 16's name for middleware) gates `/` and `/profile` on cookie presence only (`/settings`, which holds the language selector and, for signed-in users, the talk effect picker, is public, like `/about`, `/privacy` and `/faq`); real verification happens on the server. Every new protected route must be added to its `matcher`.
 
 Account deletion is `deleteAccount()` in `lib/actions/account.ts`, called through `useAuth().deleteAccount` (which then signs out like `logout`). It deletes every row tied to the user in one transaction, then the Firebase user. A new table keyed by uid or email must be added there.
 
@@ -101,6 +101,10 @@ Account deletion is `deleteAccount()` in `lib/actions/account.ts`, called throug
 
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
 - Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `hasSession` can also be stale (cookie revoked by a logout on another device, or expired), so `/login` calls `refreshSession()` before redirecting. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
+
+### Talk effect
+
+`lib/talkEffect.ts` plays an optional celebration after a successful `markAsTalked` (none / small / extreme). The choice is per browser in `localStorage` (key `talkEffect`, default `small`), picked in `TalkEffectSelector` on `/settings`. `@tsparticles/confetti` loads through dynamic `import()` only when an effect plays, and nothing plays under `prefers-reduced-motion`.
 
 ### Google Calendar
 

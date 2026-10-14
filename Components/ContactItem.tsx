@@ -1,11 +1,12 @@
 "use client";
-import { useState, useTransition } from "react";
+import { type MouseEvent, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { markAsTalked } from "@/lib/actions/contacts";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
+import { playTalkEffect, readTalkEffect } from "@/lib/talkEffect";
 import MoreOptionsDropdown from "./MoreOptionsDropdown";
 import TalkEvents from "./TalkEvents";
 import ErrorWarning from "./ErrorWarning";
@@ -41,7 +42,9 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       ? t("contactItem.talkInDays", { days: Math.ceil(daysUntilNextTalk) })
       : t("contactItem.talkToday");
 
-  function resetFunction() {
+  function resetFunction(event: MouseEvent<HTMLButtonElement>) {
+    // currentTarget is cleared after the event, so keep the button for the effect.
+    const button = event.currentTarget;
     // Clearing first remounts a repeated error, so it is announced again.
     setError(false);
     // A transition keeps isMarking true until the revalidated contact data is
@@ -53,6 +56,8 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       );
       if (!result.ok) {
         setError(result.error);
+      } else {
+        void playTalkEffect(readTalkEffect(), button);
       }
     });
   }
