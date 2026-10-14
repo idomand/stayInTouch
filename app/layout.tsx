@@ -3,9 +3,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import AuthProvider from "@/lib/AuthContext";
 import { PendingRequestCountProvider } from "@/lib/PendingRequestCountContext";
-import NavBar from "@/Components/NavBar";
-import ScrollButtonWrapper from "@/Components/ScrollToTopButton";
-import Footer from "@/Components/ui/Footer";
+import NavBar from "@/Components/layout/NavBar";
+import ScrollButtonWrapper from "@/Components/layout/ScrollToTopButton";
+import Footer from "@/Components/layout/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {

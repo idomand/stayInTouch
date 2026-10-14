@@ -7,11 +7,11 @@ import type {
   OutgoingLinkRequest,
   LinkableContact,
 } from "@/lib/db/queries/links";
-import { P, P2 } from "./ui/Text";
-import Button from "./ui/Button";
+import { P, P2 } from "@/Components/ui/Text";
+import Button from "@/Components/ui/Button";
 import Card from "@/Components/ui/Card";
-import AcceptLinkDialog from "./AcceptLinkDialog";
-import ErrorWarning from "./ErrorWarning";
+import AcceptLinkDialog from "@/Components/links/AcceptLinkDialog";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 export default function FriendRequests({
   incoming,

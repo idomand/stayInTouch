@@ -10,8 +10,8 @@ export {};
 // import { useTranslations } from "next-intl";
 // import { deleteNote } from "@/lib/actions/contacts";
 // import { H4 } from "@/Components/ui/Text";
-// import Button from "./ui/Button";
-// import ErrorWarning from "./ErrorWarning";
+// import Button from "@/Components/ui/Button";
+// import ErrorWarning from "@/Components/ui/ErrorWarning";
 //
 // type NoteItemProps = {
 //   noteId: string;

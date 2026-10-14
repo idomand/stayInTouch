@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
-import { H2 } from "./Text";
+import { H2 } from "@/Components/ui/Text";
 
 type DialogProps = {
   title: string;

@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import type { Locale } from "@/i18n/config";
 import { setLocale } from "@/lib/actions/locale";
-import { P } from "./ui/Text";
-import { basicInputClasses } from "./ui/formClasses";
+import { P } from "@/Components/ui/Text";
+import { basicInputClasses } from "@/Components/ui/formClasses";
 
 export type LanguageChoice = Locale | "auto";
 

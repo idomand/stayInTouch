@@ -128,4 +128,13 @@ The project previously used styled-components; that migration is complete and th
 
 ### Component file convention
 
-Components are flat single-file `Components/ComponentName.tsx` — no per-component folder, no `index.tsx` barrel. Reusable presentational components go in `Components/ui/`; feature components sit directly under `Components/`.
+Components are single-file `ComponentName.tsx` — no per-component folder, no `index.tsx` barrel. They are grouped in feature folders under `Components/`:
+
+- `ui/` — reusable presentational pieces with no feature logic (`Button`, `Text`, `Dialog`, `ErrorWarning`, `DatePickerComponent`, …)
+- `layout/` — app shell used by `app/layout.tsx` (`NavBar`, `Footer`, `ScrollToTopButton`)
+- `contacts/` — the home page contact list, contact forms, talk events, notes
+- `links/` — linked users: link requests and link dialogs
+- `auth/` — login, email verification, logout
+- `settings/` — user preferences and account (`/settings`, account deletion, unsubscribe)
+
+Import components with the `@/Components/<folder>/<Name>` alias, never a relative path, so moving a file does not break its imports.

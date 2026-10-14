@@ -7,10 +7,10 @@ import { FaLink } from "react-icons/fa";
 import { markAsTalked } from "@/lib/actions/contacts";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import { playTalkEffect, readTalkEffect } from "@/lib/talkEffect";
-import MoreOptionsDropdown from "./MoreOptionsDropdown";
-import TalkEvents from "./TalkEvents";
-import ErrorWarning from "./ErrorWarning";
-import Spinner from "./ui/Spinner";
+import MoreOptionsDropdown from "@/Components/contacts/MoreOptionsDropdown";
+import TalkEvents from "@/Components/contacts/TalkEvents";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import Spinner from "@/Components/ui/Spinner";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, daysSinceLastTalk, daysUntilNextTalk } = contact;

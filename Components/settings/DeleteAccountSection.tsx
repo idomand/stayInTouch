@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/AuthContext";
-import { P, P2 } from "./ui/Text";
-import Button from "./ui/Button";
-import Dialog from "./ui/Dialog";
+import { P, P2 } from "@/Components/ui/Text";
+import Button from "@/Components/ui/Button";
+import Dialog from "@/Components/ui/Dialog";
 import Card from "@/Components/ui/Card";
-import ErrorWarning from "./ErrorWarning";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 export default function DeleteAccountSection() {
   const t = useTranslations();

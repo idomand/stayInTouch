@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
-import LanguageSelector from "@/Components/LanguageSelector";
-import TalkEffectSelector from "@/Components/TalkEffectSelector";
+import LanguageSelector from "@/Components/settings/LanguageSelector";
+import TalkEffectSelector from "@/Components/settings/TalkEffectSelector";
 import PageHeader from "@/Components/ui/PageHeader";
 import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
 import { getServerUser } from "@/lib/auth/getServerUser";

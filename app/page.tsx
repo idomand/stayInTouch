@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import ContactList from "@/Components/ContactList";
-import MainForm from "@/Components/MainForm";
+import ContactList from "@/Components/contacts/ContactList";
+import MainForm from "@/Components/contacts/MainForm";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import { getContactsForCurrentUser } from "@/lib/db/queries/contacts";
 

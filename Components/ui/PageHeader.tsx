@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
-import { H1 } from "./Text";
+import { H1 } from "@/Components/ui/Text";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 type Props = {

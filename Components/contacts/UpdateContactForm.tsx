@@ -11,8 +11,8 @@ import {
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import ErrorWarning from "./ErrorWarning";
-import Dialog from "./ui/Dialog";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import Dialog from "@/Components/ui/Dialog";
 
 type UpdateContactFormProps = {
   contact: ContactListItem;

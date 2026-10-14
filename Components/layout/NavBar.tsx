@@ -5,11 +5,11 @@ import NextLink from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useAuth } from "../lib/AuthContext";
+import { useAuth } from "@/lib/AuthContext";
 import { usePendingRequestCount } from "@/lib/PendingRequestCountContext";
 import { getMyPendingRequestCount } from "@/lib/actions/links";
-import Link from "./ui/Link";
-import LogoutButton from "./LogoutButton";
+import Link from "@/Components/ui/Link";
+import LogoutButton from "@/Components/auth/LogoutButton";
 
 export default function NavBar() {
   const { currentUser } = useAuth()!;

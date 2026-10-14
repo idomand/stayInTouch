@@ -2,8 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import Link from "./Link";
-import { P } from "./Text";
+import Link from "@/Components/ui/Link";
+import { P } from "@/Components/ui/Text";
 
 export default function Footer() {
   const pathname = usePathname();

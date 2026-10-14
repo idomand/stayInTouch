@@ -15,10 +15,10 @@ import type {
   ContactListItem,
   ContactTalkEvent,
 } from "@/lib/db/queries/contacts";
-import Button from "./ui/Button";
-import Dialog from "./ui/Dialog";
-import DatePickerComponent from "./DatePickerComponent";
-import ErrorWarning from "./ErrorWarning";
+import Button from "@/Components/ui/Button";
+import Dialog from "@/Components/ui/Dialog";
+import DatePickerComponent from "@/Components/ui/DatePickerComponent";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
 
 // en-GB keeps the day-month order English used before i18n.
 const DATE_LOCALES: Record<Locale, string> = { en: "en-GB", de: "de-DE" };

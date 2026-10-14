@@ -7,11 +7,14 @@ import type {
   IncomingLinkRequest,
   LinkableContact,
 } from "@/lib/db/queries/links";
-import { P2 } from "./ui/Text";
-import Dialog from "./ui/Dialog";
-import Button from "./ui/Button";
-import ErrorWarning from "./ErrorWarning";
-import { basicInputClasses, basicLabelClasses } from "./ui/formClasses";
+import { P2 } from "@/Components/ui/Text";
+import Dialog from "@/Components/ui/Dialog";
+import Button from "@/Components/ui/Button";
+import ErrorWarning from "@/Components/ui/ErrorWarning";
+import {
+  basicInputClasses,
+  basicLabelClasses,
+} from "@/Components/ui/formClasses";
 import { twMerge } from "tailwind-merge";
 
 export default function AcceptLinkDialog({

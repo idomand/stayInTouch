@@ -46,11 +46,12 @@ Styling is **Tailwind CSS v4**. There is no styled-components code left; don't r
 
 ## Component conventions
 
-- Components are **flat single-file** `Components/ComponentName.tsx` — no per-component
-  folder, no `index.tsx` barrel.
+- Components are **single-file** `ComponentName.tsx` — no per-component folder, no
+  `index.tsx` barrel — grouped in feature folders: `Components/ui/`, `layout/`, `contacts/`,
+  `links/`, `auth/`, `settings/` (see "Component file convention" in `CLAUDE.md`).
 - Reusable presentational components live in `Components/ui/` (see `Components/ui/Button.tsx`
-  with its `variant` prop for the pattern to follow); feature components sit directly under
-  `Components/`.
+  with its `variant` prop for the pattern to follow).
+- Import components with the `@/Components/<folder>/<Name>` alias, never a relative path.
 - Auth: consumers call `useAuth()!` (non-null assertion) from `lib/AuthContext.tsx` and read
   `currentUser`.
 
@@ -59,7 +60,7 @@ Styling is **Tailwind CSS v4**. There is no styled-components code left; don't r
 1. Read a nearby existing component first to match imports, prop-typing style, and export
    convention before writing anything.
 2. Put presentational/reusable Tailwind components in `Components/ui/`; feature components in
-   `Components/`.
+   the matching feature folder under `Components/`.
 3. Type props with an explicit type or `React.ComponentProps<"tag">`. Accept and
    `twMerge` a `className` prop for anything reusable.
 4. Default-export or named-export to match how sibling files in that folder do it.

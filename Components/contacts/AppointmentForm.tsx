@@ -8,9 +8,9 @@ import { useAuth } from "@/lib/AuthContext";
 import { P1 } from "@/Components/ui/Text";
 import { basicFormClasses } from "@/Components/ui/formClasses";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import DatePickerComponent from "./DatePickerComponent";
-import Button from "./ui/Button";
-import Dialog from "./ui/Dialog";
+import DatePickerComponent from "@/Components/ui/DatePickerComponent";
+import Button from "@/Components/ui/Button";
+import Dialog from "@/Components/ui/Dialog";
 
 type AppointmentFormProps = {
   contact: ContactListItem;

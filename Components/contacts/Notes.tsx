@@ -15,10 +15,10 @@ export {};
 //   inputSubmitClasses,
 // } from "@/Components/ui/formClasses";
 // import type { ContactListItem } from "@/lib/db/queries/contacts";
-// import NoteItem from "./NoteItem";
-// import Button from "./ui/Button";
-// import Dialog from "./ui/Dialog";
-// import ErrorWarning from "./ErrorWarning";
+// import NoteItem from "@/Components/contacts/NoteItem";
+// import Button from "@/Components/ui/Button";
+// import Dialog from "@/Components/ui/Dialog";
+// import ErrorWarning from "@/Components/ui/ErrorWarning";
 //
 // export default function Notes({ contact }: { contact: ContactListItem }) {
 //   const t = useTranslations();

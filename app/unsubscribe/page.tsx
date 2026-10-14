@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { H1, P2 } from "@/Components/ui/Text";
-import UnsubscribeConfirm from "@/Components/UnsubscribeConfirm";
+import UnsubscribeConfirm from "@/Components/settings/UnsubscribeConfirm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
