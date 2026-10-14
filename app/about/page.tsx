@@ -69,6 +69,7 @@ export default async function About() {
           <img
             src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
             alt="Buy me a coffee"
+            loading="lazy"
             className="h-12"
           />
         </Link>
