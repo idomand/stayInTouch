@@ -1,5 +1,5 @@
 "use server";
-import { and, count, eq, inArray, or, sql } from "drizzle-orm";
+import { and, count, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { db } from "@/lib/db";
@@ -302,11 +302,26 @@ export async function acceptLinkRequest(
         return actionError({ key: "contactsAlreadyLinked" });
       }
 
+      // The sender's email is already shown to the addressee in the request,
+      // so saving it on the card reveals nothing new.
       let myContactId = chosenContactId;
-      if (!myContactId && newContact) {
+      if (myContactId) {
+        // Fill only an empty email: one the user typed may be the address
+        // they know the sender by, and must not be overwritten.
+        await tx
+          .update(contacts)
+          .set({ friendEmail: request.fromEmail })
+          .where(
+            and(eq(contacts.id, myContactId), isNull(contacts.friendEmail)),
+          );
+      } else if (newContact) {
         const [created] = await tx
           .insert(contacts)
-          .values({ ownerId: uid, ...newContact })
+          .values({
+            ownerId: uid,
+            ...newContact,
+            friendEmail: request.fromEmail,
+          })
           .returning({ id: contacts.id });
         myContactId = created.id;
       }
