@@ -6,12 +6,21 @@ import { PendingRequestCountProvider } from "@/lib/PendingRequestCountContext";
 import NavBar from "@/Components/layout/NavBar";
 import ScrollButtonWrapper from "@/Components/layout/ScrollToTopButton";
 import Footer from "@/Components/layout/Footer";
+import ServiceWorkerRegistration from "@/Components/layout/ServiceWorkerRegistration";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stay-in-touch.vip"),
   title: { default: "Stay-in-Touch", template: "%s | Stay-in-Touch" },
   manifest: "/manifest.json",
+  // iOS ignores the manifest icons and fills transparency with black, so it
+  // gets its own opaque icon.
+  appleWebApp: {
+    capable: true,
+    title: "Stay-in-Touch",
+    statusBarStyle: "default",
+  },
+  icons: { apple: "/icons/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {
@@ -37,6 +46,7 @@ export default async function RootLayout({
                 <div className="flex-1">{children}</div>
                 <Footer />
                 <ScrollButtonWrapper />
+                <ServiceWorkerRegistration />
               </main>
             </PendingRequestCountProvider>
           </AuthProvider>

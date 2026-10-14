@@ -13,22 +13,16 @@ building. Background and constraints are in `specs/architecture.md`.
      sign-in (check `providerData` for `password`). Firebase requires a recent
      sign-in, so re-authenticate (`reauthenticateWithCredential`) before
      `updatePassword`; show errors through `authErrorMessage()`.
-2. **A real PWA setup.** There is no service worker. `next-pwa` was removed: it
-   is a webpack plugin and the build uses Turbopack, so it never ran. Use a
-   Turbopack-compatible approach (e.g. Serwist, or a hand-written service worker),
-   check `public/manifest.json` and the icons, and decide what may be cached:
-   never serve a signed-in page after sign-out. Then put the "installable" claim
-   back in the README.
-3. **Database pool on Vercel Fluid compute.** `lib/db/index.ts` keeps one
+2. **Database pool on Vercel Fluid compute.** `lib/db/index.ts` keeps one
    module-level `Pool`. If Fluid compute is on (not checked), Vercel recommends
    `attachDatabasePool(pool)` from `@vercel/functions` so idle WebSocket
    connections close before an instance suspends.
-4. **Language per account.** The language is a cookie today, so it is per
+3. **Language per account.** The language is a cookie today, so it is per
    browser and a new device starts from its browser language. Moving it to a
    `user_settings` row would make it follow the user. (The old
    `specs/i18n-german-translations.md` on the `70-add-i18n-and-german-translations`
    branch is superseded by the shipped i18n work.)
-5. **Stable auth context value.** `AuthProvider` in `lib/AuthContext.tsx` builds
+4. **Stable auth context value.** `AuthProvider` in `lib/AuthContext.tsx` builds
    a new `value` object on every render, so every `useAuth()` consumer
    re-renders with it (P6 in `specs/app-review-fixes.md`). A `useMemo` keyed on
    `[currentUser, hasSession]` was tried and reverted: the functions in the
@@ -48,7 +42,7 @@ building. Background and constraints are in `specs/architecture.md`.
    would re-run the effect, and re-mint the session cookie, on every render.
    Once the function is stable, listing it is safe and makes the deps honest.
 
-6. **Don't block server-rendered pages on Firebase start-up.** Moved here from
+5. **Don't block server-rendered pages on Firebase start-up.** Moved here from
    P1 (High) in `specs/app-review-fixes.md`. Until the Firebase client reports
    the auth state, `AuthProvider` (`lib/AuthContext.tsx`) shows only a spinner
    and renders no children. So server-rendered content, including the home list
@@ -60,14 +54,14 @@ building. Background and constraints are in `specs/architecture.md`.
      authenticated page flash and then redirect.
    - It touches the auth flow, so it needs its own spec and its own branch.
 
-7. **What happens when the timer is up (`/profile` setting).** Each user picks
+6. **What happens when the timer is up (`/profile` setting).** Each user picks
    one option:
    1. Only turn the card red (today's behaviour, the default).
    2. Send the user an email that the timer for that contact is up.
    3. If the user and the friend are linked **and** both contacts have been red
       for over 48 hours, notify both of them.
 
-   Needs: a per-user settings row (`user_settings`, shared with item 4); a
+   Needs: a per-user settings row (`user_settings`, shared with item 3); a
    scheduled job (Vercel cron) that finds contacts that just went red; the email
    sender in `lib/email/` and the opt-out in `email_opt_outs`; a "sent" record so
    one red contact sends one email, not one per cron run. "Red for 48 hours" can
@@ -75,7 +69,7 @@ building. Background and constraints are in `specs/architecture.md`.
    Option 3 shares state across users, so check it against the "only talk events
    are shared" rule before building.
 
-8. **Calendar appointment indicator on the card.** When the user opens a Google
+7. **Calendar appointment indicator on the card.** When the user opens a Google
    Calendar appointment from a card, show an icon on that card. The icon starts
    with the date picked in the appointment form. The user can edit the date (the
    app cannot see the real calendar event: `lib/CalendarFunctions.ts` only opens
@@ -84,7 +78,7 @@ building. Background and constraints are in `specs/architecture.md`.
    the date per contact (a nullable column on `contacts`, or a small table).
    Opening the form does not mean the user saved the event, so the edit option
    should also allow clearing it.
-9. **Maybe: turn notes back on.** Not decided. Notes are parked (C1 in
+8. **Maybe: turn notes back on.** Not decided. Notes are parked (C1 in
    `specs/app-review-fixes.md`): the `notes` table, `Notes.tsx`, `NoteItem.tsx`
    and the commented-out actions in `lib/actions/contacts.ts` still exist.
    Decide whether notes are wanted before writing a spec.

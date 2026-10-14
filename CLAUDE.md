@@ -44,7 +44,7 @@ A `pre-push` git hook runs `tsc --noEmit` and aborts the push on any type error 
 
 Next.js 16 **App Router** (`app/`) + React 19, TypeScript. Firebase Auth for identity; contact data in Neon Postgres through Drizzle. Deployed on Vercel. Path alias `@/*` maps to the repo root.
 
-There is no service worker and no PWA plugin (`next-pwa` was removed: it was a webpack plugin and the build uses Turbopack). `public/manifest.json` exists, but the app is not an installable PWA today — don't design around a service worker. See item 2 in `specs/future-upgrades.md`.
+**PWA.** The app is installable from `public/manifest.json` (iOS metadata and its opaque `apple-touch-icon` are in `app/layout.tsx`). There is no PWA plugin (`next-pwa` is webpack-only; the build uses Turbopack). `public/sw.js` is a hand-written service worker, registered in production only by `Components/layout/ServiceWorkerRegistration.tsx`. It caches only `/_next/static/*` (hashed files) and `public/offline.html`, which it shows when a page cannot load. **Never let it cache HTML, RSC payloads or API responses** — a signed-in page must not show after sign-out. `offline.html` is static, so it holds its own English and German text — the one exception to the next-intl rule. Bump `CACHE` in `sw.js` when its precached files change.
 
 Route files live in `app/` as `page.tsx`; `app/layout.tsx` is the root layout. Page/head metadata comes from `metadata`/`viewport` exports, not a `<Head>` component. `app/page.tsx` (home) is a Server Component. Any component using hooks, context, browser APIs, or event handlers needs the `"use client"` directive. Navigation hooks come from `next/navigation` (`useRouter`, `usePathname`), not `next/router`.
 

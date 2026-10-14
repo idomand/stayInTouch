@@ -90,11 +90,6 @@ export default async function Welcome() {
       <P2 extraClasses="text-grey3">
         {t.rich("welcome.privacyNote", { link: textLink("/privacy") })}
       </P2>
-
-      <div className="flex flex-col items-center gap-4">
-        <H2>{t("welcome.closingTitle")}</H2>
-        <StartLink label={t("welcome.getStarted")} />
-      </div>
     </section>
   );
 }

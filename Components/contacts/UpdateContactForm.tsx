@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { updateContact } from "@/lib/actions/contacts";
-import { maxCadenceDays } from "@/lib/ConstantsFile";
+import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import {
   basicFormClasses,
   basicInputClasses,
@@ -13,6 +13,7 @@ import {
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import Dialog from "@/Components/ui/Dialog";
+import CharactersLeft from "@/Components/ui/CharactersLeft";
 
 type UpdateContactFormProps = {
   contact: ContactListItem;
@@ -92,18 +93,25 @@ export default function UpdateContactForm({
           >
             <label className={twMerge(basicLabelClasses, "")}>
               {t("updateContactForm.changeName")}
-              <input
-                type="text"
-                placeholder={t("common.enterName")}
-                name="name"
-                value={contactName}
-                required
-                onChange={nameChangeHandler}
-                className={twMerge(
-                  basicInputClasses,
-                  "border-grey2 border border-solid p-1",
-                )}
-              />
+              <div className="relative flex flex-col">
+                <input
+                  type="text"
+                  placeholder={t("common.enterName")}
+                  name="name"
+                  value={contactName}
+                  required
+                  maxLength={maxNameLength}
+                  onChange={nameChangeHandler}
+                  className={twMerge(
+                    basicInputClasses,
+                    "border-grey2 border border-solid p-1 pr-14",
+                  )}
+                />
+                <CharactersLeft
+                  length={contactName.length}
+                  max={maxNameLength}
+                />
+              </div>
             </label>
             <label
               className={twMerge(

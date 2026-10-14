@@ -19,8 +19,9 @@ keep up with and set how often you'd like to reach out — then it keeps your
 contact list sorted by who you're most overdue to talk to, so you always know
 who's next.
 
-Today it is a regular web app: it cannot be installed and does not work offline.
-Making it an installable **PWA (Progressive Web App)** is planned.
+It is an installable **PWA (Progressive Web App)**: add it to your home screen
+or install it from the browser. It needs an internet connection; offline it
+shows a short "you are offline" page.
 
 ![](public/Stay_In_Touch.PNG)
 
@@ -67,7 +68,7 @@ i18n/          Locale config, locale detection, and translations (en.json, de.js
 app/           Next.js App Router routes (/, /profile, /settings, /login, /about, /privacy, /faq, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations
-public/        Static assets, icons, and a web app manifest (PWA support is planned)
+public/        Static assets, icons, web app manifest, service worker (sw.js) and offline page
 ```
 
 ## License

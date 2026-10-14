@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { acceptLinkRequest } from "@/lib/actions/links";
-import { maxCadenceDays } from "@/lib/ConstantsFile";
+import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import type {
   IncomingLinkRequest,
   LinkableContact,
@@ -11,6 +11,7 @@ import { P2 } from "@/Components/ui/Text";
 import Dialog from "@/Components/ui/Dialog";
 import Button from "@/Components/ui/Button";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
+import CharactersLeft from "@/Components/ui/CharactersLeft";
 import {
   basicInputClasses,
   basicLabelClasses,
@@ -158,18 +159,25 @@ export default function AcceptLinkDialog({
             </label>
             <div className="flex-1">
               <div className="mt-2 space-y-2">
-                <input
-                  aria-label={t("acceptLinkDialog.contactName")}
-                  type="text"
-                  placeholder={t("acceptLinkDialog.contactName")}
-                  value={newContactName}
-                  onChange={(e) => setNewContactName(e.target.value)}
-                  disabled={choice !== "new"}
-                  className={twMerge(
-                    basicInputClasses,
-                    "disabled:cursor-not-allowed disabled:opacity-50",
-                  )}
-                />
+                <div className="relative w-fit">
+                  <input
+                    aria-label={t("acceptLinkDialog.contactName")}
+                    type="text"
+                    placeholder={t("acceptLinkDialog.contactName")}
+                    value={newContactName}
+                    onChange={(e) => setNewContactName(e.target.value)}
+                    disabled={choice !== "new"}
+                    maxLength={maxNameLength}
+                    className={twMerge(
+                      basicInputClasses,
+                      "pr-14 disabled:cursor-not-allowed disabled:opacity-50",
+                    )}
+                  />
+                  <CharactersLeft
+                    length={newContactName.length}
+                    max={maxNameLength}
+                  />
+                </div>
                 <div className={twMerge(basicLabelClasses, "")}>
                   <span className="text-grey3 text-xs">
                     {t("acceptLinkDialog.everyXDays")}

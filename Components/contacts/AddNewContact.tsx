@@ -3,8 +3,9 @@ import React, { useState, useId, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { FaUserPlus } from "react-icons/fa";
 import { addContact } from "@/lib/actions/contacts";
-import { maxCadenceDays } from "@/lib/ConstantsFile";
+import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
+import CharactersLeft from "@/Components/ui/CharactersLeft";
 import DatePickerComponent from "@/Components/ui/DatePickerComponent";
 import Spinner from "@/Components/ui/Spinner";
 import {
@@ -70,18 +71,22 @@ export default function AddNewContact() {
       >
         <label className={basicLabelClasses}>
           {t("addNewContact.talkTo")}
-          <input
-            type="text"
-            placeholder={t("common.enterName")}
-            name="name"
-            value={name}
-            required
-            onChange={nameChangeHandler}
-            className={twMerge(
-              basicInputClasses,
-              "border-grey2 border border-solid",
-            )}
-          />
+          <div className="relative flex flex-col">
+            <input
+              type="text"
+              placeholder={t("common.enterName")}
+              name="name"
+              value={name}
+              required
+              maxLength={maxNameLength}
+              onChange={nameChangeHandler}
+              className={twMerge(
+                basicInputClasses,
+                "border-grey2 border border-solid pr-14",
+              )}
+            />
+            <CharactersLeft length={name.length} max={maxNameLength} />
+          </div>
         </label>
         <label className={basicLabelClasses}>
           {t("addNewContact.every")}
