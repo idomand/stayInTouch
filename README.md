@@ -64,7 +64,7 @@ lib/auth/      Server identity (Firebase session cookies)
 lib/db/        Drizzle client, schema, migrations and queries (server only)
 lib/actions/   Server Actions for contact, note and link writes, and the language setting
 i18n/          Locale config, locale detection, and translations (en.json, de.json)
-app/           Next.js App Router routes (/, /settings, /login, /about, /privacy, /api/auth/session)
+app/           Next.js App Router routes (/, /profile, /settings, /login, /about, /privacy, /faq, /api/auth/session)
 styles/        Global styles (Tailwind theme tokens and animations)
 types/         Global type declarations
 public/        Static assets, icons, and a web app manifest (PWA support is planned)

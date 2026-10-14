@@ -18,7 +18,7 @@ const PendingRequestCountContext = createContext<PendingRequestCount | null>(
 );
 
 /**
- * The NavBar badge count, shared so /settings can push a fresh value after an
+ * The NavBar badge count, shared so /profile can push a fresh value after an
  * accept or reject (see PendingRequestCountSync). The NavBar itself fetches
  * only on sign-in, so this is how the badge follows those actions.
  */

@@ -119,7 +119,8 @@ export default function LinkContactDialog({
           <Button
             buttonText={t("linkContactDialog.sendInvite")}
             onClick={handleSend}
-            disabled={isSubmitting || remaining === 0}
+            disabled={isSubmitting || remaining === 0 || email === ""}
+            type="submit"
           />
         </div>
       </div>

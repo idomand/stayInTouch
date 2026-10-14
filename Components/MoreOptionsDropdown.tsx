@@ -170,7 +170,7 @@ export default function MoreOptionsDropdown({
               {t("moreOptionsDropdown.linkWithFriend")}
             </button>
           ) : contact.hasPendingRequest ? (
-            <NextLink href="/settings" className={menuItemClasses}>
+            <NextLink href="/profile" className={menuItemClasses}>
               {t("moreOptionsDropdown.linkPending")}
             </NextLink>
           ) : contact.isLinked ? (

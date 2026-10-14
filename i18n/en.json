@@ -11,12 +11,14 @@
     "homeLabel": "Stay-in-Touch home",
     "logoAlt": "Stay-in-Touch logo",
     "home": "Home",
+    "profile": "Profile",
     "settings": "Settings",
     "loginPage": "Log in"
   },
   "footer": {
     "about": "About",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "faq": "FAQ"
   },
   "pageHeader": {
     "backToHome": "Back to home"
@@ -119,13 +121,14 @@
     "noteEmpty": "Note is empty.",
     "noteTooLong": "Note must be at most {max} characters.",
     "contactNotFound": "Contact not found.",
+    "talkEventNotFound": "Talk not found.",
     "noteNotFound": "Note not found.",
     "requestNotFound": "Request not found.",
     "nameTaken": "A contact with this name already exists.",
     "linkToSelf": "You cannot send a link request to yourself.",
     "contactAlreadyLinked": "This contact is already linked.",
     "requestAlreadyPending": "You already have a pending request to this email.",
-    "requestCrossed": "{name} already sent you a request. Accept it on your Settings page.",
+    "requestCrossed": "{name} already sent you a request. Accept it on your Profile page.",
     "contactHasPendingRequest": "This contact already has a pending request.",
     "inviteLimitReached": "You can send {limit} invites per day. Try again later.",
     "alreadyLinkedWith": "You are already linked with {name}.",
@@ -165,7 +168,7 @@
     "updateContact": "Update contact",
     "makeAppointment": "Make appointment",
     "linkWithFriend": "Link with friend",
-    "linkPending": "Link request pending – view in Settings",
+    "linkPending": "Link request pending – view in Profile",
     "deleteContact": "Delete contact",
     "deleteName": "Delete {name}",
     "goBack": "Go back",
@@ -198,7 +201,16 @@
     "empty": "No talks recorded yet.",
     "loggedByFriend": "· logged by your friend",
     "loading": "Loading…",
-    "loadFailed": "Could not load the talk history. Please try again."
+    "loadFailed": "Could not load the talk history. Please try again.",
+    "addTitle": "Add a talk",
+    "addDate": "Date of the talk",
+    "add": "Add",
+    "adding": "Adding…",
+    "linkedNote": "This contact is linked: adding or deleting a talk also changes your friend's history.",
+    "deleteLabel": "Delete the talk on {date}",
+    "confirmDelete": "Delete this talk?",
+    "delete": "Delete",
+    "saveFailed": "Could not save the change. Please try again."
   },
   "datePicker": {
     "dateFormat": "dd/MM/yyyy"
@@ -258,7 +270,10 @@
     "failed": "Something went wrong. Please try again."
   },
   "settings": {
-    "title": "Settings",
+    "title": "Settings"
+  },
+  "profile": {
+    "title": "Profile",
     "notifications": "Notifications"
   },
   "languageSelector": {
@@ -279,9 +294,52 @@
     "me1": "My name is Ido Mandelman and I am a passionate Fullstack developer.",
     "me2": "Originally from Israel, I have moved to Berlin with my wife to start a new life in this beautiful city.",
     "me3": "In my free time I love reading programming, history, and science-fiction books, cooking and learning German.",
-    "github": "This app is completely open source. You can see the full code<link>on GitHub</link>.",
+    "github": "This app is completely open source. You can see the full code on <link>GitHub</link>.",
     "website": "You can see more of my projects on my<link>website</link>.",
     "linkedin": "And talk to me on<link>LinkedIn</link>."
+  },
+  "faq": {
+    "title": "FAQ",
+    "whatIsApp": {
+      "question": "What is Stay-in-Touch?",
+      "answer": "A simple reminder app for the people you care about. Add a contact, choose how often you want to talk, and the app shows who you should reach out to next."
+    },
+    "timer": {
+      "question": "What do the colours and the timer on a card mean?",
+      "answer": "Each card counts down to your next talk, based on how often you want to talk to that person. When the time is up, or when you have never talked, the card turns red. Mark a talk and the timer starts again."
+    },
+    "talkHistory": {
+      "question": "How do I record a talk?",
+      "answer": "Press the talk button on the contact's card after you talked. Open the talk history (the clock icon) to see all past talks. There you can also add a talk you forgot on an earlier date, or delete one you added by mistake."
+    },
+    "privacy": {
+      "question": "Who can see my contacts?",
+      "answer": "Only you. Your contacts, the names you give them and how often you want to talk stay private. If you link a contact with a friend, the only thing you share is the dates of your talks."
+    },
+    "language": {
+      "question": "How do I change the language?",
+      "answer": "Open Settings and choose English or German. You can do this without signing in. The choice is saved in this browser."
+    },
+    "inviteLimit": {
+      "question": "Why can I send only {limit} invites per day?",
+      "answer": "Each link request sends an email to your friend, who may not have an account yet. The limit stops the app from being used to send spam, and it keeps our emails out of spam folders, so your invites arrive. The limit counts the last 24 hours."
+    },
+    "linking": {
+      "question": "How does linking with a friend work?",
+      "answer": "Open the menu on a contact's card and choose \"Link with friend\". Enter your friend's email, and the app emails them a request. Your friend accepts it on their Profile page and picks which of their contacts is you, or creates a new one. From then on, when either of you marks a talk, it shows on both cards and both timers reset. Adding or deleting a talk in the history also changes it for both of you. Each contact can be linked with one friend only. You can unlink at any time from the same menu."
+    },
+    "ownCadence": {
+      "question": "If we are linked, do we need the same \"how often\" setting?",
+      "answer": "No. Each of you keeps your own setting. For example, you can want to talk every 7 days while your friend chooses every 14 days. A talk resets both timers, but each timer counts down with its own number of days."
+    },
+    "deleteAccount": {
+      "question": "What happens when I delete my account?",
+      "answer": "Everything tied to your account is deleted: your contacts, their talk history, your links and all link requests to or from you. Then the account itself is removed. This cannot be undone. You can delete your account on your Profile page."
+    },
+    "deleteWithLinks": {
+      "question": "What happens to my linked friends if I delete my account?",
+      "answer": "The links end, and your talks are no longer shared. Each friend keeps their own contact for you and the talks already recorded on it. They are not notified that you deleted your account."
+    }
   },
   "privacy": {
     "title": "Privacy policy",
@@ -299,6 +357,6 @@
     "providersTitle": "Service providers",
     "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Resend sends the link request emails; it processes the recipient's email address and the sender's name and email. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
-    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can delete your account in Settings. This removes your account, contacts, notes, talk history, links, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
+    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can delete your account on your Profile page. This removes your account, contacts, notes, talk history, links, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
   }
 }
