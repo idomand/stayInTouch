@@ -46,6 +46,7 @@ export default function DatePickerComponent({
         maxDate={maxDate}
         calendarContainer={Calendar}
         popperContainer={Popper}
+        popperProps={{ strategy: "fixed" }}
         dateFormat={t("datePicker.dateFormat")}
         locale={locale === "en" ? undefined : locale}
         selected={selected}
