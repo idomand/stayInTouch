@@ -14,7 +14,7 @@ import {
   getPendingRequestCount,
   invitesInLastDay,
 } from "@/lib/db/queries/links";
-import { inviteLimitPerDay } from "@/lib/ConstantsFile";
+import { inviteLimitPerDay, maxNameLength } from "@/lib/ConstantsFile";
 import {
   contactLinks,
   contacts,
@@ -125,11 +125,19 @@ export async function sendLinkRequest(
     });
   }
 
-  // The addressee sees only this name and email — a snapshot taken now.
+  // The addressee sees only this name and email — a snapshot taken now. The
+  // display name is free text that goes into an email from our domain, so
+  // strip control characters and cap it (Google names and accounts created
+  // before the limit can be longer).
   let fromName = myEmail;
   try {
     const record = await adminAuth.getUser(uid);
-    fromName = record.displayName?.trim() || myEmail;
+    const displayName = (record.displayName ?? "")
+      .replace(/\p{Cc}/gu, "")
+      .trim()
+      .slice(0, maxNameLength)
+      .trim();
+    fromName = displayName || myEmail;
   } catch (error) {
     console.error("Could not read the sender's display name:", error);
   }

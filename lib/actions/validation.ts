@@ -1,12 +1,12 @@
 import type { Messages } from "next-intl";
-import { maxCadenceDays } from "@/lib/ConstantsFile";
+import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 
 /**
  * Input checks shared by the Server Actions. A Server Action is a public POST
  * endpoint: its TypeScript types are not enforced at runtime, so every argument
  * is checked. Limits never sit below the UI's own limits, so the server never
- * rejects what the UI allows; the cadence limit is shared with the forms
- * (maxCadenceDays). A plain module, not "use server": those files may only
+ * rejects what the UI allows; the cadence and name limits are shared with the
+ * forms (maxCadenceDays, maxNameLength). A plain module, not "use server": those files may only
  * export async functions.
  */
 
@@ -21,7 +21,6 @@ export type ErrorMessage = {
   values?: Record<string, string | number>;
 };
 
-const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_NOTE_LENGTH = 5000;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -48,8 +47,8 @@ export function validateFields(input: ContactFieldsInput): ErrorMessage | null {
   if (typeof name !== "string" || !name.trim()) {
     return { key: "nameRequired" };
   }
-  if (name.trim().length > MAX_NAME_LENGTH) {
-    return { key: "nameTooLong", values: { max: MAX_NAME_LENGTH } };
+  if (name.trim().length > maxNameLength) {
+    return { key: "nameTooLong", values: { max: maxNameLength } };
   }
   if (
     !Number.isInteger(cadenceDays) ||

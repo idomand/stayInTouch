@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
 import { authErrorMessage, useAuth } from "@/lib/AuthContext";
+import { maxNameLength } from "@/lib/ConstantsFile";
 import { P2 } from "@/Components/ui/Text";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import PasswordInput from "@/Components/ui/PasswordInput";
+import CharactersLeft from "@/Components/ui/CharactersLeft";
 import {
   basicInputClasses,
   basicLabelClasses,
@@ -99,14 +101,18 @@ export default function EmailAuthForm({
       {mode === "signUp" && (
         <label className={basicLabelClasses}>
           {t("emailAuthForm.name")}
-          <input
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            autoComplete="name"
-            required
-            className={inputClasses}
-          />
+          <div className="relative flex flex-col">
+            <input
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              autoComplete="name"
+              required
+              maxLength={maxNameLength}
+              className={twMerge(inputClasses, "pr-14")}
+            />
+            <CharactersLeft length={name.length} max={maxNameLength} />
+          </div>
         </label>
       )}
 
