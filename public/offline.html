@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  Served by public/sw.js when a page cannot load. It is static and served
+  without Next.js, so it cannot use next-intl: the English and German text is
+  kept here and picked from the browser language.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#053BBC" />
+    <title>Stay-in-Touch</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f8f6;
+        color: rgba(0, 0, 0, 0.8);
+        font-family: system-ui, sans-serif;
+        text-align: center;
+      }
+      main {
+        padding: 16px;
+        max-width: 360px;
+      }
+      img {
+        width: 96px;
+        height: 96px;
+      }
+      h1 {
+        color: #053bbc;
+        font-size: 1.5rem;
+      }
+      button {
+        margin-top: 8px;
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 8px;
+        background: #053bbc;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #2c61e0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icons/icon-192x192.png" alt="" />
+      <h1 id="title">You are offline</h1>
+      <p id="message">
+        Stay-in-Touch needs an internet connection. Check your connection and
+        try again.
+      </p>
+      <button type="button" id="retry" onclick="location.reload()">
+        Try again
+      </button>
+    </main>
+    <script>
+      if (navigator.language.toLowerCase().startsWith("de")) {
+        document.documentElement.lang = "de";
+        document.getElementById("title").textContent = "Du bist offline";
+        document.getElementById("message").textContent =
+          "Stay-in-Touch braucht eine Internetverbindung. Prüfe deine Verbindung und versuche es erneut.";
+        document.getElementById("retry").textContent = "Erneut versuchen";
+      }
+    </script>
+  </body>
+</html>

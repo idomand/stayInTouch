@@ -21,6 +21,21 @@ module.exports = withNextIntl({
   // firebase-admin external makes Node load it natively, where require(esm) is
   // supported.
   serverExternalPackages: ["firebase-admin"],
+  // Browsers must always fetch the service worker fresh, or a deploy keeps
+  // running the old one.
+  async headers() {
+    return [
+      {
+        source: "/sw.js",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+    ];
+  },
   // Serve Firebase's auth handler from our own domain, so Google's account
   // chooser names stay-in-touch.vip instead of <project>.firebaseapp.com. Only
   // used when NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN is set to our domain. The target
