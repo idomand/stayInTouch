@@ -63,12 +63,12 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
   }
 
   return (
-    <li className="mx-1 my-2.5 flex w-[85vw] list-none items-center justify-between sm:w-auto">
-      <div className="relative grid grow grid-cols-[minmax(0,1fr)_auto] justify-between rounded-[15px] bg-white p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] sm:grid-cols-none sm:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
-        <div className="flex w-full min-w-0 flex-col items-center justify-center [grid-area:contactDetails] sm:w-50 sm:flex-row sm:items-stretch sm:justify-start">
+    <li className="my-2.5 flex w-full list-none items-center justify-between">
+      <div className="relative grid grow grid-cols-[minmax(0,1fr)_auto] justify-between rounded-[15px] bg-white p-2.5 [grid-template-areas:'contactDetails_notes''contactDates_buttons'] md:grid-cols-none md:[grid-template-areas:'contactDetails_contactDates_notes_buttons']">
+        <div className="flex w-full min-w-0 flex-col items-center justify-center [grid-area:contactDetails] md:w-50 md:flex-row md:items-stretch md:justify-start">
           <div className="flex min-w-0 flex-col justify-center">
-            <div className="flex items-center justify-center gap-2 sm:justify-start">
-              <span className="w-full min-w-0 text-center text-xl leading-5.25 font-medium wrap-break-word sm:w-max sm:text-left">
+            <div className="flex items-center justify-center gap-2 md:justify-start">
+              <span className="w-full min-w-0 text-center text-xl leading-5.25 font-medium wrap-break-word md:w-max md:text-left">
                 {name}
               </span>
               {contact.isLinked && (
@@ -82,7 +82,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             </div>
           </div>
         </div>
-        <div className="mt-3.5 mb-5 flex w-full min-w-0 border-t border-black/10 pt-3.5 [grid-area:contactDates] sm:mt-0 sm:mb-0 sm:w-100 sm:max-w-none sm:border-t-0 sm:pt-0">
+        <div className="mt-3.5 mb-5 flex w-full min-w-0 border-t border-black/10 pt-3.5 [grid-area:contactDates] md:mt-0 md:mb-0 md:w-100 md:max-w-none md:border-t-0 md:pt-0">
           <div className="mx-3.5 flex flex-col items-center justify-center">
             <span className={statusClasses}>{lastTalkedLabel}</span>
           </div>
@@ -90,7 +90,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
             <span className={statusClasses}>{nextTalkLabel}</span>
           </div>
         </div>
-        <div className="mr-0 flex items-center justify-end gap-2 [grid-area:notes] sm:mr-5">
+        <div className="mr-0 flex items-center justify-end gap-2 [grid-area:notes] md:mr-5">
           <TalkEvents contact={contact} />
         </div>
         <div className="flex shrink-0 items-center justify-end [grid-area:buttons]">

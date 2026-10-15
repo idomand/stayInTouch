@@ -29,7 +29,7 @@ export default function ContactList({
   return (
     <>
       <TalkEffectPreloader />
-      <ul className="relative flex flex-col items-center p-0">
+      <ul className="relative mx-auto flex w-[85vw] max-w-195 flex-col items-center p-0">
         {contacts.map((contact) => (
           <ContactItem key={contact.id} contact={contact} />
         ))}

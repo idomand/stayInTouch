@@ -66,7 +66,7 @@ export default function AddNewContact() {
         onSubmit={createNewContact}
         className={twMerge(
           basicFormClasses,
-          "mx-auto grid w-[85vw] max-w-full grid-cols-1 gap-0 px-1 py-2.5 sm:m-auto sm:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] sm:gap-1 sm:p-3.5",
+          "mx-auto grid w-[85vw] max-w-195 grid-cols-1 gap-0 px-1 py-2.5 sm:m-auto sm:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] sm:gap-1 sm:p-3.5",
         )}
       >
         <label className={basicLabelClasses}>
