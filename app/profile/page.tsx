@@ -12,6 +12,7 @@ import {
   getLinkableContacts,
   getOutgoingRequests,
 } from "@/lib/db/queries/links";
+import InviteOnWhatsApp from "@/Components/contacts/InviteOnWhatsApp";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -46,6 +47,7 @@ export default async function ProfilePage() {
         outgoing={outgoing}
         linkableContacts={linkableContacts}
       />
+      <InviteOnWhatsApp />
       <DeleteAccountSection />
     </section>
   );

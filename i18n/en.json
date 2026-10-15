@@ -152,7 +152,9 @@
     "lastSpoken": "Last time we spoke (optional)",
     "friendEmail": "Friend’s email (optional)",
     "submit": "Add contact",
-    "emailPlaceholder": "friend@example.com"
+    "emailPlaceholder": "friend@example.com",
+    "inviteWhatsApp": "Invite a friend on WhatsApp",
+    "whatsAppMessage": "Hi! I'm using Stay-in-Touch to remember to keep in touch with the people I care about. Join me: {url}"
   },
   "contactItem": {
     "linkedTitle": "Linked — talks are shared",

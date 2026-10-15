@@ -152,7 +152,9 @@
     "lastSpoken": "Wann wir zuletzt gesprochen haben (optional)",
     "friendEmail": "E-Mail des Kontakts (optional)",
     "submit": "Kontakt hinzufügen",
-    "emailPlaceholder": "name@beispiel.de"
+    "emailPlaceholder": "name@beispiel.de",
+    "inviteWhatsApp": "Freund auf WhatsApp einladen",
+    "whatsAppMessage": "Hallo! Ich nutze Stay-in-Touch, um mit den Menschen in Kontakt zu bleiben, die mir wichtig sind. Mach mit: {url}"
   },
   "contactItem": {
     "linkedTitle": "Verknüpft — Gespräche werden geteilt",
