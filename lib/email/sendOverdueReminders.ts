@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { contacts } from "@/lib/db/schema";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import { overdueReminderDelayHours } from "@/lib/ConstantsFile";
-import { appUrl, resend } from "./client";
+import { appUrl, emailLogoHtml, resend } from "./client";
 import { escapeHtml } from "./escapeHtml";
 import { signOverdueReminderOptOut } from "./unsubscribeToken";
 
@@ -155,7 +155,8 @@ async function sendOneReminder(
     "You get this email because you turned on overdue reminders.",
     `Turn them off in Settings: ${settingsUrl}`,
   ].join("\n");
-  const html = `<p>${escapeHtml(summary)}</p>
+  const html = `${emailLogoHtml}
+<p>${escapeHtml(summary)}</p>
 <p><a href="${escapeHtml(appUrl)}">Open Stay-in-Touch</a></p>
 <p style="color:#666;font-size:12px">You get this email because you turned on overdue reminders.
 <a href="${escapeHtml(settingsUrl)}">Turn them off in Settings</a>.</p>`;

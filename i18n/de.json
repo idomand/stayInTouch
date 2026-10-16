@@ -278,6 +278,11 @@
     "title": "Profil",
     "notifications": "Benachrichtigungen"
   },
+  "generalInfo": {
+    "title": "Allgemeine Informationen",
+    "name": "Name",
+    "email": "E-Mail"
+  },
   "languageSelector": {
     "title": "App-Sprache",
     "browserDefault": "Browsersprache"
