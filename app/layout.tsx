@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { Analytics } from "@vercel/analytics/next";
 import AuthProvider from "@/lib/AuthContext";
 import { PendingRequestCountProvider } from "@/lib/PendingRequestCountContext";
 import NavBar from "@/Components/layout/NavBar";
@@ -47,6 +48,7 @@ export default async function RootLayout({
                 <Footer />
                 <ScrollButtonWrapper />
                 <ServiceWorkerRegistration />
+                <Analytics />
               </main>
             </PendingRequestCountProvider>
           </AuthProvider>

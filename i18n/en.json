@@ -377,8 +377,8 @@
   "privacy": {
     "title": "Privacy policy",
     "intro": "This Privacy Policy explains what information Stay-in-Touch handles, how it is used, and the choices you have. By using the app, you agree to the practices described below.",
-    "noTrackingTitle": "No tracking",
-    "noTracking": "Stay-in-Touch does not track you. The app uses no analytics, no advertising cookies, and no third-party tracking of any kind. Your activity within the app is not monitored, profiled, or measured for any purpose.",
+    "noTrackingTitle": "Analytics",
+    "noTracking": "We use Vercel Web Analytics to count page visits. It uses no cookies, does not track you across sites, and never receives your name, email, contacts or notes.",
     "dataTitle": "Data we store",
     "data": "The app stores only what you enter yourself: your contacts, how often you want to talk to each one, your notes, the dates you talked, and an optional email for each contact. All accounts share one database, and every record is tied to your account, so other users cannot see your data. When you send link requests, we also log the time of each invite email, only to enforce the daily invite limit. We keep a list of email addresses that asked not to get invite emails. If you turn on reminder emails, we also store that choice and, for each contact, when the last reminder was sent.",
     "authTitle": "Authentication",
@@ -390,7 +390,7 @@
     "nonUsersTitle": "If someone sent you a link request",
     "nonUsers": "Your email address is stored because a user entered it to send you a link request. You get one email per request, with no reminders or follow-ups. The request is deleted when the sender cancels it or deletes that contact. Every email has a link to stop all further emails from Stay-in-Touch. If you use it, we keep your address on an opt-out list, only to honour that choice.",
     "providersTitle": "Service providers",
-    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Resend sends the link request emails and the reminder emails. For a link request it processes the recipient's email address and the sender's name and email. For a reminder it processes your email address and the contact's name. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
+    "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Vercel also counts page visits through Vercel Web Analytics. Resend sends the link request emails and the reminder emails. For a link request it processes the recipient's email address and the sender's name and email. For a reminder it processes your email address and the contact's name. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
     "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can turn reminder emails on or off at any time in Settings. You can delete your account on your Profile page. This removes your account, contacts, notes, talk history, links, settings, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
   }

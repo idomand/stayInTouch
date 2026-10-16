@@ -1,5 +1,14 @@
 # Spec for analytics (Vercel Web Analytics)
 
+## Status
+
+- **Built:** requirements 1, 2, 6 and 7 — the package, page views, the privacy text and the docs. The privacy text mentions page visits only.
+- **Deferred:** requirements 3–5 (`lib/analytics.ts`, auth events, server events), until custom events are confirmed on our Vercel plan. When this is built:
+  - Update the privacy text again to mention the anonymous actions.
+  - `talk_marked` fires only when a talk event row is inserted. The same-day no-op in `markAsTalked` sends nothing.
+  - `talk_marked.shared` needs `insertSharedTalkEvent` to return whether it wrote the linked row.
+- **Out of scope:** the open follow-ups (UTM on the invite email, `pwa_installed`, database stats).
+
 ## Summary
 
 Add analytics so we can see how people use the app: which pages they visit, where they come from, and how often they sign up and use the core features.
