@@ -313,6 +313,15 @@
       "question": "Was ist Stay-in-Touch?",
       "answer": "Eine einfache Erinnerungs-App für die Menschen, die dir wichtig sind. Füge einen Kontakt hinzu, wähle, wie oft du mit der Person sprechen möchtest, und die App zeigt dir, bei wem du dich als Nächstes melden solltest."
     },
+    "installAndroid": {
+      "question": "Wie installiere ich die App auf einem Android-Handy?",
+      "answer": "Du brauchst keinen App Store. Öffne Stay-in-Touch in Chrome und füge die App zu deinem Startbildschirm hinzu. Danach öffnet sie sich wie jede andere App.",
+      "stepLabel": "Schritt {number}",
+      "step1": "Öffne Stay-in-Touch in Chrome und tippe oben rechts auf das Menü (drei Punkte).",
+      "step2": "Tippe auf „Installieren und Verknüpfung erstellen“.",
+      "step3": "Tippe zur Bestätigung auf „Installieren“.",
+      "step4": "Stay-in-Touch ist jetzt auf deinem Startbildschirm. Tippe auf das Symbol, um die App zu öffnen."
+    },
     "timer": {
       "question": "Was bedeuten die Farben und der Timer auf einer Karte?",
       "answer": "Jede Karte zählt bis zu eurem nächsten Gespräch herunter, je nachdem, wie oft du mit der Person sprechen möchtest. Wenn die Zeit abgelaufen ist oder ihr noch nie gesprochen habt, wird die Karte rot. Markiere ein Gespräch, und der Timer beginnt von vorn."

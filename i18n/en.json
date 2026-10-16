@@ -313,6 +313,15 @@
       "question": "What is Stay-in-Touch?",
       "answer": "A simple reminder app for the people you care about. Add a contact, choose how often you want to talk, and the app shows who you should reach out to next."
     },
+    "installAndroid": {
+      "question": "How do I install the app on an Android phone?",
+      "answer": "You do not need an app store. Open Stay-in-Touch in Chrome and add it to your home screen. It then opens like any other app.",
+      "stepLabel": "Step {number}",
+      "step1": "Open Stay-in-Touch in Chrome and tap the menu (three dots) at the top right.",
+      "step2": "Tap \"Install and create shortcut\".",
+      "step3": "Tap \"Install\" to confirm.",
+      "step4": "Stay-in-Touch is now on your home screen. Tap the icon to open it."
+    },
     "timer": {
       "question": "What do the colours and the timer on a card mean?",
       "answer": "Each card counts down to your next talk, based on how often you want to talk to that person. When the time is up, or when you have never talked, the card turns red. Mark a talk and the timer starts again."
