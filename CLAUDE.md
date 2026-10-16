@@ -104,6 +104,10 @@ Account deletion is `deleteAccount()` in `lib/actions/account.ts`, called throug
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
 - Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `hasSession` can also be stale (cookie revoked by a logout on another device, or expired), so `/login` calls `refreshSession()` before redirecting. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
 
+### Analytics
+
+Vercel Web Analytics, through `<Analytics />` in `app/layout.tsx`. Page views only: no cookies, no personal data, production deploys only. Custom events are not built yet (they may need the Pro plan; see `specs/analytics.md`). When they are, send them only through typed helpers in `lib/analytics.ts`, and never put personal data (names, emails, ids, note text) in an event.
+
 ### Talk effect
 
 `lib/talkEffect.ts` plays an optional celebration after a successful `markAsTalked` (none / small / extreme). The choice is per browser in `localStorage` (key `talkEffect`, default `small`), picked in `TalkEffectSelector` on `/settings`. `@tsparticles/confetti` loads through dynamic `import()` only when an effect plays, and nothing plays under `prefers-reduced-motion`.

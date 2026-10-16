@@ -44,6 +44,7 @@ Components read, Server Actions write and call `revalidatePath`.
 | Notes              | Own table, private, never shared across a link                                                                                                  |
 | Linked users       | Share the talk event only; links in a `contact_links` table                                                                                     |
 | Access control     | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts`                                                       |
+| Analytics          | Vercel Web Analytics, not GA4: no cookies, so no consent banner. Page views only; custom events wait for plan support (`specs/analytics.md`)    |
 
 ## Abandoned directions — do not rebuild
 
