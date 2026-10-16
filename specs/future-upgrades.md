@@ -54,20 +54,14 @@ building. Background and constraints are in `specs/architecture.md`.
      authenticated page flash and then redirect.
    - It touches the auth flow, so it needs its own spec and its own branch.
 
-6. **What happens when the timer is up (`/profile` setting).** Each user picks
-   one option:
-   1. Only turn the card red (today's behaviour, the default).
-   2. Send the user an email that the timer for that contact is up.
-   3. If the user and the friend are linked **and** both contacts have been red
-      for over 48 hours, notify both of them.
-
-   Needs: a per-user settings row (`user_settings`, shared with item 3); a
-   scheduled job (Vercel cron) that finds contacts that just went red; the email
-   sender in `lib/email/` and the opt-out in `email_opt_outs`; a "sent" record so
-   one red contact sends one email, not one per cron run. "Red for 48 hours" can
-   be computed from the last talk and the cadence, with no new timestamp.
-   Option 3 shares state across users, so check it against the "only talk events
-   are shared" rule before building.
+6. **What happens when the timer is up.** Options 1 and 2 are done: the card
+   turns red, and an opt-in email goes out once a contact has been red for over
+   24 hours ("Overdue reminders" in `specs/architecture.md`; the switch is on
+   `/settings`, stored in `user_settings`). Still open:
+   - If the user and the friend are linked **and** both contacts have been red
+     for over 48 hours, notify both of them. It can reuse the daily cron and
+     `user_settings`. It shares state across users, so check it against the
+     "only talk events are shared" rule before building.
 
 7. **Calendar appointment indicator on the card.** When the user opens a Google
    Calendar appointment from a card, show an icon on that card. The icon starts

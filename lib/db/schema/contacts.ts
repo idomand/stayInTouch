@@ -31,6 +31,11 @@ export const contacts = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
+    // When the last overdue reminder for this contact was sent. A reminder is
+    // due again only once the contact goes red after this moment.
+    overdueReminderSentAt: timestamp("overdue_reminder_sent_at", {
+      withTimezone: true,
+    }),
   },
   (table) => [
     // Enforce unique contact name per owner, case-insensitively, in the database

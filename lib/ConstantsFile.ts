@@ -12,3 +12,9 @@ export const maxNameLength = 50;
  * sendLinkRequest; shown in the link dialog.
  */
 export const inviteLimitPerDay = 5;
+
+/**
+ * Hours a contact stays red before its overdue reminder email is due. Used by
+ * the daily job and shown in the FAQ.
+ */
+export const overdueReminderDelayHours = 24;

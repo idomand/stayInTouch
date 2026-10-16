@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import LanguageSelector from "@/Components/settings/LanguageSelector";
+import NotificationSettings from "@/Components/settings/NotificationSettings";
 import TalkEffectSelector from "@/Components/settings/TalkEffectSelector";
 import PageHeader from "@/Components/ui/PageHeader";
 import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
 import { getServerUser } from "@/lib/auth/getServerUser";
+import { getOverdueRemindersEnabled } from "@/lib/db/queries/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -13,7 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The settings page: app language, plus the talk effect for signed-in users.
+ * The settings page: app language, plus the talk effect and email
+ * notifications for signed-in users.
  * Public, so a visitor can pick the language before signing in. Account
  * features live on /profile.
  */
@@ -29,6 +32,11 @@ export default async function SettingsPage() {
         savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}
       />
       {user && <TalkEffectSelector />}
+      {user && (
+        <NotificationSettings
+          initialEnabled={await getOverdueRemindersEnabled(user.uid)}
+        />
+      )}
     </section>
   );
 }

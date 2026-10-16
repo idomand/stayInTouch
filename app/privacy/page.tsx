@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { H2, P3 } from "@/Components/ui/Text";
 import PageHeader from "@/Components/ui/PageHeader";
 import Card from "@/Components/ui/Card";
+import { overdueReminderDelayHours } from "@/lib/ConstantsFile";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -36,6 +37,13 @@ export default async function Privacy() {
         <div className="flex flex-col gap-2">
           <H2>{t("privacy.linkingTitle")}</H2>
           <P3 extraClasses="normal-case">{t("privacy.linking")}</P3>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <H2>{t("privacy.remindersTitle")}</H2>
+          <P3 extraClasses="normal-case">
+            {t("privacy.reminders", { hours: overdueReminderDelayHours })}
+          </P3>
         </div>
 
         <div className="flex flex-col gap-2">
