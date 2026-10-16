@@ -6,7 +6,10 @@ import Card from "@/Components/ui/Card";
 import OpenDetailsFromHash from "@/Components/ui/OpenDetailsFromHash";
 import PageHeader from "@/Components/ui/PageHeader";
 import { P3 } from "@/Components/ui/Text";
-import { inviteLimitPerDay } from "@/lib/ConstantsFile";
+import {
+  inviteLimitPerDay,
+  overdueReminderDelayHours,
+} from "@/lib/ConstantsFile";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
@@ -18,6 +21,7 @@ const QUESTION_KEYS = [
   "whatIsApp",
   "installAndroid",
   "timer",
+  "overdueReminders",
   "talkHistory",
   "privacy",
   "language",
@@ -62,7 +66,10 @@ const ANDROID_INSTALL_STEPS = [
  */
 export default async function Faq() {
   const t = await getTranslations();
-  const values = { limit: inviteLimitPerDay };
+  const values = {
+    limit: inviteLimitPerDay,
+    hours: overdueReminderDelayHours,
+  };
 
   return (
     <section className="relative mx-auto mb-8 flex w-[90%] flex-col items-center justify-center sm:w-[70%]">

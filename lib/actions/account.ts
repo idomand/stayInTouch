@@ -3,14 +3,20 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import { requireUserWithEmail } from "@/lib/db/queries/guards";
-import { contacts, inviteEmailsSent, linkRequests } from "@/lib/db/schema";
+import {
+  contacts,
+  inviteEmailsSent,
+  linkRequests,
+  userSettings,
+} from "@/lib/db/schema";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session";
 import { actionError } from "@/lib/actions/actionError";
 import type { ActionResult } from "@/lib/actions/validation";
 
 /**
- * Deletes the caller's account: every row tied to them, then the Firebase user.
+ * Deletes the caller's account: every row tied to them (including their
+ * `user_settings` row), then the Firebase user.
  *
  * Deleting contacts cascades to their notes, talk events, links (both sides)
  * and the requests sent from them. Kept on purpose: talk events the user
@@ -29,6 +35,7 @@ export async function deleteAccount(): Promise<ActionResult> {
     await tx
       .delete(inviteEmailsSent)
       .where(eq(inviteEmailsSent.fromUserId, uid));
+    await tx.delete(userSettings).where(eq(userSettings.ownerId, uid));
     await tx.delete(contacts).where(eq(contacts.ownerId, uid));
   });
 

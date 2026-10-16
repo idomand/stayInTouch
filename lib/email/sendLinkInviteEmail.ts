@@ -3,18 +3,10 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { emailOptOuts } from "@/lib/db/schema";
 import { appUrl, resend } from "./client";
+import { escapeHtml } from "./escapeHtml";
 import { signEmail } from "./unsubscribeToken";
 
 const FROM = "Stay-in-Touch <invites@send.stay-in-touch.vip>";
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 /**
  * The one notice a link request sends. Same text whether or not the address

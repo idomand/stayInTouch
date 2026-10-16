@@ -4,3 +4,4 @@ export * from "./talkEvents";
 export * from "./linkRequests";
 export * from "./contactLinks";
 export * from "./inviteEmails";
+export * from "./userSettings";

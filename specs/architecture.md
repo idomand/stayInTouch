@@ -33,6 +33,7 @@ Components read, Server Actions write and call `revalidatePath`.
 | Email              | Firebase sends verification and reset emails. Resend sends the one notice per link request, from `invites@send.stay-in-touch.vip`, English only |
 | Invite limit       | 5 invite emails per user per rolling 24 h, counted in `invite_emails_sent`                                                                      |
 | Email opt-out      | `email_opt_outs` table; HMAC-signed link, confirm page + RFC 8058 one-click POST                                                                |
+| Overdue reminders  | Opt-in, `user_settings`; daily Vercel cron emails one reminder per contact per red period, from `reminders@send.stay-in-touch.vip`              |
 | Email verification | Required; the session route refuses to mint a cookie for an unverified email                                                                    |
 | Realtime           | None — Server Component read + `revalidatePath` after each write                                                                                |
 | Schema changes     | Generated migrations only; production migrated by hand before merge, never from the Vercel build                                                |
@@ -193,13 +194,45 @@ shape the code:
 - **Sender subdomain.** `send.stay-in-touch.vip` was already verified in Resend;
   bad reputation there cannot hurt the root domain.
 
+## Overdue reminders
+
+Opt-in email when a contact has been red for over 24 h (`overdueReminderDelayHours`).
+Off by default; the switch is on `/settings` and is stored in
+`user_settings.overdue_reminders_since` (`NULL` = off).
+
+- **A daily cron, not a page load.** `vercel.json` calls
+  `/api/cron/overdue-reminders` at 07:00 UTC; the route accepts only
+  `Authorization: Bearer CRON_SECRET`. Vercel Hobby allows one run a day, so
+  the email arrives 24–48 h after the card turns red.
+- **"Red since" is computed**: latest `talked_at` + `cadence_days`, the same
+  rule as the card. Never-talked contacts are skipped (they are red from the
+  start, so adding contacts would send email).
+- **Once per red period.** `contacts.overdue_reminder_sent_at` is set after a
+  send; a contact is due again only when it turns red after that time. A new
+  talk starts a new period; deleting one does not resend.
+- **No backlog on opt-in.** Only contacts whose 24 h mark falls after
+  `overdue_reminders_since` are sent, so turning it on never sends one email
+  for every contact already red.
+- **Double runs cannot double-send.** Each send carries the Resend idempotency
+  key `overdue-reminder/<contactId>/<redSince>`. A failed send is logged, not
+  marked, and retried the next day.
+- **The address comes from Firebase** (`adminAuth.getUsers`) at send time,
+  only if verified and not disabled. No email is stored in Postgres.
+- **Opt-out.** The footer links to `/settings#notifications`; the
+  `List-Unsubscribe` header POSTs to `/api/email/overdue-reminders/unsubscribe`
+  with an HMAC of `overdue-reminder:<uid>`. `email_opt_outs` is not checked:
+  it is for emails other people trigger, and this one is the user's own choice.
+- **System job.** It reads across users, so it does not use `guards.ts`; each
+  email goes only to the owner of its contact row. Sends are sequential with a
+  short pause (Resend rate limit), which caps one run at a few hundred emails.
+
 ## Account deletion
 
 `deleteAccount()` in `lib/actions/account.ts`, from `/profile` (simple confirm,
 no re-sign-in). Spec: `specs/account-deletion.md`.
 
 - **Database first, Firebase second.** One transaction deletes the requests
-  addressed to the user's email, their `invite_emails_sent` rows and their
+  addressed to the user's email, their `invite_emails_sent` and `user_settings` rows and their
   contacts (the cascade removes notes, talks, links and sent requests). Then
   `adminAuth.deleteUser`. If Firebase fails, the user can sign in and retry;
   the reverse order could leave rows nobody can delete.
@@ -213,7 +246,7 @@ no re-sign-in). Spec: `specs/account-deletion.md`.
 ## Lessons learned
 
 - **`DATABASE_URL`, `FIREBASE_SERVICE_ACCOUNT_B64`, `RESEND_API_KEY`,
-  `EMAIL_UNSUBSCRIBE_SECRET` and `APP_URL` are build-time requirements.** All
+  `EMAIL_UNSUBSCRIBE_SECRET`, `APP_URL` and `CRON_SECRET` are build-time requirements.** All
   throw at module load, and Next imports route modules while collecting page
   data. Set them in Vercel before any deploy that imports them.
 - **`firebase-admin` and `jose`.** `firebase-admin` pulls in ESM-only `jose`,

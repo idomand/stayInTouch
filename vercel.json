@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/overdue-reminders",
+      "schedule": "0 7 * * *"
+    }
+  ]
+}
