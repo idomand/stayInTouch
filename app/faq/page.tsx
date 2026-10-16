@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { FiChevronDown } from "react-icons/fi";
 import Card from "@/Components/ui/Card";
+import OpenDetailsFromHash from "@/Components/ui/OpenDetailsFromHash";
 import PageHeader from "@/Components/ui/PageHeader";
 import { P3 } from "@/Components/ui/Text";
 import { inviteLimitPerDay } from "@/lib/ConstantsFile";
@@ -66,9 +67,10 @@ export default async function Faq() {
   return (
     <section className="relative mx-auto mb-8 flex w-[90%] flex-col items-center justify-center sm:w-[70%]">
       <PageHeader title={t("faq.title")} />
+      <OpenDetailsFromHash />
       {QUESTION_KEYS.map((key) => (
         <Card key={key} extraClasses="m-2 p-0 sm:p-0">
-          <details className="group">
+          <details id={key} className="group">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 text-lg font-semibold sm:p-6 [&::-webkit-details-marker]:hidden">
               {t(`faq.${key}.question`, values)}
               <FiChevronDown
