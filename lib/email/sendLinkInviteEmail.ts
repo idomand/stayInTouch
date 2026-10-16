@@ -2,7 +2,7 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { emailOptOuts } from "@/lib/db/schema";
-import { appUrl, resend } from "./client";
+import { appUrl, emailLogoHtml, resend } from "./client";
 import { escapeHtml } from "./escapeHtml";
 import { signEmail } from "./unsubscribeToken";
 
@@ -51,7 +51,8 @@ export async function sendLinkInviteEmail({
     "You got this email because someone entered your address in Stay-in-Touch.",
     `Don't want these emails? ${unsubscribeUrl}`,
   ].join("\n");
-  const html = `<p>${escapeHtml(sender)} wants to stay in touch with you on Stay-in-Touch.</p>
+  const html = `${emailLogoHtml}
+<p>${escapeHtml(sender)} wants to stay in touch with you on Stay-in-Touch.</p>
 <p>Sign in or create an account with <strong>${escapeHtml(toEmail)}</strong> to accept:<br>
 <a href="${escapeHtml(loginUrl)}">Open Stay-in-Touch</a></p>
 <p style="color:#666;font-size:12px">You got this email because someone entered your address in Stay-in-Touch.

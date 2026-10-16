@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import DeleteAccountSection from "@/Components/settings/DeleteAccountSection";
+import GeneralInfoCard from "@/Components/settings/GeneralInfoCard";
 import FriendRequests from "@/Components/links/FriendRequests";
 import PendingRequestCountSync from "@/Components/links/PendingRequestCountSync";
 import PageHeader from "@/Components/ui/PageHeader";
@@ -40,6 +41,7 @@ export default async function ProfilePage() {
   return (
     <section className="relative mx-auto mb-8 flex w-[90%] flex-col items-center justify-center gap-4 sm:w-[70%]">
       <PageHeader title={t("profile.title")} />
+      <GeneralInfoCard />
       <H4 extraClasses="self-start mt-2">{t("profile.notifications")}</H4>
       <PendingRequestCountSync count={incoming.length} />
       <FriendRequests
