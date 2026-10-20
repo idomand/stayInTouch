@@ -18,3 +18,9 @@ export const inviteLimitPerDay = 5;
  * the daily job and shown in the FAQ.
  */
 export const overdueReminderDelayHours = 24;
+
+/**
+ * Most MCP access tokens one user may hold at once. Enforced in createApiToken;
+ * shown on /settings.
+ */
+export const maxApiTokensPerUser = 5;

@@ -7,34 +7,29 @@ import {
   type ContactTalkEvent,
   getTalkEventsForOwnedContact,
 } from "@/lib/db/queries/contacts";
-import { contacts, notes, talkEvents } from "@/lib/db/schema";
+import { contacts, talkEvents } from "@/lib/db/schema";
 import { actionError } from "@/lib/actions/actionError";
 import {
   type ActionResult,
   type ErrorMessage,
   isUniqueViolation,
-  isValidTimeZone,
   normalizeEmail,
   validateFields,
-  validateNoteBody,
   validateTalkedAt,
 } from "@/lib/actions/validation";
+import {
+  type AddContactInput,
+  addContactForUser,
+  insertSharedTalkEvent,
+  linkedContactIds,
+  markAsTalkedForUser,
+} from "@/lib/contacts/core";
 
 const NOT_FOUND: ErrorMessage = { key: "contactNotFound" };
 const TALK_EVENT_NOT_FOUND: ErrorMessage = { key: "talkEventNotFound" };
 // Parked with the note actions below (C1).
 // const NOTE_NOT_FOUND: ErrorMessage = { key: "noteNotFound" };
 const NAME_TAKEN: ErrorMessage = { key: "nameTaken" };
-
-export type AddContactInput = {
-  name: string;
-  cadenceDays: number;
-  friendEmail?: string | null;
-  /** Optional first note. */
-  note?: string;
-  /** "Last time we spoke", epoch ms — seeds the first talk event. */
-  talkedAtMs?: number;
-};
 
 export type UpdateContactInput = {
   name: string;
@@ -48,43 +43,10 @@ export async function addContact(
   input: AddContactInput,
 ): Promise<ActionResult> {
   const uid = await requireUser();
-  const invalid =
-    validateFields(input) ?? validateNoteBody(input.note, { optional: true });
-  if (invalid) {
-    return actionError(invalid);
+  const result = await addContactForUser(uid, input);
+  if (!result.ok) {
+    return actionError(result.error);
   }
-
-  try {
-    await db.transaction(async (tx) => {
-      const [contact] = await tx
-        .insert(contacts)
-        .values({
-          ownerId: uid,
-          name: input.name.trim(),
-          cadenceDays: input.cadenceDays,
-          friendEmail: normalizeEmail(input.friendEmail),
-        })
-        .returning({ id: contacts.id });
-
-      if (input.talkedAtMs != null) {
-        await tx.insert(talkEvents).values({
-          contactId: contact.id,
-          createdBy: uid,
-          talkedAt: new Date(input.talkedAtMs),
-        });
-      }
-      const note = input.note?.trim();
-      if (note) {
-        await tx.insert(notes).values({ contactId: contact.id, body: note });
-      }
-    });
-  } catch (error) {
-    if (isUniqueViolation(error)) {
-      return actionError(NAME_TAKEN);
-    }
-    throw error;
-  }
-
   revalidatePath("/");
   return { ok: true };
 }
@@ -146,36 +108,19 @@ export async function deleteContact(contactId: string): Promise<ActionResult> {
   return { ok: true };
 }
 
-/**
- * Record a talk now, unless the contact already has a talk today in the
- * caller's time zone — a second click on the same day is a no-op. On a linked
- * contact a talk the friend marked today counts too. Two tabs clicking at the
- * same instant could still both insert; not worth a lock.
- */
+/** Record a talk now; see markAsTalkedForUser for the once-per-day rule. */
 export async function markAsTalked(
   contactId: string,
   timeZone: string,
 ): Promise<ActionResult> {
   const uid = await requireUser();
-  const existing = await getOwnedContact(uid, contactId);
-  if (!existing) {
-    return actionError(NOT_FOUND);
+  const result = await markAsTalkedForUser(uid, contactId, timeZone);
+  if (!result.ok) {
+    return actionError(result.error);
   }
-  // Only a tampered request sends an unknown zone; UTC never blocks a real user.
-  const zone = isValidTimeZone(timeZone) ? timeZone : "UTC";
-  // Start of the caller's local day as a timestamptz, so the range filter uses
-  // the (contact_id, talked_at DESC) index.
-  const talkedToday = await db.execute(sql`
-    SELECT 1 FROM talk_events
-    WHERE contact_id = ${contactId}
-      AND talked_at >= date_trunc('day', now() AT TIME ZONE ${zone}::text) AT TIME ZONE ${zone}::text
-    LIMIT 1
-  `);
-  if (talkedToday.rows.length > 0) {
-    return { ok: true };
+  if (result.inserted) {
+    revalidatePath("/");
   }
-  await insertSharedTalkEvent(uid, contactId, new Date());
-  revalidatePath("/");
   return { ok: true };
 }
 
@@ -232,42 +177,6 @@ export async function deleteTalkEvent(
   }
   revalidatePath("/");
   return { ok: true };
-}
-
-/** The id of the contact linked to this one, as a subquery (zero or one row). */
-function linkedContactIds(contactId: string) {
-  return sql`
-    SELECT CASE WHEN l.contact_a_id = ${contactId}
-                THEN l.contact_b_id ELSE l.contact_a_id END
-    FROM contact_links l
-    WHERE l.contact_a_id = ${contactId} OR l.contact_b_id = ${contactId}
-  `;
-}
-
-/**
- * Insert one talk on the caller's contact and, when it is linked, the same talk
- * on the friend's contact. Both rows get one shared_id so a delete can find the
- * pair. The caller must have checked ownership of contactId.
- */
-async function insertSharedTalkEvent(
-  uid: string,
-  contactId: string,
-  talkedAt: Date,
-) {
-  const sharedId = crypto.randomUUID();
-  await db.transaction(async (tx) => {
-    await tx
-      .insert(talkEvents)
-      .values({ contactId, createdBy: uid, talkedAt, sharedId });
-    // The same talk on the linked contact, owned by the other user. The link
-    // row is the only permission for this cross-user write. Zero rows when the
-    // contact is not linked, so no `if`.
-    await tx.execute(sql`
-      INSERT INTO talk_events (contact_id, created_by, talked_at, shared_id)
-      SELECT linked.id, ${uid}, ${talkedAt}, ${sharedId}
-      FROM (${linkedContactIds(contactId)}) AS linked(id)
-    `);
-  });
 }
 
 /**

@@ -44,6 +44,8 @@ Components read, Server Actions write and call `revalidatePath`.
 | Notes              | Own table, private, never shared across a link                                                                                                  |
 | Linked users       | Share the talk event only; links in a `contact_links` table                                                                                     |
 | Access control     | Every query filters by `owner_id` from the server session, via `lib/db/queries/guards.ts`                                                       |
+| AI agents (MCP)    | Remote MCP endpoint `/api/mcp` in the app, `mcp-handler` 2.x, stateless Streamable HTTP                                                         |
+| Agent identity     | Personal access tokens (SHA-256 stored), max 5 per user; OAuth for claude.ai/ChatGPT is a future phase                                          |
 | Analytics          | Vercel Web Analytics, not GA4: no cookies, so no consent banner. Page views only; custom events wait for plan support (`specs/analytics.md`)    |
 
 ## Abandoned directions — do not rebuild
@@ -227,13 +229,45 @@ Off by default; the switch is on `/settings` and is stored in
   email goes only to the owner of its contact row. Sends are sequential with a
   short pause (Resend rate limit), which caps one run at a few hundred emails.
 
+## AI agents (MCP)
+
+An agent such as Claude Code can find contacts, mark talks and add contacts
+through `/api/mcp`. Spec, edge cases and the future OAuth phase:
+`specs/mcp-server.md`.
+
+- **Remote, inside the app.** It reuses the database, guards and validation
+  directly, and claude.ai and ChatGPT accept only remote servers, so the later
+  OAuth phase builds on it. A local stdio package would need a separate API and
+  a rewrite later.
+- **Personal access tokens, not OAuth (yet).** Enough for agents that accept a
+  custom header. Tokens have 256 random bits, so SHA-256 is enough (a slow hash
+  adds nothing), and a leaked table cannot be used to call the API. Five per
+  user: one per agent or machine, so revoking one does not cut off the others,
+  and a token can be replaced before the old one is revoked.
+- **The token is not the session.** Verification also asks Firebase
+  (`getUser`) and rejects a deleted, disabled or unverified user, because the
+  cookie path rejects those too. Logout revokes Firebase refresh tokens, not
+  API tokens; revoking is per token on `/settings`.
+- **Core functions take a uid.** Server Actions got the user from the cookie;
+  an MCP request has none, and `requireUser()`'s `redirect()` breaks a route
+  handler. So the logic moved to `lib/contacts/core.ts` and both entry points
+  supply the uid. The ownership rule is unchanged: the uid comes only from a
+  verified credential.
+- **Lookup by name, not id.** Names are unique per owner, case-insensitively,
+  so an exact name is one contact and the agent needs no "which one?" step. A
+  miss writes nothing and suggests similar names from the caller's contacts
+  only. The match uses SQL `lower()` so it agrees with the unique index.
+- **Data minimisation.** Tool results go to the user's AI provider, so they
+  carry no friend emails and no notes. `add_contact` has no note input: notes
+  have no UI yet (C1), so a note added by an agent would be invisible.
+
 ## Account deletion
 
 `deleteAccount()` in `lib/actions/account.ts`, from `/profile` (simple confirm,
 no re-sign-in). Spec: `specs/account-deletion.md`.
 
 - **Database first, Firebase second.** One transaction deletes the requests
-  addressed to the user's email, their `invite_emails_sent` and `user_settings` rows and their
+  addressed to the user's email, their `invite_emails_sent`, `user_settings` and `api_tokens` rows and their
   contacts (the cascade removes notes, talks, links and sent requests). Then
   `adminAuth.deleteUser`. If Firebase fails, the user can sign in and retry;
   the reverse order could leave rows nobody can delete.
@@ -255,6 +289,16 @@ no re-sign-in). Spec: `specs/account-deletion.md`.
   24.x, forcing CommonJS `jose@5.10.0` (commits `59e4cf9`, `037592f`) and
   `serverExternalPackages: ["firebase-admin"]` in `next.config.js`. Re-check when
   `firebase-admin`, `jose` or the Vercel Node version changes.
+- **The `jose@5.10.0` override also pins every new dependency.**
+  `@modelcontextprotocol/sdk` 1.x needs `jose` 6 and would silently get 5. The
+  MCP endpoint uses the 2.x packages (`mcp-handler` 2,
+  `@modelcontextprotocol/server` 2), which do not use `jose`. Run `npm ls jose`
+  after adding any auth or crypto package.
+- **`${VAR}` in a shell command is the shell's, not the tool's.** In PowerShell,
+  `"Bearer ${STAY_IN_TOUCH_TOKEN}"` expands a PowerShell variable (empty) before
+  `claude mcp add` runs, so the saved header was `Bearer`. Claude Code documents
+  `${VAR}` header expansion only for `.mcp.json`. The `/settings` connect
+  command therefore contains the real token and `--scope user`.
 - **`ws` looks unused but isn't removable blindly.** Node 22+ has a native
   `WebSocket`; `ws` keeps the client the same across Node versions. Check the
   Vercel Node setting before removing it.

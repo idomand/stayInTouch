@@ -52,12 +52,12 @@ The reasoning behind the design (schema, auth, security, lessons learned) is in 
 
 ### Data model — the key thing to understand
 
-Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-only`). Schema is in `lib/db/schema/`: `contacts`, `notes`, `talk_events`, `link_requests`, `contact_links`. Types are inferred from the schema — no hand-written row types. `owner_id` is the Firebase uid (bare `text`, no FK).
+Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-only`). Schema is in `lib/db/schema/`: `contacts`, `notes`, `talk_events`, `link_requests`, `contact_links` (plus `user_settings`, `api_tokens` and the email tables). Types are inferred from the schema — no hand-written row types. `owner_id` is the Firebase uid (bare `text`, no FK).
 
 - Reads: `lib/db/queries/contacts.ts` → `getContactsForCurrentUser()`, called from the `app/page.tsx` Server Component. `lastTalkedAt` and `daysUntilNextTalk` are computed in SQL, not stored; the overdue-first ordering comes from there.
 - Writes: Server Actions in `lib/actions/contacts.ts` and `lib/actions/links.ts`. Each one calls `revalidatePath` for the pages it affects. There is no realtime listener. Shared input checks (`validateFields`, `isValidEmail`, `ActionResult`, …) live in `lib/actions/validation.ts` — a plain module, because a `"use server"` file may only export async functions.
 
-**Linked users.** Two users can link one contact each; a talk marked on either contact is then recorded on both (`insertSharedTalkEvent` in `lib/actions/contacts.ts`, used by `markAsTalked` and `addTalkEvent`, inserts the second row through `contact_links` in the same transaction — the link row is the only permission for that cross-user write). Both rows get one `shared_id`, so `deleteTalkEvent` removes the pair while the link exists; rows without a `shared_id` (older than the column) delete on one side only. Only talk events are shared; notes, names and cadence stay private.
+**Linked users.** Two users can link one contact each; a talk marked on either contact is then recorded on both (`insertSharedTalkEvent` in `lib/contacts/core.ts`, used by `markAsTalked` and `addTalkEvent`, inserts the second row through `contact_links` in the same transaction — the link row is the only permission for that cross-user write). Both rows get one `shared_id`, so `deleteTalkEvent` removes the pair while the link exists; rows without a `shared_id` (older than the column) delete on one side only. Only talk events are shared; notes, names and cadence stay private.
 
 - A request (`link_requests`) is addressed to an **email** and never resolved to a uid, so nothing reveals whether an email has an account. The addressee sees requests sent to their verified session email. After accept, the link (`contact_links`) is two contact ids; emails play no part.
 - Invariants the database cannot express are enforced in `acceptLinkRequest`'s transaction: a contact is in at most one link (row locks), and two users have at most one link (advisory lock on the uid pair).
@@ -66,7 +66,7 @@ Postgres is reached **only from the server** (`lib/db/index.ts` imports `server-
 
 **Overdue reminders.** Opt-in email (off by default) on `/settings`, stored in `user_settings.overdue_reminders_since` (`NULL` = off). A daily Vercel cron (`vercel.json`) calls `GET /api/cron/overdue-reminders`, which accepts only `Authorization: Bearer $CRON_SECRET` and runs `lib/email/sendOverdueReminders.ts`: one email per contact that has been red for over 24 h, once per red period (`contacts.overdue_reminder_sent_at`). Never-talked contacts are skipped. The email goes to the owner's verified Firebase email. It is a system job, so it is the one reader that goes across users without `guards.ts`. The `List-Unsubscribe` header POSTs to `/api/email/overdue-reminders/unsubscribe` (HMAC of the uid), which turns the setting off. Crons run only on production deployments.
 
-**Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`). Never trust an id from the client, and never take `owner_id` from a request body or URL.
+**Security:** all users share one table, so the `owner_id` filter is the only thing keeping data apart. Every query and action must go through `lib/db/queries/guards.ts` (`requireUser()`, `getOwnedContact()`; MCP tools use the token's uid, see "MCP server"). Never trust an id from the client, and never take `owner_id` from a request body or URL.
 
 `DATABASE_URL`, `FIREBASE_SERVICE_ACCOUNT_B64`, `RESEND_API_KEY`, `EMAIL_UNSUBSCRIBE_SECRET`, `APP_URL` and `CRON_SECRET` are checked at module load, so all are needed for `npm run build`, not just at runtime.
 
@@ -103,6 +103,16 @@ Account deletion is `deleteAccount()` in `lib/actions/account.ts`, called throug
 
 - Mint cookies only through `establishSession()` in `AuthContext`; it keeps `hasSession` in step.
 - Redirect to `/` on `hasSession`, never on `currentUser`. A client-signed-in user without a cookie would bounce `/login` → `/` → proxy → `/login` in a loop. `hasSession` can also be stale (cookie revoked by a logout on another device, or expired), so `/login` calls `refreshSession()` before redirecting. `/login` shows `VerifyEmailNotice` when `currentUser && !currentUser.emailVerified`.
+
+### MCP server (AI agents)
+
+`/api/mcp` (`app/api/mcp/route.ts`) is a stateless Streamable HTTP MCP endpoint built on `mcp-handler` 2.x and `@modelcontextprotocol/server` 2.x (not the 1.x `@modelcontextprotocol/sdk`, which needs `jose` 6 and clashes with the `jose@5.10.0` override). Tools live in `lib/mcp/tools.ts`: `find_contacts`, `mark_as_talked`, `add_contact`. The spec, edge cases and the future OAuth phase are in `specs/mcp-server.md`.
+
+- **Identity is a personal access token, not the cookie.** Users create tokens on `/settings` (`ApiTokens`, max `maxApiTokensPerUser`). Only the SHA-256 is stored, in `api_tokens`. `verifyApiToken()` (`lib/auth/apiToken.ts`) is the only way an MCP request gets a uid; it also rejects a deleted, disabled or unverified Firebase user. `withMcpAuth` returns 401 before any tool runs. Logout does not revoke tokens. `/api/mcp` must stay out of the `proxy.ts` matcher.
+- **Tools take the uid only from `ctx.http.authInfo`**, never from tool input, and pass it to uid-based code. No tool may take a uid, owner or email argument.
+- **Core vs action split.** Logic shared by Server Actions and tools lives in `lib/contacts/core.ts` and takes `uid` as an argument (`addContactForUser`, `markAsTalkedForUser`). Core code must never call `requireUser()` or `getServerUser()`: an MCP request has no cookie, and the `redirect()` would break the route. Server Actions are thin wrappers: `requireUser()` → core → `actionError()` → `revalidatePath`. A new tool calls core functions or uid-taking queries (`getContactsForUser`, `getOwnedContact`, `getOwnedContactByName`), never a Server Action.
+- **Contacts are found by name.** Names are unique per owner, case-insensitively, so `getOwnedContactByName` (SQL `lower()`, same as the index) returns at most one. On a miss, tools suggest names from the caller's contacts only.
+- **Replies are English** (the agent speaks the user's language); errors reuse the `errors.*` texts via `createTranslator({ locale: "en" })`. Tool results never include a friend's email or notes.
 
 ### Analytics
 

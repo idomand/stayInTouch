@@ -135,7 +135,9 @@
     "contactsAlreadyLinked": "One of these contacts is already linked.",
     "contactNotLinked": "This contact is not linked.",
     "unsubscribeLinkInvalid": "This unsubscribe link is not valid. Use the link from the email.",
-    "accountDeleteFailed": "Your data was deleted, but the account could not be removed. Please try again."
+    "accountDeleteFailed": "Your data was deleted, but the account could not be removed. Please try again.",
+    "apiTokenLimitReached": "You can have at most {limit} access tokens. Revoke one first.",
+    "apiTokenNotFound": "Access token not found."
   },
   "mainForm": {
     "makeAFriend": "Make a friend!",
@@ -285,7 +287,9 @@
   },
   "languageSelector": {
     "title": "App language",
-    "browserDefault": "Browser default"
+    "browserDefault": "Browser default",
+    "english": "English",
+    "german": "German"
   },
   "talkEffectSelector": {
     "title": "Talk Marker",
@@ -299,6 +303,47 @@
     "overdueReminders": "Email me when a contact has been red for over {hours} hours",
     "description": "One email per contact, sent to your account email. You get it once a day at most, and only once until you talk again.",
     "saveFailed": "Could not save this setting. Please try again."
+  },
+  "apiTokens": {
+    "title": "Access tokens for AI agents",
+    "intro": "Let an AI agent such as Claude Code mark talks and add contacts for you. Create a token and give it to the agent. Anyone with the token can read and change your contacts, so keep it secret.",
+    "nameLabel": "Token name",
+    "namePlaceholder": "e.g. Claude Code on my laptop",
+    "create": "Create token",
+    "creating": "Creating…",
+    "limitReached": "You have {limit} tokens, the maximum. Revoke one to create a new one.",
+    "newTokenTitle": "Your new token",
+    "newTokenWarning": "Copy it now. It is shown only once.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the token and copy it by hand.",
+    "done": "Done",
+    "connectIntro": "To connect Claude Code, run this command in a terminal:",
+    "copyCommand": "Copy command",
+    "connectStorageNote": "The command contains your token. Claude Code saves it in its settings on this computer. Revoke the token here if that computer is lost or shared.",
+    "listTitle": "Your tokens",
+    "empty": "You have no tokens yet.",
+    "created": "Created {date}",
+    "lastUsed": "Last used {date}",
+    "neverUsed": "Never used",
+    "revoke": "Revoke",
+    "revokeTitle": "Revoke {name}?",
+    "revokeBody": "Agents using this token stop working right away. This cannot be undone.",
+    "revokeConfirm": "Revoke token",
+    "revoking": "Revoking…",
+    "logoutNote": "Signing out does not revoke tokens. Revoke a token here when you no longer need it.",
+    "saveFailed": "Something went wrong. Please try again.",
+    "toggleLabel": "Show access tokens",
+    "instructions": {
+      "title": "Instructions: connect Claude Code",
+      "step1": "Install Claude Code. The steps are on <link>code.claude.com/docs</link>.",
+      "step2": "Below, enter a name for the token, for example “Claude Code on my laptop”, and select Create token.",
+      "step3": "Copy the command that appears under your new token. The token is shown only once.",
+      "step4": "Open a terminal (PowerShell on Windows, Terminal on Mac) and run the command. It adds Stay-in-Touch to Claude Code in every folder.",
+      "step5": "Start Claude Code with <code>claude</code>. Type <code>/mcp</code> and check that stay-in-touch is connected.",
+      "step6": "Ask in your own words, for example “Who should I call this week?”, “Mark that I talked to Anna” or “Add a friend named David”. Claude Code asks for anything it needs, such as how often you want to talk.",
+      "step7": "To disconnect, run <code>claude mcp remove stay-in-touch --scope user</code> and revoke the token here."
+    }
   },
   "about": {
     "title": "About",
@@ -387,11 +432,13 @@
     "linking": "If you send a link request, we send the person one email with your name and email and a link to accept. They also see your name and email in the app. After they accept, a talk marked on one side is also recorded on the other. Your friend sees only the dates of those talks. Your notes, contact names and talk frequency are never shared.",
     "remindersTitle": "Reminder emails",
     "reminders": "Reminder emails are off unless you turn them on in Settings. When they are on, the app checks your contacts once a day. If a contact has been red for over {hours} hours, we send one email to your account email with that contact's name and the days since your last talk. We send it once each time the contact turns red, not every day. We store whether and since when reminders are on, and for each contact when the last reminder was sent. You can turn reminders off at any time in Settings or with the unsubscribe option in your email app.",
+    "aiAgentsTitle": "AI agents",
+    "aiAgents": "AI agents are off unless you create an access token in Settings. With a token, an AI agent you choose, such as Claude Code, can list your contacts with their names, how often you want to talk and when you last talked, and can mark talks and add contacts for you. What the agent reads, including your contacts' names, goes to that agent and its AI provider (for example Anthropic), and their own privacy terms apply to it. We never send it your contacts' email addresses or your notes. We store only a fingerprint (hash) of each token, its name, and when it was created and last used. Signing out does not revoke a token. You can revoke it at any time in Settings.",
     "nonUsersTitle": "If someone sent you a link request",
     "nonUsers": "Your email address is stored because a user entered it to send you a link request. You get one email per request, with no reminders or follow-ups. The request is deleted when the sender cancels it or deletes that contact. Every email has a link to stop all further emails from Stay-in-Touch. If you use it, we keep your address on an opt-out list, only to honour that choice.",
     "providersTitle": "Service providers",
     "providers": "Your data is stored and processed by Firebase (Google), Neon and Vercel, only to run the app. Vercel also counts page visits through Vercel Web Analytics. Resend sends the link request emails and the reminder emails. For a link request it processes the recipient's email address and the sender's name and email. For a reminder it processes your email address and the contact's name. Your data is never sold or rented, and the app will never send you marketing or spam messages.",
     "controlTitle": "Your control",
-    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can turn reminder emails on or off at any time in Settings. You can delete your account on your Profile page. This removes your account, contacts, notes, talk history, links, settings, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
+    "control": "You can view, edit, or delete your contacts and notes at any time. Deleting a contact also deletes its notes and talk history. You can unlink a contact at any time to stop sharing talks. You can turn reminder emails on or off at any time in Settings. You can delete your account on your Profile page. This removes your account, contacts, notes, talk history, links, settings, access tokens, and all link requests to or from you. Talk dates already recorded on a linked friend's contact stay with that friend, and if you opted out of invite emails, that choice is kept."
   }
 }
