@@ -1,5 +1,5 @@
 import "server-only";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import { db } from "@/lib/db";
@@ -75,6 +75,33 @@ export async function getOwnedContact(
     .select()
     .from(contacts)
     .where(and(eq(contacts.id, contactId), eq(contacts.ownerId, uid)))
+    .limit(1);
+  return contact ?? null;
+}
+
+/**
+ * The contact of `uid` with this exact name, ignoring case, else null. Names
+ * are unique per owner under the same rule (index on owner_id, lower(name)), so
+ * this is at most one row. Compared with SQL lower(), not JS toLowerCase(), so
+ * it matches exactly what the index treats as equal.
+ */
+export async function getOwnedContactByName(
+  uid: string,
+  name: string,
+): Promise<Contact | null> {
+  const trimmed = name.trim();
+  if (!trimmed) {
+    return null;
+  }
+  const [contact] = await db
+    .select()
+    .from(contacts)
+    .where(
+      and(
+        eq(contacts.ownerId, uid),
+        sql`lower(${contacts.name}) = lower(${trimmed})`,
+      ),
+    )
     .limit(1);
   return contact ?? null;
 }

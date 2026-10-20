@@ -75,7 +75,7 @@ export default function ApiTokens({
   const [isCreating, startCreating] = useTransition();
   // The full token exists only here, right after a create. It is never stored.
   const [newToken, setNewToken] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<"token" | "command" | null>(null);
   const [copyError, setCopyError] = useState<string | null>(null);
   const [tokenToRevoke, setTokenToRevoke] = useState<ApiTokenListItem | null>(
     null,
@@ -84,14 +84,19 @@ export default function ApiTokens({
   const [isRevoking, startRevoking] = useTransition();
 
   const isAtLimit = initialTokens.length >= maxApiTokensPerUser;
-  // Built here, not in the JSON: ICU would read the braces of ${...} as a parameter.
-  const connectCommand = `claude mcp add --transport http stay-in-touch ${mcpUrl} --header "Authorization: Bearer \${STAY_IN_TOUCH_TOKEN}"`;
+  // The real token goes into the command: an env-var form like ${TOKEN} breaks
+  // in PowerShell (expanded to empty by the shell) and Claude Code documents
+  // header expansion only for .mcp.json. Tokens are base64url, so the command
+  // needs no quoting changes in PowerShell or bash.
+  const connectCommand = newToken
+    ? `claude mcp add --transport http stay-in-touch ${mcpUrl} --header "Authorization: Bearer ${newToken}"`
+    : "";
 
   useEffect(() => {
     if (!copied) {
       return;
     }
-    const timer = setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+    const timer = setTimeout(() => setCopied(null), COPIED_FEEDBACK_MS);
     return () => clearTimeout(timer);
   }, [copied]);
 
@@ -105,7 +110,7 @@ export default function ApiTokens({
         const result = await createApiToken(name);
         if (result.ok) {
           setName("");
-          setCopied(false);
+          setCopied(null);
           setCopyError(null);
           setNewToken(result.token);
         } else {
@@ -118,20 +123,20 @@ export default function ApiTokens({
     });
   }
 
-  async function handleCopy(token: string) {
+  async function handleCopy(target: "token" | "command", text: string) {
     setCopyError(null);
     try {
-      await navigator.clipboard.writeText(token);
-      setCopied(true);
+      await navigator.clipboard.writeText(text);
+      setCopied(target);
     } catch (caughtError) {
-      console.error("Could not copy the access token:", caughtError);
+      console.error("Could not copy to the clipboard:", caughtError);
       setCopyError(t("apiTokens.copyFailed"));
     }
   }
 
   function closeNewToken() {
     setNewToken(null);
-    setCopied(false);
+    setCopied(null);
     setCopyError(null);
   }
 
@@ -240,9 +245,11 @@ export default function ApiTokens({
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 buttonText={
-                  copied ? t("apiTokens.copied") : t("apiTokens.copy")
+                  copied === "token"
+                    ? t("apiTokens.copied")
+                    : t("apiTokens.copy")
                 }
-                onClick={() => handleCopy(newToken)}
+                onClick={() => handleCopy("token", newToken)}
               />
               <Button
                 buttonText={t("apiTokens.done")}
@@ -255,10 +262,21 @@ export default function ApiTokens({
             </div>
             {copyError && <ErrorWarning errorMessage={copyError} />}
             <P2>{t("apiTokens.connectIntro")}</P2>
-            <P2>{t("apiTokens.connectEnvHint")}</P2>
             <pre className="overflow-x-auto rounded bg-white p-2 font-mono text-xs">
               <code>{connectCommand}</code>
             </pre>
+            <Button
+              buttonText={
+                copied === "command"
+                  ? t("apiTokens.copied")
+                  : t("apiTokens.copyCommand")
+              }
+              onClick={() => handleCopy("command", connectCommand)}
+              extraClasses="self-start"
+            />
+            <P2 extraClasses="text-grey3">
+              {t("apiTokens.connectStorageNote")}
+            </P2>
           </div>
         )}
 

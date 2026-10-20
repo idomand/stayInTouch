@@ -88,8 +88,12 @@ response, and `getServerUser()` reads a cookie an MCP call does not have.
   (same gating as email notifications).
 - Create a token with a name; show it once with a copy button. List name,
   prefix, created and last used. Revoke with a confirm.
-- A connect hint that keeps the token out of the agent's config file:
-  `claude mcp add --transport http stay-in-touch <APP_URL>/api/mcp --header "Authorization: Bearer ${STAY_IN_TOUCH_TOKEN}"`.
+- A connect hint with the real token filled in, and a copy button:
+  `claude mcp add --transport http stay-in-touch <APP_URL>/api/mcp --header "Authorization: Bearer <TOKEN>"`.
+  Not an env-var form (`${STAY_IN_TOUCH_TOKEN}`): PowerShell expands it to an
+  empty string inside double quotes, and Claude Code documents `${VAR}`
+  expansion in headers only for `.mcp.json`, not for `claude mcp add`. A note
+  says the token is saved in Claude Code's settings on that computer.
 - A note that signing out does not revoke tokens.
 - All text in `i18n/en.json` and `i18n/de.json` (new `apiTokens` section).
 
