@@ -332,7 +332,18 @@
     "revokeConfirm": "Revoke token",
     "revoking": "Revoking…",
     "logoutNote": "Signing out does not revoke tokens. Revoke a token here when you no longer need it.",
-    "saveFailed": "Something went wrong. Please try again."
+    "saveFailed": "Something went wrong. Please try again.",
+    "toggleLabel": "Show access tokens",
+    "instructions": {
+      "title": "Instructions: connect Claude Code",
+      "step1": "Install Claude Code. The steps are on <link>code.claude.com/docs</link>.",
+      "step2": "Below, enter a name for the token, for example “Claude Code on my laptop”, and select Create token.",
+      "step3": "Copy the command that appears under your new token. The token is shown only once.",
+      "step4": "Open a terminal (PowerShell on Windows, Terminal on Mac) and run the command. It adds Stay-in-Touch to Claude Code in every folder.",
+      "step5": "Start Claude Code with <code>claude</code>. Type <code>/mcp</code> and check that stay-in-touch is connected.",
+      "step6": "Ask in your own words, for example “Who should I call this week?”, “Mark that I talked to Anna” or “Add a friend named David”. Claude Code asks for anything it needs, such as how often you want to talk.",
+      "step7": "To disconnect, run <code>claude mcp remove stay-in-touch --scope user</code> and revoke the token here."
+    }
   },
   "about": {
     "title": "About",

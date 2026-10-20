@@ -10,6 +10,7 @@ import {
 import type { FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
+import { FiChevronDown } from "react-icons/fi";
 import type { Locale } from "@/i18n/config";
 import { createApiToken, revokeApiToken } from "@/lib/actions/apiTokens";
 import type { ApiTokenListItem } from "@/lib/db/queries/apiTokens";
@@ -29,6 +30,17 @@ import {
 const DATE_LOCALES: Record<Locale, string> = { en: "en-GB", de: "de-DE" };
 
 const COPIED_FEEDBACK_MS = 2000;
+
+/** Steps shown in the Instructions disclosure, in display order. Each is under apiTokens.instructions.<key>. */
+const INSTRUCTION_STEPS = [
+  "step1",
+  "step2",
+  "step3",
+  "step4",
+  "step5",
+  "step6",
+  "step7",
+] as const;
 
 const subscribeNever = () => () => {};
 
@@ -70,6 +82,9 @@ export default function ApiTokens({
   const locale = useLocale();
   const isClient = useIsClient();
   const titleId = useId();
+  const contentId = useId();
+  // Collapsed by default. Not persisted, so a reload starts collapsed again.
+  const [isExpanded, setIsExpanded] = useState(false);
   const [name, setName] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [isCreating, startCreating] = useTransition();
@@ -87,9 +102,10 @@ export default function ApiTokens({
   // The real token goes into the command: an env-var form like ${TOKEN} breaks
   // in PowerShell (expanded to empty by the shell) and Claude Code documents
   // header expansion only for .mcp.json. Tokens are base64url, so the command
-  // needs no quoting changes in PowerShell or bash.
+  // needs no quoting changes in PowerShell or bash. --scope user makes the
+  // server available in every folder, not only the one where the command ran.
   const connectCommand = newToken
-    ? `claude mcp add --transport http stay-in-touch ${mcpUrl} --header "Authorization: Bearer ${newToken}"`
+    ? `claude mcp add --scope user --transport http stay-in-touch ${mcpUrl} --header "Authorization: Bearer ${newToken}"`
     : "";
 
   useEffect(() => {
@@ -169,6 +185,43 @@ export default function ApiTokens({
     });
   }
 
+  // Step 1 links to the docs and steps 5 and 7 contain commands; the rest are plain text.
+  function renderInstructionStep(key: (typeof INSTRUCTION_STEPS)[number]) {
+    switch (key) {
+      case "step1":
+        return t.rich("apiTokens.instructions.step1", {
+          link: (chunks) => (
+            <a
+              href="https://code.claude.com/docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue1 underline"
+            >
+              {chunks}
+            </a>
+          ),
+        });
+      case "step5":
+        return t.rich("apiTokens.instructions.step5", {
+          code: (chunks) => (
+            <code className="bg-grey1 rounded px-1 font-mono text-xs">
+              {chunks}
+            </code>
+          ),
+        });
+      case "step7":
+        return t.rich("apiTokens.instructions.step7", {
+          code: (chunks) => (
+            <code className="bg-grey1 rounded px-1 font-mono text-xs">
+              {chunks}
+            </code>
+          ),
+        });
+      default:
+        return t(`apiTokens.instructions.${key}`);
+    }
+  }
+
   return (
     <section
       id="access-tokens"
@@ -176,156 +229,211 @@ export default function ApiTokens({
       className="w-full scroll-mt-4 rounded-[10px] border border-black/10 bg-white p-4 sm:p-6"
     >
       <div className="flex flex-col gap-4">
-        <div>
+        <div className="flex items-center justify-between gap-4">
           <div id={titleId}>
-            <P extraClasses="text-lg font-semibold mb-2">
-              {t("apiTokens.title")}
-            </P>
+            <P extraClasses="text-lg font-semibold">{t("apiTokens.title")}</P>
           </div>
-          <P2 extraClasses="text-grey3">{t("apiTokens.intro")}</P2>
+          {/* The same native-checkbox switch as NotificationSettings: keyboard
+              and screen readers keep working, role="switch" reads on/off. */}
+          <label className="relative inline-flex shrink-0 cursor-pointer">
+            <input
+              type="checkbox"
+              role="switch"
+              className="peer sr-only"
+              checked={isExpanded}
+              aria-controls={contentId}
+              aria-label={t("apiTokens.toggleLabel")}
+              onChange={(event) => setIsExpanded(event.target.checked)}
+            />
+            <span
+              aria-hidden="true"
+              className="bg-grey1 peer-checked:bg-blue1 peer-focus-visible:outline-blue1 h-6 w-11 rounded-full transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 motion-reduce:transition-none"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5 motion-reduce:transition-none"
+            />
+          </label>
         </div>
 
-        <form onSubmit={handleCreate} className="flex flex-col gap-2">
-          <label className={basicLabelClasses}>
-            {t("apiTokens.nameLabel")}
-            <div className="relative flex flex-col">
-              <input
-                type="text"
-                name="name"
-                value={name}
-                required
-                maxLength={maxNameLength}
-                placeholder={t("apiTokens.namePlaceholder")}
-                disabled={isCreating || isAtLimit}
-                onChange={(event) => {
-                  setName(event.target.value);
-                  setCreateError(null);
-                }}
-                className={twMerge(
-                  basicInputClasses,
-                  "border-grey2 border border-solid pr-14",
-                )}
-              />
-              <CharactersLeft length={name.length} max={maxNameLength} />
-            </div>
-          </label>
-          <button
-            type="submit"
-            disabled={isCreating || isAtLimit || name === ""}
-            aria-busy={isCreating}
-            className={twMerge(
-              inputSubmitClasses,
-              "bg-blue1 hover:bg-blue3 h-10 self-start px-3",
-            )}
+        <div
+          id={contentId}
+          hidden={!isExpanded}
+          className="flex flex-col gap-4"
+        >
+          <P2 extraClasses="text-grey3">{t("apiTokens.intro")}</P2>
+
+          <details
+            id="access-tokens-instructions"
+            className="group rounded-lg border border-black/10 p-3"
           >
-            {isCreating ? t("apiTokens.creating") : t("apiTokens.create")}
-          </button>
-          {createError && <ErrorWarning errorMessage={createError} />}
-          {isAtLimit && (
-            <P2 extraClasses="text-grey3">
-              {t("apiTokens.limitReached", { limit: maxApiTokensPerUser })}
-            </P2>
-          )}
-        </form>
-
-        {newToken && (
-          <div className="border-green2 bg-grey1 flex flex-col gap-3 rounded border border-solid p-3">
-            <P1 extraClasses="font-semibold">{t("apiTokens.newTokenTitle")}</P1>
-            <P2 extraClasses="font-semibold">
-              {t("apiTokens.newTokenWarning")}
-            </P2>
-            <input
-              type="text"
-              readOnly
-              value={newToken}
-              aria-label={t("apiTokens.newTokenTitle")}
-              onFocus={(event) => event.currentTarget.select()}
-              className={twMerge(basicInputClasses, "w-full font-mono text-xs")}
-            />
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                buttonText={
-                  copied === "token"
-                    ? t("apiTokens.copied")
-                    : t("apiTokens.copy")
-                }
-                onClick={() => handleCopy("token", newToken)}
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold [&::-webkit-details-marker]:hidden">
+              {t("apiTokens.instructions.title")}
+              <FiChevronDown
+                aria-hidden
+                className="text-blue1 shrink-0 transition-transform duration-300 group-open:rotate-180"
               />
-              <Button
-                buttonText={t("apiTokens.done")}
-                onClick={closeNewToken}
-                variant="Secondary"
-              />
-              <span className="sr-only" aria-live="polite">
-                {copied ? t("apiTokens.copied") : ""}
-              </span>
-            </div>
-            {copyError && <ErrorWarning errorMessage={copyError} />}
-            <P2>{t("apiTokens.connectIntro")}</P2>
-            <pre className="overflow-x-auto rounded bg-white p-2 font-mono text-xs">
-              <code>{connectCommand}</code>
-            </pre>
-            <Button
-              buttonText={
-                copied === "command"
-                  ? t("apiTokens.copied")
-                  : t("apiTokens.copyCommand")
-              }
-              onClick={() => handleCopy("command", connectCommand)}
-              extraClasses="self-start"
-            />
-            <P2 extraClasses="text-grey3">
-              {t("apiTokens.connectStorageNote")}
-            </P2>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2">
-          <P1 extraClasses="font-semibold">{t("apiTokens.listTitle")}</P1>
-          {initialTokens.length === 0 ? (
-            <P2 extraClasses="text-grey3">{t("apiTokens.empty")}</P2>
-          ) : (
-            <ul className="m-0 flex flex-col gap-2 p-0">
-              {initialTokens.map((token) => (
-                <li
-                  key={token.id}
-                  className="border-green2 bg-grey1 flex list-none flex-col gap-2 rounded border border-solid p-2 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="flex min-w-0 flex-col gap-0.5">
-                    <P2 extraClasses="font-semibold break-all">{token.name}</P2>
-                    <P2 extraClasses="font-mono text-xs">
-                      {token.tokenPrefix}…
-                    </P2>
-                    {isClient && (
-                      <>
-                        <P2 extraClasses="text-grey3 text-xs">
-                          {t("apiTokens.created", {
-                            date: formatDate(token.createdAt, locale),
-                          })}
-                        </P2>
-                        <P2 extraClasses="text-grey3 text-xs">
-                          {token.lastUsedAt
-                            ? t("apiTokens.lastUsed", {
-                                date: formatDate(token.lastUsedAt, locale),
-                              })
-                            : t("apiTokens.neverUsed")}
-                        </P2>
-                      </>
-                    )}
-                  </div>
-                  <Button
-                    buttonText={t("apiTokens.revoke")}
-                    onClick={() => openRevoke(token)}
-                    variant="Danger"
-                    ariaLabel={t("apiTokens.revokeTitle", { name: token.name })}
-                  />
+            </summary>
+            <ol className="mt-3 flex list-decimal flex-col gap-2 pl-5">
+              {INSTRUCTION_STEPS.map((key) => (
+                <li key={key}>
+                  <P2>{renderInstructionStep(key)}</P2>
                 </li>
               ))}
-            </ul>
-          )}
-        </div>
+            </ol>
+          </details>
 
-        <P2 extraClasses="text-grey3">{t("apiTokens.logoutNote")}</P2>
+          <form onSubmit={handleCreate} className="flex flex-col gap-2">
+            <label className={basicLabelClasses}>
+              {t("apiTokens.nameLabel")}
+              <div className="relative flex flex-col">
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  required
+                  maxLength={maxNameLength}
+                  placeholder={t("apiTokens.namePlaceholder")}
+                  disabled={isCreating || isAtLimit}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                    setCreateError(null);
+                  }}
+                  className={twMerge(
+                    basicInputClasses,
+                    "border-grey2 border border-solid pr-14",
+                  )}
+                />
+                <CharactersLeft length={name.length} max={maxNameLength} />
+              </div>
+            </label>
+            <button
+              type="submit"
+              disabled={isCreating || isAtLimit || name === ""}
+              aria-busy={isCreating}
+              className={twMerge(
+                inputSubmitClasses,
+                "bg-blue1 hover:bg-blue3 h-10 self-start px-3",
+              )}
+            >
+              {isCreating ? t("apiTokens.creating") : t("apiTokens.create")}
+            </button>
+            {createError && <ErrorWarning errorMessage={createError} />}
+            {isAtLimit && (
+              <P2 extraClasses="text-grey3">
+                {t("apiTokens.limitReached", { limit: maxApiTokensPerUser })}
+              </P2>
+            )}
+          </form>
+
+          {newToken && (
+            <div className="border-green2 bg-grey1 flex flex-col gap-3 rounded border border-solid p-3">
+              <P1 extraClasses="font-semibold">
+                {t("apiTokens.newTokenTitle")}
+              </P1>
+              <P2 extraClasses="font-semibold">
+                {t("apiTokens.newTokenWarning")}
+              </P2>
+              <input
+                type="text"
+                readOnly
+                value={newToken}
+                aria-label={t("apiTokens.newTokenTitle")}
+                onFocus={(event) => event.currentTarget.select()}
+                className={twMerge(
+                  basicInputClasses,
+                  "w-full font-mono text-xs",
+                )}
+              />
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  buttonText={
+                    copied === "token"
+                      ? t("apiTokens.copied")
+                      : t("apiTokens.copy")
+                  }
+                  onClick={() => handleCopy("token", newToken)}
+                />
+                <Button
+                  buttonText={t("apiTokens.done")}
+                  onClick={closeNewToken}
+                  variant="Secondary"
+                />
+                <span className="sr-only" aria-live="polite">
+                  {copied ? t("apiTokens.copied") : ""}
+                </span>
+              </div>
+              {copyError && <ErrorWarning errorMessage={copyError} />}
+              <P2>{t("apiTokens.connectIntro")}</P2>
+              <pre className="overflow-x-auto rounded bg-white p-2 font-mono text-xs">
+                <code>{connectCommand}</code>
+              </pre>
+              <Button
+                buttonText={
+                  copied === "command"
+                    ? t("apiTokens.copied")
+                    : t("apiTokens.copyCommand")
+                }
+                onClick={() => handleCopy("command", connectCommand)}
+                extraClasses="self-start"
+              />
+              <P2 extraClasses="text-grey3">
+                {t("apiTokens.connectStorageNote")}
+              </P2>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2">
+            <P1 extraClasses="font-semibold">{t("apiTokens.listTitle")}</P1>
+            {initialTokens.length === 0 ? (
+              <P2 extraClasses="text-grey3">{t("apiTokens.empty")}</P2>
+            ) : (
+              <ul className="m-0 flex flex-col gap-2 p-0">
+                {initialTokens.map((token) => (
+                  <li
+                    key={token.id}
+                    className="border-green2 bg-grey1 flex list-none flex-col gap-2 rounded border border-solid p-2 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="flex min-w-0 flex-col gap-0.5">
+                      <P2 extraClasses="font-semibold break-all">
+                        {token.name}
+                      </P2>
+                      <P2 extraClasses="font-mono text-xs">
+                        {token.tokenPrefix}…
+                      </P2>
+                      {isClient && (
+                        <>
+                          <P2 extraClasses="text-grey3 text-xs">
+                            {t("apiTokens.created", {
+                              date: formatDate(token.createdAt, locale),
+                            })}
+                          </P2>
+                          <P2 extraClasses="text-grey3 text-xs">
+                            {token.lastUsedAt
+                              ? t("apiTokens.lastUsed", {
+                                  date: formatDate(token.lastUsedAt, locale),
+                                })
+                              : t("apiTokens.neverUsed")}
+                          </P2>
+                        </>
+                      )}
+                    </div>
+                    <Button
+                      buttonText={t("apiTokens.revoke")}
+                      onClick={() => openRevoke(token)}
+                      variant="Danger"
+                      ariaLabel={t("apiTokens.revokeTitle", {
+                        name: token.name,
+                      })}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <P2 extraClasses="text-grey3">{t("apiTokens.logoutNote")}</P2>
+        </div>
       </div>
 
       <Dialog
