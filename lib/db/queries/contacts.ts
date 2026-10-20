@@ -61,7 +61,16 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
   if (!user) {
     return [];
   }
+  return getContactsForUser(user.uid);
+}
 
+/**
+ * Every contact of `uid`, most overdue first (see getContactsForCurrentUser).
+ * The caller must supply a verified uid: the session's, or an API token's.
+ */
+export async function getContactsForUser(
+  uid: string,
+): Promise<ContactListItem[]> {
   const result = await db.execute(sql`
     SELECT
       c.id,
@@ -102,7 +111,7 @@ export async function getContactsForCurrentUser(): Promise<ContactListItem[]> {
     --   FROM notes nn
     --   WHERE nn.contact_id = c.id
     -- ) n ON true
-    WHERE c.owner_id = ${user.uid}
+    WHERE c.owner_id = ${uid}
     ORDER BY "daysUntilNextTalk" ASC NULLS FIRST
   `);
 
