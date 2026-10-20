@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import { requireUserWithEmail } from "@/lib/db/queries/guards";
 import {
+  apiTokens,
   contacts,
   inviteEmailsSent,
   linkRequests,
@@ -16,7 +17,7 @@ import type { ActionResult } from "@/lib/actions/validation";
 
 /**
  * Deletes the caller's account: every row tied to them (including their
- * `user_settings` row), then the Firebase user.
+ * `user_settings` row and MCP access tokens), then the Firebase user.
  *
  * Deleting contacts cascades to their notes, talk events, links (both sides)
  * and the requests sent from them. Kept on purpose: talk events the user
@@ -36,6 +37,7 @@ export async function deleteAccount(): Promise<ActionResult> {
       .delete(inviteEmailsSent)
       .where(eq(inviteEmailsSent.fromUserId, uid));
     await tx.delete(userSettings).where(eq(userSettings.ownerId, uid));
+    await tx.delete(apiTokens).where(eq(apiTokens.ownerId, uid));
     await tx.delete(contacts).where(eq(contacts.ownerId, uid));
   });
 

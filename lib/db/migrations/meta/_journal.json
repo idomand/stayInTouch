@@ -36,6 +36,13 @@
       "when": 1792149264416,
       "tag": "0004_dark_caretaker",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792479519366,
+      "tag": "0005_faithful_meltdown",
+      "breakpoints": true
     }
   ]
 }

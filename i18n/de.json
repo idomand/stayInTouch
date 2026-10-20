@@ -135,7 +135,9 @@
     "contactsAlreadyLinked": "Einer dieser Kontakte ist bereits verknüpft.",
     "contactNotLinked": "Dieser Kontakt ist nicht verknüpft.",
     "unsubscribeLinkInvalid": "Dieser Abmeldelink ist ungültig. Verwende den Link aus der E-Mail.",
-    "accountDeleteFailed": "Deine Daten wurden gelöscht, aber das Konto konnte nicht entfernt werden. Bitte versuche es erneut."
+    "accountDeleteFailed": "Deine Daten wurden gelöscht, aber das Konto konnte nicht entfernt werden. Bitte versuche es erneut.",
+    "apiTokenLimitReached": "Du kannst höchstens {limit} Zugriffstoken haben. Widerrufe zuerst eines.",
+    "apiTokenNotFound": "Zugriffstoken nicht gefunden."
   },
   "mainForm": {
     "makeAFriend": "Kontakt hinzufügen!",
