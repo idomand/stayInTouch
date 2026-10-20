@@ -66,36 +66,6 @@ function GermanFlag() {
 }
 
 /**
- * Display order and markers. "auto" has no fixed name, so its label is
- * translated at render time. Language names are written in their own language.
- */
-const LANGUAGE_OPTIONS = [
-  {
-    value: "auto",
-    label: null,
-    marker: <FaGlobe size={18} className="text-grey3" />,
-  },
-  {
-    value: "en",
-    label: "English",
-    marker: (
-      <span className={flagMarkerClasses}>
-        <UsFlag />
-      </span>
-    ),
-  },
-  {
-    value: "de",
-    label: "Deutsch",
-    marker: (
-      <span className={flagMarkerClasses}>
-        <GermanFlag />
-      </span>
-    ),
-  },
-] as const;
-
-/**
  * App language picker. "auto" follows the browser's language; English and
  * Deutsch are saved in a cookie for this browser. Language names are written
  * in their own language so a user can find theirs whatever is showing.
@@ -130,28 +100,63 @@ export default function LanguageSelector({
             {t("languageSelector.title")}
           </P>
         </legend>
-        {LANGUAGE_OPTIONS.map((option) => (
-          <label
-            key={option.value}
-            className="flex cursor-pointer items-center gap-3"
+
+        <label key={"auto"} className="flex cursor-pointer items-center gap-3">
+          <input
+            type="radio"
+            name="appLanguage"
+            value={"auto"}
+            checked={choice === "auto"}
+            disabled={isPending}
+            onChange={() => handleChange("auto")}
+          />
+          <span
+            aria-hidden="true"
+            className="inline-flex w-8 shrink-0 justify-center"
           >
-            <input
-              type="radio"
-              name="appLanguage"
-              value={option.value}
-              checked={choice === option.value}
-              disabled={isPending}
-              onChange={() => handleChange(option.value)}
-            />
-            <span
-              aria-hidden="true"
-              className="inline-flex w-8 shrink-0 justify-center"
-            >
-              {option.marker}
+            <FaGlobe size={18} className="text-grey3" />
+          </span>
+          <P2>{t("languageSelector.browserDefault")}</P2>
+        </label>
+
+        <label key={"en"} className="flex cursor-pointer items-center gap-3">
+          <input
+            type="radio"
+            name="appLanguage"
+            value={"en"}
+            checked={choice === "en"}
+            disabled={isPending}
+            onChange={() => handleChange("en")}
+          />
+          <span
+            aria-hidden="true"
+            className="inline-flex w-8 shrink-0 justify-center"
+          >
+            <span className={flagMarkerClasses}>
+              <UsFlag />
             </span>
-            <P2>{option.label ?? t("languageSelector.browserDefault")}</P2>
-          </label>
-        ))}
+          </span>
+          <P2>{t("languageSelector.english")}</P2>
+        </label>
+        <label key={"de"} className="flex cursor-pointer items-center gap-3">
+          <input
+            type="radio"
+            name="appLanguage"
+            value={"de"}
+            checked={choice === "de"}
+            disabled={isPending}
+            onChange={() => handleChange("de")}
+          />
+          <span
+            aria-hidden="true"
+            className="inline-flex w-8 shrink-0 justify-center"
+          >
+            <span className={flagMarkerClasses}>
+              <GermanFlag />
+            </span>
+          </span>
+          <P2>{t("languageSelector.german")}</P2>
+        </label>
       </fieldset>
     </section>
   );

@@ -287,7 +287,9 @@
   },
   "languageSelector": {
     "title": "App language",
-    "browserDefault": "Browser default"
+    "browserDefault": "Browser default",
+    "english": "English",
+    "german": "German"
   },
   "talkEffectSelector": {
     "title": "Talk Marker",
@@ -301,6 +303,35 @@
     "overdueReminders": "Email me when a contact has been red for over {hours} hours",
     "description": "One email per contact, sent to your account email. You get it once a day at most, and only once until you talk again.",
     "saveFailed": "Could not save this setting. Please try again."
+  },
+  "apiTokens": {
+    "title": "Access tokens for AI agents",
+    "intro": "Let an AI agent such as Claude Code mark talks and add contacts for you. Create a token and give it to the agent. Anyone with the token can read and change your contacts, so keep it secret.",
+    "nameLabel": "Token name",
+    "namePlaceholder": "e.g. Claude Code on my laptop",
+    "create": "Create token",
+    "creating": "Creating…",
+    "limitReached": "You have {limit} tokens, the maximum. Revoke one to create a new one.",
+    "newTokenTitle": "Your new token",
+    "newTokenWarning": "Copy it now. It is shown only once.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Could not copy. Select the token and copy it by hand.",
+    "done": "Done",
+    "connectIntro": "To connect Claude Code:",
+    "connectEnvHint": "1. Save the token in an environment variable named STAY_IN_TOUCH_TOKEN. 2. Run this command:",
+    "listTitle": "Your tokens",
+    "empty": "You have no tokens yet.",
+    "created": "Created {date}",
+    "lastUsed": "Last used {date}",
+    "neverUsed": "Never used",
+    "revoke": "Revoke",
+    "revokeTitle": "Revoke {name}?",
+    "revokeBody": "Agents using this token stop working right away. This cannot be undone.",
+    "revokeConfirm": "Revoke token",
+    "revoking": "Revoking…",
+    "logoutNote": "Signing out does not revoke tokens. Revoke a token here when you no longer need it.",
+    "saveFailed": "Something went wrong. Please try again."
   },
   "about": {
     "title": "About",

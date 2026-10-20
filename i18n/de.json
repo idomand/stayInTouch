@@ -287,7 +287,9 @@
   },
   "languageSelector": {
     "title": "App-Sprache",
-    "browserDefault": "Browsersprache"
+    "browserDefault": "Browsersprache",
+    "english": "Englisch",
+    "german": "Deutsch"
   },
   "talkEffectSelector": {
     "title": "Gesprächsmarker",
@@ -301,6 +303,35 @@
     "overdueReminders": "Schick mir eine E-Mail, wenn ein Kontakt seit über {hours} Stunden rot ist",
     "description": "Eine E-Mail pro Kontakt, an die E-Mail-Adresse deines Kontos. Sie kommt höchstens einmal am Tag und nur einmal, bis ihr wieder sprecht.",
     "saveFailed": "Die Einstellung konnte nicht gespeichert werden. Bitte versuch es noch einmal."
+  },
+  "apiTokens": {
+    "title": "Zugriffstoken für KI-Agenten",
+    "intro": "Lass einen KI-Agenten wie Claude Code Gespräche markieren und Kontakte für dich hinzufügen. Erstelle ein Token und gib es dem Agenten. Wer das Token hat, kann deine Kontakte lesen und ändern – halte es also geheim.",
+    "nameLabel": "Name des Tokens",
+    "namePlaceholder": "z. B. Claude Code auf meinem Laptop",
+    "create": "Token erstellen",
+    "creating": "Wird erstellt…",
+    "limitReached": "Du hast {limit} Token, das Maximum. Widerrufe eines, um ein neues zu erstellen.",
+    "newTokenTitle": "Dein neues Token",
+    "newTokenWarning": "Kopiere es jetzt. Es wird nur einmal angezeigt.",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "copyFailed": "Kopieren fehlgeschlagen. Markiere das Token und kopiere es von Hand.",
+    "done": "Fertig",
+    "connectIntro": "So verbindest du Claude Code:",
+    "connectEnvHint": "1. Speichere das Token in einer Umgebungsvariablen namens STAY_IN_TOUCH_TOKEN. 2. Führe diesen Befehl aus:",
+    "listTitle": "Deine Token",
+    "empty": "Du hast noch keine Token.",
+    "created": "Erstellt am {date}",
+    "lastUsed": "Zuletzt verwendet am {date}",
+    "neverUsed": "Noch nie verwendet",
+    "revoke": "Widerrufen",
+    "revokeTitle": "{name} widerrufen?",
+    "revokeBody": "Agenten mit diesem Token funktionieren sofort nicht mehr. Das lässt sich nicht rückgängig machen.",
+    "revokeConfirm": "Token widerrufen",
+    "revoking": "Wird widerrufen…",
+    "logoutNote": "Abmelden widerruft keine Token. Widerrufe ein Token hier, wenn du es nicht mehr brauchst.",
+    "saveFailed": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   },
   "about": {
     "title": "Über",
