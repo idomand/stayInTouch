@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { H1, H2, H3, P1, P2 } from "@/Components/ui/Text";
 import Card from "@/Components/ui/Card";
 import Link from "@/Components/ui/Link";
@@ -38,8 +38,32 @@ function StartLink({ label }: { label: string }) {
   );
 }
 
+const videoIds = {
+  problem: { en: "n3Xv_g3g-mA", de: "DwqwRYe6fKA" },
+  solution: { en: "I9hJ_Rux9y0", de: "HYuqC13LZ1Q" },
+} as const;
+
+/** A titled YouTube embed. The nocookie domain sets no tracking cookies before play. */
+function VideoColumn({ title, videoId }: { title: string; videoId: string }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <H2>{title}</H2>
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        className="aspect-video w-full rounded-md"
+      />
+    </div>
+  );
+}
+
 export default async function Welcome() {
   const t = await getTranslations();
+  const videoLocale = (await getLocale()) === "de" ? "de" : "en";
 
   const steps = [
     { title: t("welcome.step1Title"), text: t("welcome.step1Text") },
@@ -62,9 +86,17 @@ export default async function Welcome() {
         <H1 extraClasses="text-balance">{t("welcome.headline")}</H1>
         <P1 extraClasses="text-grey3 max-w-prose">{t("welcome.subline")}</P1>
         <StartLink label={t("welcome.getStarted")} />
-        <P2 extraClasses="text-grey3">
-          {t.rich("welcome.alreadyHaveAccount", { link: textLink("/login") })}
-        </P2>
+      </div>
+
+      <div className="grid w-full max-w-4xl gap-8 md:grid-cols-2">
+        <VideoColumn
+          title={t("welcome.problemTitle")}
+          videoId={videoIds.problem[videoLocale]}
+        />
+        <VideoColumn
+          title={t("welcome.solutionTitle")}
+          videoId={videoIds.solution[videoLocale]}
+        />
       </div>
 
       <div className="flex w-full flex-col gap-4">
