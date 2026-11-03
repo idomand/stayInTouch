@@ -2,7 +2,7 @@
 import React, { useState, useId, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { FaUserPlus } from "react-icons/fa";
-import { addContact } from "@/lib/actions/contacts";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import CharactersLeft from "@/Components/ui/CharactersLeft";
@@ -18,6 +18,7 @@ import { twMerge } from "tailwind-merge";
 
 export default function AddNewContact() {
   const t = useTranslations();
+  const { addContact } = useContactActions();
   const lastSpokenId = useId();
   // A string, so the field can be emptied while typing; checked on submit.
   const [time, setTime] = useState("3");

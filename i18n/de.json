@@ -45,7 +45,8 @@
     "or": "oder",
     "invitedEmailNote": "Du wurdest unter <strong>{email}</strong> eingeladen. Melde dich mit genau dieser E-Mail-Adresse an oder erstelle damit ein Konto, um die Anfrage zu sehen.",
     "metaTitle": "Anmelden",
-    "whatIsThis": "Neu hier?<link>Sieh dir an, was Stay-in-Touch kann</link>"
+    "whatIsThis": "Neu hier?<link>Sieh dir an, was Stay-in-Touch kann</link>",
+    "tryDemo": "Nur mal schauen?<link>Demo ausprobieren</link>"
   },
   "welcome": {
     "metaDescription": "Stay-in-Touch erinnert dich daran, mit wem du lange nicht gesprochen hast. Lege fest, wie oft du mit jeder Person sprechen willst, und sieh zuerst, wer überfällig ist.",
@@ -64,7 +65,8 @@
     "linkedTitle": "Gemeinsam besser",
     "linkedText": "Nutzt eine Freundin oder ein Freund auch Stay-in-Touch, verknüpft eure Kontakte. Ein Gespräch, das einer von euch markiert, zählt für beide. Deine Notizen bleiben privat.",
     "privacyNote": "Keine Werbung. Kein Tracking. Für immer kostenlos. <link>Zur Datenschutzerklärung</link>",
-    "closingTitle": "Bereit, in Kontakt zu bleiben?"
+    "closingTitle": "Bereit, in Kontakt zu bleiben?",
+    "tryDemo": "Demo ausprobieren"
   },
   "unsubscribe": {
     "title": "Einladungs-E-Mails abbestellen",
@@ -143,7 +145,20 @@
   "mainForm": {
     "makeAFriend": "Kontakt hinzufügen!",
     "greeting": "Hallo {name}",
-    "greetingNoName": "Hallo"
+    "greetingNoName": "Hallo",
+    "greetingVisitor": "Hallo, Gast"
+  },
+  "demo": {
+    "metaTitle": "Demo",
+    "bannerText": "Das ist eine Demo, nicht die echte App. Deine Änderungen bleiben nur in diesem Browser.",
+    "bannerCta": "Anmelden und die echte App nutzen",
+    "seedMom": "Mama",
+    "seedBestFriend": "Bester Freund",
+    "linkNeedsAccountTitle": "Zum Verknüpfen brauchst du ein Konto",
+    "linkNeedsAccountText": "Wenn du dich mit einer Freundin oder einem Freund verknüpfst, seht ihr beide jedes Gespräch, das eine Seite einträgt. Melde dich an, um eine Anfrage zu senden.",
+    "signIn": "Anmelden",
+    "badge": "Demo",
+    "bannerTitle": "Du siehst gerade eine Demo"
   },
   "contactList": {
     "empty": "Noch keine Kontakte",

@@ -2,8 +2,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SlOptions } from "react-icons/sl";
-import { deleteContact } from "@/lib/actions/contacts";
-import { unlinkContact } from "@/lib/actions/links";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import AppointmentForm from "@/Components/contacts/AppointmentForm";
 import UpdateContactForm from "@/Components/contacts/UpdateContactForm";
@@ -23,6 +22,7 @@ export default function MoreOptionsDropdown({
   contact: ContactListItem;
 }) {
   const t = useTranslations();
+  const { deleteContact, unlinkContact, isDemo } = useContactActions();
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateContactModalOpen, setIsUpdateContactModalOpen] =
     useState(false);
@@ -238,12 +238,31 @@ export default function MoreOptionsDropdown({
           {deleteError && <ErrorWarning errorMessage={deleteError} />}
         </div>
       </Dialog>
-      {isLinkContactDialogOpen && (
-        <LinkContactDialog
-          contact={contact}
+      {/* A real link request emails the friend, so the demo cannot fake it. */}
+      {isDemo ? (
+        <Dialog
+          title={t("demo.linkNeedsAccountTitle")}
           isOpen={isLinkContactDialogOpen}
           close={() => setIsLinkContactDialogOpen(false)}
-        />
+        >
+          <div className="flex flex-col gap-4">
+            <P2 extraClasses="text-grey3">{t("demo.linkNeedsAccountText")}</P2>
+            <NextLink
+              href="/login"
+              className="bg-blue1 hover:bg-blue3 hover:text-blue1 self-start rounded-md border px-2 py-1 text-sm font-medium text-white transition duration-200 ease-in"
+            >
+              {t("demo.signIn")}
+            </NextLink>
+          </div>
+        </Dialog>
+      ) : (
+        isLinkContactDialogOpen && (
+          <LinkContactDialog
+            contact={contact}
+            isOpen={isLinkContactDialogOpen}
+            close={() => setIsLinkContactDialogOpen(false)}
+          />
+        )
       )}
       <Dialog
         title={t("moreOptionsDropdown.unlinkTitle")}

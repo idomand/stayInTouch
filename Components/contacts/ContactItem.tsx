@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { BsExclamationSquare } from "react-icons/bs";
 import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
-import { markAsTalked } from "@/lib/actions/contacts";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import { playTalkEffect, readTalkEffect } from "@/lib/talkEffect";
 import MoreOptionsDropdown from "@/Components/contacts/MoreOptionsDropdown";
@@ -15,6 +15,7 @@ import Spinner from "@/Components/ui/Spinner";
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, daysSinceLastTalk, daysUntilNextTalk } = contact;
   const t = useTranslations();
+  const { markAsTalked } = useContactActions();
   const [error, setError] = useState<string | false>(false);
   const [isMarking, startMarking] = useTransition();
 
@@ -74,7 +75,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
               {contact.isLinked && (
                 <FaLink
                   size={14}
-                  className="text-blue1 shrink-0"
+                  className="text-blue1 shrink-0 cursor-help"
                   title={t("contactItem.linkedTitle")}
                   aria-label={t("contactItem.linkedLabel", { name })}
                 />

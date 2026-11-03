@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { twMerge } from "tailwind-merge";
-import { updateContact } from "@/lib/actions/contacts";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import { maxCadenceDays, maxNameLength } from "@/lib/ConstantsFile";
 import {
   basicFormClasses,
@@ -31,6 +31,7 @@ export default function UpdateContactForm({
   onClose,
 }: UpdateContactFormProps) {
   const t = useTranslations();
+  const { updateContact } = useContactActions();
   const [contactName, setContactName] = useState(contact.name);
   const [newFriendEmail, setNewFriendEmail] = useState(
     contact.friendEmail ?? "",

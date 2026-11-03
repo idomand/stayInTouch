@@ -12,9 +12,18 @@ import { SESSION_COOKIE_NAME } from "@/lib/auth/session";
  * A visitor without a cookie on "/" gets the public landing page instead of a
  * redirect, so the URL stays "/" and first-time visitors learn what the app is
  * before being asked to sign in.
+ *
+ * /demo is the reverse: public, but a visitor with a session cookie is sent
+ * to "/", where their real contacts are.
  */
 export function proxy(request: NextRequest) {
-  if (!request.cookies.has(SESSION_COOKIE_NAME)) {
+  const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
+  if (request.nextUrl.pathname === "/demo") {
+    return hasSession
+      ? NextResponse.redirect(new URL("/", request.url))
+      : NextResponse.next();
+  }
+  if (!hasSession) {
     if (request.nextUrl.pathname === "/") {
       return NextResponse.rewrite(new URL("/welcome", request.url));
     }
@@ -24,7 +33,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Protected routes; /login, /welcome, /about, /privacy, /faq and /settings
-  // are public. Add every new protected route here.
-  matcher: ["/", "/profile"],
+  // Protected routes, plus /demo (redirects signed-in users). /login, /welcome,
+  // /about, /privacy, /faq and /settings are public. Add every new protected
+  // route here.
+  matcher: ["/", "/profile", "/demo"],
 };

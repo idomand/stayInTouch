@@ -26,18 +26,6 @@ function textLink(href: string) {
   };
 }
 
-/** Primary button look, as a link. Matches Button's Primary variant, a bit larger. */
-function StartLink({ label }: { label: string }) {
-  return (
-    <Link
-      href="/login"
-      extraClasses="inline-flex items-center justify-center rounded-md border border-blue1 bg-blue1 px-6 py-3 text-base font-semibold text-white transition duration-200 ease-in hover:border-blue3 hover:bg-blue3 hover:text-blue1"
-    >
-      {label}
-    </Link>
-  );
-}
-
 const videoIds = {
   problem: { en: "n3Xv_g3g-mA", de: "DwqwRYe6fKA" },
   solution: { en: "I9hJ_Rux9y0", de: "HYuqC13LZ1Q" },
@@ -85,7 +73,22 @@ export default async function Welcome() {
         />
         <H1 extraClasses="text-balance">{t("welcome.headline")}</H1>
         <P1 extraClasses="text-grey3 max-w-prose">{t("welcome.subline")}</P1>
-        <StartLink label={t("welcome.getStarted")} />
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/login"
+            variant="Button"
+            extraClasses="border-blue1 bg-blue1 px-6 py-3 text-base text-white hover:bg-blue2 hover:border-blue2"
+          >
+            {t("welcome.getStarted")}
+          </Link>
+          <Link
+            href="/demo"
+            variant="Button"
+            extraClasses="border-blue1 text-blue1 hover:bg-blue3 bg-white px-6 py-3 text-base"
+          >
+            {t("welcome.tryDemo")}
+          </Link>
+        </div>
       </div>
 
       <div className="grid w-full max-w-4xl gap-8 md:grid-cols-2">
