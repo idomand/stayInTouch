@@ -5,11 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { BsClockHistory, BsTrash } from "react-icons/bs";
 import { P2 } from "@/Components/ui/Text";
 import type { Locale } from "@/i18n/config";
-import {
-  addTalkEvent,
-  deleteTalkEvent,
-  getTalkEvents,
-} from "@/lib/actions/contacts";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import type { ActionResult } from "@/lib/actions/validation";
 import type {
   ContactListItem,
@@ -60,6 +56,7 @@ type HistoryState =
  */
 export default function TalkEvents({ contact }: { contact: ContactListItem }) {
   const t = useTranslations();
+  const { addTalkEvent, deleteTalkEvent, getTalkEvents } = useContactActions();
   const locale = useLocale();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [history, setHistory] = useState<HistoryState>({ status: "loading" });

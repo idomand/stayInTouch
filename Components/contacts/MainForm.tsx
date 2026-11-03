@@ -2,12 +2,14 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/AuthContext";
+import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import AddNewContact from "@/Components/contacts/AddNewContact";
 import { H1 } from "@/Components/ui/Text";
 import Button from "@/Components/ui/Button";
 
 export default function MainForm() {
   const { currentUser } = useAuth()!;
+  const { isDemo } = useContactActions();
   const t = useTranslations();
   const [showMainForm, setShowMainForm] = useState(false);
   const displayName = currentUser?.displayName;
@@ -19,7 +21,9 @@ export default function MainForm() {
           <H1 extraClasses="pt-2.5 min-w-0 break-words">
             {displayName
               ? t("mainForm.greeting", { name: displayName })
-              : t("mainForm.greetingNoName")}
+              : isDemo
+                ? t("mainForm.greetingVisitor")
+                : t("mainForm.greetingNoName")}
           </H1>
         </div>
         <div className="mx-auto mb-3 sm:mx-0 sm:mb-0">

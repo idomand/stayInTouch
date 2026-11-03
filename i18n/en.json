@@ -45,7 +45,8 @@
     "or": "or",
     "invitedEmailNote": "You were invited at <strong>{email}</strong>. Sign in or create an account with this exact email to see the request.",
     "metaTitle": "Log in",
-    "whatIsThis": "New here?<link>See what Stay-in-Touch does</link>"
+    "whatIsThis": "New here?<link>See what Stay-in-Touch does</link>",
+    "tryDemo": "Just looking?<link>Try the demo</link>"
   },
   "welcome": {
     "metaDescription": "Stay-in-Touch reminds you who you haven't talked to in a while. Choose how often you want to talk to each person and see who is overdue first.",
@@ -64,7 +65,8 @@
     "linkedTitle": "Better together",
     "linkedText": "If a friend uses Stay-in-Touch too, link your contacts. A talk marked by either of you counts for both. Your notes stay private.",
     "privacyNote": "No ads. No tracking. Free forever. Read the <link>privacy policy</link>",
-    "closingTitle": "Ready to stay in touch?"
+    "closingTitle": "Ready to stay in touch?",
+    "tryDemo": "Try the demo"
   },
   "unsubscribe": {
     "title": "Stop invite emails",
@@ -143,7 +145,20 @@
   "mainForm": {
     "makeAFriend": "Make a friend!",
     "greeting": "Hi {name}",
-    "greetingNoName": "Hi"
+    "greetingNoName": "Hi",
+    "greetingVisitor": "Hi visitor"
+  },
+  "demo": {
+    "metaTitle": "Demo",
+    "bannerText": "This is a demo, not the real app. Your changes stay in this browser only.",
+    "bannerCta": "Sign in to use the real app",
+    "seedMom": "Mom",
+    "seedBestFriend": "Best friend",
+    "linkNeedsAccountTitle": "Linking needs an account",
+    "linkNeedsAccountText": "When you link with a friend, a talk marked by either of you shows up for both of you. Sign in to send a link request.",
+    "signIn": "Sign in",
+    "badge": "Demo",
+    "bannerTitle": "You are looking at a demo"
   },
   "contactList": {
     "empty": "No contacts yet",

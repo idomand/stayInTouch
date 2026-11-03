@@ -86,6 +86,26 @@ function Login() {
               <H1>{t("login.welcome")}</H1>
               <P2 extraClasses="text-grey3">{t("login.intro")}</P2>
             </div>
+            <div className="flex flex-col gap-1">
+              <P2 extraClasses="text-grey3">
+                {t.rich("login.whatIsThis", {
+                  link: (chunks) => (
+                    <Link href="/welcome" variant="Text">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </P2>
+              <P2 extraClasses="text-grey3">
+                {t.rich("login.tryDemo", {
+                  link: (chunks) => (
+                    <Link href="/demo" variant="Text">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </P2>
+            </div>
             {invitedEmail && (
               <P2 extraClasses="text-grey3">
                 {t.rich("login.invitedEmailNote", {
@@ -144,15 +164,6 @@ function Login() {
               initialEmail={invitedEmail}
               disabled={isSigningIn}
             />
-            <P2 extraClasses="text-grey3">
-              {t.rich("login.whatIsThis", {
-                link: (chunks) => (
-                  <Link href="/welcome" variant="Text">
-                    {chunks}
-                  </Link>
-                ),
-              })}
-            </P2>
           </>
         )}
       </div>
