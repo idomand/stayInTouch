@@ -15,6 +15,7 @@ import {
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
 import { twMerge } from "tailwind-merge";
+import posthog from "posthog-js";
 
 export default function AddNewContact() {
   const t = useTranslations();
@@ -53,6 +54,11 @@ export default function AddNewContact() {
       if (!result.ok) {
         setError(result.error);
       } else {
+        posthog.capture("contact_created", {
+          cadence_days: Number(time),
+          has_friend_email: Boolean(friendEmail),
+          has_initial_talk: startDate !== null,
+        });
         setStartDate(null);
         setName("");
         setFriendEmail("");

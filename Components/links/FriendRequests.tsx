@@ -12,6 +12,7 @@ import Button from "@/Components/ui/Button";
 import Card from "@/Components/ui/Card";
 import AcceptLinkDialog from "@/Components/links/AcceptLinkDialog";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
+import posthog from "posthog-js";
 
 export default function FriendRequests({
   incoming,
@@ -41,6 +42,8 @@ export default function FriendRequests({
     setProcessingId(null);
     if (!result.ok) {
       setError(result.error);
+    } else {
+      posthog.capture("link_request_rejected");
     }
   }
 
@@ -51,6 +54,8 @@ export default function FriendRequests({
     setProcessingId(null);
     if (!result.ok) {
       setError(result.error);
+    } else {
+      posthog.capture("link_request_cancelled");
     }
   }
 

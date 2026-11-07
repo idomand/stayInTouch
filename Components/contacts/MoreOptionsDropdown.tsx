@@ -12,6 +12,7 @@ import LinkContactDialog from "@/Components/links/LinkContactDialog";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import { P2 } from "@/Components/ui/Text";
 import NextLink from "next/link";
+import posthog from "posthog-js";
 
 const menuItemClasses =
   "block w-full text-left px-4 py-3 cursor-pointer bg-transparent border-0 text-black text-sm transition-colors duration-200 hover:bg-grey2 active:bg-grey3 not-last:border-b not-last:border-grey2";
@@ -108,6 +109,8 @@ export default function MoreOptionsDropdown({
     const result = await deleteContact(contact.id);
     if (!result.ok) {
       setDeleteError(result.error);
+    } else {
+      posthog.capture("contact_deleted", { is_linked: contact.isLinked });
     }
   }
 
@@ -116,6 +119,7 @@ export default function MoreOptionsDropdown({
     if (!result.ok) {
       setUnlinkError(result.error);
     } else {
+      posthog.capture("contact_unlinked");
       setIsUnlinkConfirmOpen(false);
     }
   }

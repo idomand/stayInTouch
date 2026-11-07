@@ -14,6 +14,7 @@ import type { ContactListItem } from "@/lib/db/queries/contacts";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import Dialog from "@/Components/ui/Dialog";
 import CharactersLeft from "@/Components/ui/CharactersLeft";
+import posthog from "posthog-js";
 
 type UpdateContactFormProps = {
   contact: ContactListItem;
@@ -62,6 +63,11 @@ export default function UpdateContactForm({
     if (!result.ok) {
       setError(result.error);
     } else {
+      posthog.capture("contact_updated", {
+        name_changed: nameChanged,
+        cadence_changed: cadenceChanged,
+        friend_email_changed: emailChanged,
+      });
       onClose();
     }
   }

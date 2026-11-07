@@ -15,6 +15,7 @@ import Button from "@/Components/ui/Button";
 import Dialog from "@/Components/ui/Dialog";
 import DatePickerComponent from "@/Components/ui/DatePickerComponent";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
+import posthog from "posthog-js";
 
 // en-GB keeps the day-month order English used before i18n.
 const DATE_LOCALES: Record<Locale, string> = { en: "en-GB", de: "de-DE" };
@@ -97,12 +98,17 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
   }
 
   /** Runs an add or delete, then reloads the list on success. */
-  async function saveChange(change: () => Promise<ActionResult>) {
+  async function saveChange(
+    event: "talk_event_added" | "talk_event_deleted",
+    properties: Record<string, boolean>,
+    change: () => Promise<ActionResult>,
+  ) {
     setIsSaving(true);
     setSaveError(null);
     try {
       const result = await change();
       if (result.ok) {
+        posthog.capture(event, properties);
         setPendingDeleteId(null);
         await loadHistory(false);
       } else {
@@ -117,11 +123,17 @@ export default function TalkEvents({ contact }: { contact: ContactListItem }) {
   }
 
   function onAdd() {
-    saveChange(() => addTalkEvent(contact.id, talkedAtMsForDay(talkDay)));
+    saveChange(
+      "talk_event_added",
+      { is_linked: contact.isLinked, is_today: isToday(talkDay) },
+      () => addTalkEvent(contact.id, talkedAtMsForDay(talkDay)),
+    );
   }
 
   function onConfirmDelete(eventId: string) {
-    saveChange(() => deleteTalkEvent(contact.id, eventId));
+    saveChange("talk_event_deleted", { is_linked: contact.isLinked }, () =>
+      deleteTalkEvent(contact.id, eventId),
+    );
   }
 
   const addDateInputId = `talk-date-${contact.id}`;

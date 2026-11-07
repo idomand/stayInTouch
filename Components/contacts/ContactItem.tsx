@@ -11,6 +11,7 @@ import MoreOptionsDropdown from "@/Components/contacts/MoreOptionsDropdown";
 import TalkEvents from "@/Components/contacts/TalkEvents";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
 import Spinner from "@/Components/ui/Spinner";
+import posthog from "posthog-js";
 
 export default function ContactItem({ contact }: { contact: ContactListItem }) {
   const { id, name, daysSinceLastTalk, daysUntilNextTalk } = contact;
@@ -58,6 +59,10 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       if (!result.ok) {
         setError(result.error);
       } else {
+        posthog.capture("contact_marked_as_talked", {
+          was_overdue: !isTalkingStatusOK,
+          is_linked: contact.isLinked,
+        });
         void playTalkEffect(readTalkEffect(), button);
       }
     });

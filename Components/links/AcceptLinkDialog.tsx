@@ -17,6 +17,7 @@ import {
   basicLabelClasses,
 } from "@/Components/ui/formClasses";
 import { twMerge } from "tailwind-merge";
+import posthog from "posthog-js";
 
 export default function AcceptLinkDialog({
   request,
@@ -70,6 +71,9 @@ export default function AcceptLinkDialog({
     if (!result.ok) {
       setError(result.error);
     } else {
+      posthog.capture("link_request_accepted", {
+        contact_creation_mode: choice,
+      });
       close();
     }
   }
