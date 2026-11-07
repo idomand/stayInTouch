@@ -16,6 +16,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import { P2 } from "@/Components/ui/Text";
 import { inviteLimitPerDay } from "@/lib/ConstantsFile";
+import posthog from "posthog-js";
 
 /** Mount this only while it is open, so its fields start fresh each time. */
 export default function LinkContactDialog({
@@ -71,6 +72,9 @@ export default function LinkContactDialog({
     if (!result.ok) {
       setError(result.error);
     } else {
+      posthog.capture("contact_link_invite_sent", {
+        invites_remaining_before_send: remaining,
+      });
       close();
     }
   }

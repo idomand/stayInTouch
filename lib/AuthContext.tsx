@@ -14,7 +14,14 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import type { Messages, useTranslations } from "next-intl";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import posthog from "posthog-js";
 import { auth, provider } from "@/lib/Firebase";
 import { deleteAccount as deleteAccountAction } from "@/lib/actions/account";
 import type { ActionResult } from "@/lib/actions/validation";
@@ -161,6 +168,7 @@ export default function AuthProvider({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasSession, setHasSession] = useState(false);
+  const identifiedUserId = useRef<string | null>(null);
   const router = useRouter();
 
   /** Every cookie mint goes through here so hasSession stays in step. */
@@ -194,6 +202,8 @@ export default function AuthProvider({
   /** Client half of signing out, once the server cookie is already gone. */
   async function finishSignOut() {
     setHasSession(false);
+    posthog.reset();
+    identifiedUserId.current = null;
     await signOut(auth);
     setCurrentUser(null);
     // The home page is server-rendered now, so clearing state does not move
@@ -216,6 +226,7 @@ export default function AuthProvider({
   async function deleteAccount(): Promise<ActionResult> {
     const result = await deleteAccountAction();
     if (result.ok) {
+      posthog.capture("account_deleted");
       await finishSignOut();
     }
     return result;
@@ -300,8 +311,27 @@ export default function AuthProvider({
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
       setLoading(false);
-      if (!user) {
+      if (user) {
+        // Firebase UIDs are stable primary identifiers; email and display name
+        // stay on the person, never on individual analytics events.
+        if (identifiedUserId.current !== user.uid) {
+          if (identifiedUserId.current) {
+            posthog.reset();
+          }
+          posthog.identify(user.uid, {
+            ...(user.email ? { email: user.email } : {}),
+            ...(user.displayName ? { name: user.displayName } : {}),
+          });
+          identifiedUserId.current = user.uid;
+        }
+      } else {
         setHasSession(false);
+        // Reset only after a known user signs out; preserve an anonymous
+        // visitor's pre-login history on the initial auth-state check.
+        if (identifiedUserId.current) {
+          posthog.reset();
+          identifiedUserId.current = null;
+        }
         // Signed out is the only state that shows the Google button.
         warmUpPopupSignIn();
       }

@@ -6,6 +6,7 @@ import { setOverdueReminders } from "@/lib/actions/settings";
 import { overdueReminderDelayHours } from "@/lib/ConstantsFile";
 import { P, P2 } from "@/Components/ui/Text";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
+import posthog from "posthog-js";
 
 /**
  * Email notification choices, saved on the account. The id lets the link in a
@@ -30,6 +31,10 @@ export default function NotificationSettings({
         if (!result.ok) {
           setEnabled(!nextEnabled);
           setError(result.error);
+        } else {
+          posthog.capture("overdue_reminders_preference_updated", {
+            enabled: nextEnabled,
+          });
         }
       } catch (caughtError) {
         console.error("Could not save the notification setting:", caughtError);

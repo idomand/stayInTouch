@@ -9,6 +9,7 @@ import {
 } from "@/lib/db/queries/contacts";
 import { contacts, talkEvents } from "@/lib/db/schema";
 import { actionError } from "@/lib/actions/actionError";
+import { logPostHogInfo } from "@/lib/posthogLogs";
 import {
   type ActionResult,
   type ErrorMessage,
@@ -47,6 +48,7 @@ export async function addContact(
   if (!result.ok) {
     return actionError(result.error);
   }
+  logPostHogInfo("contact_created", { action: "contact_create" });
   revalidatePath("/");
   return { ok: true };
 }
@@ -104,6 +106,7 @@ export async function deleteContact(contactId: string): Promise<ActionResult> {
   await db
     .delete(contacts)
     .where(and(eq(contacts.id, contactId), eq(contacts.ownerId, uid)));
+  logPostHogInfo("contact_deleted", { action: "contact_delete" });
   revalidatePath("/");
   return { ok: true };
 }
@@ -119,6 +122,9 @@ export async function markAsTalked(
     return actionError(result.error);
   }
   if (result.inserted) {
+    logPostHogInfo("contact_marked_as_talked", {
+      action: "contact_mark_talked",
+    });
     revalidatePath("/");
   }
   return { ok: true };

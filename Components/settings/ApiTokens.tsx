@@ -25,6 +25,7 @@ import {
   basicLabelClasses,
   inputSubmitClasses,
 } from "@/Components/ui/formClasses";
+import posthog from "posthog-js";
 
 // Same mapping as TalkEvents, so dates read the same across the app.
 const DATE_LOCALES: Record<Locale, string> = { en: "en-GB", de: "de-DE" };
@@ -125,6 +126,7 @@ export default function ApiTokens({
       try {
         const result = await createApiToken(name);
         if (result.ok) {
+          posthog.capture("api_token_created");
           setName("");
           setCopied(null);
           setCopyError(null);
@@ -174,6 +176,7 @@ export default function ApiTokens({
       try {
         const result = await revokeApiToken(token.id);
         if (result.ok) {
+          posthog.capture("api_token_revoked");
           setTokenToRevoke(null);
         } else {
           setRevokeError(result.error);
