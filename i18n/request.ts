@@ -5,7 +5,7 @@ import en from "./en.json";
 import {
   defaultLocale,
   isLocale,
-  LOCALE_COOKIE_NAME,
+  APP_LANGUAGE_COOKIE,
   type Locale,
 } from "@/i18n/config";
 
@@ -42,7 +42,7 @@ function matchAcceptLanguage(header: string | null): Locale | null {
  * browser's language, else English. No locale in the URL.
  */
 export default getRequestConfig(async () => {
-  const cookieLocale = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
+  const cookieLocale = (await cookies()).get(APP_LANGUAGE_COOKIE)?.value;
   const locale = isLocale(cookieLocale)
     ? cookieLocale
     : (matchAcceptLanguage((await headers()).get("accept-language")) ??

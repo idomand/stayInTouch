@@ -9,7 +9,7 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "en";
 
 /** Set only when the user picks a language; absent means "follow the browser". */
-export const LOCALE_COOKIE_NAME = "NEXT_LOCALE";
+export const APP_LANGUAGE_COOKIE = "APP_LANGUAGE";
 
 export function isLocale(value: unknown): value is Locale {
   return (

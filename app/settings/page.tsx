@@ -6,7 +6,7 @@ import LanguageSelector from "@/Components/settings/LanguageSelector";
 import NotificationSettings from "@/Components/settings/NotificationSettings";
 import TalkEffectSelector from "@/Components/settings/TalkEffectSelector";
 import PageHeader from "@/Components/ui/PageHeader";
-import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
+import { isLocale, APP_LANGUAGE_COOKIE } from "@/i18n/config";
 import { getServerUser } from "@/lib/auth/getServerUser";
 import { getApiTokens } from "@/lib/db/queries/apiTokens";
 import { getOverdueRemindersEnabled } from "@/lib/db/queries/settings";
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function SettingsPage() {
   const t = await getTranslations();
-  const savedLocale = (await cookies()).get(LOCALE_COOKIE_NAME)?.value;
+  const savedLocale = (await cookies()).get(APP_LANGUAGE_COOKIE)?.value;
   const user = await getServerUser();
 
   return (

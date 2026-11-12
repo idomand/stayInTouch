@@ -1,6 +1,6 @@
 "use server";
 import { cookies } from "next/headers";
-import { isLocale, LOCALE_COOKIE_NAME } from "@/i18n/config";
+import { isLocale, APP_LANGUAGE_COOKIE } from "@/i18n/config";
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
@@ -13,13 +13,13 @@ const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 export async function setLocale(choice: string): Promise<void> {
   const cookieStore = await cookies();
   if (choice === "auto") {
-    cookieStore.delete(LOCALE_COOKIE_NAME);
+    cookieStore.delete(APP_LANGUAGE_COOKIE);
     return;
   }
   if (!isLocale(choice)) {
     throw new Error("Unsupported locale.");
   }
-  cookieStore.set(LOCALE_COOKIE_NAME, choice, {
+  cookieStore.set(APP_LANGUAGE_COOKIE, choice, {
     maxAge: ONE_YEAR_SECONDS,
     sameSite: "lax",
     path: "/",
