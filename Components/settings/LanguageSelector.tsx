@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { FaGlobe } from "react-icons/fa";
 import type { Locale } from "@/i18n/config";
-import { setLocale } from "@/lib/actions/locale";
+import { setAppLanguage } from "@/lib/actions/locale";
 import { P, P2 } from "@/Components/ui/Text";
 
 export type LanguageChoice = Locale | "auto";
@@ -84,7 +84,7 @@ export default function LanguageSelector({
     setChoice(nextChoice);
     startTransition(async () => {
       try {
-        await setLocale(nextChoice);
+        await setAppLanguage(nextChoice);
       } catch (error) {
         console.error("Could not change the language:", error);
         setChoice(previousChoice);

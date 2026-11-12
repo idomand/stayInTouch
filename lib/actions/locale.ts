@@ -10,7 +10,7 @@ const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
  * browser. Setting a cookie in a Server Action makes Next re-render the
  * current page, so the new language shows without a manual refresh.
  */
-export async function setLocale(choice: string): Promise<void> {
+export async function setAppLanguage(choice: string): Promise<void> {
   const cookieStore = await cookies();
   if (choice === "auto") {
     cookieStore.delete(APP_LANGUAGE_COOKIE);
