@@ -5,7 +5,20 @@ if (!firebaseProjectId) {
   throw new Error("NEXT_PUBLIC_FIREBASE_PROJECT_ID is not set");
 }
 
+const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+if (!posthogHost) {
+  throw new Error("NEXT_PUBLIC_POSTHOG_HOST is not set");
+}
+
+const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+if (!posthogKey) {
+  throw new Error("NEXT_PUBLIC_POSTHOG_KEY is not set");
+}
+
 module.exports = withNextIntl({
+  // PostHog API paths end in a slash (/e/, /flags/). Without this, Next.js
+  // answers each one with a 308 redirect before the proxy rewrite runs.
+  skipTrailingSlashRedirect: true,
   reactStrictMode: true,
   turbopack: {},
   experimental: {
@@ -45,6 +58,23 @@ module.exports = withNextIntl({
       {
         source: "/__/auth/:path*",
         destination: `https://${firebaseProjectId}.firebaseapp.com/__/auth/:path*`,
+      },
+      // PostHog reverse proxy: the browser sends analytics to our own domain, so
+      // ad blockers that block posthog.com do not drop events. The path is
+      // app-specific on purpose; blockers know /ingest and /analytics. The
+      // specific asset rules must come before the catch-all, because the first
+      // match wins. Assets have no env var: change both hosts if the region moves.
+      {
+        source: "/friendship/static/:path*",
+        destination: `https://eu-assets.i.posthog.com/static/:path*`,
+      },
+      {
+        source: "/friendship/array/:path*",
+        destination: `https://eu-assets.i.posthog.com/array/:path*`,
+      },
+      {
+        source: "/friendship/:path*",
+        destination: `${posthogHost}/:path*`,
       },
     ];
   },
