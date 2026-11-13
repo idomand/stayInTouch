@@ -39,11 +39,10 @@ export function saveAnalyticsConsent(choice: AnalyticsConsent) {
   document.cookie = `${ANALYTICS_CONSENT_COOKIE}=${choice}; path=/; max-age=${ONE_YEAR_SECONDS}; samesite=lax${secure}`;
 
   if (choice === "granted") {
-    // Persist first, so the id is stored before the first event is sent.
-    posthog.set_config({ persistence: "localStorage+cookie" });
     posthog.opt_in_capturing();
   } else {
-    // Stop sending, then drop the stored id (matters after an earlier accept).
+    // Opting out also removes PostHog's storage (opt_out_persistence_by_default).
+    // reset() then replaces the in-memory id, so a later accept starts fresh.
     posthog.opt_out_capturing();
     posthog.reset();
   }

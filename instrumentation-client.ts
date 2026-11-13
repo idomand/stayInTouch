@@ -7,8 +7,9 @@ if (!posthogKey) {
   throw new Error("NEXT_PUBLIC_POSTHOG_KEY is not set");
 }
 
-// Until the user accepts, PostHog sends nothing and keeps its id in memory
-// only. A user who accepted on an earlier visit starts tracked right away.
+// Until the user accepts, PostHog sends nothing and stores nothing (see
+// opt_out_persistence_by_default). A user who accepted on an earlier visit
+// starts tracked right away.
 const hasConsent = readAnalyticsConsent() === "granted";
 
 posthog.init(posthogKey, {
@@ -20,7 +21,10 @@ posthog.init(posthogKey, {
   // survived "clear cookies" and kept tracking while our consent cookie was
   // gone. As a cookie, it is cleared together with ours.
   opt_out_capturing_persistence_type: "cookie",
-  persistence: hasConsent ? "localStorage+cookie" : "memory",
+  // While opted out, PostHog removes and stops writing its ph_<key>_posthog
+  // cookies and localStorage; opting in turns storage back on (default
+  // "localStorage+cookie"). Without this, a decline left the id cookies.
+  opt_out_persistence_by_default: true,
   person_profiles: "identified_only",
   api_host: "/friendship",
   ui_host: "https://eu.posthog.com",

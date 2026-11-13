@@ -320,6 +320,12 @@
     "small": "Small",
     "extreme": "Extreme"
   },
+  "analyticsConsentSelector": {
+    "title": "Analytics",
+    "description": "Choose whether we may use analytics cookies. You can change this at any time.",
+    "granted": "Allow analytics",
+    "denied": "Don't allow analytics"
+  },
   "notificationSettings": {
     "title": "Notifications",
     "overdueReminders": "Email me when a contact has been red for over {hours} hours",

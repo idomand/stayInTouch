@@ -320,6 +320,12 @@
     "small": "Klein",
     "extreme": "Extrem"
   },
+  "analyticsConsentSelector": {
+    "title": "Analyse",
+    "description": "Wähle, ob wir Analyse-Cookies nutzen dürfen. Du kannst das jederzeit ändern.",
+    "granted": "Analyse erlauben",
+    "denied": "Analyse nicht erlauben"
+  },
   "notificationSettings": {
     "title": "Benachrichtigungen",
     "overdueReminders": "Schick mir eine E-Mail, wenn ein Kontakt seit über {hours} Stunden rot ist",

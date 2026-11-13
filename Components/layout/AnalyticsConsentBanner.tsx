@@ -41,10 +41,13 @@ export default function AnalyticsConsentBanner({
     return null;
   }
 
+  // Sticky, not fixed: it stays at the bottom of the screen while scrolling,
+  // but at the end of the page it sits after the footer instead of over it.
+  // That only works while it is rendered after <Footer /> in app/layout.tsx.
   return (
     <section
       aria-label={t("analyticsConsentBanner.label")}
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white p-4 shadow-lg"
+      className="sticky bottom-0 z-50 border-t border-black/10 bg-white p-4 shadow-lg"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
         <P2 extraClasses="flex-1">
