@@ -6,6 +6,7 @@ import ContactList from "@/Components/contacts/ContactList";
 import MainForm from "@/Components/contacts/MainForm";
 import Link from "@/Components/ui/Link";
 import Spinner from "@/Components/ui/Spinner";
+import { trackClient } from "@/lib/analytics/trackEvent";
 import { ContactActionsProvider } from "@/lib/contacts/ContactActionsContext";
 import {
   createDemoActions,
@@ -63,6 +64,10 @@ export default function Demo() {
     setContacts(loaded);
     // Load once; a language change must not reseed or reload.
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    trackClient({ name: "demo_started" });
   }, []);
 
   const demoActions = useMemo(
