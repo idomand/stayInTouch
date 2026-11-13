@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import ApiTokens from "@/Components/settings/ApiTokens";
 import LanguageSelector from "@/Components/settings/LanguageSelector";
 import NotificationSettings from "@/Components/settings/NotificationSettings";
-import TalkEffectSelector from "@/Components/settings/TalkEffectSelector";
+import ConfettiStyleSelector from "@/Components/settings/ConfettiStyleSelector";
 import PageHeader from "@/Components/ui/PageHeader";
 import { isLocale, APP_LANGUAGE_COOKIE } from "@/i18n/config";
 import { getServerUser } from "@/lib/auth/getServerUser";
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The settings page: app language, plus the talk effect, email
+ * The settings page: app language, plus the confetti style, email
  * notifications and access tokens for AI agents for signed-in users.
  * Public, so a visitor can pick the language before signing in. Account
  * features live on /profile.
@@ -34,7 +34,7 @@ export default async function SettingsPage() {
       <LanguageSelector
         savedChoice={isLocale(savedLocale) ? savedLocale : "auto"}
       />
-      {user && <TalkEffectSelector />}
+      {user && <ConfettiStyleSelector />}
       {user && (
         <NotificationSettings
           initialEnabled={await getOverdueRemindersEnabled(user.uid)}

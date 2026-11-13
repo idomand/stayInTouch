@@ -313,7 +313,7 @@
     "english": "English",
     "german": "German"
   },
-  "talkEffectSelector": {
+  "confettiStyleSelector": {
     "title": "Talk Marker",
     "description": "What you see after you mark a talk.",
     "none": "None",

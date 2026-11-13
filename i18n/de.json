@@ -313,7 +313,7 @@
     "english": "Englisch",
     "german": "Deutsch"
   },
-  "talkEffectSelector": {
+  "confettiStyleSelector": {
     "title": "Gesprächsmarker",
     "description": "Was du nach dem Markieren eines Gesprächs siehst.",
     "none": "Keine",

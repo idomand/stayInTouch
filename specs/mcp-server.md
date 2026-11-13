@@ -180,7 +180,7 @@ Platform:
 - Vercel deployment protection blocks `/api/mcp` on preview URLs. Test on
   localhost.
 - No realtime: an open app tab shows an MCP change only after a reload or
-  navigation. The talk effect does not play.
+  navigation. The confetti does not play.
 - The service worker caches only `/_next/static/*`; agents do not go through it.
 - No new env variable, so no new build-time requirement.
 - No analytics events for MCP. If added later: no names, ids or emails.

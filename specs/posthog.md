@@ -45,7 +45,7 @@ The user runs `npx -y @posthog/wizard@latest` in their own terminal (it needs a 
    - The choice is a first-party cookie `analyticsConsent=granted|denied` (1 year, `SameSite=Lax`, not httpOnly). It is strictly necessary, so it needs no consent. A cookie, not localStorage, so the server can read it (requirement 6).
    - One small module (e.g. `lib/analyticsConsent.ts`) reads and writes the cookie and calls PostHog: accept → `opt_in_capturing()` + `set_config({ persistence: "localStorage+cookie" })`; decline → `opt_out_capturing()` + `reset()`.
    - `Components/layout/ConsentBanner.tsx` (`"use client"`), rendered in `app/layout.tsx` next to `<Analytics />`. Shown on every page until a choice is made, `/demo` included. **Accept** and **Decline** are equally prominent (`Components/ui/Button`). Short text with a link to `/privacy`.
-   - `/settings`: `Components/settings/AnalyticsConsentSelector.tsx` to change the choice at any time, like `TalkEffectSelector`.
+   - `/settings`: `Components/settings/AnalyticsConsentSelector.tsx` to change the choice at any time, like `ConfettiStyleSelector`.
    - Text in `i18n/en.json` and `i18n/de.json` (`consentBanner`, plus keys in `settings`).
 4. **Typed client events.** `lib/analytics.ts`:
 

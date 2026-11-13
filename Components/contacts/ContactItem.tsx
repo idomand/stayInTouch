@@ -6,7 +6,7 @@ import { IoCheckboxOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { useContactActions } from "@/lib/contacts/ContactActionsContext";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
-import { playTalkEffect, readTalkEffect } from "@/lib/talkEffect";
+import { playConfettiStyle, readConfettiStyle } from "@/lib/confettiStyle";
 import MoreOptionsDropdown from "@/Components/contacts/MoreOptionsDropdown";
 import TalkEvents from "@/Components/contacts/TalkEvents";
 import ErrorWarning from "@/Components/ui/ErrorWarning";
@@ -44,7 +44,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       : t("contactItem.talkToday");
 
   function resetFunction(event: MouseEvent<HTMLButtonElement>) {
-    // currentTarget is cleared after the event, so keep the button for the effect.
+    // currentTarget is cleared after the event, so keep the button for the confetti.
     const button = event.currentTarget;
     // Clearing first remounts a repeated error, so it is announced again.
     setError(false);
@@ -58,7 +58,7 @@ export default function ContactItem({ contact }: { contact: ContactListItem }) {
       if (!result.ok) {
         setError(result.error);
       } else {
-        void playTalkEffect(readTalkEffect(), button);
+        void playConfettiStyle(readConfettiStyle(), button);
       }
     });
   }

@@ -3,24 +3,24 @@
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import {
-  readTalkEffect,
-  saveTalkEffect,
-  subscribeTalkEffect,
-  TALK_EFFECTS,
-} from "@/lib/talkEffect";
+  readConfettiStyle,
+  saveConfettiStyle,
+  subscribeConfettiStyle,
+  CONFETTI_STYLES,
+} from "@/lib/confettiStyle";
 import { P, P2 } from "@/Components/ui/Text";
 
 /**
  * Per-browser choice of the celebration shown after marking a talk. Default is
  * small.
  */
-export default function TalkEffectSelector() {
+export default function ConfettiStyleSelector() {
   const t = useTranslations();
   // The server has no localStorage, so it renders "small"; the client then
   // switches to the saved choice without a hydration mismatch.
   const choice = useSyncExternalStore(
-    subscribeTalkEffect,
-    readTalkEffect,
+    subscribeConfettiStyle,
+    readConfettiStyle,
     () => "small",
   );
 
@@ -29,23 +29,22 @@ export default function TalkEffectSelector() {
       <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
         <legend>
           <P extraClasses="text-lg font-semibold mb-2">
-            {t("talkEffectSelector.title")}
+            {t("confettiStyleSelector.title")}
           </P>
         </legend>
-        <P2 extraClasses="text-grey3">{t("talkEffectSelector.description")}</P2>
-        {TALK_EFFECTS.map((effect) => (
-          <label
-            key={effect}
-            className="flex cursor-pointer items-center gap-3"
-          >
+        <P2 extraClasses="text-grey3">
+          {t("confettiStyleSelector.description")}
+        </P2>
+        {CONFETTI_STYLES.map((style) => (
+          <label key={style} className="flex cursor-pointer items-center gap-3">
             <input
               type="radio"
-              name="talkEffect"
-              value={effect}
-              checked={choice === effect}
-              onChange={() => saveTalkEffect(effect)}
+              name="confettiStyle"
+              value={style}
+              checked={choice === style}
+              onChange={() => saveConfettiStyle(style)}
             />
-            <P2>{t(`talkEffectSelector.${effect}`)}</P2>
+            <P2>{t(`confettiStyleSelector.${style}`)}</P2>
           </label>
         ))}
       </fieldset>

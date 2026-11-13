@@ -1,19 +1,19 @@
 /**
  * The celebration shown after marking a contact as talked. The choice is a
  * per-browser preference in localStorage, picked on /settings. The particle
- * library is not in the initial bundle: `preloadTalkEffect` loads it once the
- * page is idle, so the first effect does not wait for a download.
+ * library is not in the initial bundle: `preloadConfettiStyle` loads it once the
+ * page is idle, so the first confetti does not wait for a download.
  */
 
-export const TALK_EFFECTS = ["none", "small", "extreme"] as const;
-export type TalkEffect = (typeof TALK_EFFECTS)[number];
+export const CONFETTI_STYLES = ["none", "small", "extreme"] as const;
+export type ConfettiStyle = (typeof CONFETTI_STYLES)[number];
 
-const TALK_EFFECT_STORAGE_KEY = "talkEffect";
+const CONFETTI_STYLE_STORAGE_KEY = "confettiStyle";
 // The small burst is on screen about 3 s. The extreme one fires for 2.5 s,
 // then fades like the small one, so it ends after about 6 s.
 const EXTREME_DURATION_MS = 2500;
 
-// One party at a time: extra clicks during the extreme effect add nothing.
+// One party at a time: extra clicks during the extreme confetti add nothing.
 let isPartying = false;
 
 let confettiModule: Promise<typeof import("@tsparticles/confetti")> | null =
@@ -31,22 +31,22 @@ function loadConfetti() {
   return confettiModule;
 }
 
-function canPlay(effect: TalkEffect) {
+function canPlay(style: ConfettiStyle) {
   return (
-    effect !== "none" &&
+    style !== "none" &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
 
-function isTalkEffect(value: unknown): value is TalkEffect {
-  return TALK_EFFECTS.includes(value as TalkEffect);
+function isConfettiStyle(value: unknown): value is ConfettiStyle {
+  return CONFETTI_STYLES.includes(value as ConfettiStyle);
 }
 
-/** The saved effect, or "small" when nothing valid is saved or storage is blocked. */
-export function readTalkEffect(): TalkEffect {
+/** The saved style, or "small" when nothing valid is saved or storage is blocked. */
+export function readConfettiStyle(): ConfettiStyle {
   try {
-    const saved = localStorage.getItem(TALK_EFFECT_STORAGE_KEY);
-    return isTalkEffect(saved) ? saved : "small";
+    const saved = localStorage.getItem(CONFETTI_STYLE_STORAGE_KEY);
+    return isConfettiStyle(saved) ? saved : "small";
   } catch {
     return "small";
   }
@@ -56,17 +56,17 @@ export function readTalkEffect(): TalkEffect {
 // subscribers directly.
 const listeners = new Set<() => void>();
 
-export function saveTalkEffect(effect: TalkEffect) {
+export function saveConfettiStyle(style: ConfettiStyle) {
   try {
-    localStorage.setItem(TALK_EFFECT_STORAGE_KEY, effect);
+    localStorage.setItem(CONFETTI_STYLE_STORAGE_KEY, style);
   } catch (error) {
-    console.error("Could not save the talk effect:", error);
+    console.error("Could not save the confetti style:", error);
   }
   listeners.forEach((listener) => listener());
 }
 
 /** Subscribe API for `useSyncExternalStore`; also follows changes from other tabs. */
-export function subscribeTalkEffect(onChange: () => void) {
+export function subscribeConfettiStyle(onChange: () => void) {
   listeners.add(onChange);
   window.addEventListener("storage", onChange);
   return () => {
@@ -76,17 +76,17 @@ export function subscribeTalkEffect(onChange: () => void) {
 }
 
 /**
- * Loads the particle library when the browser is idle, so the first effect
+ * Loads the particle library when the browser is idle, so the first confetti
  * plays without a download. Safe to call many times; it schedules once, and
- * skips the download when no effect can play.
+ * skips the download when no confetti can play.
  */
-export function preloadTalkEffect() {
-  if (isPreloadScheduled || !canPlay(readTalkEffect())) {
+export function preloadConfettiStyle() {
+  if (isPreloadScheduled || !canPlay(readConfettiStyle())) {
     return;
   }
   isPreloadScheduled = true;
   const load = () => {
-    // Best effort: playTalkEffect retries and logs a failed load.
+    // Best effort: playConfettiStyle retries and logs a failed load.
     loadConfetti().catch(() => {});
   };
   // Safari has no requestIdleCallback.
@@ -98,18 +98,18 @@ export function preloadTalkEffect() {
 }
 
 /**
- * Plays the effect. "small" bursts from `sourceElement` when given. Never
- * throws: the effect is decoration and must not break the action behind it.
+ * Plays the confetti. "small" bursts from `sourceElement` when given. Never
+ * throws: the confetti is decoration and must not break the action behind it.
  */
-export async function playTalkEffect(
-  effect: TalkEffect,
+export async function playConfettiStyle(
+  style: ConfettiStyle,
   sourceElement?: Element | null,
 ) {
-  if (!canPlay(effect)) {
+  if (!canPlay(style)) {
     return;
   }
   try {
-    if (effect === "small") {
+    if (style === "small") {
       const { confetti } = await loadConfetti();
       await confetti({
         particleCount: 100,
@@ -120,7 +120,7 @@ export async function playTalkEffect(
       await playExtreme();
     }
   } catch (error) {
-    console.error("Could not play the talk effect:", error);
+    console.error("Could not play the confetti:", error);
   }
 }
 
@@ -189,9 +189,7 @@ function repeatUntil(
         resolve();
         return;
       }
-      fire().catch((error) =>
-        console.error("Talk effect frame failed:", error),
-      );
+      fire().catch((error) => console.error("Confetti frame failed:", error));
       setTimeout(tick, intervalMs);
     };
     tick();

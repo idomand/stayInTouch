@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { H2, P3 } from "@/Components/ui/Text";
 import type { ContactListItem } from "@/lib/db/queries/contacts";
 import ContactItem from "@/Components/contacts/ContactItem";
-import TalkEffectPreloader from "@/Components/contacts/TalkEffectPreloader";
+import ConfettiStylePreloader from "@/Components/contacts/ConfettiStylePreloader";
 
 /**
  * Renders the server-fetched contact list. The rows arrive already ordered
@@ -28,7 +28,7 @@ export default function ContactList({
 
   return (
     <>
-      <TalkEffectPreloader />
+      <ConfettiStylePreloader />
       <ul className="relative mx-auto flex w-[85vw] max-w-195 flex-col items-center p-0">
         {contacts.map((contact) => (
           <ContactItem key={contact.id} contact={contact} />
