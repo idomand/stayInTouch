@@ -16,6 +16,10 @@ posthog.init(posthogKey, {
   capture_exceptions: true,
   debug: process.env.NODE_ENV === "development",
   opt_out_capturing_by_default: !hasConsent,
+  // PostHog keeps its own opt-in flag. In localStorage (the default) it
+  // survived "clear cookies" and kept tracking while our consent cookie was
+  // gone. As a cookie, it is cleared together with ours.
+  opt_out_capturing_persistence_type: "cookie",
   persistence: hasConsent ? "localStorage+cookie" : "memory",
   person_profiles: "identified_only",
   api_host: "/friendship",

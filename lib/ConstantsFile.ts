@@ -24,3 +24,5 @@ export const overdueReminderDelayHours = 24;
  * shown on /settings.
  */
 export const maxApiTokensPerUser = 5;
+
+export const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;

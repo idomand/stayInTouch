@@ -26,6 +26,12 @@
   "scrollToTopButton": {
     "top": "Nach oben"
   },
+  "analyticsConsentBanner": {
+    "label": "Einwilligung zur Analyse",
+    "text": "Dürfen wir Cookies nutzen? Die Namen und Notizen deiner Kontakte senden wir nie. Lies die <link>Datenschutzerklärung</link>.",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen"
+  },
   "logoutButton": {
     "confirmTitle": "Bist du sicher?",
     "logOut": "Abmelden",

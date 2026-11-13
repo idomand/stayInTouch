@@ -1,4 +1,10 @@
 import posthog from "posthog-js";
+import {
+  ANALYTICS_CONSENT_COOKIE,
+  AnalyticsConsent,
+  isAnalyticsConsent,
+} from "./analyticsConsentCookie";
+import { ONE_YEAR_SECONDS } from "../ConstantsFile";
 
 /**
  * The user's analytics choice, and the PostHog switch that follows it. Browser
@@ -8,16 +14,6 @@ import posthog from "posthog-js";
  * (server events must check consent). Storing the answer is strictly
  * necessary, so the cookie itself needs no consent.
  */
-
-export const ANALYTICS_CONSENT_VALUES = ["granted", "denied"] as const;
-export type AnalyticsConsent = (typeof ANALYTICS_CONSENT_VALUES)[number];
-
-const ANALYTICS_CONSENT_COOKIE = "analyticsConsent";
-const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
-
-function isAnalyticsConsent(value: unknown): value is AnalyticsConsent {
-  return ANALYTICS_CONSENT_VALUES.includes(value as AnalyticsConsent);
-}
 
 /** The saved choice, or null when there is none or it is not a valid value. */
 export function readAnalyticsConsent(): AnalyticsConsent | null {

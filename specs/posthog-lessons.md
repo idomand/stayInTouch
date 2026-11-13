@@ -6,11 +6,11 @@ A step-by-step learning path for adding PostHog (analytics, feature flags, A/B t
 
 **Branch:** `feat/posthog-analytics` (pushed). **PostHog project:** `stay-in-touch`, EU Cloud, id 332815. The PostHog MCP (claude.ai connector) is set up and works.
 
-## Where we stopped (2026-11-12)
+## Where we stopped (2026-11-13)
 
-- **Done:** Lessons 0, 1, 2, 3, 4a.
-- **Next:** Lesson 4b — the consent banner.
-- Last commit: `8b6a8a4 feat(analytics): store analytics consent in a cookie and start PostHog from it`.
+- **Done:** Lessons 0, 1, 2, 3, 4a, 4b (tests 1–4 and 6 pass; test 5 waits for 4c).
+- **Next:** Lesson 4c — the settings selector, then run test 5 from 4b.
+- Last commit: `8b6a8a4 feat(analytics): store analytics consent in a cookie and start PostHog from it` (4b not committed yet).
 
 ## Decisions made
 
@@ -24,12 +24,17 @@ A step-by-step learning path for adding PostHog (analytics, feature flags, A/B t
 | `cookieless_mode`       | Not used                                                                                       | Decline must mean no tracking; Vercel Analytics already counts cookieless page views                                                                                                                             |
 | `/flags` before consent | Kept for now (the SDK asks for flags even when opted out)                                      | User's choice. Privacy text (Lesson 12) must not promise "nothing is sent" before consent. Fix if wanted: `advanced_disable_feature_flags_on_first_load: !hasConsent` + `posthog.reloadFeatureFlags()` on accept |
 | Consent storage         | Cookie `analyticsConsent=granted\|denied`, 1 year, written with `document.cookie`              | The server must read it in Lesson 7                                                                                                                                                                              |
+| Banner first paint      | `app/layout.tsx` reads the cookie and passes `initialConsent`; it is the `getServerSnapshot`   | No flash for returning visitors, no delay for new ones. Pages are dynamic already (i18n reads cookies)                                                                                                           |
+| PostHog opt-in flag     | `opt_out_capturing_persistence_type: "cookie"`                                                 | In localStorage (default) it survived "clear cookies" and PostHog kept tracking while the banner asked again (test 6 failed). Residual: deleting only `analyticsConsent` by hand still leaves PostHog's flag     |
+| Banner buttons          | Accept and Decline use the same `Button` variant                                               | A weaker Decline is a dark pattern; EU regulators treat it as invalid consent                                                                                                                                    |
 | Change notification     | Publish/subscribe (observer) pattern + `useSyncExternalStore`, copied from `lib/talkEffect.ts` | Same pattern already in the repo. No shared helper yet (only 2 copies); extract `createChangeNotifier()` when a third appears                                                                                    |
 
 ## What is built
 
 - `next.config.js` — fail-fast checks for `NEXT_PUBLIC_POSTHOG_KEY` / `_HOST`; `/friendship` rewrites; `skipTrailingSlashRedirect`.
 - `instrumentation-client.ts` — `posthog.init` via `/friendship`. Reads consent first: `granted` → capture on + `localStorage+cookie`; otherwise opted out + `memory`.
+- `lib/analytics/analyticsConsentCookie.ts` — plain module (server + browser): cookie name, `ANALYTICS_CONSENT_VALUES`, `AnalyticsConsent`, `isAnalyticsConsent`. Lesson 7's "shared file" step is done.
+- `Components/layout/AnalyticsConsentBanner.tsx` — fixed bottom banner, rendered in `app/layout.tsx`; i18n section `analyticsConsentBanner`.
 - `lib/analytics/analyticsConsent.ts` (browser only) — `readAnalyticsConsent()`, `saveAnalyticsConsent(choice)` (writes cookie, turns PostHog on/off, notifies), `subscribeAnalyticsConsent()`, exports `AnalyticsConsent` and `ANALYTICS_CONSENT_VALUES`.
 
 ## Lessons learned (gotchas)
@@ -64,6 +69,7 @@ A step-by-step learning path for adding PostHog (analytics, feature flags, A/B t
 
 `posthog.identify(uid)` after `establishSession()`, no person properties. `reset()` on logout and account delete. `sign_up` / `login` events in `lib/AuthContext.tsx`.
 
+- **`posthog.reset()` also clears the consent flag.** With `opt_out_capturing_by_default`, a `reset()` on logout silently stops capturing for a user who accepted. Do `reset()` first, then `opt_in_capturing()` again if the cookie says `granted`.
 - **Call `identify` only when consent is `granted`.** In memory mode each page load mints a new id, and identify would merge them all onto the person (PostHog warns about this). On accept while signed in, call `identify` then.
 
 ### Lesson 7 — Server events
@@ -90,7 +96,7 @@ Error tracking (already on), session replay (consent-gated, mask inputs), heatma
 
 ### Lesson 12 — Privacy text and docs
 
-`privacy.*` keys in both languages (mention the `/flags` request before consent), `CLAUDE.md` Analytics section, a note in `specs/architecture.md`, update `specs/posthog.md` (`/ingest` → `/friendship`, status).
+`privacy.*` keys in both languages (mention the `/flags` request before consent), fix `welcome.privacyNote` ("No tracking" is no longer true after Accept), the banner text has no purpose (user's choice; GDPR wants informed consent, so the privacy page must state the purpose), `CLAUDE.md` Analytics section, a note in `specs/architecture.md`, update `specs/posthog.md` (`/ingest` → `/friendship`, status).
 
 ## Before merging the branch
 

@@ -9,6 +9,12 @@ import ScrollButtonWrapper from "@/Components/layout/ScrollToTopButton";
 import Footer from "@/Components/layout/Footer";
 import ServiceWorkerRegistration from "@/Components/layout/ServiceWorkerRegistration";
 import "@/styles/globals.css";
+import AnalyticsConsentBanner from "@/Components/layout/AnalyticsConsentBanner";
+import { cookies } from "next/headers";
+import {
+  ANALYTICS_CONSENT_COOKIE,
+  isAnalyticsConsent,
+} from "@/lib/analytics/analyticsConsentCookie";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stay-in-touch.vip"),
@@ -35,6 +41,11 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
 
+  // Read on the server so the first paint already knows whether to show the
+  // banner: no flash for returning visitors, no delay for new ones.
+  const savedConsent = (await cookies()).get(ANALYTICS_CONSENT_COOKIE)?.value;
+  const initialConsent = isAnalyticsConsent(savedConsent) ? savedConsent : null;
+
   return (
     <html lang={locale}>
       <body>
@@ -49,6 +60,7 @@ export default async function RootLayout({
                 <ScrollButtonWrapper />
                 <ServiceWorkerRegistration />
                 <Analytics />
+                <AnalyticsConsentBanner initialConsent={initialConsent} />
               </main>
             </PendingRequestCountProvider>
           </AuthProvider>

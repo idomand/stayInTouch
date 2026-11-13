@@ -26,6 +26,12 @@
   "scrollToTopButton": {
     "top": "Top"
   },
+  "analyticsConsentBanner": {
+    "label": "Analytics consent",
+    "text": "May we use cookies? We never send your contacts' names or notes. Read the <link>privacy policy</link>.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "logoutButton": {
     "confirmTitle": "Are you sure?",
     "logOut": "Log out",
