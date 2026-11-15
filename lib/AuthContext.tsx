@@ -14,9 +14,20 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import type { Messages, useTranslations } from "next-intl";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { auth, provider } from "@/lib/Firebase";
 import { deleteAccount as deleteAccountAction } from "@/lib/actions/account";
+import {
+  readAnalyticsConsent,
+  subscribeAnalyticsConsent,
+} from "@/lib/analytics/analyticsConsent";
+import { identifyUser, resetAnalyticsUser } from "@/lib/analytics/identity";
 import type { ActionResult } from "@/lib/actions/validation";
 import { Result } from "@/Components/ui/Spinner";
 
@@ -162,6 +173,22 @@ export default function AuthProvider({
   const [loading, setLoading] = useState(true);
   const [hasSession, setHasSession] = useState(false);
   const router = useRouter();
+  // Null on the server: the provider shows a spinner until auth resolves, so
+  // nothing depends on this value before the browser reads the cookie.
+  const analyticsConsent = useSyncExternalStore(
+    subscribeAnalyticsConsent,
+    readAnalyticsConsent,
+    () => null,
+  );
+  const uid = currentUser?.uid;
+
+  // One place for both orders: sign in after accepting, or accept while
+  // signed in. The effect re-runs when either changes.
+  useEffect(() => {
+    if (analyticsConsent === "granted" && hasSession && uid) {
+      identifyUser(uid);
+    }
+  }, [analyticsConsent, hasSession, uid]);
 
   /** Every cookie mint goes through here so hasSession stays in step. */
   const establishSession = useCallback(async (user: User) => {
@@ -196,6 +223,7 @@ export default function AuthProvider({
     setHasSession(false);
     await signOut(auth);
     setCurrentUser(null);
+    resetAnalyticsUser();
     // The home page is server-rendered now, so clearing state does not move
     // the user off it — navigate, and refresh so no cached authed view remains.
     router.replace("/login");

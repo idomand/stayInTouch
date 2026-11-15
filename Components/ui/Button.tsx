@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
    */
   type?: "button" | "submit";
   ariaLabel?: string;
+  ref?: Ref<HTMLButtonElement>;
 };
 
 export default function Button({
@@ -25,6 +26,7 @@ export default function Button({
   disabled = false,
   type = "button",
   ariaLabel,
+  ref,
 }: Props) {
   const baseClasses =
     "justify-center cursor-pointer flex items-center transition ease-in duration-200 text-sm rounded-md border-current font-medium";
@@ -51,6 +53,7 @@ export default function Button({
 
   return (
     <button
+      ref={ref}
       type={type}
       aria-label={ariaLabel}
       className={twMerge(

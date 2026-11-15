@@ -6,11 +6,11 @@ A step-by-step learning path for adding PostHog (analytics, feature flags, A/B t
 
 **Branch:** `feat/posthog-analytics` (pushed). **PostHog project:** `stay-in-touch`, EU Cloud, id 332815. The PostHog MCP (claude.ai connector) is set up and works.
 
-## Where we stopped (2026-11-13)
+## Where we stopped (2026-11-15)
 
-- **Done:** Lessons 0, 1, 2, 3, 4a, 4b, 4c (all six consent tests pass).
-- **Next:** Lesson 5 — first custom event.
-- Last commit: `4ed7956 feat(analytics): add consent banner read from the server cookie`. Not committed yet: talkEffect → confettiStyle rename, Lesson 4c, `opt_out_persistence_by_default`.
+- **Done:** Lessons 0–5. Lesson 5: `trackClient()` in `lib/analytics/trackEvent.ts`, `demo_started` in `app/demo/page.tsx`, saved trend insight "Demo starts" (unique users, daily).
+- **Next:** Lesson 6 — identity and auth events.
+- Last commit: `e336912 feat(analytics): add typed trackClient and send demo_started`.
 
 ## Decisions made
 
@@ -47,31 +47,18 @@ A step-by-step learning path for adding PostHog (analytics, feature flags, A/B t
 - PostHog sends events in batches every few seconds; wait, or navigate, before checking Network.
 - `ph_debug` in localStorage comes from `debug: true` (development only).
 - Git `core.autocrlf=true` makes Prettier warn on CRLF files like `package.json`; the committed content is fine.
+- `reactStrictMode: true` runs effects twice in dev, so a `useEffect` event is sent twice locally (28 `demo_started` from 2 users on 2026-11-13). Production sends it once. Read dev counts as "it arrives", not as numbers.
+- An insight shows 0 for local data because the test-account filter hides `localhost:3000`. Turn the filter off to check dev events.
+- Page-load events (`demo_started`) count every reload: use **Unique users**, not Total count.
 
 ## Remaining lessons
 
-### Lesson 4b — Consent banner (next)
-
-`Components/layout/ConsentBanner.tsx` (`"use client"`), rendered in `app/layout.tsx` next to `<Analytics />`. Shows when `readAnalyticsConsent()` is `null`; **Accept** and **Decline** equally prominent (`Components/ui/Button`); short text + link to `/privacy`. Uses `useSyncExternalStore(subscribeAnalyticsConsent, readAnalyticsConsent, getServerSnapshot)`. i18n keys `consentBanner.*` in `en.json` and `de.json`.
-
-- **Open design question:** what `getServerSnapshot` returns. "No answer" → banner flashes for returning users. "Answered" → banner appears a moment late for new users. Third option: the server reads the cookie in `app/layout.tsx` and passes it as a prop.
-- **Tests to run with the banner:**
-  - Accept then Decline in the same tab: is the `ph_..._posthog` cookie removed and not written again? If not, add a `set_config` line on decline.
-  - After Accept, PostHog stores its own `__ph_opt_in_out_<key>` in localStorage. If the user clears cookies only, does PostHog keep tracking? If yes, add `opt_out_capturing_persistence_type: "cookie"`.
-
-### Lesson 4c — Settings selector
-
-`Components/settings/AnalyticsConsentSelector.tsx`, modelled on `ConfettiStyleSelector`, on `/settings`. i18n keys in `settings`.
-
-### Lesson 5 — First custom event
-
-`lib/analytics.ts` with a typed `AnalyticsEvent` union and `trackClient()` (wraps `posthog.capture`, catches errors). Only `demo_started` in `app/demo/page.tsx`. Then build the first trend insight in the PostHog UI.
-
-### Lesson 6 — Identity and auth events
+### Lesson 6 — Identity and auth events (next)
 
 `posthog.identify(uid)` after `establishSession()`, no person properties. `reset()` on logout and account delete. `sign_up` / `login` events in `lib/AuthContext.tsx`.
 
-- **`posthog.reset()` also clears the consent flag.** With `opt_out_capturing_by_default`, a `reset()` on logout silently stops capturing for a user who accepted. Do `reset()` first, then `opt_in_capturing()` again if the cookie says `granted`.
+- **`posthog.reset()` also clears the consent flag** (confirmed in posthog-js 1.447.3 source, `_reset` → `consent.reset()`). With `opt_out_capturing_by_default`, a `reset()` on logout silently stops capturing for a user who accepted. `resetAnalyticsUser()` in `lib/analytics/identity.ts` does `reset()`, then `opt_in_capturing({ captureEventName: null })` if the cookie says `granted` (null: no fake `$opt_in` event).
+- **6a built (2026-11-15):** `identifyUser` / `resetAnalyticsUser` in `lib/analytics/identity.ts`. One effect in `AuthProvider` identifies on `consent === "granted" && hasSession && uid`, covering both orders. `finishSignOut()` resets (logout and account delete). Consent banner moved to `fixed top-1/3`. **Next: 6b** — `sign_up` / `login` events.
 - **Call `identify` only when consent is `granted`.** While opted out nothing is stored, so each page load mints a new id, and identify would merge them all onto the person (PostHog warns about this). On accept while signed in, call `identify` then.
 
 ### Lesson 7 — Server events

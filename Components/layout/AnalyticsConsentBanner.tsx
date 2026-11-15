@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import type { AnalyticsConsent } from "@/lib/analytics/analyticsConsentCookie";
 import {
@@ -36,18 +36,25 @@ export default function AnalyticsConsentBanner({
     readAnalyticsConsent,
     () => initialConsent,
   );
+  const acceptButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Focus, not a page-wide key listener: Enter accepts only while focus is
+  // still here. A listener would also catch Enter in a form on the page and
+  // grant consent by accident, which is not valid consent.
+  useEffect(() => {
+    if (consent === null) {
+      acceptButtonRef.current?.focus();
+    }
+  }, [consent]);
 
   if (consent !== null) {
     return null;
   }
 
-  // Sticky, not fixed: it stays at the bottom of the screen while scrolling,
-  // but at the end of the page it sits after the footer instead of over it.
-  // That only works while it is rendered after <Footer /> in app/layout.tsx.
   return (
     <section
       aria-label={t("analyticsConsentBanner.label")}
-      className="sticky bottom-0 z-50 border-t border-black/10 bg-white p-4 shadow-lg"
+      className="border-grey1 border-l-blue1 fixed inset-x-4 top-1/3 z-50 mx-auto max-w-3xl rounded-xl border border-l-4 bg-gray-300 p-5 shadow-2xl sm:p-6"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
         <P2 extraClasses="flex-1">
@@ -61,6 +68,7 @@ export default function AnalyticsConsentBanner({
             extraClasses="flex-1 sm:flex-none"
           />
           <Button
+            ref={acceptButtonRef}
             buttonText={t("analyticsConsentBanner.accept")}
             onClick={() => saveAnalyticsConsent("granted")}
             extraClasses="flex-1 sm:flex-none"
